@@ -9,7 +9,7 @@ A portfolio website and download hub for educational tools and curricular resour
 Scholastica Codex is organized into two sections:
 
 - **Educational Instruments** — interactive browser-based learning apps hosted on GitHub Pages
-- **Curricular Resources (Bibliotheca Scholastica)** — downloadable PDF textbooks and workbooks, LaTeX-typeset, covering a full K–12 curriculum
+- **Curricular Resources (Bibliotheca Scholastica)** — downloadable PDF textbooks and workbooks, LaTeX-typeset, covering a partial K–12 curriculum
 
 The site uses a classical Greek/Roman aesthetic (Cinzel & Crimson Text fonts, papyrus tones, goldenrod accents) that reflects the timeless nature of learning and scholarship.
 
@@ -72,10 +72,10 @@ scholastica-codex/
 
 ## 🤝 Contributing & Errors
 
-Built with human-AI collaboration using Claude Code (Claude Sonnet 4.6). Content may contain errors — please [open an issue](https://github.com/JD-Jones-ASES/project-launchpad/issues/new?title=Resource%20Error%3A%20) to report them.
+Built with human-AI collaboration using Claude Code (Claude Opus/Sonnet 4.6). Content may contain errors — please [open an issue](https://github.com/JD-Jones-ASES/project-launchpad/issues/new?title=Resource%20Error%3A%20) to report them.
 
 ## 🎓 Educational Philosophy
 
 The internet was transformative for education in the 1990s. LLMs and AI tools represent an even larger shift today. These resources demonstrate how quickly quality educational materials can be created with AI assistance — materials that would have taken weeks or months now take hours.
 
-Several resources reflect a Classical Christian educational perspective. The author is Catholic, but you will find the books quoting the King James Bible, Martin Luther, and Pope Leo XIII in equal measure. Claude tends toward mainstream consensus views, but all perspectives should be examined critically. Approach everything with charity and intellectual curiosity.
+
