@@ -1,50 +1,81 @@
 # Scholastica Codex
 
-*Studia Efficientia - Efficient Studies*
+*Studia Efficientia — Efficient Studies*
 
-A portfolio website showcasing educational tools and resources created through human-AI collaboration. This launchpad provides easy access to interactive learning applications built with modern web technologies.
+A portfolio website and download hub for educational tools and curricular resources created through human-AI collaboration. The site serves as a launchpad for interactive learning applications and a library of downloadable textbooks and workbooks.
 
 ## 🏛️ About
 
-Scholastica Codex serves as a central hub for educational instruments designed to elevate learning through interactive excellence. The website features a classical Greek/Roman aesthetic that reflects the timeless nature of learning and scholarship.
+Scholastica Codex is organized into two sections:
 
-## 🚀 Featured Projects
+- **Educational Instruments** — interactive browser-based learning apps hosted on GitHub Pages
+- **Curricular Resources (Bibliotheca Scholastica)** — downloadable PDF textbooks and workbooks, LaTeX-typeset, covering a full K–12 curriculum
 
-- **AP Guides Hub** - Comprehensive study companion for Advanced Placement courses
-- **Cyber Math Flashcards** - Interactive mathematical operations trainer with customizable difficulty
-- **Fraction Sakura** - Beautiful fraction practice tool with Japanese aesthetic
-- **Verb Tense Explorer** - Master English verb conjugations with interactive examples
+The site uses a classical Greek/Roman aesthetic (Cinzel & Crimson Text fonts, papyrus tones, goldenrod accents) that reflects the timeless nature of learning and scholarship.
 
-## 🛠️ Technologies Used
+## 🚀 Educational Instruments
 
-- HTML5 & CSS3
-- Vanilla JavaScript
-- Google Fonts (Cinzel & Crimson Text)
-- Responsive Grid Layout
-- CSS Animations & Transitions
+| App | Description |
+|-----|-------------|
+| **AP Guides Hub** | Study companion for Advanced Placement courses with searchable terms |
+| **Cyber Math Flashcards** | Math trainer with customizable difficulty levels |
+| **Fraction Sakura** | Fraction practice with Japanese aesthetic and progressive difficulty |
+| **Philosophy Timeline** | Searchable, filterable timeline of famous philosophical works |
+| **Perception Typing** | Typing game combining perception, recognition, and speed |
+| **A Guide to Le Morte d'Arthur** | Interactive explorer for Sir Thomas Malory's classic |
+| **Infix-Postfix Parser** | Convert and visualize mathematical expression conversions |
+| **Factoring Quadratic Expressions** *(Beta)* | Quadratic conversion practice |
+| **Verb Tense Explorer** *(Beta)* | English verb conjugation practice |
+
+## 📚 Curricular Resources (Bibliotheca Scholastica)
+
+Downloadable ZIP archives containing student and teacher PDF editions. Organized by subject:
+
+| Subject | Titles |
+|---------|--------|
+| **Mathematics** | Math I & II (Middle), Algebra I & II (Middle/High) — each with companion workbooks |
+| **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
+| **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High) |
+| **Philosophy** | The Trial of Socrates, The Death of Socrates (High) |
+| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle) |
+| **Religion** | Religious Roundtable (High) |
+| **Special Interest** | Nourish: An MS-Friendly Cookbook (Adults) |
+
+Resources are licensed under **CC BY-SA 4.0**. Most titles include separate Student and Teacher editions.
+
+## 🛠️ Technologies
+
+- HTML5, CSS3, Vanilla JavaScript — no frameworks, no backend
+- Google Fonts: Cinzel (display) & Crimson Text (body)
+- CSS Grid, custom properties, responsive design (3 breakpoints)
+- localStorage for user-editable content persistence
 
 ## 📁 Project Structure
 
 ```
 scholastica-codex/
 ├── index.html          # Main portfolio page
-├── styles.css          # Complete styling and animations
-├── README.md           # Project documentation
-└── LICENSE             # MIT License
+├── styles.css          # Shared styles and animations
+├── downloads.html      # Bibliotheca Scholastica download hub
+├── downloads.css       # Download hub styles
+├── downloads/          # 36 curricular resource ZIP files (~146 MB)
+├── README.md
+└── LICENSE             # MIT License (instruments); CC BY-SA 4.0 (resources)
 ```
 
-## 🤝 Contributing
+## ⚖️ Licensing
 
-This project was created through human-AI collaboration using Claude Sonnet 4 and Super Grok. While the core functionality is complete, suggestions for improvements are welcome!
+| Content | License |
+|---------|---------|
+| Educational Instruments (web apps) | MIT License © 2025 JD Jones |
+| Curricular Resources (textbooks, workbooks) | CC BY-SA 4.0 © 2026 JD Jones |
 
-## 📜 License
+## 🤝 Contributing & Errors
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Built with human-AI collaboration using Claude Code (Claude Sonnet 4.6). Content may contain errors — please [open an issue](https://github.com/JD-Jones-ASES/project-launchpad/issues/new?title=Resource%20Error%3A%20) to report them.
 
 ## 🎓 Educational Philosophy
 
-The internet was transformative for education in the 1990s. LLMs and AI represent an even bigger shift today. These tools demonstrate how modern AI can help create simple, effective educational resources in a matter of hours rather than weeks.
+The internet was transformative for education in the 1990s. LLMs and AI tools represent an even larger shift today. These resources demonstrate how quickly quality educational materials can be created with AI assistance — materials that would have taken weeks or months now take hours.
 
-## ⚖️ Disclaimer
-
-All projects use human-AI collaboration, so standard AI disclaimers apply. Software is provided as-is under the MIT License.
+Several resources reflect a Classical Christian educational perspective. The author is Catholic, but you will find the books quoting the King James Bible, Martin Luther, and Pope Leo XIII in equal measure. Claude tends toward mainstream consensus views, but all perspectives should be examined critically. Approach everything with charity and intellectual curiosity.
