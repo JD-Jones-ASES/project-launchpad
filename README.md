@@ -37,7 +37,7 @@ Downloadable ZIP archives containing student and teacher PDF editions. Organized
 | **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
 | **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High) |
 | **Philosophy** | The Trial of Socrates, The Death of Socrates (High) |
-| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle) |
+| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle), Shakespeare's Sonnets: A Reading Companion (High/University) |
 | **Religion** | Religious Roundtable (High) |
 | **Special Interest** | Nourish: An MS-Friendly Cookbook (Adults) |
 
@@ -58,7 +58,7 @@ scholastica-codex/
 ├── styles.css          # Shared styles and animations
 ├── downloads.html      # Bibliotheca Scholastica download hub
 ├── downloads.css       # Download hub styles
-├── downloads/          # 36 curricular resource ZIP files (~146 MB)
+├── downloads/          # 37 curricular resource ZIP files (~148 MB)
 ├── README.md
 └── LICENSE             # MIT License (instruments); CC BY-SA 4.0 (resources)
 ```
