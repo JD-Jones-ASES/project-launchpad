@@ -34,6 +34,7 @@ Downloadable ZIP archives containing student and teacher PDF editions. Organized
 | Subject | Titles |
 |---------|--------|
 | **Mathematics** | Math I & II (Middle), Algebra I & II (Middle/High) — each with companion workbooks |
+| **Logic & Reasoning** | Logic & Reasoning for Middle School (Middle) |
 | **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
 | **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High) |
 | **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); First Philosophy: Reading Descartes' Meditations (High) |
