@@ -38,7 +38,7 @@ Downloadable ZIP archives containing student and teacher PDF editions. Organized
 | **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
 | **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High) |
 | **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); First Philosophy: Reading Descartes' Meditations (High) |
-| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle), Shakespeare's Sonnets: A Reading Companion (High/University) |
+| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle), Shakespeare's Sonnets: A Reading Companion (High/University); Clear & Effective: Professional and Technical Writing (High) |
 | **Religion** | Religious Roundtable (High) |
 | **Special Interest** | Nourish: An MS-Friendly Cookbook (Adults) |
 
