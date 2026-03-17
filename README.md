@@ -37,7 +37,7 @@ Downloadable ZIP archives containing student and teacher PDF editions. Organized
 | **Life Skills** | Logic & Reasoning for Middle School (Middle); Reading Charts, Graphs & Diagrams (Middle); Financial Literacy for High School (High) |
 | **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
 | **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High) |
-| **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); First Philosophy: Reading Descartes' Meditations (High); The Dangerous Perhaps: Reading Nietzsche (High/University) |
+| **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); Powers & Principalities: Reading Machiavelli's The Prince (High); First Philosophy: Reading Descartes' Meditations (High); The Dangerous Perhaps: Reading Nietzsche (High/University) |
 | **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Encountering Spanish (Middle), Shakespeare's Sonnets: A Reading Companion (High/University); Tales of the Decameron: Reading Boccaccio (High); Clear & Effective: Professional and Technical Writing (High) |
 | **Religion** | Religious Roundtable (High); The Cloister and the Cell: An Introduction to Western Monasticism (High) |
 | **Special Interest** | Nourish: An MS-Friendly Cookbook (Adults) |
