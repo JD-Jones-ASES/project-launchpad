@@ -34,7 +34,7 @@ Downloadable ZIP archives containing student and teacher PDF editions. Organized
 | Subject | Titles |
 |---------|--------|
 | **Mathematics** | Math I & II (Middle), Algebra I & II (Middle/High) — each with companion workbooks; Business Math: Practical Applications (High) |
-| **Life Skills** | Logic & Reasoning for Middle School (Middle); Reading Charts, Graphs & Diagrams (Middle); Financial Literacy for High School (High) |
+| **Life Skills** | Logic & Reasoning for Middle School (Middle); Reading Charts, Graphs & Diagrams (Middle); Financial Literacy for High School (High); The Thinking Toolkit (High) |
 | **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
 | **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High); War: A Debate in Primary Sources (High) |
 | **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); Powers & Principalities: Reading Machiavelli's The Prince (High); First Philosophy: Reading Descartes' Meditations (High); The Dangerous Perhaps: Reading Nietzsche (High/University) |
