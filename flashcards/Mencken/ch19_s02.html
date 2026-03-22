@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 19, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the primary objective of politics under democracy?", "back": "The job or office rather than principles."}, {"front": "In Mencken’s view, why does a defeated candidate in a democracy commonly take failure very badly?", "back": "It leaves the professional politician stripped bare of their livelihood."}, {"front": "What is the common purpose of appointive offices, such as Federal commissions, for defeated politicians?", "back": "To preserve their livelihood and save their face."}, {"front": "According to Mencken, what action does a “majestic victim” of political defeat take if they cannot be assuaged by office?", "back": "They turn their influence into a weapon against the nation and become a chronic maker of trouble."}, {"front": "Which three years does Mencken cite as the dates of Henry Clay’s presidential defeats?", "back": "1824, 1832, and 1840."}, {"front": "After his defeats, Henry Clay became a public agent and attorney for which group?", "back": "The Interests."}, {"front": "What were the two primary economic policies championed by Henry Clay?", "back": "Centralization and a protective tariff."}, {"front": "According to Mencken, which politician was primarily responsible for the doctrine of Nullification?", "back": "John C. Calhoun."}, {"front": "What historical event does Mencken claim John C. Calhoun devoted himself to preparing for after 1832?", "back": "The American Civil War."}, {"front": "Who does Mencken identify as being \"more to blame\" for the Civil War than any other man?", "back": "John C. Calhoun."}, {"front": "In the 1800 election, who did Aaron Burr fail to defeat for the Presidency?", "back": "Thomas Jefferson."}, {"front": "According to the text, what personal quality did Aaron Burr develop as a result of failing to succeed Adams?", "back": "Misanthropy."}, {"front": "What were the three major consequences of Aaron Burr's political bitterness mentioned by Mencken?", "back": "A duel with Hamilton, a conspiracy with Blennerhassett, and a trial for treason."}, {"front": "Which political tactic did James G. Blaine use to keep Civil War hatreds alive?", "back": "Waving the \"bloody shirt.\""}, {"front": "According to Mencken, what conversion did Theodore Roosevelt undergo after his defeat in 1912?", "back": "He became a \"political killer\" constantly on the warpath."}, {"front": "What was Theodore Roosevelt’s initial stance on the \"German scheme of things\" prior to the outbreak of World War I?", "back": "He was its most ardent American exponent."}, {"front": "Why did Theodore Roosevelt change his stance on World War I to oppose Germany?", "back": "To annoy and damage his successful enemy, Woodrow Wilson."}, {"front": "Which specific goal did Theodore Roosevelt pursue during World War I that Woodrow Wilson ultimately vetoed?", "back": "A high military command at the front."}, {"front": "Mencken describes the final years of Theodore Roosevelt's life as more _____ than political.", "back": "Pathological"}, {"front": "In what year did William Jennings Bryan suffer his third and final presidential defeat?", "back": "1908."}, {"front": "According to Mencken, who was the target of William Jennings Bryan’s post-defeat reprisals?", "back": "The intelligent minority of his countrymen."}, {"front": "What specific campaign does Mencken describe as Bryan’s \"gross attack upon human dignity\"?", "back": "His campaign against the teaching of evolution."}, {"front": "Contrary to public belief, what does Mencken claim was the true motivation behind Bryan’s anti-evolution stance?", "back": "Hatred and a lust for revenge."}, {"front": "How does Mencken characterize Bryan’s performance during Clarence Darrow’s cross-examination?", "back": "He was unable to competently defend his vague theological ideas."}, {"front": "To what temperature does Mencken claim Bryan’s fever rose when he passed away?", "back": "110 degrees."}, {"front": "Mencken claims the damage done to the South by Bryan was greater than the damage done by which military force?", "back": "Sherman’s army."}, {"front": "How do countries under despotism typically dispose of unsuccessful aspirants for the crown?", "back": "They are either butchered or exiled to Paris."}, {"front": "Why are the people in a despotism not \"annoyed or injured\" by the homicidal thoughts of a Crown Prince?", "back": "Etiquette forces him to keep his thoughts to himself."}, {"front": "Under democracy, where are the \"hopes and yearnings\" of defeated politicians typically voiced?", "back": "They are bellowed from every stump."}, {"front": "Which French thinker does Mencken note made no mention of the \"unpleasant by-product\" of defeated politicians?", "back": "Faguet."}, {"front": "Mencken describes the bitter defeated politician as a _____ whose bitterness poisons American public life.", "back": "Lame duck"}, {"front": "What was Aaron Burr's status relative to the young Republic’s needs, according to Mencken?", "back": "He was an able man whose peculiar talents the Republic stood in great need of."}, {"front": "What does Mencken call the politicians who occupy Federal commissions to \"save face\" after defeat?", "back": "Lame ducks."}, {"front": "According to Mencken, what is the ultimate fate of the \"bitterness\" of a defeated candidate in a democracy?", "back": "It is turned into a weapon against the nation as a whole."}, {"front": "How did Henry Clay’s relationship with democracy change after his multiple defeats?", "back": "He turned his back upon it and became an agent for corporate interests."}, {"front": "Mencken lists the names of several \"warlocks\" in American history; identify four of the primary figures mentioned.", "back": "Burr, Clay, Calhoun, and Roosevelt."}, {"front": "What does Mencken suggest would have happened to John C. Calhoun's \"bellicose tune\" had he succeeded Andrew Jackson?", "back": "He would have sung a far less aggressive or bellicose tune."}, {"front": "In what year did James G. Blaine lose the presidency, only to wave the \"bloody shirt\" again in 1884?", "back": "1876."}, {"front": "Which historical figure does Mencken claim helped more than any other to force the United States into World War I?", "back": "Theodore Roosevelt."}, {"front": "Mencken characterizes William Jennings Bryan in his last years not as a fanatic, but as an \"ambulent _____.\"", "back": "Boil"}, {"front": "What did William Jennings Bryan hope to achieve by raising \"the mob\" against the intelligent minority?", "back": "To make them infamous and put them down by law."}, {"front": "Mencken argues that the objective of democratic politics is always the _____, not the principle.", "back": "Job"}, {"front": "According to Mencken, what is the primary destination for unsuccessful royal aspirants in a despotism, besides death?", "back": "Exile to Paris."}, {"front": "Mencken notes that “lame ducks” are not only in commissions but are also common on which branch of government?", "back": "The Federal bench."}, {"front": "What was the result of the \"debacle in 1912\" for Theodore Roosevelt’s political character?", "back": "He was converted into a \"political killer.\""}, {"front": "In Mencken's view, which specific location was the focus of Bryan's rolling eyes as he died?", "back": "1600 Pennsylvania Avenue (the White House)."}, {"front": "What was the primary reason Mencken believes Theodore Roosevelt supported the Allies in WWI?", "back": "To damage Woodrow Wilson."}, {"front": "Mencken claims that Henry Clay became the \"darling\" of which specific financial figures of his time?", "back": "The Mellons, Morgans, and Charlie Schwabs."}, {"front": "According to the text, where are \"warlocks\" similar to the national examples familiar in local politics?", "back": "In every American county."}, {"front": "What does Mencken claim was the result of Calhoun being deprived of the \"golden plum\" of the presidency?", "back": "He concluded the country deserved capital punishment."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

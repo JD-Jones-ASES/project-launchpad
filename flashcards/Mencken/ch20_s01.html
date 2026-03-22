@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 20, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In Part III of 'Notes on Democracy', Mencken shifts from diagnosing the political system to what rhetorical action?", "back": "He puts the system's stated ideals, such as liberty and peace, on trial."}, {"front": "According to Mencken's argument in 'The Will to Peace', what does the common man actually desire instead of liberty?", "back": "The common man desires safety and the reassuring smell of the herd."}, {"front": "Why does Mencken characterize liberty as 'cold and lonely'?", "back": "It demands courage and self-reliance, which the average citizen lacks."}, {"front": "What role does democracy play in relation to the 'free spirit' according to Mencken?", "back": "Democracy acts as the most efficient destroyer of the free spirit because the mob cannot tolerate him."}, {"front": "In Mencken's closing reduction of democratic dignity, what does the 'Pope' become?", "back": "The Pope is reduced to the figure of a Methodist bishop."}, {"front": "Which historical figure represents the 'Generalissimo' in Mencken's comedic deflation of democracy?", "back": "Pershing slapping the backs of Elks."}, {"front": "Whom does Mencken address as his primary rhetorical target and 'elect' audience?", "back": "The educated skeptic who fancies himself superior to the common man."}, {"front": "How is Mencken's persona described in the 'Voice and Tone' section of the analysis?", "back": "He adopts the persona of a weary diagnostician naming the symptoms of a disease."}, {"front": "Describe the tonal shift that occurs across 'The Will to Peace.'", "back": "The tone moves from relatively sober philosophy to contempt and finally into grotesque comedy."}, {"front": "Which two German philosophers provide the initial philosophical framework for Mencken's section?", "back": "Friedrich Nietzsche and Arthur Schopenhauer."}, {"front": "What is the rhetorical purpose of shifting from philosophical gravity to comic deflation?", "back": "It allows the reader to take the argument seriously just long enough to make the punchline devastating."}, {"front": "What is Mencken’s 'signature move' regarding his choice of diction?", "back": "He juxtaposes dignified philosophical language with images from the barnyard, prison, and circus."}, {"front": "Term: ignominious", "back": "Definition: Deserving or causing public disgrace or shame."}, {"front": "Term: prehensile", "back": "Definition: Capable of grasping; used metaphorically for the mob's seizure of power."}, {"front": "Term: charlatan", "back": "Definition: A person falsely claiming to have special knowledge; a fraud."}, {"front": "Term: heresy", "back": "Definition: Belief or opinion contrary to orthodox doctrine; used by Mencken for political dissent."}, {"front": "In Mencken’s writing, what follows a long sentence of qualification and evidence?", "back": "A short sentence that delivers a blunt, final verdict."}, {"front": "What is the rhetorical effect of parallelism in Mencken’s sentence structure?", "back": "It makes a double failure or negative condition feel comprehensive and inescapable."}, {"front": "Which punctuation mark is described as Mencken's most characteristic tool for interruption?", "back": "The dash."}, {"front": "How does Mencken use the dash to convert an observation into a political indictment?", "back": "He uses it to introduce an unanticipated and negative consequence."}, {"front": "In the context of the 'policeman' example, what does Mencken's use of lettered items (a, b, c) mimic?", "back": "The formal language found in contracts and statutes."}, {"front": "Concept: Apostrophe", "back": "Definition: A figure of speech in which the speaker addresses an absent person or an abstract concept as if it were present."}, {"front": "How does Mencken employ apostrophe when discussing 'Liberty'?", "back": "He treats liberty as a character in a drama or a patient on an examination table."}, {"front": "What is the central comparison in Mencken’s 'Penitentiary Analogy'?", "back": "The common man's ideal peace is compared to the contentment of a trusty in a prison."}, {"front": "In the 'Penitentiary Analogy', what does the 'trusty' represent about the democratic citizen?", "back": "A person who has forfeited liberty and earns privileges through obedience rather than merit."}, {"front": "What does the adjective 'well-managed' imply in the context of Mencken's prison analogy?", "back": "It implies that the common man values smooth government operation more than justice."}, {"front": "How does the prison analogy transform the image of the 'sovereign' democratic individual?", "back": "It converts the individual into a compliant inmate who is grateful for small comforts."}, {"front": "In the close reading of 'He simply wants to be safe,' what rhetorical work does the word 'simply' perform?", "back": "It suggests the common man's desire is both modest and intellectually primitive."}, {"front": "What is the central antithesis that structures Mencken's section 'The Will to Peace'?", "back": "The contrast between being 'free' and being 'safe'."}, {"front": "What is the 'forensic' rhythm identified in Mencken's syntax?", "back": "A sequence of evidence followed by a concise conclusion."}, {"front": "Mencken describes a man who can 'stand' liberty as inevitably being an _____ in democratic societies.", "back": "outlaw"}, {"front": "In the comedic deflation of the closing paragraph, who does the 'King' become?", "back": "President Harding."}, {"front": "Mencken uses the word _____ to suggest that safety purchased by losing liberty is inherently shameful.", "back": "ignominious"}, {"front": "By applying the term 'heresy' to political dissent, what does Mencken imply about democracy?", "back": "He implies that democracy is a religion that punishes those who do not believe its doctrines."}, {"front": "What is the primary drive of existence according to the philosophy of Arthur Schopenhauer?", "back": "The 'will to live'."}, {"front": "Which philosopher influenced Mencken with the concept of 'herd morality'?", "back": "Friedrich Nietzsche."}, {"front": "According to Mencken, what does the common man want a policeman to protect him from?", "back": "His superiors, his equals, and his own impulses."}, {"front": "What technique does Mencken use to show that freedom is only for the 'intellectually ambitious'?", "back": "A controlled collision between elevated philosophical context and simple, blunt language."}, {"front": "Mencken's 'will-to-peace' argument suggests that the average citizen lacks which two specific qualities?", "back": "Courage and self-reliance."}, {"front": "How does Mencken use the 'gap' between dignified language and undignified reality in his writing?", "back": "The distance between the two registers serves as his actual argument."}, {"front": "What is the rhetorical effect of Mencken's 'grotesque comedy' at the end of the section?", "back": "It reduces the high offices of civilization to the level of buffoons."}, {"front": "In Mencken's view, why is the 'trusty' a fitting symbol for the democratic citizen?", "back": "The trusty is a convict who values obedience over freedom."}, {"front": "What does Mencken suggest is the relationship between democratic dignity and 'farce'?", "back": "He suggests that democracy reduces the dignity of high office to the level of a farce."}, {"front": "According to the close reading, where does Mencken place his central antithesis in a paragraph?", "back": "At the end of the paragraph to create a periodic structure in miniature."}, {"front": "Mencken refers to the common man's desire for safety as the simplest and most _____ sort of peace.", "back": "ignominious"}, {"front": "In rhetorical terms, why is the audience's pleasure in reading Mencken described as 'dangerous'?", "back": "Because it seduces the reader into believing they are part of an intellectual 'elect'."}, {"front": "Mencken’s forensic syntax uses _____ and _____ to build evidence before the verdict.", "back": "qualification; subordination"}, {"front": "How does Mencken reframe the role of law enforcement in a democracy?", "back": "He reframes law enforcement as a confidence trick or a protection racket."}, {"front": "Mencken defines the mob's seizing of power over the individual as being _____.", "back": "prehensile"}, {"front": "The analysis suggests that Mencken writes with the authority of someone who considers the case _____.", "back": "closed"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

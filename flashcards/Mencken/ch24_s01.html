@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 24, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is H.L. Mencken's self-defined role in the final section of Notes on Democracy?", "back": "He defines himself as a diagnostician, not a therapist."}, {"front": "How does Mencken justify the absence of a solution or remedy for democracy in his text?", "back": "He argues that acknowledging the absence of a remedy is an honest and courageous intellectual position."}, {"front": "Mencken compares democracy to a \"self-limiting disease\"; what does the term \"self-limiting\" imply?", "back": "It suggests democracy contains the mechanisms of its own destruction and will be consumed by its own contradictions."}, {"front": "Which philosopher's influence is most visible in Mencken's treatment of political belief as a form of faith?", "back": "Friedrich Nietzsche."}, {"front": "How does the tone of the Coda's voice differ from earlier sections of the book?", "back": "The volume is lowered, shifting from an exuberant satirist to a man of measured, judicial authority."}, {"front": "What is the rhetorical purpose of Mencken admitting \"I don't know\" regarding democracy's survival?", "back": "It serves as an implicit rebuke to the certainty of democratic true believers."}, {"front": "In Mencken's medical register, what is the distinction between diagnosis and prognosis?", "back": "Diagnosis examines the present condition, while prognosis predicts the future."}, {"front": "In Mencken's medical register, what is the distinction between therapeutics and pathology?", "back": "Therapeutics involves curing a disease, while pathology is the study of the disease itself."}, {"front": "What rhetorical effect is achieved by Mencken's use of clinical vocabulary like \"psychopathology\" and \"clinical material\"?", "back": "It provides an air of scientific detachment and objectivity to his critique."}, {"front": "What does Mencken's use of a theological register (e.g., dogma, miracles) suggest about democracy?", "back": "It treats democracy as a religious creed rather than a rational political system."}, {"front": "Term: ratiocination", "back": "Definition: The process of logical reasoning."}, {"front": "Term: puissant", "back": "Definition: Powerful or mighty."}, {"front": "Term: usufructs", "back": "Definition: The legal right to enjoy the use and advantages of another's property."}, {"front": "Term: brummagem", "back": "Definition: Cheap, showy, or counterfeit."}, {"front": "Why does Mencken apply the word \"puissant\" to modern democratic states?", "back": "He uses it with a faint ironic edge, applying chivalric language to a system he disdains."}, {"front": "What does the term \"brummagem\" describe in Mencken's critique of democracy?", "back": "It describes democratic titles and honors as cheap knockoffs of genuine aristocratic distinction."}, {"front": "What is a \"periodic sentence\" structure?", "back": "A sentence that withholds its main clause or point until the very end."}, {"front": "How does the function of the dash change in the final section of Mencken's book?", "back": "It shifts from being a sardonic interruption to a pause for philosophical reflection or resignation."}, {"front": "Term: Peroration", "back": "Definition: The concluding section of a speech or argument that summarizes the case and makes a final appeal."}, {"front": "How does Mencken subvert the traditional function of a peroration?", "back": "He explicitly refuses to propose a solution, making an argument against the necessity of remedies."}, {"front": "According to Mencken's systematic analogy, what is the \"dogma\" of democracy?", "back": "The sovereignty of the people."}, {"front": "In Mencken's religious mapping of democracy, what are the \"sacraments\"?", "back": "Elections."}, {"front": "Which historical figure does Mencken identify as a \"saint\" of the democratic religion?", "back": "Abraham Lincoln."}, {"front": "To what common childhood illness does Mencken compare democracy to deflate its grand ideals?", "back": "Measles."}, {"front": "What is the rhetorical impact of the antithetical structure in the phrase \"not therapeutics, but pathology\"?", "back": "It creates a sense of logical inevitability and confidence in his scientific stance."}, {"front": "Mencken suggests that democratic theory is immune to rational criticism because it operates in the realm of _____.", "back": "faith"}, {"front": "What biblical passage is echoed in Mencken's phrase \"until the corruptible puts on incorruption\"?", "back": "1 Corinthians 15:53."}, {"front": "Why does Mencken use Roman law terms like \"usufructs\" in his analysis?", "back": "To describe the loss of distinction and privilege that democratic equality causes."}, {"front": "In the medical metaphor, who is cast as the \"physician\" and what is the \"patient\"?", "back": "Mencken is the physician and democracy is the patient."}, {"front": "What does Mencken claim is democracy's greatest vice regarding problem-solving?", "back": "Its insistence that every problem must have a remedy."}, {"front": "The shift toward longer, elaborately subordinated sentences in the Coda creates a sense of _____ weight.", "back": "judicial"}, {"front": "How does the measles metaphor characterize the \"rhetoric of liberty and equality\"?", "back": "It reduces grand idealism to the level of a common, unglamorous childhood illness."}, {"front": "What does Mencken's use of \"ratiocination\" suggest about his view of the common man?", "back": "He believes rational thought is too demanding and unnecessary for the democratic mob."}, {"front": "Mencken argues that democracy will not be defeated by enemies but will be _____ by its own contradictions.", "back": "consumed"}, {"front": "What is the primary function of the medical register in Mencken's peroration?", "back": "To shield him from charges of prejudice by claiming clinical objectivity."}, {"front": "According to the religious analogy, what are the \"miracles\" of democracy?", "back": "The belief that voting has the capacity to solve any problem."}, {"front": "What does the phrase \"last joke upon man\" in the text refer to?", "back": "The failure of man to learn how to govern himself in a rational and competent manner."}, {"front": "Mencken's transition from the satirist's mask to the \"I don't know\" confession signals the performance's _____ phase.", "back": "final"}, {"front": "How does Mencken use the word \"hocus-pocus\" in his analysis?", "back": "As part of a theological register to dismiss democratic processes as irrational rituals."}, {"front": "Why is the brevity of the sentences \"My business is not prognosis, but diagnosis\" significant?", "back": "The brevity signals confidence and breaks from the preceding long, periodic structures."}, {"front": "Mencken treats democracy not as a political system but as a _____.", "back": "creed"}, {"front": "What does the word \"pathologist\" imply about Mencken's attitude toward the \"disease\" he studies?", "back": "It implies he does not hate the disease but simply describes it objectively."}, {"front": "The use of \"immemorial Christian dead\" in the opening sentence is an example of a _____ allusion.", "back": "biblical"}, {"front": "What is the significance of the term \"self-limiting\" when applied to civilization?", "back": "It suggests that civilization, like democracy, may inherently lead to its own end."}, {"front": "By admitting ignorance of the future, Mencken sets himself apart from _____.", "back": "democratic true believers"}, {"front": "What does the term \"cardinal article of faith\" refer to in Mencken's critique?", "back": "A fundamental, unquestionable belief within the \"religion\" of democracy."}, {"front": "What is the rhetorical effect of comparing elections to \"Transubstantiation\"?", "back": "It mocks the irrational, mystical power democratic citizens attribute to the act of voting."}, {"front": "In Mencken's view, a diagnostician is not obligated to provide a _____.", "back": "cure"}, {"front": "The collision between medical and theological registers is used to diagnose a _____.", "back": "faith"}, {"front": "How does the periodic sentence structure reflect the \"judicial weight\" Mencken seeks to project?", "back": "It suggests the verdict is being carefully composed after hearing all evidence."}, {"front": "Mencken's peroration is described as an argument against _____.", "back": "perorations"}, {"front": "What does the word \"brummagem\" imply about the quality of something?", "back": "That it is cheap and counterfeit."}, {"front": "According to Mencken, what is the democratic \"heretic\"?", "back": "Anyone who questions the fundamental faith or dogmas of democracy."}, {"front": "What is the \"emotional logic\" provided by the medical metaphor?", "back": "A doctor identifying a disease is not invalid just because they cannot cure it."}, {"front": "The admission \"I don't know\" is described as a rhetorical move that earns the right to speak by demonstrating _____.", "back": "knowledge"}, {"front": "In the comparison between democracy and measles, why is the disease's association with \"childhood\" important?", "back": "It suggests that democracy is an immature phase that humanity might eventually outgrow."}, {"front": "The register of \"pathology\" and \"clincal material\" is intended to counter the charge of _____.", "back": "mere prejudice"}, {"front": "What is the rhetorical purpose of mapping political belief onto religious structure?", "back": "To suggest that democratic theory is immune to rational criticism."}, {"front": "Mencken’s \"business\" is not prognosis, but _____.", "back": "diagnosis"}, {"front": "Mencken is not engaged in therapeutics, but in _____.", "back": "pathology"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

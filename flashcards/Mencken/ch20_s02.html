@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 20, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what do observers of political outrages often fail to realize about the 'common man'?", "back": "His love of liberty is almost entirely imaginary."}, {"front": "How does the common man feel when he is actually granted freedom?", "back": "Uncomfortable, alarmed, and lonely."}, {"front": "Mencken uses the 'herd' metaphor to describe the common man's desire for what?", "back": "The warm, reassuring smell of the group and the presence of a leader (herdsman)."}, {"front": "In democratic societies, what is the usual social status of the 'special sort of man' who can stand liberty?", "back": "An outlaw."}, {"front": "What does the common man prioritize above liberty, dignity, and pride?", "back": "Safety and peace."}, {"front": "To what temperature did Friedrich Nietzsche compare liberty?", "back": "Too cold to be borne."}, {"front": "Into what concept did Mencken believe Nietzsche should have evolved the 'will-to-live' for lower human levels?", "back": "A will-to-peace."}, {"front": "Mencken compares the common man's ideal peace to that of a 'trusty' in what specific setting?", "back": "A well-managed penitentiary."}, {"front": "What figure does the common man venerate due to his belief in the 'mysterious sanctity' of law?", "back": "The policeman."}, {"front": "According to Mencken, a policeman offers protection from what three entities?", "back": "Superiors, equals, and oneself."}, {"front": "Which service of the policeman is 'commonly the most esteemed' under democracy?", "back": "Protection of the individual from himself."}, {"front": "What does Mencken claim is the primary 'democratic invention' regarding personal behavior?", "back": "The state preventing individuals from self-destruction or indulgence (e.g., ruinous habits)."}, {"front": "How does the common man perceive liberty when it is possessed by his 'enemy'?", "back": "As a weapon used against him."}, {"front": "Mencken defines the history of democracy as an effort to force minorities to be _____.", "back": "Untrue to their nature."}, {"front": "What specific type of individual poses the greatest peril to democracy?", "back": "The free spirit."}, {"front": "Mencken compares a democracy's dread of heresy to a Sunday-school superintendent's dread of what?", "back": "Scarlet women, light wines, beer, and the works of Charles Darwin."}, {"front": "How did Frederick the Great differ from a democracy in his response to 'gross dissents'?", "back": "He permitted and even encouraged them."}, {"front": "What is the democratic objective regarding the 'subversive minority'?", "back": "To reduce them to impotence and put down the heretic."}, {"front": "Who does Mencken claim is the 'chief victim' of the democratic process?", "back": "The superior individual."}, {"front": "In a democracy, what does the state attempt to do to a superior individual's thoughts?", "back": "Delimit them."}, {"front": "What was the purpose of the Roman 'lex de majestate'?", "back": "To protect the state against aristocrats and free spirits."}, {"front": "Who was the historical figure responsible for the 'lex de majestate'?", "back": "Saturninus, a tribune of the people."}, {"front": "What is the primary aim of democracy concerning the 'free spirits' of society?", "back": "To break them to the common harness and make them docile."}, {"front": "According to Mencken, what is the 'measure of civilization'?", "back": "The extent to which superior individuals resist and survive the democratic process."}, {"front": "What is the only form of 'real' liberty Mencken identifies under democracy?", "back": "The liberty of the have-nots to destroy the liberty of the haves."}, {"front": "What is the 'valuable' gain for a 'have-not' in a democratic system?", "back": "The delusion that he is the equal of his betters."}, {"front": "What does Mencken claim democracy 'kills' even while supposedly loving it?", "back": "The dignity of man."}, {"front": "How did Mencken characterize President Harding's lack of dignity?", "back": "He was 'jabbering of normalcy'."}, {"front": "What does the Pope become in a democratic society, according to Mencken?", "back": "A Methodist bishop in a business suit with a toothbrush moustache."}, {"front": "How does Generalissimo Pershing represent the loss of dignity in Mencken's view?", "back": "He harangues Rotary and slaps the backs of fellow Elks."}, {"front": "Mencken describes the average man's love for sense, justice, and truth as being _____.", "back": "Wholly imaginary."}, {"front": "In the context of the United States, which political 'reign' does Mencken cite as an example of liberty being mocked?", "back": "The reign of Wilson, Palmer, and Burleson."}, {"front": "Which philosopher changed Schopenhauer’s 'will-to-live' into a 'will-to-power'?", "back": "Friedrich Nietzsche."}, {"front": "What does Mencken define as 'will-to-power' in the context of Nietzsche's philosophy?", "back": "A will-to-free-function."}, {"front": "What is the 'ignominious sort of peace' that the common man longs for above all else?", "back": "The peace of a trusty in a penitentiary."}, {"front": "How does the common man view the liberty of others?", "back": "As something to be taken away from them."}, {"front": "Mencken characterizes the 'free spirit' as holding himself answerable only to _____.", "back": "His own notions."}, {"front": "What does democracy attempt to 'pump dry' out of superior men?", "back": "Self-respect."}, {"front": "Mencken refers to 'ice-wagon drivers' and 'insurance collectors' as what type of animal metaphor?", "back": "Human camels."}, {"front": "Term: Droit de seigneur", "back": "Definition: A feudal right; Mencken uses it to describe the freedom of superior natures to follow their own counsel."}, {"front": "Why is a despot considered 'safe' in a way a democracy is not?", "back": "His own belief in himself cannot be shaken."}, {"front": "Mencken identifies liberty as the 'exclusive possession' of which group?", "back": "A small and disreputable minority."}, {"front": "What qualities does Mencken group with liberty as being exclusive to a minority?", "back": "Knowledge, courage, and honour."}, {"front": "What does Mencken claim is the 'only thing' keeping common men from smoking opium or ruining themselves in night clubs?", "back": "The protection provided by democratic law (policemen)."}, {"front": "Mencken describes the common man's view of liberty as something too _____ for his hands.", "back": "Hot."}, {"front": "The common man's belief in the 'mysterious sanctity in law' persists regardless of what fact?", "back": "The law may be absurd in fact."}, {"front": "What is the consequence for a 'free spirit' when democracy is 'on the loose'?", "back": "He must be reduced to impotence."}, {"front": "According to Mencken, what is the relationship between civilized government and individual liberty?", "back": "Democracy accomplishes the preservation of liberty less efficiently than any other form."}, {"front": "What Roman figure does Mencken equate with the 'docile' output of the democratic process?", "back": "John Doe."}, {"front": "What 'delusion' allows the peasant to no longer pull his forelock when meeting a baron?", "back": "The delusion of equality."}, {"front": "Mencken uses the term 'Tabakparlement' to describe the undignified surroundings of which US President?", "back": "Calvin Coolidge."}, {"front": "How does democracy view the 'superior individual' in comparison to the 'inferior'?", "back": "As a threat to be regulated, delimited, and brought down."}, {"front": "What historical crime does Mencken claim democracy is constantly reinventing through its regulation of thoughts?", "back": "Imagining the King’s death."}, {"front": "The ability of a commoner to denounce a scientist like Huxley as a 'quack' is an example of what?", "back": "The realities emerging from the democratic delusion of equality."}, {"front": "Mencken posits that the average man doesn't want to be free; he simply wants to be _____.", "back": "Safe."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

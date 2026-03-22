@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 23, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the defining characteristic—rather than a mere defect—of democratic government?", "back": "Corruption."}, {"front": "Why does the democratic 'mob' tolerate thieves in government, according to Mencken's argument?", "back": "The mob recognizes in thieves a kindred spirit to its own corrupt nature."}, {"front": "Mencken claims that nine-tenths of Puritan 'moral compulsion' is actually composed of cruelty, envy, and _____.", "back": "cowardice"}, {"front": "How does Mencken describe the business ethics of the 'Ur-Puritan' of New England?", "back": "He was a virtuoso of sharp practices whose feats survive in fable."}, {"front": "According to Mencken, the modern 'cult of Service' serves as a sop to conscience and a bait to _____.", "back": "catch conies (victims)"}, {"front": "In Mencken's view, which industry represents the 'most gorgeous development of imposture as a fine art'?", "back": "Advertising."}, {"front": "Mencken notes that in less 'pious' civilizations, the talents currently used for advertising would be devoted to creating _____.", "back": "cathedrals and masses"}, {"front": "What fraction of the Americano's income does Mencken claim is 'rooked' out of him officially by the government?", "back": "One-sixth."}, {"front": "Why does Mencken believe all schemes to save the 'democratic man' from victimization are bound to fail?", "back": "Democratic man is eternally a prey to shibboleths and delusions."}, {"front": "Mencken compares the history of democracy to a citizen sneaking home a jug of contraband whiskey only to find it contains pepper, prune juice, and _____.", "back": "wood alcohol"}, {"front": "Which three 'democratic masterpieces' does Mencken label as virtuous pretenses that are actually 'unmitigated swindles'?", "back": "Bryanism, Ku Kluxery, and the war to end war."}, {"front": "What was Friedrich von Gentz's 1809 argument against the introduction of democracy on the Continent?", "back": "It would bring a reign of bribery and destroy the integrity of the state."}, {"front": "Mencken cites the 1919 flight of a German Cabinet minister with his loot as evidence for which political theory?", "back": "The inherent corruption of democratic republics."}, {"front": "How did the American populace react to the 'gigantic peculations' of the second Grant administration, according to Henry Adams?", "back": "With a philosophic acceptance of them as inevitable and natural."}, {"front": "In the case of the 'martyred' Harding, who did the public find more unpopular than the thieves?", "back": "The specialists in rectitude who ventured to protest the corruption."}, {"front": "Mencken defines democracy as a form of 'wholesale _____' rather than a government with a fixed purpose.", "back": "bribery"}, {"front": "How does a democratic government maintain its security while managing the 'mob's vagaries'?", "back": "By constantly bargaining with and providing bribes for prehensile minorities."}, {"front": "Mencken argues that labor leaders constitute a 'government within the general government' that must be bought with _____.", "back": "offices"}, {"front": "According to Mencken, the 'yearnings' of farmers are never ameliorated by a desire for the _____.", "back": "common good"}, {"front": "Why is the head of a democratic state forced to 'haggle and bargain like the lowliest office-seeker'?", "back": "He has no title to office except for that which lies in the popular will."}, {"front": "What percentage of presidential promises does Mencken claim are for private rewards from the public store?", "back": "Nine-tenths."}, {"front": "In the democratic ethic, what is considered more 'immoral' than making a promise of private reward?", "back": "Making the promise and then failing to execute it."}, {"front": "Mencken compares the appointment of William Jennings Bryan as Secretary of State to appointing a _____ as Surgeon-General.", "back": "chiropractor"}, {"front": "According to the text, why did Woodrow Wilson's popular support finally collapse?", "back": "He tried to force the United States into the League of Nations."}, {"front": "How does Mencken characterize the United States' reputation in foreign relations due to its 'Puritan' nature?", "back": "As a 'pious fraud' regarded as a dubious friend and tricky foe."}, {"front": "Which U.S. government entity does Mencken describe as a 'fecund source of oppression and corruption' since its earliest days?", "back": "The Department of Justice."}, {"front": "What tactic does Mencken allege the Department of Justice used in its efforts to 'undo men' who flouted it?", "back": "Perjury."}, {"front": "According to John Stuart Mill, how is the 'tyranny of the majority' manifested regarding just laws?", "back": "In the usurped power to suspend the operation of laws that are just."}, {"front": "Mencken argues that democracy, more than oriental despotism, becomes a government of _____, not of laws.", "back": "men"}, {"front": "How does a democratic government handle the supply of mob 'crazes and delusions' when they lag?", "back": "It maintains a machine for launching such delusions itself."}, {"front": "What 'characteristically Puritan habit' does Brooks Adams attribute to the government in 'The Emancipation of Massachusetts'?", "back": "The habit of inflicting as much mental suffering as possible upon victims."}, {"front": "What is the 'constant and central aim' of every democratic government, according to Mencken?", "back": "To silence criticism of itself."}, {"front": "Why are constitutional checks ineffective against a democratic government's operations?", "back": "The machinery for enforcing those checks is under the government's own control."}, {"front": "Mencken asserts that the sense of power for a ruler comes not from executing laws, but from _____.", "back": "evading or augmenting them"}, {"front": "Why does the 'democratic man' view 'beating the government' as a transaction devoid of moral turpitude?", "back": "He sees the government as an external group devoted to his exploitation."}, {"front": "According to Mencken, what is the true source of public indignation when scoundrels achieve theft on an 'heroic scale'?", "back": "Envy."}, {"front": "Why were returning WWI soldiers more indignant toward shipyard workers than toward war profiteers?", "back": "They could imagine and envy the workers' ten-dollar-a-day pay, whereas the contractors' billions were beyond their grasp."}, {"front": "Mencken argues that capitalism is secure under democracy because the democratic man shares capitalism's _____.", "back": "aims and aspirations"}, {"front": "Why is the 'democratic man' generally suspicious of those who propose to overthrow capitalism?", "back": "A new system would force him to invent an entirely new 'outfit of dreams.'"}, {"front": "How did the American 'capitalistic system' neutralize the threat of returning conscripts after WWI?", "back": "By diverting their anger toward draft-dodgers, conscientious objectors, and radicals."}, {"front": "Mencken cites the 1926 general strike in England as an example of defeating the proletariat by _____.", "back": "pitting half of the group against the other half"}, {"front": "In a democratic society, why are rich manufacturers and bankers placed higher than soldiers or men of learning?", "back": "Their achievements are more easily comprehended and imagined by the 'inferior man.'"}, {"front": "What was E.W. Howe's argument regarding the professional competence of American business men versus statesmen?", "back": "The average business man is more competent professionally than the average statesman or scholar."}, {"front": "Mencken contrasts the rank of the best American poet with the world rank of which financial manipulator?", "back": "J. Pierpont Morgan."}, {"front": "According to Mencken, who truly 'runs the country' in all democracies?", "back": "The capitalists."}, {"front": "Mencken identifies McKinley, Harding, and Coolidge as 'trusted and reliable men' put in power by whom?", "back": "The capitalists (or plutocracy)."}, {"front": "What metaphor does Mencken use to describe the capitalists' control over the public via agents like Gompers?", "back": "Keeping 'Demos' penned in a 'gilt and glittering cage.'"}, {"front": "Mencken claims that 'Public Opinion' is piped to central factories to be flavored, colored, and _____.", "back": "put into cans"}, {"front": "Term: Usurpation", "back": "Definition: The wrongful seizure of power or authority, which Mencken claims is the history of government under republics."}, {"front": "Term: Turpitude", "back": "Definition: Depravity or wickedness; Mencken argues democratic man sees no such quality in cheating the government."}, {"front": "How does Mencken characterize the 'security' of a democratic government?", "back": "It depends wholly on providing bribes for the prehensile minorities that constitute or deceive the mob."}, {"front": "What is the democratic man's reaction to a leader who shows 'unusual rectitude' and refuses to steal?", "back": "He sets the leader down as either a liar or an idiot."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

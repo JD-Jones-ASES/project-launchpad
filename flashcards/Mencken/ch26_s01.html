@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 26, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In what year was H. L. Mencken's \"Notes on Democracy\" published?", "back": "1926"}, {"front": "By which year had Mencken's influence sharply declined due to shifts in the political and economic climate?", "back": "1935"}, {"front": "Which historical event made Mencken’s contempt for the common man appear cruel rather than clever?", "back": "The Great Depression"}, {"front": "Why did the rise of fascism in Europe negatively affect the reception of Mencken's attacks on democracy?", "back": "They looked less like intellectual sport and more like collaboration with tyranny."}, {"front": "List the three memoirs Mencken wrote during his final productive decade.", "back": "Happy Days, Newspaper Days, and Heathen Days."}, {"front": "How did the tone of Mencken's memoirs differ from his earlier polemical work?", "back": "They were warmer, more nostalgic, and less combative."}, {"front": "What medical event in 1948 ended Mencken’s ability to read and write?", "back": "A devastating stroke"}, {"front": "According to the text, what was the \"cruelest possible punishment\" for Mencken during his final eight years?", "back": "Living in silence without the ability to read or write."}, {"front": "Why does Mencken's prose survive despite the fading of the specific controversies he wrote about?", "back": "Because of the craft, rhythm, and instinct for language rather than the specific subject matter."}, {"front": "Mencken's influence on American prose style is often traced back to which 18th-century English essayists?", "back": "Joseph Addison and Richard Steele"}, {"front": "Which two 18th-century publications established the model for literary journalism in English?", "back": "The Tatler and The Spectator"}, {"front": "How did Mencken modify the tradition of literary journalism for an American context?", "back": "He made it louder, cruder, funnier, and more willing to offend."}, {"front": "Who is credited as the inventor of \"Gonzo journalism\"?", "back": "Hunter S. Thompson"}, {"front": "Term: Gonzo journalism", "back": "A style where the reporter is a central figure, blending fact with personal commentary, satire, and exaggeration."}, {"front": "What is considered the defining work of Gonzo journalism?", "back": "Fear and Loathing in Las Vegas (1971)"}, {"front": "How did Hunter S. Thompson’s role in his journalism differ from Mencken's perspective?", "back": "Thompson placed himself inside the spectacle of folly rather than observing it from above."}, {"front": "Who was the pioneer of the \"New Journalism\" movement in the 1960s and 1970s?", "back": "Tom Wolfe"}, {"front": "Concept: New Journalism", "back": "The application of fiction techniques like scene construction and dialogue to factual reporting."}, {"front": "Name two representative works of New Journalism written by Tom Wolfe.", "back": "The Electric Kool-Aid Acid Test and The Right Stuff."}, {"front": "Mencken used the term _____ to describe the American masses, a group Tom Wolfe also satirized through status-seeking portraits.", "back": "Booboisie"}, {"front": "Which Anglo-American polemicist is described as the most self-conscious inheritor of Mencken's style?", "back": "Christopher Hitchens"}, {"front": "What conviction did Christopher Hitchens share with Mencken regarding the purpose of prose?", "back": "The belief that a well-turned sentence is a form of moral action."}, {"front": "Which three traits characterize Christopher Hitchens' prose style as a reflection of Mencken's voice?", "back": "Erudite, combative, and deliberately provocative."}, {"front": "What metaphor is used to describe Mencken's ongoing influence on American opinion journalism?", "back": "An underground river"}, {"front": "What is the \"Paradox of Reputation\" concerning H. L. Mencken?", "back": "He is revered as a brilliant prose stylist but frequently condemned for his personal views."}, {"front": "In what year was \"The Diary of H. L. Mencken\" published posthumously?", "back": "1989"}, {"front": "Who edited the 1989 publication of Mencken’s private diary?", "back": "Charles A. Fecher"}, {"front": "Why did the publication of Mencken's private diary cause a painful reassessment of his legacy?", "back": "It contained bigoted language regarding African Americans and Jews that was harsher than his public work."}, {"front": "How did Mencken's public record on race contrast with his private diary entries?", "back": "Publicly he mocked the KKK and defended Jewish friends; privately he expressed unambiguous bigotry."}, {"front": "The text argues that studying Mencken's craft is a form of intellectual self-defense because it teaches readers to _____.", "back": "Analyze rhetoric and see how persuasion works at the level of language."}, {"front": "What four rhetorical elements should a reader be able to identify to avoid being deceived by a text?", "back": "Hyperbole, irony, loaded diction, and the structure of an argument."}, {"front": "According to the \"Key Concept\" section, why does studying a writer's craft not require agreeing with their content?", "back": "Analysis focuses on how something is said rather than what is said."}, {"front": "What comparison is used to explain that studying Mencken's craft does not make one a \"Menckenite\"?", "back": "Studying a magician's technique does not make you believe in magic."}, {"front": "Identify three 1920s targets of Mencken's writing that are now considered part of a \"vanished era.\"", "back": "Prohibition, the Ku Klux Klan, and William Jennings Bryan (or Warren Harding)."}, {"front": "What permanent feature of democratic life involves the power of leaders to manipulate democratic institutions?", "back": "The power of demagogues"}, {"front": "What tension in democratic governance does Mencken's work continue to highlight in the 21st century?", "back": "The tension between populism and expertise."}, {"front": "What is described as the \"ultimate test of style\" that Mencken’s prose passes a century later?", "back": "The ability of sentences to remain \"alive\" and make a reader laugh, wince, or think."}, {"front": "What was the peak unemployment rate in the United States during the Great Depression?", "back": "25 percent"}, {"front": "In the context of Mencken's decline, what specific event occurred in October 1929?", "back": "The stock market crash"}, {"front": "Mencken's \"Notes on Democracy\" was written at what stage of his career?", "back": "At the height of his fame."}, {"front": "What does the text suggest is the substance of Mencken's surviving work?", "back": "The craft (rhythm, word choice, and entertainment of outrage)."}, {"front": "How did Hunter S. Thompson view American politics in his writing?", "back": "As a spectacle of human folly."}, {"front": "Tom Wolfe's fascination with \"status detail\" and \"social observation\" is attributed to the influence of _____.", "back": "H. L. Mencken"}, {"front": "According to the text, what is the value of a reader who can trace the structure of an argument?", "back": "They are far harder to deceive."}, {"front": "Mencken's diary was kept private for how many years after his death per his instructions?", "back": "Twenty-five years"}, {"front": "What was the primary conflict in the scholarly debate regarding Mencken's diary?", "back": "Whether private prejudices negate a public record of opposing organized bigotry."}, {"front": "What specific technique of fiction did New Journalism apply to reporting?", "back": "Scene-by-scene construction (or dialogue, point of view, status detail)."}, {"front": "What role did Mencken take toward the \"booboisie\" in his writing?", "back": "Observing them from above with aristocratic contempt."}, {"front": "Who were the primary targets of Mencken's contempt for \"religious orthodoxy\" among his inheritors?", "back": "Christopher Hitchens"}, {"front": "Mencken's sentences are described as having an \"instinct for the _____ word.\"", "back": "Devastating"}, {"front": "What was repealed, ending one of the specific controversies Mencken wrote about in the 1920s?", "back": "Prohibition"}, {"front": "Mencken's influence is seen in columnists who treat the English language as both a \"weapon and a _____.\"", "back": "Toy"}, {"front": "The Great Depression lasted through much of which decade?", "back": "The 1930s"}, {"front": "What quality distinguishes \"great prose from merely competent prose\" according to the text?", "back": "The sentences are alive (they move, surprise, and land)."}, {"front": "What did the rise of fascism make Mencken's attacks on democracy look like?", "back": "Collaboration with tyranny"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

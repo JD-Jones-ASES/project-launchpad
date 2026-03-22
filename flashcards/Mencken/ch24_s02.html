@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 24, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In his inquiry into democracy, Mencken identifies his primary professional role as a _____ rather than a therapist.", "back": "pathologist"}, {"front": "According to Mencken, what specific concept becomes 'unfashionable' or even 'infamous' under democracy?", "back": "The concept of the insoluble."}, {"front": "Mencken asserts that democracy came into the world and remains primarily a _____.", "back": "cure-all"}, {"front": "Under the democratic system, how is any 'boil upon the body politic' supposedly relieved?", "back": "By taking a vote."}, {"front": "Mencken argues that the aim of democratic government is to repeal the laws of nature and re-enact them with _____.", "back": "moral amendments"}, {"front": "How does Mencken describe the democratic state's relationship to the 'mob' that created it?", "back": "It is a mystical emanation with transcendental potency that can remake the mob itself."}, {"front": "Contrast with democracy: What did ancient systems of despotism refrain from attempting to abolish?", "back": "Immutable realities such as sin, poverty, stupidity, and cowardice."}, {"front": "In Medieval Christianity, when was the quest for a perfect moral order expected to be fulfilled?", "back": "Post mortem, after arriving in heaven."}, {"front": "Mencken argues that democracy functions as a substitute for, and the antithesis of, _____.", "back": "old religion"}, {"front": "Why does Mencken claim democracy is not vulnerable to logical attack?", "back": "It possesses the magical potency of a system of faith and lies outside the range of logical ideas."}, {"front": "What irony does Mencken find in James Bryce’s 'Modern Democracies'?", "back": "Bryce amasses evidence that democracy doesn’t work but concludes that it does."}, {"front": "According to Mencken, what is the purpose of the 'hocus-pocus' inherent in democratic doctrines?", "back": "It simplifies the process of ratiocination, which most men find painfully difficult."}, {"front": "Mencken compares the 'banal mysticism' of democracy to the long-continued popularity of the dogma of the _____.", "back": "Trinity"}, {"front": "What 'sweet democratic axiom' does Mencken identify as a fundamental problem in the United States?", "back": "The notion that the man who hopes absurdly is a better citizen than the man who detects the truth."}, {"front": "Mencken describes American Liberals' shifting defense of the League of Nations as clinical material for the study of _____.", "back": "democratic psychopathology"}, {"front": "What does Mencken suggest is the 'last joke' upon man in the department of government?", "back": "That he never learned how to govern himself in a rational and competent manner."}, {"front": "Mencken argues that democracy's defects can only be cured by examining them _____.", "back": "realistically"}, {"front": "How does Mencken define 'civilization' in the context of human effort?", "back": "An effort to remedy the blunders and check the cruel humours of the 'Cosmic Kaiser.'"}, {"front": "What 'suicidal' paradox does Mencken identify in the philosophy of democratic equality?", "back": "It offers a way for one to rise above others but then removes the benefits of rising by declaring all equal."}, {"front": "Despite its theoretical abhorrence of them, what is democracy 'always inventing'?", "back": "Class distinctions."}, {"front": "Mencken observes that democratic man is unable to think of himself as a free individual and must instead belong to a _____.", "back": "group"}, {"front": "In a democratic state, what group tends to take the place of the missing aristocracy?", "back": "The plutocracy."}, {"front": "What essential quality does Mencken claim the plutocracy lacks compared to a true aristocracy?", "back": "Courage."}, {"front": "Mencken identifies the 'main character' of the plutocracy as its incurable _____.", "back": "timorousness"}, {"front": "Why is the plutocracy comprehensible to the mob, according to Mencken?", "back": "Its aspirations are essentially the same as those of inferior men."}, {"front": "According to Mencken, why does the 'pedagogue's' revolt against the plutocracy usually fail?", "back": "It is hampered by a haunting fear of losing their jobs and a lack of aristocratic disinterestedness."}, {"front": "Mencken claims that democratic politics resolves itself into a choice between the plutocracy and _____.", "back": "a rabble of preposterous impossibilists"}, {"front": "What does Mencken believe is democracy's greatest need beyond a party of liberty?", "back": "A genuine aristocracy to breed and secure libertarians."}, {"front": "Term: Vox populi, vox Dei", "back": "Definition: The voice of the people is the voice of God, a concept Mencken finds no evidence for in democracy."}, {"front": "Mencken characterizes democracy as a 'raucous defiance' of the _____.", "back": "divine will"}, {"front": "Mencken argues that 'the distinction that goes with mere _____ runs far ahead of the distinction that goes with actual achievement' in the US.", "back": "office"}, {"front": "How does Mencken characterize the origins of today's most powerful plutocrats?", "back": "They emerged from the mob only yesterday and brought the mob's ignobilities with them."}, {"front": "According to Mencken, what replaces the 'baron' in a democratic society?", "back": "Brummagem titles like the grand goblin or the supreme worthy archon."}, {"front": "Mencken notes that the dogma of _____ came under fire in the Reformation because it had grown too simple and comprehensible.", "back": "Transubstantiation"}, {"front": "In Mencken's view, the pedagogue eventually demonstrates the virtues of a _____ rather than an aristocrat.", "back": "Congressman (or newspaper editorial writer/butler)"}, {"front": "Mencken argues that democracy treats 'occasional libertarians' in the same _____ way that despotism treats regicides.", "back": "drum-head"}, {"front": "What quality of mind does Mencken attribute to the 'superior man' (Doe) in his struggle with the 'inferior man' (Roe)?", "back": "The natural yearning to use and enjoy the superiority he has won."}, {"front": "Mencken asserts that the 'Holy Saints' have been deposed and replaced by problems that fall within the range of _____.", "back": "practical politics"}, {"front": "According to Mencken, democracy treats the power to make laws as a way to stop a 'flux of blood,' implying it views law as a _____.", "back": "medical or physical remedy"}, {"front": "Mencken describes the democratic belief that progress is ordained of God as a _____.", "back": "touching acceptance of faith"}, {"front": "What does Mencken claim is the 'motive power' of the political 'New Thoughters' known as Liberals?", "back": "The notion that optimism is a virtue in itself."}, {"front": "Mencken defines the plutocracy as being as far from the _____ as it is from the Holy Saints.", "back": "honnête homme"}, {"front": "How does Mencken describe the nature of 'free opinion' in the presence of the mob and plutocracy?", "back": "It is virtually non-existent because its exponents fear for their livelihoods."}, {"front": "Mencken suggests that democracy might be a _____ disease, similar to civilization itself.", "back": "self-limiting"}, {"front": "In democracy, war is simplistically characterized as a 'device to _____.'", "back": "end war"}, {"front": "What does Mencken identify as the 'cardinal article of faith' in Medieval Christianity regarding the world's evils?", "back": "That the evils of the world were incurable."}, {"front": "According to Mencken, what 'simple statement of fact' leads to him being condemned as unfit for his task?", "back": "His declaration that he is engaged in pathology, not therapeutics."}, {"front": "Mencken argues that 'logical holes' in the medieval scheme of checks and balances were 'chinked with _____.'", "back": "miracles"}, {"front": "Mencken refers to the Gettysburg Address's argument for self-government as a thesis 'echoed in _____' fifty years later.", "back": "falsetto"}, {"front": "What does Mencken claim is 'unbearably painful' to the great majority of men?", "back": "The process of ratiocination (logical reasoning)."}, {"front": "Mencken notes that democracy's 'preposterous postulates' are cherished like 'authentic hairs from the whiskers of _____.'", "back": "Moses"}, {"front": "Mencken describes the Washington Disarmament Conference as a switch to the doctrine that _____ in it would save the world.", "back": "believing"}, {"front": "According to Mencken, 'civilization' is an effort to remedy the blunders of the _____.", "back": "Cosmic Kaiser"}, {"front": "Mencken argues that the history of democratic states is a history of 'disingenuous efforts' to resolve the dilemma of _____.", "back": "equality vs. superiority"}, {"front": "Mencken claims that democratic man reveres 'brummagem serene highnesses' with more _____ than in any other country.", "back": "passionate devotion"}, {"front": "Why does Mencken say a Harding is regarded as superior to a Halsted in a democracy?", "back": "Because his doings are better understood by the common man."}, {"front": "According to Mencken, what does the plutocracy lack besides courage and honor?", "back": "A clean tradition, culture, and public spirit."}, {"front": "Mencken compares the planning of a revolution by 'half a dozen gabby Jewish youths' to kittens preparing to upset the _____.", "back": "Matterhorn"}, {"front": "According to Mencken, Christianity (a mob religion) paves heaven with gold because gold represents _____ to the mob.", "back": "money"}, {"front": "Mencken claims that 'distrust' of plutocratic pretensions among the mob seldom arises above mere _____.", "back": "envy"}, {"front": "Mencken argues that the choice in democratic politics is between the New York Times and _____.", "back": "Bryan and the Bolsheviki"}, {"front": "Mencken concludes that democracy needs a party that will separate the _____ from the evils that beset it.", "back": "good that is in it theoretically"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

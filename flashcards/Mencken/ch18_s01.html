@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 18, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the fate of an honest man in public life under a democracy?", "back": "Virtue is punished rather than rewarded."}, {"front": "Why does the democratic mob find it impossible to believe in disinterested public service?", "back": "The mob cannot imagine acting without self-interest itself."}, {"front": "Why does an honest man suffer more than a crook from the mob's assumption of universal corruption?", "back": "The crook at least knows how to play the game of political survival."}, {"front": "What rhetorical shift occurs when Mencken discusses his own career as a journalist?", "back": "He moves from third-person analysis to first-person testimony."}, {"front": "What is the strategic purpose of Mencken's move to personal testimony in this section?", "back": "It transforms abstract political theory into personal witness."}, {"front": "Who was James Alexander Reed?", "back": "A Democratic Senator from Missouri who served from 1911 to 1929."}, {"front": "Which specific Progressive-era policies did Senator James A. Reed oppose?", "back": "The League of Nations and Prohibition."}, {"front": "Why did Mencken admire Senator James A. Reed?", "back": "He was a rare politician who refused to flatter the mob."}, {"front": "How does Mencken describe the initial tone of Section 1?", "back": "His customary satirical mode describing structural obstacles for honest politicians."}, {"front": "How does Mencken's tone change when introducing his own experiences?", "back": "It shifts from satirist to witness, taking on a quality of controlled indignation."}, {"front": "Mencken lists four groups he was accused of taking money from; name two of them.", "back": "The brewers and the Vatican (also distillers and the Medical Trust)."}, {"front": "How does Mencken describe a typical American newspaper editor?", "back": "One who has written a million words for Coolidge and half a million against Darwin."}, {"front": "What is the cautionary note regarding Mencken's self-portrait as a 'disinterested truth-teller'?", "back": "It is a carefully crafted rhetorical persona designed to serve his argument."}, {"front": "What two concepts does Mencken place in opposition to define the section's central tension?", "back": "Rectitude (private moral uprightness) and political necessity."}, {"front": "Term: timorousness", "back": "Definition: fearfulness or timidity."}, {"front": "Term: Katzenjammer", "back": "Definition: German for 'cat's wailing'; a hangover or the miserable aftermath of excess."}, {"front": "Term: comstocks", "back": "Definition: Moralistic censors, named after anti-vice crusader Anthony Comstock."}, {"front": "Term: prehensile", "back": "Definition: Capable of grasping, used by Mencken to describe corrupt public servants."}, {"front": "Term: sordid", "back": "Definition: Morally ignoble or base; carrying connotations of filth."}, {"front": "Why does Mencken use the German word 'Katzenjammer' to describe the post-war mood?", "back": "It serves as a small act of defiance against post-war anti-German sentiment."}, {"front": "In Mencken's rhetorical strategy, what effect do phrases like 'my own experience' have on the register?", "back": "They create an uncharacteristically modest register that signals a shift to personal testimony."}, {"front": "Define 'periodic sentence' in the context of Mencken's writing.", "back": "A sentence that withholds its main point or clause until the very end."}, {"front": "In the periodic sentence describing the 'sweet resiliency' of a backbone, what is the final 'punch'?", "back": "The revelation that the politician's actions are determined by bribery rather than principle."}, {"front": "What role do semicolons play in Mencken's long, building periodic sentences?", "back": "They function as pauses in a drumroll, building toward a final revelation."}, {"front": "How does Mencken use the dash in his commentary on Senator Reed?", "back": "As a 'parenthetical smirk' to point out contradictions in Senate rules."}, {"front": "What is an epigram?", "back": "A brief, witty, and memorable statement that compresses a complex idea into a single phrase."}, {"front": "How does Mencken's epigram about American editors critique American journalism?", "back": "It highlights servility to mediocre power (Coolidge) and hostility toward revolutionary ideas (Darwin)."}, {"front": "Why is the title 'The Rewards of Virtue' considered ironic?", "back": "The text argues that virtue actually receives no rewards and is instead punished."}, {"front": "What is the central antithesis that structures Mencken's argument in this section?", "back": "The conflict between public perception of motive and the actual truth."}, {"front": "Mencken divides the legislative process into which two stages in his final verdict?", "back": "Invention and enactment."}, {"front": "According to Mencken's final epigram, who 'invents' our laws?", "back": "Frauds and fanatics."}, {"front": "According to Mencken's final epigram, who puts laws upon the 'statute books'?", "back": "Poltroons and scoundrels."}, {"front": "What is the rhetorical effect of alliteration in the phrase 'frauds and fanatics'?", "back": "It creates a hissing, contemptuous quality through the repeated 'f' sound."}, {"front": "What is the rhetorical effect of the harder consonants in 'poltroons' and 'scoundrels'?", "back": "They land like blows, reinforcing the sense of judgement and contempt."}, {"front": "How does Mencken use the qualifier 'in the main' in his final sentence?", "back": "As a mock-fairness that reinforces the claim's weight by suggesting exceptions are negligible."}, {"front": "What does Mencken suggest is the national mood after World War I using the term 'Katzenjammer'?", "back": "A collective hangover resulting from patriotic excess."}, {"front": "Why are Mencken's epigrams described as 'arguments in compressed form'?", "back": "They state a position, imply evidence, and deliver a verdict in a single breath."}, {"front": "According to Mencken, what makes the 'crook' better suited for public life than the honest man?", "back": "The crook understands the 'game' of satisfying the mob's cynical assumptions."}, {"front": "The phrase 'The typical American editor...' is an example of which figure of speech?", "back": "An epigram."}, {"front": "What does Mencken imply about the Senate's rule forbidding members to 'question the motives of another'?", "back": "He treats it as a hollow pretense that masks the lack of integrity in the institution."}, {"front": "What register of language does Mencken use to describe the mob's inability to imagine virtue?", "back": "Medical vocabulary, framing it as a kind of disease or pathology."}, {"front": "The sentence structure 'Our laws are invented by X and put upon by Y' is an example of _____.", "back": "Parallelism."}, {"front": "How does Mencken's use of 'Coolidge' and 'Darwin' in an epigram create contrast?", "back": "It pits a mediocre, forgettable political figure against a revolutionary, unforgettable scientist."}, {"front": "What 'price' did Senator Reed pay for his refusal to flatter the mob?", "back": "The political price of being a rare exception who defied his party and the public."}, {"front": "What is the potential danger of using epigrams in persuasive writing?", "back": "They can substitute cleverness for truth, sounding inevitable without necessarily being correct."}, {"front": "The term 'comstocks' is used by Mencken as a _____ noun to denote any moralistic censor.", "back": "common"}, {"front": "In the analysis of Mencken's prose, what is the 'drumroll' effect associated with?", "back": "The sequence of clauses in a periodic sentence separated by semicolons."}, {"front": "How does Mencken describe the 'backbone' of the opportunistic politician?", "back": "As having a 'sweet resiliency'."}, {"front": "Mencken suggests that for an honest critic, it is impossible to convince the public that an attack on an institution is not _____.", "back": "paid for by that institution's competitors."}, {"front": "What specific human trait does Mencken label as 'timorousness' in American politics?", "back": "A pervasive culture of fear and timidity."}, {"front": "What quality does the prose take on when Mencken speaks as a 'witness' to his own persecution?", "back": "Controlled indignation."}, {"front": "How does Mencken reduce Anthony Comstock to a 'type' rather than an individual identity?", "back": "By using his name as a lowercase common noun (comstocks)."}, {"front": "Mencken's final sentence ends on a _____ syllable, reinforcing the sound of contempt.", "back": "stressed"}, {"front": "The 'honest man' in Mencken's analysis is characterized by 'disinterested public service'. What does 'disinterested' mean here?", "back": "Acting without self-interest or personal gain."}, {"front": "Mencken describes the democratic legislator as both a 'fool' and a _____.", "back": "fraud"}, {"front": "In the context of Mencken's epigrams, what is 'compression'?", "back": "Forcing a complex argument into a single, concise sentence."}, {"front": "What does Mencken mean by the 'aristocratic disdain' seen in the final paragraphs?", "back": "A posture of looking down upon the common and the mediocre with superior contempt."}, {"front": "Why is 'political necessity' contrasted with 'rectitude'?", "back": "To show how the demands of office-holding inevitably clash with private moral uprightness."}, {"front": "How does Mencken portray the public's understanding of human motivation?", "back": "As a pathological inability to imagine virtue."}, {"front": "Mencken's first-person testimony serves to transform abstract theory into what?", "back": "Personal witness."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 18, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the usual outcome for a rare honest man who enters democratic politics?", "back": "He is punished for his virtues while the fraud beside him is rewarded."}, {"front": "How long does the success of an intelligent and honourable man usually last in public office?", "back": "His first term is commonly his last."}, {"front": "Which factors helped the Missouri Senator overcome the odds against him in his last campaign?", "back": "His talents as an orator, post-war Katzenjammer, and a local delight in vigorous fighters."}, {"front": "In which types of American States do honourable men have the best chance of obtaining public office?", "back": "The newer States and the border States."}, {"front": "What prevents men of genuine dignity and ability from entering public life in states like Georgia or Vermont?", "back": "Long-standing and strong party fidelity."}, {"front": "How does Mencken describe the typical politicians found in states dominated by party hacks?", "back": "Men who have trimmed and fawned and are forbidden from frank discussion of national issues."}, {"front": "What assumption is placed upon even the most honourable man who miraculously gains public office?", "back": "The assumption of cowardice and venality."}, {"front": "Why is the mob unable to understand the actions of a public man of rectitude?", "back": "They are unable to grasp the concept of honour."}, {"front": "To what types of motives does the mob ascribe the acts of an honest public official?", "back": "Sordid and degrading motives."}, {"front": "What does Mencken identify as the main cause of the 'astounding timorousness' of American politics?", "back": "The fact that honest acts are ascribed to base motives."}, {"front": "What technique did Prohibitionist leaders use to silence politicians who spoke against them?", "back": "A technique of terrorization."}, {"front": "What was a common 'whispered' accusation against politicians who opposed Prohibition?", "back": "That they were secret drunkards or in the pay of the 'Whiskey Ring'."}, {"front": "Who did Mencken identify as being actually on the payroll of the Anti-Saloon League?", "back": "Many of the principal supporters of Prohibition, including judges and attorneys-general."}, {"front": "Why did the 'plain people' react to baseless charges against honest men as if they were proven?", "back": "They could only imagine motives involving a yearning for private advantage."}, {"front": "What event finally encouraged politicians to defy the Prohibitionists after years of silence?", "back": "The obvious corruption and imprisonment of Anti-Saloon League agents."}, {"front": "What is the recurring accusation Mencken faced whenever he attacked a current theory?", "back": "That he was in the pay of its interested opponents."}, {"front": "Why did the brewers offer to put Mencken on their payroll?", "back": "They could not imagine a man discharging a public duty disinterestedly."}, {"front": "When Mencken exposed the 'quackeries' of osteopaths, what was he accused of receiving?", "back": "A retainer from the mythical Medical Trust."}, {"front": "Which group accused Mencken of receiving bribes from the Vatican after he denounced the Ku Klux Klan?", "back": "Spokesmen for the Methodist Church."}, {"front": "What specific charge did the 'comstocks' use in their attempt to jail Mencken?", "back": "The circulation of pornography."}, {"front": "How did many American newspapers initially react to the Comstocks' charges against Mencken?", "back": "They assumed as a matter of course that he was guilty as charged."}, {"front": "Why does Mencken believe typical editors have a 'special fitness' for influencing the mob?", "back": "Their lack of sound knowledge, genuine intelligence, and sense of honour."}, {"front": "What does the 'daily toil' of a typical American editor involve according to Mencken?", "back": "Praising fraudulent men and ideas while denouncing respected ones."}, {"front": "The typical American editor is described as writing a million words for _____ and half a million against _____.", "back": "Coolidge; Darwin"}, {"front": "In Mencken's view, what does a typical editor value more than self-respect?", "back": "His job."}, {"front": "How is a fraud perceived by the mob in a democracy?", "back": "As a charming 'regular fellow'."}, {"front": "What label is often given to a superior newspaper editor to dismiss their efforts?", "back": "Bolshevik."}, {"front": "Which two honest and able editors does Mencken cite as examples of those opposed by their colleagues?", "back": "Fremont Older and Julian Harris."}, {"front": "How does the democratic process typically treat a public servant who masters their job?", "back": "With suspicion and implacable enmity."}, {"front": "Who authored the book titled 'The Cult of Incompetence'?", "back": "Emile Faguet."}, {"front": "How does Emile Faguet describe the business of law-making under democracy?", "back": "A series of panics, or government by orgy and orgasm."}, {"front": "What does public service become under the 'Cult of Incompetence'?", "back": "A refuge for prehensile morons."}, {"front": "What is the primary motive the mob attributes to any person entering public life?", "back": "A yearning for private advantage."}, {"front": "Term: Comstocks", "back": "Definition: Individuals or groups dedicated to the sinister and dishonest censorship of literature."}, {"front": "Why are honourable men effectively barred from public life in states with strong party fidelity?", "back": "The system favors party hacks who are willing to trim and fawn."}, {"front": "What does Mencken claim is the 'first idea' of the mob regarding public figures?", "back": "That a fraud is somehow charming and reassuring."}, {"front": "What does Mencken claim is the 'second idea' of the mob regarding public figures?", "back": "That an honest and candid man is dangerous or non-existent."}, {"front": "How does the 'superior' editor's experience mirror that of the 'superior' politician?", "back": "Both encounter incredulous hostility from their peers and the public."}, {"front": "According to Faguet, what is the 'get yours, and run' mentality a symptom of?", "back": "The transformation of public service into a refuge for the incompetent."}, {"front": "What was the 'Medical Trust' accusation leveled against Mencken meant to imply?", "back": "That he was a paid agent for established medical institutions like the Mayo brothers."}, {"front": "How long did it take for a faction of politicians to muster the courage to defy Prohibitionists?", "back": "Five or six years."}, {"front": "What specific 'local delight' in Missouri helped the Senator Mencken mentions win his campaign?", "back": "A delight in vigorous, rough-and-ready fighters."}, {"front": "Mencken believes that if an honourable man succeeds in politics, it is only by a _____.", "back": "Suspension of natural laws"}, {"front": "What is the 'common phrase' used by the mob to describe a charming fraud?", "back": "A regular fellow."}, {"front": "How does Mencken describe the relationship between bootleggers and Prohibitionists?", "back": "They are allies rather than opponents."}, {"front": "What characterizes the 'technique of terrorization' used against anti-prohibitionists?", "back": "Accusing the opponent of the grossest baseness and secret vices."}, {"front": "In democracy, who is favored by the 'furiously inimical' nature of the process?", "back": "The man who is without honourable motives."}, {"front": "What does Mencken claim is the 'daily toil' of a typical American editor besides praising frauds?", "back": "Denouncing men and ideas that are respected by their betters."}, {"front": "Which historical figure's 'waspish ghost' hung over the Missouri battlefield mentioned by Mencken?", "back": "The late Dr. Wilson."}, {"front": "Why did Mencken decline the brewers' offer to put him on their payroll?", "back": "He was attempting to discharge a public duty disinterestedly."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

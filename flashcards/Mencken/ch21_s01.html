@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 21, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How does H.L. Mencken define \"Puritanism\" in his rhetorical context?", "back": "The impulse to regulate the private behavior of others through the force of law."}, {"front": "According to Mencken, what two psychological motives drive democratic moralism?", "back": "Envy and sadism."}, {"front": "What constitutional amendment ratified in 1919 banned alcoholic beverages in the U.S.?", "back": "The Eighteenth Amendment."}, {"front": "What 1919 legislation provided the enforcement mechanism for Prohibition?", "back": "The Volstead Act."}, {"front": "In Mencken's view, what does the Puritan seek to punish in others?", "back": "Pleasures that the Puritan himself is unable to enjoy."}, {"front": "Mencken describes the result of democratic moralism as a system of \"_____ persecution.\"", "back": "psychopathological"}, {"front": "What amendment repealed Prohibition in 1933?", "back": "The Twenty-first Amendment."}, {"front": "According to the text, Mencken's persona in Section III.2 oscillates between which two modes?", "back": "The cool diagnostician and the angry polemicist."}, {"front": "Why does Mencken shift his tone from analytical to denunciatory?", "back": "To make the reader feel that evidence has mounted until outrage is the only logical conclusion."}, {"front": "How does Mencken characterize the army of Prohibition enforcement officers?", "back": "As an army of bravos mainly made up of professional criminals."}, {"front": "What is the primary difference between Mencken's attack on moralism and an attack on morality itself?", "back": "Mencken objects specifically to using law to enforce private moral codes rather than rejecting morality as such."}, {"front": "What are the three distinct registers of vocabulary Mencken uses in this section?", "back": "Theological, clinical, and colloquial."}, {"front": "Give an example of a \"theological\" word Mencken uses to expose Puritan pretensions.", "back": "Evangelical (or altruistic, grace, ascetic, libidinousness, sin)."}, {"front": "Give an example of a \"clinical\" word Mencken uses to pathologize Puritan motives.", "back": "Psychopathological (or sadism, aberration)."}, {"front": "Give an example of a \"colloquial\" word Mencken uses to dismiss the Puritan enterprise.", "back": "Buncombe (or brummagem, bravos, fraud)."}, {"front": "Term: Buncombe", "back": "Definition: Insincere or foolish talk, especially by a politician."}, {"front": "Term: Brummagem", "back": "Definition: Cheap, showy, and counterfeit."}, {"front": "Term: Bravos", "back": "Definition: Hired thugs or assassins employed to intimidate."}, {"front": "Term: Sadism (in Mencken's usage)", "back": "Definition: The derivation of pleasure from inflicting pain or humiliation on others."}, {"front": "Term: Casuistry", "back": "Definition: The use of clever but unsound reasoning, especially regarding moral questions."}, {"front": "What is the rhetorical effect of Mencken's \"three-register collision\" of vocabulary?", "back": "It strips Puritanism of dignity by exposing its pretensions, reducing it to pathology, and dismissing it as a swindle."}, {"front": "What is the syntactic engine of Mencken's argument in this section?", "back": "Accumulation (piling up examples, qualifications, and parallel clauses)."}, {"front": "How does Mencken use lettered enumeration (a, b) in his prose?", "back": "To mimic the format of a legal brief or scientific paper, suggesting dispassionate precision."}, {"front": "What rhythmic pattern does Mencken use when discussing bureaucratic oppression?", "back": "Long, complex sentences followed by a short, blunt verdict."}, {"front": "Definition: Accumulation (Congeries)", "back": "A rhetorical figure of amplification where a writer heaps up words or examples to create an effect of overwhelming abundance."}, {"front": "What is the purpose of Mencken's prosecutorial use of accumulation?", "back": "To make the pattern of overreach seem so heavily documented that denial becomes impossible."}, {"front": "How does Mencken employ irony against the Puritan's own language?", "back": "He uses the Puritan’s vocabulary of moral aspiration (e.g., \"yearning\") to describe what he sees as moral corruption."}, {"front": "In Mencken's characterization, what is the Puritan looking for when he views a picture?", "back": "He sees only the model's pudenda (sexual organs)."}, {"front": "Why is the word \"safely\" crucial to Mencken's", "back": "It implies the Puritan only forbids what he fears or is incapable of, rather than what he has transcended."}, {"front": "In the close reading of Mencken’s prose, why is the verb \"lust\" used to describe moralists?", "back": "It accuses them of hypocrisy by suggesting their crusade against pleasure is itself a form of perversion."}, {"front": "Identify the rhetorical figure used in the series: \"inconvenience, discomfort, and... disgrace.\"", "back": "Climax (or gradatio), where items are arranged in ascending order of severity."}, {"front": "What does Mencken's use of the phrase \"which is to say\" typically signal?", "back": "A redefinition from polite language into what Mencken considers the plain truth."}, {"front": "Mencken labels the moralists' beliefs as \"barbarous _____ superstitions.\"", "back": "theological"}, {"front": "According to Mencken, what is the \"ultimate proof\" that democratic moralism produces tyranny?", "back": "Prohibition."}, {"front": "What groups were primary drivers of the temperance agitation leading to Prohibition?", "back": "Protestant evangelical churches and women's organizations."}, {"front": "Mencken argues that the Puritan's morality is not based on conviction but on _____.", "back": "cowardice"}, {"front": "How does Mencken reduce the entire Puritan moral system in the final clause of the close-reading passage?", "back": "He reduces it to the single motive of envy."}, {"front": "What term does Mencken use to describe the regulation of the private behavior of others?", "back": "Democratic moralism."}, {"front": "What specific example of sexual persecution does Mencken mention alongside Prohibition?", "back": "The Mann Act (or the persecution of Arbuckle/Thaw)."}, {"front": "What was the result of Prohibition regarding the public's respect for law?", "back": "Respect for the law eroded as alcohol consumption went underground and organized crime grew."}, {"front": "How does the text define \"comstockery\"?", "back": "A form of democratic moralism involving the censorship or regulation of behavior and expression."}, {"front": "Why does Mencken refer to Prohibition as a \"brummagem cure-all\"?", "back": "To signify it is a cheap, fake remedy manufactured for the gullible."}, {"front": "What is the rhetorical purpose of the \"controlled loss of control\" in Mencken's tone?", "back": "It earns his outrage by first establishing him as a dispassionate, analytical observer."}, {"front": "Mencken describes the Puritan's sexual encounters as reducing themselves to the \"terms of the _____.\"", "back": "barnyard"}, {"front": "According to Mencken, how does democracy facilitate the Puritan's resentment?", "back": "It provides the machinery to translate private resentment into public law through the mob's votes."}, {"front": "In Mencken's view, who are the primary victims of democratic moralism?", "back": "The competent, the free, and the pleasure-loving."}, {"front": "Which county in North Carolina is the origin of the term \"buncombe\"?", "back": "Buncombe County."}, {"front": "What clinical term does Mencken use to describe the Puritan's motive to inflict pain?", "back": "Sadism."}, {"front": "Mencken asserts that the Puritan \"forbids what he _____, not what he has transcended.\"", "back": "fears"}, {"front": "What is the primary rhetorical function of a \"catalogue\" in Mencken's writing?", "back": "To pile up evidence in an indictment against his target."}, {"front": "What is the tone of the passage regarding Prohibition enforcement?", "back": "Genuinely disgusted (rather than merely amused or superior)."}, {"front": "Mencken characterizes Prohibition as a _____ invention.", "back": "democratic"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

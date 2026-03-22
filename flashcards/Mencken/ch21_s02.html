@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 21, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what two phenomena are identical in the human psyche?", "back": "Democracy and Puritanism."}, {"front": "What is the 'primal essence' shared by both democracy and Puritanism?", "back": "The inferior man’s fear and hatred of his betters."}, {"front": "What specific emotion does Mencken claim must be understood to grasp democracy and Puritanism?", "back": "Envy."}, {"front": "In what political system is the envy of the ignoble man liberated and made the 'philosophy of the state'?", "back": "Democracy."}, {"front": "According to Mencken, what was the primary historical service provided by old autocracies?", "back": "They held the green fury of the mob in check."}, {"front": "What historical period resulted from the collapse of autocracies under Flavius Honorius?", "back": "Four hundred years of chaos in Europe."}, {"front": "Which leader's revival of autocracy does Mencken credit with making the Renaissance possible?", "back": "Charlemagne."}, {"front": "Mencken uses the murders of Louis XVI and _____ to illustrate the mob's war on superiority.", "back": "Lavoisier"}, {"front": "What was the Revolutionary Tribunal’s justification for murdering the scientist Lavoisier?", "back": "They claimed France had no need for scientists."}, {"front": "Which historical figure does Mencken cite as having hanged every man who could read and write?", "back": "Wat Tyler."}, {"front": "How does Mencken define democracy as a 'political scheme'?", "back": "As a device for releasing hatred born of envy and giving it the force of law."}, {"front": "According to Mencken, what does the democratic state almost always tend to become?", "back": "A Puritan state."}, {"front": "What is the false theory behind Puritan legislation like Prohibition and vice crusading?", "back": "That the aim is to benefit the other person against their own will."}, {"front": "What is the first actual motive Mencken attributes to the Puritan moralist?", "back": "To punish others for having a better time in the world."}, {"front": "Mencken argues that the Puritan aims to bring the 'other fellow' down to his own _____.", "back": "unhappy level"}, {"front": "Term: Comstockery", "back": "Definition: Moralistic censorship and the suppression of free expression. Example: The banning of books or art deemed 'vicious' by anti-vice crusaders."}, {"front": "Why does the Puritan support the Mann Act according to Mencken?", "back": "He is incapable of managing sexual experience on a civilized or romantic plane."}, {"front": "What does Mencken claim is the Puritan's actual experience with 'dalliance with the grape'?", "back": "A furtive transaction behind a door followed by a headache."}, {"front": "When looking at a picture, what is the only thing a Puritan sees according to Mencken?", "back": "The model’s pudenda."}, {"front": "What is the Puritan's fundamental error regarding their own moral 'rectitude'?", "back": "Mistaking a weakness for a merit and an inferiority for a superiority."}, {"front": "Mencken describes the 'moral' Puritan as a sign of docility, lack of enterprise, and _____.", "back": "cowardice"}, {"front": "How does Mencken classify John Milton in opposition to Puritanism?", "back": "As a libertarian."}, {"front": "What book does Mencken identify as the only work comprising the whole of Puritan literature?", "back": "The Pilgrim’s Progress."}, {"front": "What does Mencken identify as the only genuinely valuable contribution to moral legislation in the modern age?", "back": "The Code Napoléon."}, {"front": "Why is the 'mob' easier for Puritans to convince than a King?", "back": "Puritan politics is based on the same brutal envies and fears the mob already believes."}, {"front": "Why is 'haste' necessary when launching legislative experiments in a democracy?", "back": "To prevent the mob from being shaken by sober second thought."}, {"front": "How were 'upper chambers' originally intended to counteract the dangers of the mob?", "back": "By being removed by at least one degree from the mob’s hot rages."}, {"front": "What does Mencken describe as 'law-making by orgy'?", "back": "The process of fanatics providing motive power while unconscionable knaves steer the machine."}, {"front": "Why does the mob find 'grotesque' laws like anti-evolution acts popular?", "back": "They provide an endless succession of barbarous and thrilling shows."}, {"front": "Who are the 'chosen victims' of democratic moral legislation?", "back": "Men of unusual intelligence and enterprise who take constitutional liberties seriously."}, {"front": "What is the primary motivation for American district attorneys to launch prosecutions against superior men?", "back": "Aspiration to higher office."}, {"front": "According to Mencken, what is the 'rich man's' status in American criminal courts?", "back": "He is under very real and very heavy burdens rather than enjoying advantages."}, {"front": "What did Prohibitionists originally promise would be abolished by their 'brummagem cure-all'?", "back": "Crime, poverty, and disease."}, {"front": "How did Prohibition affect alcohol use among the young according to Mencken?", "back": "They took to it almost unanimously after it became devilish and fashionable."}, {"front": "What psychological 'aberration' does Mencken identify as the genuine motive for continued Prohibition frenzy?", "back": "Sadism."}, {"front": "Why do Prohibitionists feel safe to continue their 'anti-social activity' without personal risk?", "back": "The American mob is excessively tolerant of written laws and judicial fiats."}, {"front": "Who are the 'bravos' Mencken claims reinforce the officers of the law in Prohibition enforcement?", "back": "Professional criminals."}, {"front": "Concept: The Forgotten Man", "back": "Definition: The normal, well-behaved, decent citizen who is beset by the envy of inferiors. Source: William Graham Sumner."}, {"front": "What does Mencken claim is the effect of Prohibition on the reputation of the courts?", "back": "It has made the courts disreputable."}, {"front": "What choice did some judges make when they could no longer square Prohibition duties with their honor?", "back": "They stepped down from the bench."}, {"front": "Mencken argues that the 'Good Man' of democracy is a psychological descendant of _____.", "back": "Wat Tyler"}, {"front": "In Mencken's view, the Puritan is primarily against any human act that he is incapable of doing _____.", "back": "safely"}, {"front": "According to Mencken, why is it difficult to distinguish the democratic man's political ideas from his theological ones?", "back": "They constantly overlap and coalesce."}, {"front": "What is the 'only' contribution to moral legislation that Mencken considers valuable?", "back": "The Code Napoléon."}, {"front": "How does Mencken characterize the 'common criminal law' in America?", "back": "It has acquired a flavor of fraud."}, {"front": "What is the 'last appeal' in the democratic political machinery that allows for cutting off debate?", "back": "The appeal to the majority."}, {"front": "Mencken claims a judge who jails an inoffensive citizen for an unjust law cannot be defended as a _____.", "back": "self-respecting man"}, {"front": "Which two states are cited by Mencken for their 'anti-evolution' laws?", "back": "Tennessee and Mississippi."}, {"front": "What two celebrities are mentioned as examples of figures district attorneys pray to prosecute for fame?", "back": "Thaw and Fatty Arbuckle."}, {"front": "Mencken argues that the Puritan's 'virtue' is actually a sign of a lack of _____ and originality.", "back": "enterprise"}, {"front": "Which group does Mencken say is 'exposed to slander and oppression' because the mob lacks their qualities?", "back": "Men of unusual intelligence and enterprise."}, {"front": "How does Mencken describe the nature of the Prohibition enforcement officers?", "back": "An army mainly made up of professional criminals."}, {"front": "Mencken believes that if the Puritan had to meet his victims _____ , the story would be different.", "back": "face to face"}, {"front": "What does the Puritan miss when reading a book, according to Mencken?", "back": "The ordeals and exaltations of the spirit."}, {"front": "Mencken states that no Puritan has ever written a _____ worth hearing.", "back": "symphony"}, {"front": "According to Mencken, the Code Napoléon was concocted by a committee of _____.", "back": "violent anti-Puritans"}, {"front": "What is the relationship between a law officer's prosperity and his conduct in democracy?", "back": "It runs in direct ratio to his reckless ferocity."}, {"front": "Mencken argues that the Puritan's delight in his own rectitude is based on the assumption that it is _____ to maintain.", "back": "difficult"}, {"front": "What happens to 'superior man' when a catastrophe liberates the mob?", "back": "The mob begins a war to the death upon superiority of every kind."}, {"front": "In democracy, who are the 'knaves' who steer the machine of law-making?", "back": "Unconscionable politicians/scoundrels."}, {"front": "What is the democratic definition of the 'Good Man'?", "back": "An anthropoid figure whose ideas overlap with theological Puritanism."}, {"front": "What was the 'theory' the Prohibitionists used to foist their cure-all during war hysteria?", "back": "A Christian yearning to abate drunkenness."}, {"front": "How does Mencken describe the historical transition from autocracy to democracy?", "back": "As a failure of enfeebled successors that let civilization be attacked by the mob."}, {"front": "What does Mencken call the process where fanatics inflame the mob to pressure lawmakers?", "back": "Law-making by orgy."}, {"front": "In the department of moral legislation, Mencken characterizes the Puritan’s work as _____.", "back": "second and third rate"}, {"front": "What was the result of deprivation of the 'prophylactic remoteness' of upper chambers?", "back": "They became exposed to the direct and unmitigated blast of the mob."}, {"front": "What does the 'inferior man' observe about his 'betters' that causes him fear?", "back": "That they are stronger and have more courage."}, {"front": "According to Mencken, what is the 'last appeal of all' in the democratic process?", "back": "The appeal to the majority."}, {"front": "Mencken claims that under democracy, the 'Good Man' becomes someone like _____.", "back": "Wat Tyler"}, {"front": "What is the 'psychopathological' purpose of many state laws in America?", "back": "Persecution and private revenge."}, {"front": "How does the Puritan view himself in the 'moral department'?", "back": "As an artist of unusual talents or a virtuoso of virtue."}, {"front": "What does Mencken claim was the state of Europe for four hundred years after the fall of autocracy?", "back": "Europe was in chaos."}, {"front": "The mob delights in seeing superior men exposed to _____ and railroaded to prison.", "back": "slander"}, {"front": "What term does Mencken use for the 'unconscionable fanatics' who drive moral legislation?", "back": "Pack of irresponsible and unconscionable fanatics."}, {"front": "How does Mencken describe the state of alcohol use 'under license' compared to Prohibition?", "back": "The young were mainly innocent of the cup under license."}, {"front": "What 'vulgar' reality lies behind the 'altruistic' claims of Puritan law?", "back": "The desire to bring the other fellow down to a depressing level."}, {"front": "Term: Casuistry", "back": "Definition: The use of clever but unsound reasoning, especially in ethics. Mencken applies this to the defense of judges jailing citizens under unjust laws."}, {"front": "Mencken argues that the mob's envy is a common possession of all men of the _____ sort.", "back": "ignoble and incompetent"}, {"front": "According to the text, what is the effect of the Mann Act on sexual adventure?", "back": "It reduces it to the terms of the barnyard."}, {"front": "What is the primary reason the mob turned against Prohibition?", "back": "It brought in many new evils while failing its original promises."}, {"front": "What does Mencken call the 'scoundrels' who make laws in the mob's name?", "back": "Congressmen and law officers seeking promotion."}, {"front": "The instant a revolution liberates the mob, it begins a 'war to the death' upon _____.", "back": "superiority of every kind"}, {"front": "What is the 'secret' of the Prohibitionists’ continued frenzy despite failure?", "back": "Freedom from personal risk."}, {"front": "What is the relationship between Puritanism and Democracy in terms of execution?", "back": "Democracy provides the machinery for the quick execution of Puritan inventions."}, {"front": "Mencken describes the Puritan as a 'poor stick of a man' and a _____.", "back": "natural democrat"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 15, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the 'reformer's perennial hope' regarding the political system?", "back": "The hope that the system can be redeemed from within by men of integrity and talent."}, {"front": "What is Mencken's central thesis regarding the effect of the democratic system on leaders?", "back": "The system does not merely fail to produce good leaders; it actively destroys them."}, {"front": "Mencken's 'educated skeptic' audience consists of those who suspect that _____ is futile.", "back": "Reform"}, {"front": "How does Mencken describe the belief held by 'professional Liberals' regarding democracy?", "back": "They believe democracy's problems are issues of personnel rather than structure."}, {"front": "Which historical figure does Mencken use as the 'central exhibit' for the corruption of reformers?", "back": "Theodore Roosevelt"}, {"front": "Mencken regarded _____ as the embodiment of mediocrity whose chief qualification was inoffensiveness.", "back": "Calvin Coolidge"}, {"front": "What does Mencken's 'mock-philosopher' register achieve by using terms like 'psychic impossibility'?", "back": "It inflates a practical observation into a cosmic law."}, {"front": "How does Mencken's 'satirist' register function in his rhetorical strategy?", "back": "It uses analogy and indirection to make the opponent's position look absurd."}, {"front": "Which tonal register is characterized by direct, unmediated contempt without 'protective irony'?", "back": "The polemicist"}, {"front": "Mencken writes that President Harding spent his hours of ease with _____, not metaphysicians.", "back": "Bootleggers"}, {"front": "What is the purpose of Mencken's 'tonal instability' or shifting between satire and polemic?", "back": "To keep the reader off balance and prevent them from settling into a comfortable posture."}, {"front": "In Mencken's diction, what is the 'elevated vocabulary' used by reformers to describe their aspirations?", "back": "Words like duty, integrity, rectitude, and incorruption."}, {"front": "What type of vocabulary does Mencken use to answer the language of idealism?", "back": "The vocabulary of the street, the courtroom, and the confidence game."}, {"front": "Mencken compares the mob's resentment of a gentleman to a child's resistance to ____.", "back": "Soap"}, {"front": "Term: Mountebank", "back": "Definition: Originally an itinerant charlatan; Mencken uses it for career politicians selling false remedies."}, {"front": "Term: Sempiternal", "back": "Definition: Everlasting or eternal; used by Mencken to grant mob prejudices an air of cosmic permanence."}, {"front": "Term: Recusant", "back": "Definition: Originally one refusing to attend church; Mencken applies it to reformers who abandon their principles."}, {"front": "What syntactic structure does Mencken use to trap the reformer in an 'inescapable logical progression'?", "back": "The conditional chain (a sequence of 'if-then' structures)."}, {"front": "Mencken's short, decisive sentences about Roosevelt's 'jumping' mimic what political characteristic?", "back": "Opportunism or quick, unprincipled movements."}, {"front": "The use of the _____ in Mencken's sentences often presents the reformer's dilemma as a logical binary.", "back": "Dash"}, {"front": "Concept: Satire", "back": "Definition: Attacking a target indirectly through irony, ridicule, or exaggeration so the reader must decode the meaning."}, {"front": "Concept: Polemic", "back": "Definition: Attacking a target directly by stating objections plainly and arguing the case openly."}, {"front": "Mencken's comparison of political reform to filling 'bawdy-houses with virgins' is an example of _____.", "back": "Satire"}, {"front": "In the 'bawdy-house' analogy, what is the equated equivalent of political office?", "back": "Prostitution"}, {"front": "According to the bawdy-house analogy, what are the only two fates for a 'virgin' reformer?", "back": "They either leap out of the windows or they cease to be virgins."}, {"front": "How does Mencken use 'litotes' (understatement) to describe Calvin Coolidge?", "back": "He states there is 'no evidence' Coolidge knows an intelligent man to mimic a fair observer."}, {"front": "In his close reading, how does Mencken describe Theodore Roosevelt's entry into politics?", "back": "As a sword drawn against demagogy."}, {"front": "Mencken's", "back": "Polemic"}, {"front": "How does the 'sword' metaphor for Roosevelt reflect Mencken's stylistic choices?", "back": "It borrows chivalric vocabulary to expose the absurdity of Roosevelt's eventual transformation."}, {"front": "What grammatical device is used in the phrase 'Has the United States ever seen a more violent and shameless demagogue...?'", "back": "Rhetorical question"}, {"front": "Mencken contrasts the noise of a polemical accusation with the _____ of the historical record.", "back": "Silence"}, {"front": "Mencken argues that for a reformer to stay 'within the fence,' he must learn all the tricks of the _____.", "back": "Mountebanks"}, {"front": "Why does Mencken include names like Lodge, Harding, and Coolidge in his text?", "back": "To ground his polemic in observable reality and challenge the reader to dispute evidence."}, {"front": "The phrase 'psychic impossibility' is an example of Mencken's _____ register.", "back": "Mock-philosopher"}, {"front": "According to the text, satire does not refute an argument but rather _____ it.", "back": "Ridicules"}, {"front": "Mencken's use of the nursery-room idiom 'washed behind the ears' suggests the mob's hostility is _____.", "back": "Primitive or irrational"}, {"front": "In the close reading of Roosevelt, the transition from a question to a declarative sentence enacts the process of _____.", "back": "Idealism transforming into its opposite."}, {"front": "What 'visceral' effect do Mencken's analogies have on the reader's understanding of political compromise?", "back": "They translate abstraction into physical or commercial realities."}, {"front": "Mencken suggests the democratic ideal is reached when it is impossible for a _____ to hold office.", "back": "Gentleman"}, {"front": "The word 'mountebank' originates from an Italian term for someone who 'mounted a bench' to sell _____.", "back": "Fraudulent medicines"}, {"front": "In the Roosevelt example, Mencken characterizes the politician's exit as becoming the _____ he meant to slay.", "back": "Dragon"}, {"front": "What is the primary function of the 'dash' in the dilemma of the man of native integrity?", "back": "It forecloses hope by presenting the dilemma as a inescapable binary choice."}, {"front": "Mencken's polemic against Harding is described as 'unmediated' because it lacks ____.", "back": "Irony or indirection"}, {"front": "What does Mencken use to make a political argument 'unforgettable' and compressed?", "back": "The bawdy-house analogy"}, {"front": "Mencken contrasts the 'heavy voiced consonants' of accusation with the 'hard consonants' of ____.", "back": "Combat"}, {"front": "Which group of people does Mencken explicitly mention as believing in the 'personnel' solution to democracy?", "back": "Professional Liberals or earnest progressives."}, {"front": "Mencken uses the word 'recuse' to describe reformers who abandon their conviction as if they were _____.", "back": "Refusing to attend services (recusants)."}, {"front": "How does Mencken characterize the politician's movements through his rhythmic use of short sentences?", "back": "Quick, darting, and unprincipled."}, {"front": "Mencken's 'satirist' register makes the reformer's position look _____ rather than just wrong.", "back": "Naive"}, {"front": "What is the 'sword' metaphor's effect on the", "back": "It frames him as a noble knight in a chivalric romance."}, {"front": "Mencken's 'third register' is described as the bare statement of a _____.", "back": "Damning fact"}, {"front": "What 'cosmic' quality does the word 'sempiternal' apply to the mob's prejudices?", "back": "Permanence or being everlasting."}, {"front": "In Mencken's view, the moment a reformer 'goes over the fence,' he must confront the _____.", "back": "Mob"}, {"front": "How does Mencken use 'litotes' to describe Coolidge's circle of acquaintances?", "back": "By stating 'there is no evidence' he knows a single intelligent man."}, {"front": "Mencken's comparison of a reformer to a 'merchant' suggests that politics involves _____.", "back": "Making terms with established powers."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

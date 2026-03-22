@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 22, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what maxim does democratic law tend to follow under the pressure of fanaticism?", "back": "Every citizen is, by nature, a traitor, a libertine, and a scoundrel."}, {"front": "To what historical systems does Mencken compare the extended police power in American democratic law?", "back": "The oriental monarchies of antiquity."}, {"front": "Which two American States are cited as examples where citizens have virtually no rights the police must respect?", "back": "California and Pennsylvania."}, {"front": "According to the text, what action most easily places a citizen into a persecuted 'unpopular minority'?", "back": "Speaking out boldly for the Bill of Rights."}, {"front": "What is the typical sequence of a disingenuous legal attack on an unpopular individual?", "back": "The person is singled out first, and then a diligent search is made for a law they can be accused of breaking."}, {"front": "What type of statutes makes it easy for prosecuting officers to find a crime to charge against a target?", "back": "Multiplicity of sumptuary and inquisitorial statutes."}, {"front": "In the 'progress through the mill of justice,' what is the typical initial accusation against an unpopular man?", "back": "Vague disorderly conduct or disturbing the peace."}, {"front": "What specific type of statute in California allows the state to 'lay [a citizen] by the heels'?", "back": "Statutes that explore the citizen's mind for unpopular thoughts."}, {"front": "To what event does Mencken compare legal proceedings once a citizen is accused of ideological heresy?", "back": "A lynching."}, {"front": "What happens to Common Law rules like double jeopardy and hearsay during trials for heresy?", "back": "They are suspended in order to secure a conviction."}, {"front": "Which specific law does Mencken cite as destroying the constitutional right to a jury trial?", "back": "The Volstead Act."}, {"front": "Why does Mencken claim that the public 'mob' is usually in favor of the prosecution?", "back": "The prosecution is seen as providing entertainment or a 'show.'"}, {"front": "What personal trait is most essential for the professional success and promotion of an American prosecuting attorney?", "back": "Ferocity of attack."}, {"front": "What percentage of American judges does Mencken estimate have served as prosecuting officers?", "back": "Approximately half of all American judges."}, {"front": "What habit of mind do former prosecutors carry to the judicial bench according to Mencken?", "back": "The conviction that any person accused of a crime is ipso facto guilty."}, {"front": "According to the text, how do judges view a person with political heresies who mentions their constitutional rights?", "back": "As someone guilty of a sort of blasphemy."}, {"front": "Who was the Methodist Episcopal bishop who argued that atheism should not be protected by free speech guarantees?", "back": "The Right Rev. Luther B. Wilson."}, {"front": "What reason did Bishop Luther B. Wilson give for denying constitutional immunity to atheists?", "back": "He declared atheism to be not only folly but a traitor to the state."}, {"front": "During the Scopes trial, which official stated that an atheist had no right to a fair trial in Tennessee?", "back": "Prosecuting Attorney General Stewart."}, {"front": "Who was the Liberal defense attorney for Scopes who was 'overcome' by the denial of due process in court?", "back": "Arthur Garfield Hays."}, {"front": "Which groups besides atheists faced legal disabilities in the States South of the Potomac, according to Mencken?", "back": "Catholics, Negroes, and persons unable to speak the local dialects fluently."}, {"front": "Which group faced legal and social disabilities in Massachusetts according to Mencken's analysis?", "back": "Anti-Catholics."}, {"front": "Mencken notes that _____ face legal and social disabilities in the state of New York.", "back": "Anti-Semites"}, {"front": "How does Mencken describe the typical jury member in cases of heterodox ideas?", "back": "A man of limited information and intelligence chosen for a lack of intellectual resilience."}, {"front": "Term: Common Decency", "back": "Definition: The habit of viewing the acts and ideas of other individuals with tolerance and charity."}, {"front": "Why does Mencken argue that the 'democrat' is seldom a good citizen?", "back": "Because of an eagerness to force others into accord with a dull and docile way of thinking."}, {"front": "What social disaster occurs when the 'democratic epistemology' and 'Puritan ethic' are unopposed?", "back": "The breakdown of mutual trust and confidence required for civilized society."}, {"front": "To what does Mencken attribute the cultural collapse of New England and backwardness in the South and Middle West?", "back": "The harassment of well-informed men by the 'moron' majority, forcing them to leave."}, {"front": "What false accusations might be leveled against a man of 'sound sense' in the Tennessee hinterland if heresy charges fail?", "back": "Burning barns, poisoning wells, or taking Russian gold."}, {"front": "Why does Mencken claim Americans are 'probably the least happy in Christendom' despite material prosperity?", "back": "Because they do not trust one another."}, {"front": "According to Mencken, what is the primary source of charm in life?", "back": "The society of our fellow men."}, {"front": "What quality draws humans toward one another and makes society enjoyable according to the text?", "back": "Admiration for outer graces and decencies, ensuring generous and understanding intercourse."}, {"front": "What delusion prevents a Puritan from being magnanimous or tolerant?", "back": "The belief that saving others from sin is more important than letting them be happy in their own way."}, {"front": "How does Mencken define the 'democrat' in relation to Puritanism?", "back": "A democrat is simply a Puritan doubly damned."}, {"front": "Which historical figure's imprisonment is used to illustrate the 'harsh Puritan compulsion' of Woodrow Wilson?", "back": "Eugene Debs."}, {"front": "What professional identity does Mencken assign to every Puritan and every democrat?", "back": "A lawyer."}, {"front": "In Mencken's view, a Puritan is constitutionally unable to grasp the notion that it is better to be _____ than to be steadfast.", "back": "Decent"}, {"front": "According to Mencken, what is the 'theoretical' status of the American people's happiness compared to their actual state?", "back": "Theoretically they should be the happiest, but actually they are the least happy."}, {"front": "Mencken asserts that very few American judges have the courage to enforce constitutional guarantees due to whose applause?", "back": "The mob's applause."}, {"front": "What does Mencken claim is the result of the 'enormous multiplicity of sumptuary and inquisitorial statutes'?", "back": "It makes it easy for the state to target and criminalize unpopular individuals."}, {"front": "According to Mencken, what is the 'Polizei' likely to do to a man who speaks out for the Bill of Rights in Pennsylvania?", "back": "Club or jail him."}, {"front": "Which group of people is described as 'specialists in liberty' whose protests are often ineffective?", "back": "Those busy keeping out of jail themselves."}, {"front": "What was the significance of Bishop Wilson preaching at the Cathedral of St. John the Divine?", "back": "It was a delicate acknowledgment of his importance by the Anglican prelate, Monsignor Manning."}, {"front": "According to the text, how did New York newspapers and Liberal weeklies react to Bishop Wilson's 'bloodthirsty' sermon?", "back": "They let it pass without challenge, as if the doctrine were too obvious for cavil."}, {"front": "The judge who presided over the Scopes trial and approved the denial of an atheist's right to a fair trial was named _____.", "back": "Raulston"}, {"front": "Why does Mencken believe the democratic man inevitably performs acts of 'unfairness, oppression and dishonour'?", "back": "Due to his drive to force everyone, especially superiors, into his own dull way of thinking."}, {"front": "Mencken defines the 'Puritan ethic' as being incompatible with which form of personal habit?", "back": "Common decency."}, {"front": "What does Mencken believe happens to the 'ancient rules of the Common Law' in modern statutes?", "back": "They are formally suspended, though such suspension is plainly unconstitutional."}, {"front": "In the case of Eugene Debs, what impulse was overcome by the 'harsh Puritan compulsion' to observe the letter of the law?", "back": "The impulse to be magnanimous, kindly, and generous."}, {"front": "According to Mencken, what is the 'democratic epistemology'?", "back": "A way of thinking that rejects common decency and trust in favor of forced conformity to dull norms."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

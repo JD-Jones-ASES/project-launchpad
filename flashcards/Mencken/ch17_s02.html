@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 17, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, which constitutional rule exaggerates the democratic tendency to exclude competent men from public service?", "back": "The requirement that a legislator must be an actual resident of the district they represent."}, {"front": "Which specific parts of the U.S. Constitution embody the residency requirement for legislators?", "back": "Article I, Sections 2 and 3."}, {"front": "What is the intended 'obvious aim' of the residency rule for electoral units?", "back": "To preserve a direct and continuous voice for every electoral unit in the government."}, {"front": "Mencken argues that the 'actual effect' of residency rules is to fill legislative bodies with _____.", "back": "Puerile local politicians."}, {"front": "How does the English system of choosing representatives differ from the American system regarding geography?", "back": "In England, it is possible for a district to choose a representative from outside its own borders."}, {"front": "Mencken cites which individual as an example of a competent representative England might choose from a remote division?", "back": "Morley."}, {"front": "In Mencken's view, why is a 'competent man' in the South or West often unable to run for office?", "back": "He is typically unpopular due to his opposition to local 'imbeciles' and their leaders."}, {"front": "According to the text, what group's 'ban' makes it impossible for civilized inhabitants to be elected in states like Mississippi?", "back": "The local Fundamentalist clergy."}, {"front": "Mencken characterizes the congressional delegations of Tennessee and Mississippi as 'pliant and unconscionable _____.'", "back": "Jackasses."}, {"front": "Which constitutional change does Mencken attribute to the influence of 'ignoble fellows' from backward states?", "back": "The Eighteenth Amendment."}, {"front": "Who were the 'degraded noodles' that Mencken claims actually put the Eighteenth Amendment into the Constitution?", "back": "Members of the State Legislatures assembled from the backwoods."}, {"front": "Mencken suggests that without local residency rules, North Dakota might elect which prominent legal scholar?", "back": "Roscoe Pound."}, {"front": "Why does Mencken believe Roscoe Pound could not be elected in his own Massachusetts district?", "back": "His independence and intelligence are familiar and therefore offensive to his neighbors."}, {"front": "According to the text, what two professions primarily make up the 'depressing gang of incompetents' in Congress?", "back": "Petty lawyers and small-town bankers."}, {"front": "To what criminal group does Mencken compare the House of Representatives in terms of integrity and information?", "back": "A gang of bootleggers."}, {"front": "Which 'corrupt and sinister' agency does Mencken claim holds immense power over mediocre Congressmen?", "back": "The Anti-Saloon League."}, {"front": "Term: John J. Balderdash", "back": "Definition: A fictionalized archetype used by Mencken to represent a generic, mediocre, and subservient Congressman."}, {"front": "Where can one find 'autobiographies full of voluptuous self-praise' for Congressmen, according to Mencken?", "back": "The Congressional Directory."}, {"front": "What is the typical educational background of the 'standard type' of Southern member of the House?", "back": "Education in a hedge school followed by a preposterous Methodist or Baptist college."}, {"front": "Before entering politics, what is the first professional role often held by the average Southern Congressman in Mencken's", "back": "A schoolteacher in his native swamps."}, {"front": "According to Mencken, what is a Congressman's 'daily toil' while in office?", "back": "Securing jobs for relatives and retainers."}, {"front": "How does Mencken define a 'congressional junket'?", "back": "A drunken holiday at government expense."}, {"front": "Mencken describes a Congressman as a 'knavish and preposterous nonentity' positioned between a Kleagle of the KKK and a officer of the _____.", "back": "Knights of Zoroaster."}, {"front": "Why does Mencken consider the members of the Senate to be 'measurably better' than those of the House?", "back": "They serve longer terms and are not constantly running for re-election."}, {"front": "What activity must a Congressman resume almost immediately upon arriving in Washington?", "back": "Bootlicking the local bosses."}, {"front": "According to Mencken, what enables a Senator to show a 'certain independence' and still survive?", "back": "The ability to safely forget local bosses for two or three years after being sworn in."}, {"front": "Mencken defines the average Senator as a 'party _____, without ideas and without anything rationally describable as self-respect.'", "back": "Hack."}, {"front": "Mencken uses the phrase 'sweet resiliency' to describe which anatomical part of the average Senator?", "back": "The backbone."}, {"front": "According to the text, what is required to forecast a Senator's action on a matter of principle?", "back": "Knowing what rewards are being offered by the rival sides."}, {"front": "Who succeeded Henry Cabot Lodge as the 'intellectual snob' of the Upper House?", "back": "One of the gentlemen from Pennsylvania during the Sixty-Ninth Congress."}, {"front": "What is 'the eternal tragedy of democracy' according to Mencken?", "back": "Private rectitude yielding to political necessity."}, {"front": "Which Senator from Missouri is described as 'able and uncompromisingly independent'?", "back": "Senator Reed."}, {"front": "In his 1924 speech, Senator Reed claimed the pending measure would be voted for by _____.", "back": "Cowards."}, {"front": "What did Senator Reed claim his colleagues feared losing more than they valued serving their country?", "back": "Their present offices."}, {"front": "According to Senator Reed, why were his colleagues' souls 'aquiver with apprehension'?", "back": "They feared losing the votes of some bloc, clique, or coterie."}, {"front": "Which Senate rule did Senator Reed violate during his 1924 characterization of his colleagues?", "back": "The rule forbidding one member to question the motives of another."}, {"front": "How did the other Senators react to Senator Reed's 'brutal' truth-telling on the Senate floor?", "back": "They slinked into the cloak-rooms rather than invoking the rules against him."}, {"front": "Mencken concludes that American laws are invented, in the main, by _____ and _____.", "back": "Frauds; fanatics."}, {"front": "Mencken concludes that American laws are put upon the statute books by _____ and _____.", "back": "Poltroons; scoundrels."}, {"front": "Why does Mencken believe it is 'extremely improbable' to find a competent man in whole states of the 'newer West'?", "back": "The population in those areas is described by him as largely consisting of 'resident imbeciles'."}, {"front": "Concept: Puerile local politicians", "back": "Definition: Small-minded individuals whose political concerns are limited to trivial local interests rather than national governance."}, {"front": "What is the primary difference in Mencken's view between a House representative's focus and a Senator's focus regarding re-election?", "back": "The House representative is in a state of constant re-election, while the Senator has a multi-year buffer."}, {"front": "What role does the 'clapping on of false whiskers' play in Mencken's", "back": "It symbolizes the deceptive and performative nature of their political allegiances."}, {"front": "According to Mencken, what is a 'poltroon' in the context of law-making?", "back": "A cowardly legislator who votes based on fear of losing office rather than principle."}, {"front": "Mencken suggests that a 'Morley' would disdain the mandates of which group?", "back": "The Anti-Saloon League."}, {"front": "What is the 'ban' that prevents civilized inhabitants of Mississippi from being elected?", "back": "Opposition from the local Fundamentalist clergy."}, {"front": "How does Mencken describe the intelligence level of the House of Representatives compared to its leaders?", "back": "It is so deficient in competent leaders that it can scarcely carry on its business."}, {"front": "Mencken identifies 'the recent rise of the _____' as the reason why England might now struggle to choose a Morley.", "back": "Mob."}, {"front": "What does Mencken claim is the 'third result' of the constitutional residency rule?", "back": "The immense power of corrupt and sinister agencies like the Anti-Saloon League."}, {"front": "Which state's backwoods legislators does Mencken specifically blame for the ratification of the 18th Amendment?", "back": "The 'backward States'."}, {"front": "According to Mencken, when a Congressman is invited to a party, it indicates that which other low-status group is also invited?", "back": "Police sergeants."}, {"front": "Mencken notes that a Congressman must be in at least their _____ or _____ term before White House ushers remember their face.", "back": "Second; third."}, {"front": "What corrupt financial practice does Mencken attribute to some Congressmen regarding the payroll?", "back": "Putting a dummy on the pay-roll and collecting that dummy’s salary themselves."}, {"front": "What is the 'blistering truth' mentioned by Senator Reed in 1924?", "back": "That his fellow Senators were voting out of cowardice and fear of interest groups."}, {"front": "Mencken claims that Southern Congressmen often reach the 'dignity' of what local office before running for Congress?", "back": "County superintendent of schools."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

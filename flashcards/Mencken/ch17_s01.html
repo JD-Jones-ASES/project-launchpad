@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 17, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Which specific sections of Article I of the U.S. Constitution establish the residency requirement for legislators?", "back": "Sections 2 and 3"}, {"front": "What is the primary constitutional requirement regarding the residency of House and Senate members?", "back": "They must be inhabitants of the state they represent."}, {"front": "Beyond the written Constitution, what additional residency demand is imposed on House members by custom?", "back": "They must reside in their specific district."}, {"front": "How does Mencken argue the residency requirement affects the quality of American legislators?", "back": "It ensures mediocrity by confining each district to its own shallow talent pool."}, {"front": "Which country's practice does Mencken contrast with the American residency rule to highlight parochialism?", "back": "Great Britain"}, {"front": "According to Mencken, what does the British lack of a residency requirement allow for in a constituency?", "back": "The ability to choose a distinguished figure from anywhere in the nation."}, {"front": "Mencken's dominant persona in this section is compared to a _____ who has abandoned legal niceties for insults.", "back": "prosecuting attorney"}, {"front": "What is the strategic purpose of Mencken beginning his critique with a measured, constitutional tone?", "back": "To earn intellectual credibility before transitioning to satire."}, {"front": "The shift from dispassionate analysis to intense invective in Mencken's writing signals that the evidence is _____.", "back": "so overwhelming that dispassionate argument is no longer adequate"}, {"front": "Whom does Mencken quote to allow a politician to indict his own colleagues?", "back": "Senator Reed of Missouri"}, {"front": "What two distinct registers of diction does Mencken collide for comic effect?", "back": "Constitutional/legalistic and the language of abuse"}, {"front": "Term/Definition: Puerile", "back": "Childish; suggesting immaturity and an inability to think like an adult."}, {"front": "How does the 'jackasses' metaphor characterize legislators?", "back": "As brainless and stubborn beasts of burden."}, {"front": "What is the meaning of the archaic slang term 'noodles' in Mencken's vocabulary of contempt?", "back": "Simpletons"}, {"front": "Why is 'vermin' considered the strongest term in Mencken's catalogue of abuse?", "back": "It suggests legislators are pestilential and require extermination."}, {"front": "What was a 'kleagle' in the context of Mencken's comparison?", "back": "A recruiter for the Ku Klux Klan."}, {"front": "By comparing a Congressman to a 'kleagle,' what does Mencken suggest about democratic politics?", "back": "That democratic politics and mob bigotry are branches of the same enterprise."}, {"front": "Mencken uses the medieval dining phrase _____ to apply feudal social hierarchy to democratic Washington.", "back": "below the salt"}, {"front": "What is the rhetorical effect of mixing legalistic language with terms like 'vermin'?", "back": "It suggests the dignified language of government is a costume worn by clowns."}, {"front": "In rhetoric, the deliberate listing of items, qualities, or examples in a series is known as a _____.", "back": "catalogue (or enumeration)"}, {"front": "What impression does Mencken intend to create by using long, detailed catalogues of a Congressman's career?", "back": "A numbing accumulation of mediocrity."}, {"front": "In the passage describing a Congressman's education, which word is described as 'detonating like a small bomb'?", "back": "Preposterous"}, {"front": "What rhythmic technique does Mencken use to deliver a 'verdict' after a long, polysyllabic sentence?", "back": "He follows the long sentence with a devastatingly short, terse one."}, {"front": "How does the final sentence, 'It is such vermin who make the laws of the United States,' achieve its hammering force?", "back": "Through its brevity and use of monosyllables."}, {"front": "Mencken's comparison of the House of Representatives to 'a gang of bootleggers' is an example of which figure of speech?", "back": "Simile"}, {"front": "What child's word does Mencken incorporate into the mock title 'grand worthy bow-wow'?", "back": "dog"}, {"front": "How does Mencken use irony when referring to a 'congressional junket'?", "back": "He uses the formal 'i.e.' to mock-translate the term as 'a drunken holiday at government expense.'"}, {"front": "In Mencken's antithesis between the Senate and the House, what is the 'faint praise' given to Senators?", "back": "That they are measurably better only because they serve for longer terms."}, {"front": "Mencken refers to Senator Reed's anecdote as a _____, or a final blow that ends the contest.", "back": "coup de grâce"}, {"front": "Term/Definition: Knavish", "back": "Dishonest; unscrupulous."}, {"front": "How does Mencken use a spatial metaphor to describe the Congressman in his close reading passage?", "back": "He places him 'half way between' a sinister organization and a farcical one."}, {"front": "What is the primary rhetorical principle behind Mencken's use of volume in his lists?", "back": "Volume can substitute for proof by making the case seem unanswerable."}, {"front": "Mencken's use of 'native swamps' to describe a schoolteacher's origins adds _____ contempt to professional contempt.", "back": "geographical"}, {"front": "What specific quality of the 'Knights of Zoroaster' title exploits Mencken's view of democratic absurdity?", "back": "It is an invented fraternal order that sounds both grandiose and ridiculous."}, {"front": "Which syllables are stressed in the sentence: 'It is such VER-min who MAKE the LAWS of the u-NI-ted STATES'?", "back": "vermin, make, laws, States"}, {"front": "Mencken argues that the residency requirement guarantees _____, or a narrow-minded concern for local interests.", "back": "parochialism"}, {"front": "The phrase 'poltroon souls aquiver with apprehension' was used by which figure?", "back": "Senator Reed of Missouri"}, {"front": "According to the analysis, Mencken's use of the catalogue causes the reader to _____ under the volume of evidence.", "back": "surrender"}, {"front": "How does Mencken's vocabulary shift after establishing his structural thesis?", "back": "He abandons the scholar's tone to become a satirist conducting a public execution."}, {"front": "In the close reading of 'knavish and preposterous nonentity,' what three judgments are compressed into four words?", "back": "Dishonesty, absurdity, and insignificance."}, {"front": "What register of diction includes terms like 'electoral unit' and 'legislative bodies'?", "back": "The constitutional and legalistic register"}, {"front": "Mencken uses the term _____ to describe a simpleton, a word whose comic sound reinforces his contempt.", "back": "noodles"}, {"front": "Mencken's intended audience consists of _____ readers who likely already suspect their representatives are fools.", "back": "educated"}, {"front": "What effect is produced by the collision of 'vermin' and 'the laws of the United States'?", "back": "It forces the reader to contrast constitutional grandeur with the perceived squalor of legislators."}, {"front": "The phrase 'hedge school' in Mencken's catalogue suggests a _____ level of education.", "back": "low or rudimentary"}, {"front": "How does Mencken use the title 'grand worthy bow-wow' to characterize the Congressman's rank?", "back": "He pretends to dignify him with a title while reducing him to an animal."}, {"front": "What is the 'structural argument' Mencken uses to anchor his personal contempt for legislators?", "back": "The residency requirement of Article I of the Constitution."}, {"front": "Why does Mencken value the quote from Senator Reed so highly in his rhetorical strategy?", "back": "It transforms his external critique into an internal confession by a sitting legislator."}, {"front": "Mencken's 'prosecuting attorney' persona eventually discards _____ to simply insult the defendant.", "back": "legal niceties"}, {"front": "Mencken views the residency requirement not just as a rule, but as a _____ for ensuring mediocrity.", "back": "mechanism"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
