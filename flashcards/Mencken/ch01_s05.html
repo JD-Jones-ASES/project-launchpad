@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 1, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What literary magazine, published from 1900 to 1930, served as the predecessor to *The American Mercury*?", "back": "*The Smart Set*"}, {"front": "Who served as the co-editors of *The Smart Set* from 1914 to 1923?", "back": "H.L. Mencken and George Jean Nathan"}, {"front": "How did Mencken and Nathan transform the focus of *The Smart Set* during their editorship?", "back": "They changed it from a society magazine into a vehicle for iconoclastic criticism and new fiction."}, {"front": "Term: George Jean Nathan", "back": "Definition: An American drama critic and editor who partnered with Mencken to challenge American provincialism."}, {"front": "What specific editorial goal did Mencken and George Jean Nathan share?", "back": "The demolition of American provincialism."}, {"front": "Why did H.L. Mencken eventually want to move beyond *The Smart Set* and launch a new magazine?", "back": "He felt *The Smart Set* was limited by its origins as a society magazine."}, {"front": "In what month and year was the first issue of *The American Mercury* published?", "back": "January 1924"}, {"front": "Which individual served as the publisher for *The American Mercury*?", "back": "Alfred A. Knopf"}, {"front": "What was the distinctive visual characteristic of *The American Mercury*'s cover?", "back": "A signature green color"}, {"front": "The green cover of *The American Mercury* was viewed by critics as an emblem of intellectual _____.", "back": "Snobbery"}, {"front": "Who was the primary target audience for *The American Mercury*?", "back": "The educated skeptic"}, {"front": "Reading *The American Mercury* served as a signal that a person had outgrown which religious tradition?", "back": "Sunday school"}, {"front": "Which civic organization did *Mercury* readers often use as a symbol of the small-town values they rejected?", "back": "The Rotary Club"}, {"front": "Which popular publication did Mencken's readers associate with conventional 'pieties'?", "back": "The *Saturday Evening Post*"}, {"front": "What psychological 'permission' did Mencken's writing provide to his audience?", "back": "Permission to feel superior"}, {"front": "Besides editorials and cultural criticism, what two types of literature did *The American Mercury* publish?", "back": "Fiction and poetry"}, {"front": "Mencken's monthly editorials were characterized by a combination of extravagant wit and a consistent _____.", "back": "Worldview"}, {"front": "Identify one of Mencken's targets: The strict moralism associated with early American religious history.", "back": "Puritanism"}, {"front": "Identify one of Mencken's targets: The constitutional ban on alcohol.", "back": "Prohibition"}, {"front": "Identify one of Mencken's targets: The lack of excellence or distinction in a democratic system.", "back": "Democratic mediocrity"}, {"front": "Identify one of Mencken's targets: The spread of fundamentalist, fervor-based Christianity.", "back": "Evangelical religion"}, {"front": "Identify one of Mencken's targets: The official suppression of literature or ideas.", "back": "Censorship"}, {"front": "Identify one of Mencken's targets: Self-importance and pretension within universities.", "back": "Academic pomposity"}, {"front": "At what point in his career did Mencken reach his peak as the most famous journalist in America?", "back": "The mid-1920s"}, {"front": "How did the denunciations from the 'guardians of public morality' impact *The American Mercury*?", "back": "They increased the magazine's circulation."}, {"front": "In what month and year did the U.S. stock market crash, signaling the end of the Jazz Age?", "back": "October 1929"}, {"front": "Why did Mencken's 'aristocratic scorn for the common man' lose its appeal during the Great Depression?", "back": "It seemed cruel and obscene to mock people who were suffering in bread lines."}, {"front": "In what year did H.L. Mencken resign from his position as editor of *The American Mercury*?", "back": "1933"}, {"front": "What intellectual fashion replaced Mencken's libertarian skepticism as the dominant trend in the 1930s?", "back": "New Deal liberalism"}, {"front": "Which U.S. president is associated with the New Deal liberalism that supplanted Mencken's influence?", "back": "Franklin D. Roosevelt"}, {"front": "What were the two primary focuses of Mencken's writing during his later years?", "back": "Writing memoirs and revising *The American Language*."}, {"front": "Concept: The Jazz Age", "back": "Definition: The 1920s in America, characterized by sharp cultural conflicts and rapid technological change."}, {"front": "Which amendment to the U.S. Constitution, ratified in 1919, established Prohibition?", "back": "The 18th Amendment"}, {"front": "What kind of underground economy did Prohibition create in the 1920s?", "back": "An economy based on speakeasies, bootleggers, and organized crime."}, {"front": "By 1924, how many members were estimated to be in the Ku Klux Klan?", "back": "Four million"}, {"front": "What did the 1925 Scopes Trial dramatize about American culture?", "back": "The clash between modern science and fundamentalist religion."}, {"front": "Which constitutional amendment, ratified in 1920, gave women the right to vote?", "back": "The 19th Amendment"}, {"front": "List three new technologies that transformed daily American life during the Jazz Age.", "back": "Radio, cinema, and the automobile."}, {"front": "The text describes Mencken as writing not in a vacuum, but in a 'culture ____'.", "back": "War"}, {"front": "What nickname is used for H.L. Mencken in the section title?", "back": "The Sage of Baltimore"}, {"front": "How did Mencken's editorial partnership with George Jean Nathan influence 1920s literature?", "back": "They became the most influential pair of editors in American letters during that decade."}, {"front": "Under Mencken's editorship, *The American Mercury* was published from 1924 until what year?", "back": "1933"}, {"front": "Describe the pace of social change in the 1920s according to the historical context provided.", "back": "It was so fast that it left many Americans feeling dizzy and resentful."}, {"front": "What group of people specifically 'feared' Mencken during the height of his influence?", "back": "Politicians"}, {"front": "What was the primary reason for the decline in influence of *The American Mercury* leading up to Mencken's resignation?", "back": "The magazine's influence declined as the world changed due to the Great Depression."}, {"front": "Mencken and Nathan's taste for _____ culture served as a counterpoint to American provincialism.", "back": "European"}, {"front": "The audience of *The American Mercury* was described as 'young professionals' who despised the values of their _____.", "back": "Parents"}, {"front": "In what decade did H.L. Mencken's cultural influence 'wane sharply'?", "back": "After 1930"}, {"front": "Which intellectual stance did Mencken promote that was eventually replaced by Roosevelt's liberalism?", "back": "Libertarian skepticism"}, {"front": "What was the timeframe of Mencken and Nathan's editorial partnership at *The Smart Set*?", "back": "1914 to 1923"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

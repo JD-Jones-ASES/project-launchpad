@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 2, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, did democracy arrive in the Western World as a revolution or as a fashion?", "back": "As a fashion."}, {"front": "Mencken argues that democracy was imposed by intellectuals who had never met the _____ they claimed to champion.", "back": "Common man"}, {"front": "Mencken contrasts the \"harsh bawling from below\" with what kind of sounds \"from above\" at democracy's start?", "back": "Dulcet twittering"}, {"front": "Mencken identifies which philosopher as the primary target for creating the concept of the \"noble savage\"?", "back": "Jean-Jacques Rousseau"}, {"front": "Term: Smock and jerkin", "back": "Definition: Working-class clothing of an earlier era, specifically a loose outer garment and a close-fitting jacket."}, {"front": "Democratic theory suggests there is a \"mystical merit\" and an \"ineradicable rectitude\" in what specific group of people?", "back": "The man at the bottom of the scale."}, {"front": "In democratic thought, what \"strange magic\" happens to inferiority?", "back": "It becomes a sort of superiority (the \"superiority of superiorities\")."}, {"front": "The movement of the modern age is toward the enfranchisement of which group?", "back": "The lower orders"}, {"front": "Democratic theory views the lower orders as an illimitable reservoir of what two qualities?", "back": "Righteousness and wisdom"}, {"front": "What \"seraphic\" quality do the people supposedly possess to solve problems that baffle statesmen?", "back": "Seraphic intuition"}, {"front": "According to the democratic dogma, what is the cure for the evils of democracy?", "back": "More democracy"}, {"front": "Mencken describes the originators of democratic theory as \"gentlemen on the upper levels\" and _____.", "back": "Sentimentalists"}, {"front": "How did early democratic intellectuals metaphorically propose to \"reform transport\"?", "back": "By putting the over-laden ass into the cart."}, {"front": "What phrase does Mencken use to describe the quality of the blood/spirit of early democratic theorists?", "back": "Stale Christian bilge"}, {"front": "Mencken links the ancestors of today's \"saccharine Liberals\" to which 18th-century intellectual movement?", "back": "Modernism"}, {"front": "What were the four concrete, materialistic goals of early democratic man?", "back": "More to eat, less work, higher wages, and lower taxes."}, {"front": "Did early democratic man initially have a high belief in the capacity of his own class to rule?", "back": "No (he had no apparent belief in its capacity to rule)."}, {"front": "Early democratic man's aim was not to exterminate the baron, but to bring him back to what?", "back": "A proper discharge of baronial business."}, {"front": "Term: The mob", "back": "Definition: Mencken's term for the democratic electorate or mass of ordinary voters he deems unfit to govern."}, {"front": "According to Mencken, once \"the pikes were out,\" who was it more dangerous to be than an \"ornament of the old order\"?", "back": "A tribune of the people"}, {"front": "In Mencken's view, the more blood that gushed during the Revolution, the closer the _____ came to resurrection.", "back": "Old order"}, {"front": "In what year did the Paris proletariat kill its King?", "back": "1793"}, {"front": "After killing the King, what did the Paris proletariat spend the next two years doing?", "back": "Killing those who had misled it."}, {"front": "By the middle of 1796, France had another _____ in fact.", "back": "King"}, {"front": "By 1799, France had a King \"de jure\" with an attendant herd of what?", "back": "Barons, counts, marquises, and dukes."}, {"front": "Mencken compares the seeping down of democratic theory from rhetoricians to the mob to what?", "back": "A stealthy plague"}, {"front": "Democratic rhetoric took hold more quickly in England and America than on the Continent because those populations had time for _____.", "back": "Oratory"}, {"front": "As democratic theory progressed, Mencken notes the status of the common man changed from \"slave\" to _____.", "back": "Serf"}, {"front": "As democratic man gained skill in criticizing masters, he began to perceive his own wishes as what?", "back": "Legal, intrinsic, and natural rights."}, {"front": "By 1828 in America and 1848 in Europe, what doctrine regarding moral excellence had arisen?", "back": "Moral excellence and sagacity reside in the inferior four-fifths of mankind."}, {"front": "In 1867, a \"philosopher out of the gutter\" taught that the superior minority had no virtues and therefore no _____.", "back": "Rights"}, {"front": "What was the logical conclusion of the 1867 doctrine regarding the ownership of the world?", "back": "The world belonged exclusively to those who hewed wood and drew water."}, {"front": "Mencken describes the \"dictatorship of the proletariat\" as being _____, according to his prejudiced judgment.", "back": "Somewhat impracticable"}, {"front": "Does Mencken believe the underlying democratic dogma was abandoned after the failure of the dictatorship of the proletariat?", "back": "No (he states it is more prosperous than ever)."}, {"front": "Mencken claims that the \"late war\" (World War I) was fought in the name of which concept?", "back": "The democratic dogma"}, {"front": "What is the first fundamental axiom of democracy according to Mencken's summary?", "back": "The masses have an inalienable right to govern themselves."}, {"front": "What is the second fundamental axiom of democracy according to Mencken's summary?", "back": "The masses are competent to govern themselves."}, {"front": "In democratic theory, if the masses are \"misinformed,\" what is the prescribed remedy?", "back": "More education"}, {"front": "In democratic theory, if the masses are seen as \"naughty\" or \"swinish,\" what is the prescribed remedy?", "back": "To deliver (liberate) them."}, {"front": "Mencken defines a \"good\" government as one that responds most quickly to what?", "back": "The desires and ideas of the masses."}, {"front": "Mencken defines a \"bad\" government as one that conditions the masses' _____ and questions their omniscience.", "back": "Omnipotence"}, {"front": "Term: Dulcet", "back": "Definition: Sweet and pleasant, especially to the ear."}, {"front": "Term: Ineffable", "back": "Definition: Too great or extreme to be expressed or described in words."}, {"front": "Term: Sagacity", "back": "Definition: The quality of being wise or having good judgment."}, {"front": "Term: Omnipotence", "back": "Definition: Unlimited power; the quality of being all-powerful."}, {"front": "Term: Omniscience", "back": "Definition: The quality of knowing everything."}, {"front": "In Mencken's view, the wishes of the masters in a democratic society sink to the level of mere \"_____ lusts.\"", "back": "Ignominious"}, {"front": "Who are the direct ancestors of today’s \"saccharine Liberals\" according to Mencken?", "back": "Sentimentalists from the upper levels who originated democratic theory."}, {"front": "What metaphor does Mencken use for the increasing empowerment of the masses by modern governments?", "back": "Driving larger and larger pipes into the reservoir of natural wisdom."}, {"front": "According to Mencken, what is the status of democracy in \"benighted lands\"?", "back": "It is temporarily in eclipse (or God is temporarily asleep)."}, {"front": "What \"fascinating art\" did democratic man learn to use against his masters and even the ordinances of God?", "back": "The art of criticizing, damming, and flouting."}, {"front": "Mencken notes that the proletariat were so enamored with their new King (Napoleon) that they \"leaped to _____\" for his glory.", "back": "Suicide"}, {"front": "According to Mencken, what did the intellectuals observe about the \"ass\" (common man) that moved them to distress?", "back": "That the ass was over-laden."}, {"front": "Did the actual objects of democratic rhetoric (the common people) initially show much veneration for the democratic ideal?", "back": "No (they gave it little thought and less veneration)."}, {"front": "The 1867 philosopher taught that the world belonged to those who _____.", "back": "Hewed its wood and drew its water."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

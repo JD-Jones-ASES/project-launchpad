@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Instead of a thesis statement or policy argument, how does Mencken open his rhetorical survey of democracy?", "back": "He opens with a sardonic story of how democracy came into the world."}, {"front": "Who is the primary target audience for Mencken's \"Notes on Democracy\"?", "back": "The educated American skeptic who suspects democratic politics is a sham."}, {"front": "What is Mencken's primary rhetorical purpose in the opening of the text?", "back": "To demolish assumptions so thoroughly that the reader loses their innocence regarding democracy."}, {"front": "How does Mencken use the history of the French Revolution and Rousseau as a \"rhetorical weapon\"?", "back": "He selects, distorts, and compresses facts to make democracy look like a confidence trick."}, {"front": "What specific persona does Mencken adopt to deliver his survey of democratic history?", "back": "A mock-historian who appears dispassionate while being dripping with contempt."}, {"front": "How would you describe the tone of Mencken's voice in the text?", "back": "Urbane, learned, and deliberately superior."}, {"front": "What transformation does Mencken's tone undergo between the opening sentence and the", "back": "It shifts from a gentle, sweet irony to open, savage scorn."}, {"front": "What prevents Mencken's savage tone from devolving into a mere \"rant\"?", "back": "His control of syntax and stylist's timing."}, {"front": "In rhetorical terms, what is structural irony?", "back": "A discrepancy between appearance and reality where an entire section's framework undermines its literal premise."}, {"front": "How does Mencken signal that he views the \"virtues\" of the common man as fictions?", "back": "By using inflated, romantic language like \"ineffable virtues.\""}, {"front": "What is the primary characteristic of Mencken's diction and vocabulary selection?", "back": "A mixture of high Latinate/scholarly registers with earthy, colloquial, or coarse language."}, {"front": "In the phrase \"stale Christian bilge ran through their veins,\" what does the word \"bilge\" represent regarding register?", "back": "A coarse, physical register that clashes with the noble rhetoric of the surrounding phrase."}, {"front": "Why does Mencken apply theological vocabulary like \"seraphic\" and \"mystical\" to democratic theory?", "back": "To suggest that democracy is a credulous religion rather than a political system."}, {"front": "Term: dulcet", "back": "Definition: Sweet and pleasant to the ear, used by Mencken to imply democracy arrived as flattery."}, {"front": "Term: ineffable", "back": "Definition: Too great to be expressed in words, typically reserved for the divine."}, {"front": "Term: bilge", "back": "Definition: Foul water in a ship's hull; by extension, worthless or contemptible talk."}, {"front": "Why does Mencken describe Rousseau's \"noble savage\" as wearing a \"smock and jerkin\"?", "back": "To turn an abstract ideal into a comic, period-costumed figure."}, {"front": "What literary device is used in the phrase \"sweet, soft music\" to mimic the pleasantness it describes?", "back": "Alliteration of the \"s\" sound."}, {"front": "In Mencken's syntax, how does he create a \"pivot\" to contrast the classes in democracy's arrival?", "back": "By using a semicolon to balance an antithesis between \"below\" and \"above.\""}, {"front": "What is the rhetorical effect of Mencken's balanced parallelism, such as \"There was... there was...\"?", "back": "It forces the reader to hold two contrasting halves in mind simultaneously to generate meaning."}, {"front": "How do short, declarative sentences function within Mencken’s longer paragraphs of scholarly deliberation?", "back": "They act as tools to puncture the atmosphere and deliver a sharp verdict."}, {"front": "Figure of Speech: Antithesis", "back": "Definition: Placing opposing ideas in parallel grammatical structures to dramatize a contrast."}, {"front": "What does Mencken's antithesis between \"harsh bawling from below\" and \"dulcet twittering from above\" imply about class?", "back": "It suggests democracy originated with the elite's flattery rather than a popular uprising."}, {"front": "What is the structural purpose of Mencken's musical metaphor (tune, music, twittering)?", "back": "It frames democracy as an artifice or performance rather than something natural."}, {"front": "How does Mencken use hyperbole when discussing the French people?", "back": "He claims half of France leaped to suicide so their glory might blind the world."}, {"front": "How does Mencken use parody against the axioms of political philosophy?", "back": "By restating democratic virtues in a mock-serious catalogue that makes them sound absurd."}, {"front": "What are the three rhetorical functions of Mencken's musical performance metaphor?", "back": "Characterizing democracy as artifice, establishing a sensory world to demolish, and positioning the reader as a deceived listener."}, {"front": "What does the verb \"came\" imply about democracy in Mencken's first sentence?", "back": "It suggests democracy was a passive event that happened to the world rather than an achievement fought for."}, {"front": "In the close reading of \"to the tune of,\" what is the secondary implication regarding democracy's origin?", "back": "It was a marketing pitch or sales pitch designed to please an audience."}, {"front": "What do the adjectives \"sweet\" and \"soft\" imply about the nature of democratic ideals?", "back": "They suggest the ideas are childish, sentimental, and lacking in force."}, {"front": "In the phrase \"sweet, soft music,\" what does the \"music\" symbolize regarding democracy's appeal?", "back": "The appeal was aesthetic and sensory rather than intellectual or substantial."}, {"front": "How does Mencken’s use of the \"mock-historian\" persona affect his credibility with his intended audience?", "back": "It makes his contemptuous views appear as obvious truths being shared with the \"polite.\""}, {"front": "According to the text, why is Mencken's opening sentence considered a masterclass in rhythmic control?", "back": "It uses a falling cadence and alliteration to sonically mimic the \"pleasantness\" it eventually labels a lie."}, {"front": "What is the rhetorical relationship between \"harsh bawling\" and \"dulcet twittering\" in Mencken's antithesis?", "back": "They represent the conflict between different classes and motives."}, {"front": "The phrase \"stale Christian bilge\" uses theological context to imply that democracy's idealism is actually _____.", "back": "Rancid piety."}, {"front": "Mencken's use of \"omniscience\" and \"omnipotence\" in a secular political context serves to define democracy as a form of _____.", "back": "Religion."}, {"front": "Why does Mencken alternate between periodic sentences and short exclamatory ones?", "back": "To build an atmosphere of deliberation before suddenly exposing an absurdity."}, {"front": "What does the alliteration of the \"s\" sound in the first sentence suggest on a sub-intellectual level?", "back": "The sound of seduction rather than conviction."}, {"front": "How does Mencken's treatment of the \"common man\" function as structural irony?", "back": "He pretends to honor the man's virtues while using language that signals they are fictional."}, {"front": "Which historical figure does Mencken link to the \"Social Contract\" and the origin of democratic flattery?", "back": "Jean-Jacques Rousseau."}, {"front": "In the context of the text, what is \"rhetorical situation\"?", "back": "The staging of a speaker, audience, and purpose to achieve a specific effect."}, {"front": "Mencken suggests that people liked the \"sound\" of democracy without examining its _____.", "back": "Substance."}, {"front": "How does Mencken characterize the \"Paris mob\" through his tone?", "back": "With savage intensity that remains controlled by syntax."}, {"front": "The phrase \"ran through their veins\" is identified as what type of rhetorical device?", "back": "A cliché of noble rhetoric."}, {"front": "What does the \"falling cadence\" of Mencken's first sentence mimic?", "back": "The very sweetness and pleasantness it describes."}, {"front": "In Mencken's view, democracy was not a discovery but a _____ set to music.", "back": "Sales pitch."}, {"front": "What does the comparison of democracy to weather suggest about its arrival?", "back": "It was an inevitable event that occurred rather than a deliberate human achievement."}, {"front": "How does antithesis help Mencken \"compress\" his argument?", "back": "It forces a relationship between two opposing ideas into a single, balanced sentence."}, {"front": "Mencken addresses readers who share his _____ or his taste for irreverence.", "back": "Skepticism."}, {"front": "What is the three-step close-reading process recommended in the teacher's note?", "back": "Observation, interpretation, and evaluation."}, {"front": "By moving between scholarly and \"street-corner\" registers, Mencken creates small _____ of meaning.", "back": "Explosions."}, {"front": "Mencken characterizes democracy's history as a \"confidence trick\" played on the _____.", "back": "Credulous."}, {"front": "What is the effect of framing democracy as a \"performance\"?", "back": "It suggests the system was composed and rehearsed rather than natural."}, {"front": "What specific word choice indicates that democracy arrived as flattery rather than truth?", "back": "Dulcet."}, {"front": "Mencken's opening sentence describes democracy arriving to the tune of \"sweet, soft music\" to establish a _____ that he will later demolish.", "back": "Sensory world."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
