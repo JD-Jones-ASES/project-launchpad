@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 1, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the title of H.L. Mencken's most sustained and systematic attack on democratic government?", "back": "Notes on Democracy"}, {"front": "In what year was Mencken's *Notes on Democracy* published?", "back": "1926"}, {"front": "Mencken's *Notes on Democracy* is organized into how many total sections?", "back": "Twenty-four"}, {"front": "What are the four main parts that comprise the structure of *Notes on Democracy*?", "back": "Democratic Man, The Democratic State, Democracy and Liberty, and Coda"}, {"front": "How does the author describe the organization of *Notes on Democracy* to contrast it with logical structure?", "back": "Musical"}, {"front": "What primary element unifies Mencken's performance in *Notes on Democracy*?", "back": "A distinctive voice"}, {"front": "What is Mencken's core definition of democracy?", "back": "Government by the mob"}, {"front": "What provocative phrase does Mencken use to refer to the common man?", "back": "The inferior man"}, {"front": "According to Mencken, why is the common man unfit to govern wisely?", "back": "He is too stupid, credulous, and consumed by envy"}, {"front": "What two negative qualities does Mencken claim democratic politics inevitably selects for?", "back": "Mediocrity and corruption"}, {"front": "How does Mencken characterize the democratic politician in terms of their public persona?", "back": "A confidence man"}, {"front": "What is the primary motive of the democratic politician when flattering the crowd?", "back": "To gain power and enrich himself"}, {"front": "How does Mencken describe the nature of \"the uplift,\" such as Prohibition and censorship?", "back": "Tyranny dressed in the robes of virtue"}, {"front": "Which philosopher provided the intellectual basis for Mencken's critique of \"herd morality\"?", "back": "Friedrich Nietzsche"}, {"front": "Mencken's version of Nietzsche's superior and inferior man owed more to _____ than to philosophy.", "back": "Journalism"}, {"front": "Which French social psychologist influenced Mencken's view that crowds are irrational and emotional?", "back": "Gustave Le Bon"}, {"front": "What is the title of Gustave Le Bon's 1895 study on the popular mind?", "back": "The Crowd"}, {"front": "According to Gustave Le Bon, what happens to individuals' rational faculties when they are in crowds?", "back": "They lose their rational faculties and become suggestible"}, {"front": "Which Italian economist influenced Mencken with the theory that elites always rule society?", "back": "Vilfredo Pareto"}, {"front": "What is Vilfredo Pareto's theory regarding the replacement of one ruling class by another called?", "back": "The circulation of elites"}, {"front": "How does Vilfredo Pareto view the outcome of democratic revolutions?", "back": "They merely replace one ruling class with another rather than abolishing elite rule"}, {"front": "Mencken's contempt for democracy is often confused by critics with an enthusiasm for _____.", "back": "Dictatorship"}, {"front": "Which two European dictators did Mencken despise as much as Bryan and Coolidge?", "back": "Hitler and Mussolini"}, {"front": "Why is Mencken not considered a systematic political philosopher?", "back": "He offers no alternative to democracy"}, {"front": "Mencken described his own role in political analysis as being a _____.", "back": "Diagnostician"}, {"front": "What does Mencken's role as a \"diagnostician\" imply about his approach to the \"disease\" of democracy?", "back": "He identifies the disease without pretending to have a cure"}, {"front": "In Mencken’s four targets, how is \"The Mob\" described regarding its view of excellence?", "back": "Hostile to excellence"}, {"front": "Which of Mencken's targets exploits the mob's fears for personal gain?", "back": "The Demagogue"}, {"front": "What is the primary method used by \"The Moralist\" to impose private codes on the public?", "back": "Democratic legislation"}, {"front": "Which figure does Mencken target for claiming authority without genuine intelligence or independence?", "back": "The Pedagogue"}, {"front": "What scientific-sounding name does Mencken give the average voter?", "back": "Homo boobiens"}, {"front": "What is the purpose of Mencken's use of rhetorical extravagance and exaggeration?", "back": "To perform a demolition rather than write a scientific treatise"}, {"front": "According to the text, what error do readers make when evaluating Mencken's \"Homo boobiens\" label?", "back": "Reading him literally instead of as a rhetorical performance"}, {"front": "Which target specifically includes the reformer and the Prohibitionist?", "back": "The Moralist"}, {"front": "What trait does Mencken attribute to the electorate that makes them easily manipulated by demagogues?", "back": "Fright"}, {"front": "How does Mencken characterize the intelligence of the teacher or expert in his target list?", "back": "Lacking genuine intelligence or independence of mind"}, {"front": "Mencken borrowed the distinction between \"superior\" and \"inferior\" men from which thinker?", "back": "Friedrich Nietzsche"}, {"front": "According to Pareto, what is the nominal form of government's relationship to elite rule?", "back": "Elites always rule regardless of the nominal form of government"}, {"front": "Which target is described as irrational, envious, and acting as a herd?", "back": "The Mob"}, {"front": "What does Mencken identify as the \"apparatus\" used by moralists to enact tyranny?", "back": "The uplift"}, {"front": "In Mencken's view, what is the democratic politician's relationship with the crowd?", "back": "He flatters the crowd to gain power"}, {"front": "How did Gustave Le Bon's crowd psychology influence the political spectrum?", "back": "It influenced everyone from democratic reformers to authoritarian propagandists"}, {"front": "Mencken's skepticism about democratic equality found intellectual support in the work of _____.", "back": "Vilfredo Pareto"}, {"front": "Mencken's critique of democratic moralism includes opposition to \"blue laws\" and _____.", "back": "Prohibition"}, {"front": "Which recurring figure in *Notes on Democracy* is specifically described as a \"confidence man\"?", "back": "The Demagogue"}, {"front": "What did Mencken consider to be \"beneath him\" regarding political theory?", "back": "Offering an alternative to democracy"}, {"front": "The organization of Mencken's book is described as having recurring themes and arguments that _____.", "back": "Circle back on themselves"}, {"front": "What does Mencken claim is the primary emotional driver of the \"inferior man\"?", "back": "Envy"}, {"front": "According to the text, Mencken's \"Notes on Democracy\" was published at the _____ of his influence.", "back": "Height"}, {"front": "Mencken's targets in the book are described as _____ figures.", "back": "Recurring"}, {"front": "Which target claims authority without possessing genuine intelligence?", "back": "The Pedagogue"}, {"front": "Under what condition does Mencken find democratic moralism to be tyrannical?", "back": "When it uses legislation to impose private moral codes"}, {"front": "What is the relationship between Mencken's intellectual debts and his writing style?", "back": "His debts are real but loosely worn through a journalistic lens"}, {"front": "How does Mencken view the relationship between the demagogue and the mob's fears?", "back": "The demagogue exploits those fears for personal gain"}, {"front": "What type of individual, according to Le Bon, is prone to extreme behavior?", "back": "Individuals in crowds"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

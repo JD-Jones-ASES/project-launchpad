@@ -1,82 +1,84 @@
 # Scholastica Codex
 
-*Studia Efficientia — Efficient Studies*
+*AI-Accelerated Educational Publishing*
 
-A portfolio website and download hub for educational tools and curricular resources created through human-AI collaboration. The site serves as a launchpad for interactive learning applications and a library of downloadable textbooks and workbooks.
+A proof of concept demonstrating that a single developer with AI tools can produce a complete K-12 curriculum — 40+ textbooks, multimedia learning modules, and interactive instruments — in weeks instead of years.
 
-## 🏛️ About
+## What This Is
 
-Scholastica Codex is organized into two sections:
+**Scholastica Codex** is both a free educational library and a technology demonstration. It proves that human-AI collaboration can compress the educational publishing timeline by orders of magnitude while maintaining quality across diverse subjects and grade levels.
 
-- **Educational Instruments** — interactive browser-based learning apps hosted on GitHub Pages
-- **Curricular Resources (Bibliotheca Scholastica)** — downloadable PDF textbooks and workbooks, LaTeX-typeset, covering a partial K–12 curriculum
+- **40+ complete textbooks** spanning mathematics, science, philosophy, history, literature, language, and religion
+- **1,657 content sections** extracted and structured for multimedia transformation
+- **Automated pipeline** from LaTeX source to YouTube classroom (video, quiz, study guide, flashcards)
+- **9 interactive web apps** for subject-specific practice
 
-The site uses a classical Greek/Roman aesthetic (Cinzel & Crimson Text fonts, papyrus tones, goldenrod accents) that reflects the timeless nature of learning and scholarship.
+## The Curriculum Factory
 
-## 🚀 Educational Instruments
-
-| App | Description |
-|-----|-------------|
-| **AP Guides Hub** | Study companion for Advanced Placement courses with searchable terms |
-| **Cyber Math Flashcards** | Math trainer with customizable difficulty levels |
-| **Fraction Sakura** | Fraction practice with Japanese aesthetic and progressive difficulty |
-| **Philosophy Timeline** | Searchable, filterable timeline of famous philosophical works |
-| **Perception Typing** | Typing game combining perception, recognition, and speed |
-| **A Guide to Le Morte d'Arthur** | Interactive explorer for Sir Thomas Malory's classic |
-| **Infix-Postfix Parser** | Convert and visualize mathematical expression conversions |
-| **Factoring Quadratic Expressions** *(Beta)* | Quadratic conversion practice |
-| **Verb Tense Explorer** *(Beta)* | English verb conjugation practice |
-
-## 📚 Curricular Resources (Bibliotheca Scholastica)
-
-Downloadable ZIP archives containing student and teacher PDF editions. Organized by subject:
-
-| Subject | Titles |
-|---------|--------|
-| **Mathematics** | Math I & II (Middle), Algebra I & II (Middle/High) — each with companion workbooks; Business Math: Practical Applications (High) |
-| **Life Skills** | Logic & Reasoning for Middle School (Middle); Reading Charts, Graphs & Diagrams (Middle); Financial Literacy for High School (High); The Thinking Toolkit (High) |
-| **Science** | Discover Science (Middle), Intermediate Science (Middle/High) |
-| **History & Government** | We the People (Middle), History & Humanities I–III (Middle/High); War: A Debate in Primary Sources (High) |
-| **Philosophy** | The Trial of Socrates, The Death of Socrates (High); The Life of Man, The Life of Words, The Life of Being — Aristotle I–III (High/University); Powers & Principalities: Reading Machiavelli's The Prince (High); First Philosophy: Reading Descartes' Meditations (High); The Dangerous Perhaps: Reading Nietzsche (High/University) |
-| **Language & Literature** | The Open Page, Let's Read! Five Children and It (Elem/Middle), Words from the Ancients: A Latin and Greek Roots Companion (Middle), Encountering Spanish (Middle), Shakespeare's Sonnets: A Reading Companion (High/University); Tales of the Decameron: Reading Boccaccio (High); The Sage of Baltimore: Reading Mencken's Notes on Democracy (High); Reading the Modern Short Story: Chekhov, Joyce, and Hemingway (High); Reading a Modern Novel: The Great Gatsby (High); Clear & Effective: Professional and Technical Writing (High) |
-| **Religion** | Religious Roundtable (High); The Cloister and the Cell: An Introduction to Western Monasticism (High) |
-| **Special Interest** | Nourish: An MS-Friendly Cookbook (Adults) |
-
-Resources are licensed under **CC BY-SA 4.0**. Most titles include separate Student and Teacher editions.
-
-## 🛠️ Technologies
-
-- HTML5, CSS3, Vanilla JavaScript — no frameworks, no backend
-- Google Fonts: Cinzel (display) & Crimson Text (body)
-- CSS Grid, custom properties, responsive design (3 breakpoints)
-- localStorage for user-editable content persistence
-
-## 📁 Project Structure
+The core technology is an end-to-end pipeline:
 
 ```
-scholastica-codex/
-├── index.html          # Main portfolio page
-├── styles.css          # Shared styles and animations
-├── downloads.html      # Bibliotheca Scholastica download hub
-├── downloads.css       # Download hub styles
-├── downloads/          # 43 curricular resource ZIP files (~155 MB)
-├── README.md
-└── LICENSE             # MIT License (instruments); CC BY-SA 4.0 (resources)
+LaTeX Textbook → JSON Extraction → NotebookLM Artifacts → YouTube/Forms Publishing
 ```
 
-## ⚖️ Licensing
+Each textbook chapter is automatically decomposed into sections, uploaded to Google NotebookLM, and transformed into:
+- Video overviews (Explainer or Cinematic format)
+- Auto-graded quizzes (Google Forms)
+- Study guides (Markdown)
+- Flashcard sets (JSON)
+- Slide decks (PPTX)
+
+The pipeline is resume-safe, quota-aware, and runs unattended overnight.
+
+**Tools:** Claude Code (Anthropic), Google NotebookLM, YouTube Data API v3, Google Forms API, LaTeX/latexmk, Python
+
+## Content Library
+
+| Subject | Titles | Levels |
+|---------|--------|--------|
+| **Mathematics** | Math I & II, Algebra I & II, Business Math + 3 workbooks | Middle–High |
+| **Life Skills** | Logic & Reasoning, Charts & Graphs, Financial Literacy, The Thinking Toolkit | Middle–High |
+| **Science** | Discover Science, Intermediate Science (32 units each) | Middle–High |
+| **History & Government** | We the People, History & Humanities I–III, War: A Debate | Middle–High |
+| **Philosophy** | Plato I & II, Aristotle I–III, Descartes, Machiavelli, Nietzsche | High–University |
+| **Language & Literature** | The Open Page, Spanish, Latin/Greek Roots, Shakespeare, Boccaccio, Mencken, Short Stories, Gatsby, Technical Writing, Five Children and It | Elementary–University |
+| **Religion** | Religious Roundtable, Monasticism | High |
+| **Special Interest** | Nourish: An MS-Friendly Cookbook | Adults |
+
+Most titles include separate Student and Teacher editions.
+
+## Deliberate Variety
+
+The breadth of subject matter is intentional. This collection includes Classical Christian texts alongside secular history, Nietzsche alongside monasticism, Mencken's provocations alongside elementary reading companions. The variety demonstrates that the framework is content-agnostic — it handles any subject, any perspective, any grade level.
+
+## Disclaimers
+
+- **AI-Assisted Content:** All materials were created through human-AI collaboration and are provided as-is. Content may contain errors. Review and verify before classroom use.
+- **Not Professional Advice:** These materials do not constitute professional educational, financial, medical, legal, or religious advice.
+- **Perspective:** Several titles reflect a Classical Christian educational perspective. Others are secular or intentionally provocative. All perspectives should be examined critically.
+- **Beta Release:** This collection is a work in progress. [Report errors via GitHub Issues](https://github.com/JD-Jones-ASES/project-launchpad/issues/new?title=Resource%20Error%3A%20).
+
+## Licensing
 
 | Content | License |
 |---------|---------|
-| Educational Instruments (web apps) | MIT License © 2025 JD Jones |
-| Curricular Resources (textbooks, workbooks) | CC BY-SA 4.0 © 2026 JD Jones |
+| Educational Instruments (web apps) | MIT License |
+| Curricular Resources (textbooks) | CC BY-SA 4.0 |
 
-## 🤝 Contributing & Errors
+All content is freely available for use, remix, and redistribution with attribution.
 
-Built with human-AI collaboration using Claude Code (Claude Opus/Sonnet 4.6). Content may contain errors — please [open an issue](https://github.com/JD-Jones-ASES/project-launchpad/issues/new?title=Resource%20Error%3A%20) to report them.
+## Technologies
 
-## 🎓 Educational Philosophy
+- HTML5, CSS3, vanilla JavaScript — no frameworks, no backend
+- Google Fonts: Cinzel (display) & Crimson Text (body)
+- LaTeX/latexmk for textbook typesetting
+- Python for pipeline orchestration
+- Claude Code (Anthropic) for authoring and automation
+- Google NotebookLM for multimedia generation
+- YouTube Data API v3 + Google Forms API for publishing
 
-The internet was transformative for education in the 1990s. LLMs and AI tools represent an even larger shift today. These resources demonstrate how quickly quality educational materials can be created with AI assistance — materials that would have taken weeks or months now take hours.
+## Investment
 
+This project seeks partners in AI or venture capital who see the opportunity in AI-accelerated educational publishing. The content is free. The capability is the product. [Get in touch via GitHub Issues](https://github.com/JD-Jones-ASES/project-launchpad/issues).
 
+Copyright 2025-2026 JD Jones
