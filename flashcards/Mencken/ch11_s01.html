@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 11, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In Part II of Notes on Democracy, Mencken shifts his focus from the democratic citizen to what subject?", "back": "The democratic state and its institutions."}, {"front": "What central question does Mencken explore regarding the structure of democracy?", "back": "Does it matter whether democracy is direct or representative?"}, {"front": "How does Mencken characterize the distinction between direct and representative democracy?", "back": "He argues that the distinction is simply rhetoric."}, {"front": "What is the primary rhetorical task Mencken undertakes in Chapter 11, Section 1?", "back": "To demolish the fundamental distinction between direct and representative government."}, {"front": "Instead of abstract argument, what literary tool does Mencken use to make political theory vivid?", "back": "Analogy."}, {"front": "To what does Mencken compare the composition of folk ballads?", "back": "The New England town-meeting."}, {"front": "Mencken adopts the persona of a world-weary _____, appearing as one who has seen through every fraud.", "back": "political realist"}, {"front": "In the New England town-meeting, Mencken claims most leaders were actually _____.", "back": "demagogues and fanatics"}, {"front": "What is the purpose of Mencken's occasional concessions to the 'superiority' of some leaders?", "back": "It is a rhetorical device to signal fairness before he continues his critique."}, {"front": "What tone does Mencken use to suggest that the debate over democratic forms is a nuisance?", "back": "Impatience."}, {"front": "Mencken's diction moves between the language of political science, the language of contempt, and the language of _____.", "back": "mock-concession"}, {"front": "Term: Camorra", "back": "An organized ring of conspirators, originally a Neapolitan secret society."}, {"front": "How does Mencken use the term 'camorra' in a political context?", "back": "To describe the self-serving minorities that dominate democratic politics."}, {"front": "What does the compound modifier 'stall-fed' imply when applied to democratic idealists?", "back": "It reduces them to livestock fattened in a stable."}, {"front": "In the phrase 'stall-fed Rousseaus,' what does the capitalized 'R' in Rousseau signify?", "back": "It turns a proper noun into a common, interchangeable type of idealist."}, {"front": "Mencken refers to bad scholars as 'philologues of _____ powers of observation.'", "back": "defective"}, {"front": "What effect does Mencken achieve by mixing three different registers of diction?", "back": "It makes the reader feel simultaneously informed, entertained, and superior."}, {"front": "How are Mencken's sentences in this section typically structured?", "back": "They are long and cumulative, leading to a short, decisive verdict."}, {"front": "Mencken uses the colon and the period as instruments of _____ to create a theatrical effect.", "back": "timing"}, {"front": "In Part II, for what purpose does Mencken primarily use the dash?", "back": "For qualification and concession."}, {"front": "Term: Tricolon", "back": "A series of three parallel clauses or phrases, often ending with an ironic twist."}, {"front": "What rhythm does Mencken create by listing three types of government in a tricolon?", "back": "A rhythm of exhaustive enumeration suggesting all forms reduce to the same thing."}, {"front": "Concept: Analogy", "back": "An extended parallel between a familiar situation and an unfamiliar one for clarification."}, {"front": "How does the folk ballad analogy debunk the myth of the town-meeting?", "back": "It shows that 'the folk' merely acted as referees for works created by individual poets."}, {"front": "According to the close reading, why is the phrase 'concrete poets' significant?", "back": "It insists on individual human agency over the abstraction of 'the folk.'"}, {"front": "What role does Mencken assign to 'the folk' in the creation of ballads?", "back": "The role of referees who choose which works survive."}, {"front": "The phrase 'choosing which should survive' in the ballad analogy contains an echo of what theory?", "back": "Darwinian natural selection."}, {"front": "Mencken compares the sovereignty of democratic citizens to the sovereignty of _____.", "back": "absolute monarchs"}, {"front": "Why does Mencken argue that even absolute kings were not truly sovereign?", "back": "They were constrained by ministers, courtiers, soldiers, and women."}, {"front": "What is the intended effect of comparing democratic sovereignty to autocratic sovereignty?", "back": "To make the distinction between democracy and autocracy seem trivial."}, {"front": "How does Mencken use mock concession to drain his opponents' arguments of substance?", "back": "He grants their points while adding qualifications like 'under the hand of God' or 'by some miracle.'"}, {"front": "In Mencken's prose, what does the phrase 'in point of fact' typically signal?", "back": "A shift from comfortable myths to harsh reality."}, {"front": "How does the verb 'acted as referees' reduce the importance of the common people?", "back": "It changes their role from creative agents to passive judges."}, {"front": "What does Mencken's impatience with the 'representative vs direct' debate suggest to the reader?", "back": "That the distinction is an irrelevant nuisance to be swept aside."}, {"front": "How does Mencken flatter his audience through his choice of diction?", "back": "He assumes they can follow technical political terminology while enjoying its mockery."}, {"front": "In the close reading, what does the semicolon in the ballad sentence divide?", "back": "It balances what the poets did against what the folk did."}, {"front": "According to Mencken, what is the core reality of apparent democracy?", "back": "It is an oligarchy where the many ratify what the few have already decided."}, {"front": "What specific geographical area does Mencken associate with 'stall-fed Rousseaus'?", "back": "The cow States."}, {"front": "How does the 'impatience' in Mencken's tone distinguish Part II from Part I?", "back": "Part II is less playful and more focused on dismantling arguments he considers unworthy."}, {"front": "Why is analogy described as a 'potentially deceptive' tool in argumentation?", "back": "It makes ideas accessible, but the comparison may break down under close scrutiny."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

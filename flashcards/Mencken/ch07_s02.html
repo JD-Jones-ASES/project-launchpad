@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 7, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the primary \"engine\" of democracy?", "back": "Envy."}, {"front": "Mencken argues that the inferior man does not truly desire liberty or justice, but rather _____.", "back": "What his betters have."}, {"front": "How does Mencken characterize the \"pretension to superiority\" found in the democratic man?", "back": "As an uncomfortable realization of actual inferiority."}, {"front": "Mencken quotes Heine to define \"l’envie\" as an _____.", "back": "Inferiority that confesses itself."}, {"front": "How does the disdain felt by someone of \"genuine superiority\" differ from the peasant's outlook?", "back": "It contains no sign of the envious hatred or moralizing found in the peasant."}, {"front": "According to Mencken, what specific city attraction drives the peasant to become a Prohibitionist?", "back": "The cabaret."}, {"front": "Mencken claims the peasant denounces urban delights as \"crimes\" primarily because _____.", "back": "He cannot access them himself."}, {"front": "What term does Mencken use to describe the loneliness of a peasant drinking cider in a barn?", "back": "Onanism."}, {"front": "Why is the peasant a Prohibitionist by conscience, \"doubly-riveted and immovable\"?", "back": "His own drinking is solitary and unpalatable compared to the romanticized gaiety of the city."}, {"front": "What does the \"yokel\" see when he peeks through a crack in the barn-door while dreaming of city life?", "back": "His slatternly wife laboriously rounding up strayed pigs."}, {"front": "Mencken identifies the hatred of city \"plutocrats\" as being rooted in their money and their _____.", "back": "Debaucheries that are beyond the reach of the peasant."}, {"front": "What type of literature does Mencken credit with propagating \"idealism\" in the corn-and-hog belt?", "back": "Yellow-backs or scandal sheets such as \"Night Life in Chicago.\""}, {"front": "The rural conviction that \"Babylonish revels\" must be stopped is framed as a necessity for _____ to survive.", "back": "Christianity."}, {"front": "In Mencken's view, why does the Iowa swineherd resent the Chicago stock-broker having concubines?", "back": "It is seen as against the will of God that one man should have many while he has only one."}, {"front": "Concept: Antinomianism.", "back": "Definition: The rejection of established moral, religious, or social laws, often attributed by Mencken to city women."}, {"front": "Why does the \"husbandman\" behind his plough feel tortured by \"ruby reflections\" of Atlantic City?", "back": "He is envious of the carnalities and charms of city women that his own wife lacks."}, {"front": "According to Mencken, the movement toward antinomianism in the country is mostly an _____.", "back": "Apeing of its externals (such as bobbing hair) without rejecting divine revelation."}, {"front": "What is the dominant spiritual yearning of the typical farm-wife according to Mencken?", "back": "To save the heathen hordes in India from hell fire."}, {"front": "Mencken identifies the \"unmitigated monogamy\" of rural life as a primary motive behind which 1910 federal law?", "back": "The Mann Act."}, {"front": "How does Mencken use the analogy of a \"sea-sick passenger\" on an ocean liner?", "back": "To illustrate how the democratic man hates anyone having a better time in the world."}, {"front": "Besides democracy, what other social \"twin\" originates from envy according to Mencken?", "back": "Puritanism."}, {"front": "Concept: Puritanism (Mencken's definition).", "back": "Definition: The impulse to regulate private behavior through legislation."}, {"front": "Why is the city proletarian considered \"a cut above\" the rural hind?", "back": "His natural envy is mitigated and mellowed by \"panem et circenses.\""}, {"front": "Concept: Panem et circenses.", "back": "Definition: \"Bread and circuses\"; the strategy of pacifying a population with food and entertainment."}, {"front": "Mencken asserts that the proletarian is never dangerous so long as his belly is filled and his _____.", "back": "Eyes are kept \"a-pop\" (distracted by spectacles)."}, {"front": "How has the American plutocracy attained \"higher skill\" in dealing with the proletarian than other countries?", "back": "By having more experience with the realities of democracy."}, {"front": "What happens in American cities when the \"genuine wants\" of the proletarian fail them?", "back": "A class of experts invents artificial wants to keep them occupied."}, {"front": "Mencken refers to the enterprise of providing for the proletarian's needs as the _____.", "back": "Third theological virtue (Charity)."}, {"front": "To what biological role is the urban proletarian father reduced by modern charity organizations?", "back": "A boar in a barnyard."}, {"front": "How does Mencken describe the prenatal care provided to the urban proletarian woman?", "back": "Elaborate machinery involving obstetricians, gynecologists, and trained nurses at no cost."}, {"front": "What benefit is provided to the city mother who is too lazy or poor to make baby clothes?", "back": "A free layette."}, {"front": "In what manner does Mencken claim the urban mother is delivered of her child in the hospital?", "back": "In a brilliant, aseptic, and painless manner."}, {"front": "What service is available to an urban mother if she wants to \"get rid of\" her child?", "back": "It is taken off her hands by propagandists."}, {"front": "Mencken notes that city children receive \"modified\" cow's milk based on the formulas of _____.", "back": "Eminent pediatricians."}, {"front": "Where can an urban mother \"park\" her baby while she goes shopping?", "back": "At a crèche."}, {"front": "Name two medical benefits provided to children at the public's charge in urban schools.", "back": "Dentistry (filling/pulling teeth) and oculist services (fitting spectacles)."}, {"front": "List three non-traditional subjects Mencken claims are taught in the public schools.", "back": "Raffia-work, salesmanship, and the new dances."}, {"front": "What is the psychological result of relieving the city proletarian of \"elemental gnawings\"?", "back": "His envy is sublimated into a sort of \"boozy contentment.\""}, {"front": "Mencken compares the contentment of the provided-for city proletarian to that of a _____.", "back": "Hog in a comfortable sty."}, {"front": "Why are the \"political imbecilities\" of the prairies ineffective against the city proletarian?", "back": "They break upon the hard rock of his urban cynicism."}, {"front": "What is the typical complaint of the city proletarian against his emancipated wife?", "back": "That she is too worldly, extravagant, and spreads her charms too boldly."}, {"front": "Mencken contrasts the \"rustic\" nursing his grievances with the \"city moron\" who is _____.", "back": "Diverted by the shows that surround him."}, {"front": "According to Mencken, what replaced \"yellow journalism\" as a tool to pacify the urban masses?", "back": "Harmless tabloids."}, {"front": "How do tabloids ease the envy of the city proletarian?", "back": "By giving him a vicarious share in the debaucheries of his economic superiors."}, {"front": "While the yokel sees \"brimstone\" in tales of city vice, the city proletarian hears the _____.", "back": "Frou-frou of perfumed skirts."}, {"front": "Mencken claims that urban envy is often obscured by simple _____.", "back": "Civic pride or animal delight in good shows."}, {"front": "Term: Glabella.", "back": "Definition: The smooth part of the forehead between the eyebrows, mentioned by Mencken in the context of a headache."}, {"front": "In the village, the peasant finds no cabarets, but only _____.", "back": "Sordid speak-easies selling raw spirits out of filthy jugs."}, {"front": "What does Mencken suggest is the ultimate goal of the city proletarian's education regarding politics?", "back": "To learn the fallacies of Socialism and the causes of the late war."}, {"front": "How does Mencken describe the \"idealism\" found in the corn-and-hog belt?", "back": "As a passionate conviction driven by envy and secret reading of city scandals."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

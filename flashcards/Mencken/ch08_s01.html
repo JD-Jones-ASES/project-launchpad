@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 8, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what single concept serves as the ultimate justification for democracy despite its failings?", "back": "Liberty"}, {"front": "Mencken argues that the common man is primarily driven by what specific emotion?", "back": "Envy"}, {"front": "In Mencken's view, what does the common man desire more than freedom?", "back": "Security"}, {"front": "What is the central rhetorical paradox Mencken presents regarding democracy and liberty?", "back": "Democracy is an enemy of liberty rather than its guardian."}, {"front": "Mencken's skepticism of popular self-government draws on a tradition dating back to which classical philosopher?", "back": "Plato"}, {"front": "Which 19th-century thinker warned about the “tyranny of the majority,” influencing Mencken's stance?", "back": "Tocqueville"}, {"front": "Identify the 1920s US amendment that Mencken viewed as a restriction of personal freedom by majority morality.", "back": "The Eighteenth Amendment (Prohibition)"}, {"front": "Which 1925 legal case pitted scientific inquiry against popular religious sentiment, fueling Mencken's contempt for democratic moralism?", "back": "The Scopes Trial"}, {"front": "Mencken’s", "back": "Friedrich Nietzsche"}, {"front": "What animal does Mencken use as a metaphor for the common man's submission to authority?", "back": "An ox"}, {"front": "In Mencken’s ox metaphor, who represents the political master?", "back": "The butcher"}, {"front": "Mencken uses the term \"mountebanks\" to describe which group of people in a democracy?", "back": "Politicians"}, {"front": "Term: Mountebanks", "back": "Definition: Charlatans or frauds."}, {"front": "Term: Poltroonery", "back": "Definition: Utter cowardice."}, {"front": "What is the significance of Mencken calling lovers of liberty \"votaries\"?", "back": "It elevates freedom to a quasi-religious ideal for a select few."}, {"front": "Term: Anthropoid", "back": "Definition: Resembling a human being but not quite one (zoological reduction)."}, {"front": "What does the word \"grandiloquently\" imply about the mob's talk of liberty?", "back": "The mob's language exceeds its actual understanding of the concept."}, {"front": "Mencken describes the free man as \"a sort of ____\" in his own world.", "back": "God"}, {"front": "Mencken's diction shifts between an elevated, liturgical register for liberty and what kind of register for the common man?", "back": "A barnyard or animalistic register"}, {"front": "Which rhetorical device is defined as the repetition of initial consonant sounds in closely connected words?", "back": "Alliteration"}, {"front": "What is the primary structural device Mencken uses to pair opposites like liberty vs. security?", "back": "Antithesis"}, {"front": "According to the text, what does the ox's \"proud, defiant gesture\" of licking the butcher's ear actually represent?", "back": "Abject submission disguised as affection or dignity."}, {"front": "Mencken argues that the common man has the same talent for self-reliance as he does for what musical feat?", "back": "Writing symphonies in the manner of Beethoven."}, {"front": "Which Enlightenment-era absolute monarch does Mencken cite as a protector of free speech?", "back": "Frederick the Great (Frederick II of Prussia)"}, {"front": "What is the ironic central paradox of Mencken's argument regarding Frederick the Great?", "back": "Absolutism can protect liberty while democracy threatens it."}, {"front": "What specific punctuation mark is described as Mencken's characteristic tool for inserting sardonic qualifications?", "back": "The dash"}, {"front": "Mencken’s phrase “ham and cabbage” is used to describe what base motivation of the city mobs?", "back": "Physical security and sustenance over abstract liberty."}, {"front": "The parallel clauses “It means self-reliance, it means resolution...” create the rhythmic effect of a _____.", "back": "Creed or litany"}, {"front": "Why does Mencken use the word \"proud\" ironically when describing the ox?", "back": "To expose the slave's delusion that submission is actually dignity."}, {"front": "What is the purpose of Mencken’s use of hard consonants like 'k' and 'b' in his", "back": "To create a blunt, percussive sound that matches the blunt meaning."}, {"front": "Mencken characterizes the proletariat as \"_____\", a term that denies their claim to rational self-governance.", "back": "Anthropoid"}, {"front": "Mencken views the relationship between ruler and ruled not as political, but as _____.", "back": "Biological (or species-based)"}, {"front": "What rhetorical task does Mencken perform for his specific audience of \"educated readers\"?", "back": "Arming them with memorable formulations of their shared convictions."}, {"front": "The tone Mencken adopts when discussing the history of human servitude is described as _____.", "back": "Amateur historian (learned and sweeping)"}, {"front": "What were the Palmer Raids (1919–1920) intended to target, according to the historical context provided?", "back": "Political dissidents"}, {"front": "How does Mencken use the concept of \"loneliness\" in relation to the free man?", "back": "It is a necessary burden of the self-reliant, god-like individual."}, {"front": "Term: Self-reliance", "back": "Definition: One of the core, demanding requirements Mencken attaches to true liberty."}, {"front": "What does Mencken suggest is the historical age of liberty as a concept?", "back": "A recent and fragile acquisition."}, {"front": "In the ox metaphor, the location \"behind the ear\" makes the act of submission feel _____.", "back": "Grotesquely intimate or physically repulsive."}, {"front": "According to the analysis, Mencken's syntax often follows a pattern of a long build-up followed by a _____.", "back": "Devastating short sentence"}, {"front": "The phrase “lick the butcher” serves as a metaphor for what democratic action in Mencken’s eyes?", "back": "The citizen's vote as a deluded act of defiance."}, {"front": "Mencken suggests that if a person is biologically like an animal, they cannot be _____.", "back": "Free in any meaningful sense."}, {"front": "What does the word \"poltroonery\" imply about the democratic electorate?", "back": "They are inherently cowardly."}, {"front": "Mencken's use of liturgical diction like \"magnificent\" and \"unfathomable\" is reserved for which subject?", "back": "Liberty and the free man."}, {"front": "What role did Mencken play in relation to events like the Scopes Trial and Prohibition?", "back": "He was a journalist who covered them directly."}, {"front": "The tone shift from the \"cool diagnostician\" to \"Nietzschean exaltation\" highlights the height of what?", "back": "The height to which the common man is incapable of rising."}, {"front": "Mencken's argument that democracy is the enemy of liberty is described by the text as a _____ move.", "back": "Paradoxical"}, {"front": "Mencken views the common man as intellectually _____", "back": "Limited"}, {"front": "What effect does Mencken's use of animal imagery have on the reader's perception of the proletariat?", "back": "It systematically denies their capacity for rational self-governance."}, {"front": "The final sentence of the ox metaphor analysis notes that the grammatical simplicity of the sentence mirrors the _____.", "back": "Intellectual simplicity of the ox."}, {"front": "According to the text, Mencken treats the concept of liberty with a \"near-_____ seriousness.\"", "back": "Religious"}, {"front": "What quality does the word \"ear\" contribute to the sound of Mencken's famous ox sentence?", "back": "A soft sound that makes the image more grotesque through intimate contrast."}, {"front": "Mencken’s use of parallel syntax in the", "back": "Narrowing"}, {"front": "The term \"Ubermensch\" refers to which Nietzschean concept mentioned as an influence on Mencken?", "back": "The \"overman\" or superior solitary individual."}, {"front": "What is the primary rhetorical goal of Mencken's use of irony regarding Frederick the Great?", "back": "To show that the form of government is less important than the quality of the ruler."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 12, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In Chapter 12, Mencken attacks the underlying doctrine of both direct and representative democracy known as the ______.", "back": "Popular Will"}, {"front": "How does Mencken's persona shift in Section 1 from its initial state as a dispassionate analyst?", "back": "It shifts toward a prophet of doom."}, {"front": "What is the core tension Mencken establishes regarding the power of the American people?", "back": "The tension between their total theoretical sovereignty and their total actual incompetence."}, {"front": "Mencken uses a descending hierarchy of animals to describe the American people: sheep, donkeys, and ______.", "back": "Goats"}, {"front": "According to the text's animal metaphors, what specific quality do 'sheep' represent?", "back": "Docility and being easily led."}, {"front": "According to the text's animal metaphors, what specific quality do 'donkeys' represent?", "back": "Stubbornness and stupidity."}, {"front": "In Mencken's hierarchy, why are voters described as 'goats'?", "back": "They are gullible, willing victims who collaborate in their own exploitation."}, {"front": "What layer of meaning is added by the phrase 'to borrow from their own dialect' when Mencken uses the term 'goats'?", "back": "It signals class contempt by suggesting the vocabulary of abuse must be dumbed down for the targets."}, {"front": "Mencken compares the victimization of voters to the relationship between a surgeon and a ______.", "back": "Hypochondriac"}, {"front": "Term: Prehensile soothsayers", "back": "Definition: Politicians described as grasping creatures (half primate) who pretend to see the future (half oracle)."}, {"front": "Term: Blackleg", "back": "Definition: A swindler or cheat who preys on gamblers; used by Mencken to describe Prohibition agents."}, {"front": "Term: Antinomian", "back": "Definition: One who rejects conventional morality or believes faith alone is necessary for salvation."}, {"front": "Term: Mellifluous", "back": "Definition: Sweet-sounding or honeyed language."}, {"front": "Mencken uses the theological term 'antinomian' to mock voters for applying religious categories to a candidate's ______.", "back": "Divorce"}, {"front": "How does Mencken use 'mellifluous' to describe political rhetoric?", "back": "To underscore the gap between the sweetness of the language and the sordidness of the political transaction."}, {"front": "Mencken refers to the U.S. Constitution with the ironic term '______ scripture.'", "back": "Hoary"}, {"front": "Concept: Enumeratio (The Catalogue)", "back": "Definition: A rhetorical device where the speaker lists items or details to prove a point through sheer accumulation or absurdity."}, {"front": "What is the rhetorical purpose of Mencken's long list of absurd things the people 'could' do with their sovereignty?", "back": "To make unlimited power in the hands of the many appear ridiculous."}, {"front": "In his catalogue of popular power, Mencken suggests the people could enfranchise 'the kine in the byres,' which refers to ______.", "back": "Cattle in the stables."}, {"front": "Which specific U.S. President does Mencken suggest the people could 'hang to-morrow' to prove their theoretical power?", "back": "Dr. Coolidge"}, {"front": "What is Mencken's 'signature rhythmic move' at the end of a long analytical build-up?", "back": "A flat, monosyllabic verdict sentence."}, {"front": "Mencken defines the 'science of politics' under democracy as the practice of ______ and swindling.", "back": "Hoodwinking"}, {"front": "Why does Mencken use the scholarly abbreviation 'i. e.' when defining politics as hoodwinking?", "back": "To create an ironic air of rational inquiry for an activity he considers fraudulent."}, {"front": "In the democratic bargaining process, what do the people yield in return for 'the mere appearance of what they want'?", "back": "What the politician and the enterprising minorities behind him want."}, {"front": "Mencken compares the 'simple and sordid' bottom of political bargaining to the sale of what animal?", "back": "A mule"}, {"front": "Why does Mencken use a 'mule' in his simile for democracy instead of a horse or an ox?", "back": "Because it is sterile, stubborn, and associated with rural poverty and indignity."}, {"front": "In the closing metaphor 'combat between jackals and jackasses,' who are the 'jackals'?", "back": "Politicians (predators)."}, {"front": "In the closing metaphor 'combat between jackals and jackasses,' who are the 'jackasses'?", "back": "Voters (beasts of burden)."}, {"front": "What phonetic device binds the predator and prey together in the phrase 'jackals and jackasses'?", "back": "Alliteration of the hard 'j' sound."}, {"front": "According to the text, what three things do the people actually want from government?", "back": "Safety and security, heroes to worship, and rough entertainment."}, {"front": "Mencken argues that the people's power is meaningless because they lack the ______ and ______ to use it wisely.", "back": "Knowledge; will"}, {"front": "The use of rhetorical questions in this section serves what specific purpose?", "back": "To create the illusion of dialogue while acting as aggressive, self-evident challenges."}, {"front": "Mencken uses the term 'prehensile' to specifically compare a politician's grasping nature to a ______.", "back": "Monkey's tail"}, {"front": "The 'instability' of Mencken’s tone is intended to keep the reader ______.", "back": "Off balance"}, {"front": "Mencken’s use of legal terminology like 'inalienable rights' is intended to expose the gap between grand terminology and ______.", "back": "Mean reality"}, {"front": "In Mencken's catalogue of absurdities, what does he suggest the people could require the President to do with his hair?", "back": "Shave his head."}, {"front": "In Mencken's catalogue of absurdities, what does he suggest the people could require the President to wear while sleeping?", "back": "Underclothes"}, {"front": "Mencken describes the bargaining of democracy as being conducted to the tune of '______ rhetoric.'", "back": "Affecting"}, {"front": "What previous imagery is recalled by the mention of 'music by the choir' during political transactions?", "back": "The opening of the book, where democracy arrives to 'sweet, soft music.'"}, {"front": "Mencken characterizes the 'master transaction of democratic states' as a combat between which two groups?", "back": "Jackals and jackasses."}, {"front": "According to Mencken, what do the people receive from politicians instead of the actual things they want?", "back": "The mere appearance of what they want."}, {"front": "Mencken's use of 'enumeratio' aims to prove the unlimited ______ of the people through the sheer length of the list.", "back": "Sovereignty"}, {"front": "How does Mencken describe the American people's role in future wars?", "back": "They will be shoved into the next one with the same credulity that took them into the last."}, {"front": "The word 'prehensile' emphasizes that politicians are motivated by ______.", "back": "Grasping for power."}, {"front": "What is the implied answer in Mencken's declarative sentences that function as rhetorical questions?", "back": "An answer that is assumed to be so obvious that no reasonable person could disagree."}, {"front": "By comparing voters to 'goats,' Mencken suggests they are not just stupid but ______ in their own exploitation.", "back": "Collaborators"}, {"front": "What does Mencken's 'clinical detachment' toward the 'sheep' and 'donkeys' transition into by the end of the section?", "back": "Genuine anger at political manipulation."}, {"front": "What rhetorical effect is achieved by the descent from 'pastoral innocence' (sheep) to 'comic indignity' (goats)?", "back": "It enacts a graduated sequence of insult and contempt."}, {"front": "According to the close reading, what does the 'simulacrum' in the political transaction represent?", "back": "The 'mere appearance' of the people's wants provided by politicians."}, {"front": "The catalogue listing that the people 'could abolish the Federal and State Legislatures' is used to demonstrate their ______ power.", "back": "Infinite (or unlimited)"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

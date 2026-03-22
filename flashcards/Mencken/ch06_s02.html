@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 6, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what physical substances actually drive the emotions of 'democratic man'?", "back": "Glandular secretions or hormones."}, {"front": "Mencken argues that 'civic virtue' is essentially a reduction to what type of instinct?", "back": "Animal instinct."}, {"front": "What are the two primary emotions Mencken observes in a 'raw human being'?", "back": "Rage and love."}, {"front": "How does Mencken describe the 'love' felt by a child in its most basic form?", "back": "A delight in being tickled or being amiable."}, {"front": "Mencken asserts that the delights of an infant have more to do with hormones than with the _____.", "back": "Soul."}, {"front": "What psychological concept does Mencken use to explain why the 'inferior man' retains childhood emotions in adulthood?", "back": "Incurable infantilism."}, {"front": "At what point in development does Mencken claim the 'inferior man's' brain stops developing?", "back": "The first years of his second decade."}, {"front": "What biological change dominates the 'inferior man' during his middle teens?", "back": "His glands begin to unfold and dominate his whole organism."}, {"front": "To what animal does Mencken compare the 'inferior man's' passion for love in his teens?", "back": "A Tom cat."}, {"front": "Mencken identifies the rural variety of the 'inferior man' using what Latinate-style term?", "back": "Bucolic variety of Homo stultus."}, {"front": "How does the 'urban proletariat' yield to biological urges compared to the rural variety?", "back": "He yields vicariously or in harsh physiological terms due to the inhospitable city environment."}, {"front": "According to the text, where can one find the content of the 'inferior man's' poetry?", "back": "In movies or popular songs."}, {"front": "Mencken compares the 'loftiest' expressions of love in the inferior man to the poetry of what animal?", "back": "A rooster in a barnyard."}, {"front": "In Mencken's view, what is the primary characteristic of the hero admired by the 'inferior man's' wife?", "back": "A perambulating phallus."}, {"front": "What type of media does Mencken claim bases its 'metaphysical system' on the 'anthropoid appetite' of the masses?", "back": "Tabloid newspapers."}, {"front": "What is the 'inferior man's' primary cognitive deficiency regarding the concept of 'good'?", "back": "He cannot formulate a concept of a good that is not his own private good."}, {"front": "How does Mencken explain the 'inferior man's' historical hostility toward heretics?", "back": "It is an expression of his own elemental yearnings and incapacity for imagination."}, {"front": "Mencken claims the 'inferior man' has never supported fairness, justice, or _____.", "back": "Decency."}, {"front": "To Mencken, concepts like 'honour' and 'liberty' belong only to whom?", "back": "The inferior man's superiors."}, {"front": "What organization does Mencken mention the 'inferior man' joined to march against radicals?", "back": "The American Legion."}, {"front": "Mencken argues that the 'inferior man's' cruelty is a translation of what congenital trait?", "back": "Fear or cowardice."}, {"front": "When the 'inferior man' is asked for fair dealing by his 'betters,' how does he behave according to Mencken?", "back": "He acts like a wolf."}, {"front": "Which group does Mencken identify as the 'lowest caste among civilized men'?", "back": "Peasants."}, {"front": "Mencken describes peasants as the _____ remaining in the filter after progress has passed through.", "back": "Sediment."}, {"front": "Why does Mencken consider the city proletariat 'appreciably superior' to the peasant?", "back": "They were intelligent enough to escape the drudgery of the farm."}, {"front": "What characterises the theology of the 'yokel' or peasant?", "back": "Primitive animism involving demons, witches, and ghosts."}, {"front": "What specific historical legal movement does Mencken use to illustrate the 'peasant mind'?", "back": "The anti-evolution laws of the South."}, {"front": "What was the core theory behind the prosecution in the Scopes trial, according to Mencken?", "back": "That dissenters from barnyard theology are scoundrels devoid of civil rights."}, {"front": "In the mind of the 'virtuous clod-hopper,' what is the sole purpose of government?", "back": "To promote his own private advantage."}, {"front": "How does the peasant respond when his affairs are prospering at the expense of city men?", "back": "He rams his advantage home with relentless ferocity."}, {"front": "What does the peasant demand from the city man when economic conditions are unfavorable?", "back": "That the city man be taxed to make up his losses."}, {"front": "What is the true motivation behind the 'brummagem progressivism' of the farm?", "back": "Bald self-seeking."}, {"front": "Mencken describes the 'yokel' as 'democratic man in the _____' and the bulwark of democratic states.", "back": "Altogether."}, {"front": "While the city proletariat may be moved by 'ideas,' what is the only idea the 'yokel' holds?", "back": "That God regards him fondly and all other men are abandoned to the devil."}, {"front": "Term: Erogenous zones.", "back": "Definition: Areas of the body where physical delights are seated, which Mencken links to hormones rather than the soul."}, {"front": "According to the text, what 'satirical fact' did Dr. Watson allege occurs at birth in males?", "back": "Tumescence."}, {"front": "How does Mencken characterize the 'inferior man's' capacity for illusion?", "back": "A powerful thirst for the 'not true' that embellishes his physical appetite."}, {"front": "Concept: Mencken's view of Altruism.", "back": "Definition: A concept nonexistent in the 'inferior man,' who only shows charity to those as poor as himself."}, {"front": "According to Mencken, what is the 'alpha and omega' of rural progressivism?", "back": "The demand that city dwellers subsidize the peasant's losses."}, {"front": "Mencken uses the term 'Homo stultus' to refer to which general group?", "back": "The inferior or stupid man."}, {"front": "What 'trappings' are used to disguise the self-interest of political mountebanks?", "back": "The trappings of Service."}, {"front": "How does Mencken describe the peasant's relationship to the 'stream of progress'?", "back": "He is the leftover sediment in the filter."}, {"front": "To Mencken, the 'inferior man' is incapable of projecting himself into the place of another due to a deficiency in _____.", "back": "Imagination."}, {"front": "What does Mencken claim is the 'ideal piece of news' for the readers of tabloid newspapers?", "back": "News where nothing is left to the imagination and gross provocation is wormed through the mails."}, {"front": "Mencken asserts that the 'inferior man' reduces all forms of love, including philanthropy, to what?", "back": "His own elemental yearnings."}, {"front": "In the context of the Scopes trial, who did the 'peasant judge' support?", "back": "The peasant attorney-general."}, {"front": "What is the primary reason Mencken gives for the 'yokel' hating everyone who is not a 'yokel'?", "back": "Fear."}, {"front": "Mencken suggests that the 'inferior man' lacks the 'wit' to escape from what specific setting?", "back": "The drudgery of the dunghill."}, {"front": "According to Mencken, the 'inferior man' is most likely to applaud which historical figure of the Inquisition?", "back": "Torquemada."}, {"front": "Mencken views the 'yokel's' theology as being as intolerant as which specific Eastern religious structure?", "back": "Thibetan lamaism."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

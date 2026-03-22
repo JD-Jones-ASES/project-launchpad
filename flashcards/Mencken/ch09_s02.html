@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 9, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../quizzes.html">&larr; Back to Quiz Hub</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, who is responsible for the progress of the world?", "back": "The rare and gifted few."}, {"front": "In Mencken's view, what role does democracy play in relation to gifted individuals?", "back": "It acts as an engine that grinds them down."}, {"front": "How does the 'inferior man' typically perceive the desire for liberty in his superiors?", "back": "As an appetite for a good of which he is himself incapable."}, {"front": "Why is the inferior man eager to 'put down' those who harbor a desire for liberty?", "back": "He envies them for possessing a quality he lacks."}, {"front": "How does Mencken characterize the status of justice in a democratic state?", "back": "It is always unpopular and in difficulties."}, {"front": "How does Mencken define the democratic concept of 'social justice'?", "back": "A false form of justice designed to get the laborer more than his fair hire."}, {"front": "What is the typical reaction of the 'lower levels' to wars of extermination against heretical minorities?", "back": "They offer no opposition and are ready to help destroy their rights."}, {"front": "Which organization does Mencken cite as performing 'heroic services' in the post-war pogrom against Reds?", "back": "The American Legion."}, {"front": "What group aided the American Legion in its 'crusade' against political radicals?", "back": "The American Federation of Labour."}, {"front": "What does the city workman mourn more than the loss of his liberty under Prohibition?", "back": "The loss of his beer."}, {"front": "According to Mencken, where does the protest against democratic 'obscenities' originate?", "back": "The higher levels of society."}, {"front": "Mencken compares the difficulty of breeding a libertarian to the difficulty of breeding a _____.", "back": "Race-horse."}, {"front": "What is the general attitude of the masses toward the progress that ameliorates their own lot?", "back": "They oppose it."}, {"front": "The American Department of Agriculture originally began in 1830 as a bureau of the _____.", "back": "Patent Office."}, {"front": "How did United States farmers initially react to the creation of the Department of Agriculture?", "back": "They opposed it almost unanimously with bitter derision."}, {"front": "Why was John Adams denounced as an 'idiot and a scoundrel' during his presidency?", "back": "He proposed the establishment of a Weather Bureau."}, {"front": "Mencken considers it axiomatic that the majority opposes all measures for safeguarding _____.", "back": "Public health."}, {"front": "What was the direct consequence of the rejected vaccination ordinance in Los Angeles?", "back": "Smallpox spread in the town."}, {"front": "To whom did the 'alarmed' proletariat turn for help after smallpox spread in Los Angeles?", "back": "Christian Scientists, osteopaths, and chiropractors."}, {"front": "From which country did the United States and England imitate their social legislation?", "back": "Germany."}, {"front": "Who was the 'kept Socialist' that supported Bismarck's social legislation?", "back": "Ferdinand Lassalle."}, {"front": "How did Bismarck manage to pass social legislation despite the opposition of the Reichstag?", "back": "He carried on the government unconstitutionally without their consent."}, {"front": "What was Bismarck's primary goal in formulating his code of social legislation?", "back": "To restore rights under Prussian common law destroyed by the industrial system."}, {"front": "According to Sir Henry Maine, what would universal suffrage have done to the spinning-jenny?", "back": "It would have prohibited it."}, {"front": "What major timekeeping reform does Sir Henry Maine argue universal suffrage would have prevented?", "back": "The adoption of the Gregorian Calendar."}, {"front": "Which religious group does Maine argue would have been proscribed under effective universal suffrage in 18th-century England?", "back": "Roman Catholics."}, {"front": "What does Mencken call the region of the United States where anti-evolution acts are common?", "back": "The Hookworm Belt."}, {"front": "According to Lecky, what is 'irrational' about the liberal notion of an elective body?", "back": "The idea that increased ignorance in voters converts to increased capacity for government."}, {"front": "Why does Mencken argue that *Homo neandertalensis* is hostile to exact knowledge?", "back": "It is complex and puts an unbearable burden on his meagre mental capacity."}, {"front": "What is the primary aim of political platitudes, shibboleths, and superstitions?", "back": "To make the unintelligible simple and obvious."}, {"front": "Why is chiropractic immensely popular among the 'submerged' classes?", "back": "The theory can be learned in two lessons, unlike complex physical sciences."}, {"front": "Mencken attributes the popularity of Fundamentalism to the simplicity of the cosmogony found in _____.", "back": "The first chapter of Genesis."}, {"front": "How does the average human being react to a person with an acquaintance with sciences like histology?", "back": "He views them as ridiculous with a touch of the sinister."}, {"front": "Mencken claims the common man knows as much about biology as a _____.", "back": "Cow's calf."}, {"front": "What is 'Greek' to the average man in Mencken's", "back": "A jargon spoken by boot-blacks."}, {"front": "Who does the average man mistake the composer 'Wagner' for?", "back": "A retired baseball player."}, {"front": "Why does Mencken believe that learning survives in modern society?", "back": "The mob has not yet heard of it or discovered it."}, {"front": "What did the peasants of Georgia demand when they learned grand opera was being played in Atlanta?", "back": "A tax of $1000 per performance to discourage it."}, {"front": "How did the American Legion in the Middle West respond to musicians playing Bach and Beethoven?", "back": "They proceeded against them with clubs."}, {"front": "Which American city does Mencken identify as having the 'most active censorship of literature'?", "back": "Boston."}, {"front": "What is the underlying cause for the common man's hostility toward beauty?", "back": "He cannot comprehend it, and it challenges and disturbs him."}, {"front": "Mencken argues that the common man's sense of morality is actually driven by _____.", "back": "Fear of punishment (or fear of his neighbors)."}, {"front": "Mencken compares the private morals of the common man to those of a _____.", "back": "Variety actor."}, {"front": "Why does Johann Sebastian Bach's music remain 'lawful' in the United States?", "back": "It lies outside the cognizance of the mob and demagogues."}, {"front": "What does Mencken predict would happen to a musician playing Bach in rural Tennessee?", "back": "He would be railroaded to the calaboose (jail) by a jury of morons."}, {"front": "Term: The common man", "back": "Definition: A political abstraction representing the ordinary citizen, treated by Mencken with contempt."}, {"front": "According to Mencken, what is the 'exclusive possession' of small, unpopular minorities?", "back": "The finest fruits of human progress and nobler virtues."}, {"front": "What does Mencken identify as the 'Egyptian night' that hedges in the common man?", "back": "His profound ignorance of science, art, and history."}, {"front": "Mencken suggests that it would be as vain to teach scientific cosmogonies to peasants as it would be to teach them to _____.", "back": "Streptococci."}, {"front": "Which philosopher wrote 'The Republic,' a work Mencken claims the common man has never heard of?", "back": "Plato."}, {"front": "According to Mencken, the common man is a 'Feinschmecker of pornography' but remains unaware of _____.", "back": "Sigmund Freud."}, {"front": "Which 17th-century political work by Thomas Hobbes is mentioned as being unknown to the common man?", "back": "Leviathan."}, {"front": "In Mencken's view, the common man sticks to 'the tabloids and the movies' because they are _____.", "back": "Simple and easy to understand."}, {"front": "What does Mencken believe would happen to the fine arts if they were effectively integrated into school curricula?", "back": "The mob would rise up and attempt to put them down by law."}, {"front": "Mencken notes that 'more democracy' usually results in acts depriving minorities of what rights?", "back": "Free assemblage and free speech."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
