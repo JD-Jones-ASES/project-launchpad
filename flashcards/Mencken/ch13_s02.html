@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 13, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Mencken">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Mencken, what is the primary paradox of the subversion of the one-man-one-vote principle in the United States?", "back": "The subversion is itself an expression of the democratic will."}, {"front": "Mencken compares a community with half-weight votes to a community where half the citizens are effectively _____.", "back": "Unable to vote at all"}, {"front": "How does the United States Senate exemplify Mencken's concept of disproportional representation?", "back": "Each state has exactly two Senators regardless of its population size."}, {"front": "In Mencken's analysis, why do large cities usually lack proportional representation in state legislatures?", "back": "The upper houses are typically constituted based on geographical boundaries rather than population."}, {"front": "Why does the lower house of state legislatures often show disharmony between population and representation?", "back": "Reapportionment lags behind the rapid population growth of cities compared to rural districts."}, {"front": "What is Mencken's critique of the 'complicated remedies' proposed by 'romantic fuglemen' of pure democracy?", "back": "He argues they have all been tried elsewhere and failed miserably."}, {"front": "Contrary to the view that it nullifies democracy, Mencken argues disproportional representation is a device to make democracy _____.", "back": "More workable"}, {"front": "According to Mencken, what is the source of every inequality in the American democratic system?", "back": "The free will and approval of the sovereign people."}, {"front": "What 'nature of things' advantage are rural voters given disproportionate representation to counter-balance?", "back": "The ability of urban voters to act together more promptly and effectively as a compact mob."}, {"front": "Mencken uses the term 'yokels' to describe which group of voters?", "back": "Rural regions/farmers."}, {"front": "What 'bucolic imbecility' does Mencken specifically blame on the disproportionate power of rural voters in the Senate?", "back": "Prohibition"}, {"front": "What does Mencken claim happens to constitutional checks when the majority's 'blood is up'?", "back": "They yield to the pressure of the majority's desires."}, {"front": "Mencken argues that the Supreme Court exercises its power with 'one eye on the _____.'", "back": "Election returns"}, {"front": "According to Mencken, what do celebrated Supreme Court decisions, like the Dred Scott case, actually reflect?", "back": "Popular rages of the hour."}, {"front": "Mencken attributes the changing personnel of the Supreme Court to a high incidence of _____ among its members.", "back": "Senile deterioration"}, {"front": "Why do Presidents and Senators consider 'cross-roads grocery-store' doctrines when filling Court vacancies?", "back": "They are practical politicians responding to fashionable public opinions."}, {"front": "Mencken characterizes Supreme Court justices as having a talent for reconciling the 'ideally just' with the '_____.'", "back": "Privately profitable"}, {"front": "In 'boom times,' what does Mencken claim democracy is very impatient of?", "back": "Natural rights"}, {"front": "What is the 'typical democrat' willing to exchange the theoretical boons of freedom for?", "back": "Something that he can use / material advantage."}, {"front": "According to Mencken, what is the chief occupation of political parties and professional politicians under democracy?", "back": "Offering bribes like jobs or business advantages to voters."}, {"front": "Why does Mencken believe the 'inferior American' is hostile to the concept of 'direct action'?", "back": "He believes any reform can be achieved peacefully through constitutional means."}, {"front": "Mencken claims the American people could use a simple amendment to the Constitution to _____ all private property.", "back": "Expropriate"}, {"front": "According to Mencken, what allows the American people to destroy property through 'tariff juggling' without compensation?", "back": "The flexibility and survival of the Constitution under sovereign will."}, {"front": "What group does Mencken suggest the American people could enfranchise if they 'so desired,' despite it being an absurdity?", "back": "Idiots (or 'kine in the byres')."}, {"front": "Mencken notes that city councils have already been abolished in hundreds of municipalities to illustrate the power to _____.", "back": "Abolish legislatures"}, {"front": "What extreme penal actions does Mencken claim the South introduced 'by acclamation' regardless of law?", "back": "Burning at the stake, flogging, castration, and tar-and-feathering."}, {"front": "Mencken identifies the _____ as the beginning of a legal system that authorizes unreasonable searches and seizures.", "back": "Volstead Act"}, {"front": "Which two specific books does Mencken cite as having been made criminal to read by state or federal action?", "back": "Das Kapital and The Inestimable Life of the Great Gargantua."}, {"front": "According to Mencken, what did the United States effectively set up in place of a republic during the 'late war'?", "back": "A monarchy"}, {"front": "How does Mencken respond to the claim that election results do not manifest a concrete popular wish?", "back": "He states that nine times out of ten, there was no popular wish to begin with."}, {"front": "Mencken argues that in a democracy, indifference to an issue is itself an _____.", "back": "Expression of opinion"}, {"front": "What does Mencken claim the masses want 'principally' from the government?", "back": "Safety and security."}, {"front": "According to Mencken, what does the 'science of politics under democracy' consist of?", "back": "Trading with, hoodwinking, and swindling the populace."}, {"front": "Mencken describes the master transaction of democratic states as a combat between '_____ and _____.'", "back": "Jackals and jackasses"}, {"front": "What is the significance of the 'Prussian-Belgian voting system' in Mencken's essay?", "back": "It is a previous example of the disproportional representation he is discussing."}, {"front": "Mencken observes that urban voters maintain opinions with a '_____ front' due to close physical and mental contact.", "back": "Solid"}, {"front": "Why is the United States Senate seldom the target of serious protest despite its 'bucolic imbecilities'?", "back": "The plan of organization enjoys the general approval of the sovereign people."}, {"front": "Mencken claims the Supreme Court prioritizes the rights of _____ in late years.", "back": "Property"}, {"front": "What anatomical metaphor does Mencken use to describe the flexibility of justices in reconciling justice with profit?", "back": "Limberness of the biceps femoris, semitendinosus and semimembranosus."}, {"front": "Mencken believes that if the majority wanted to, they could sweep all existing inequalities out of existence _____, if not instantly.", "back": "Surely"}, {"front": "What 'rough entertainment' does Mencken claim the populace wants from their leaders?", "back": "Heroes to worship and mellifluous words."}, {"front": "Mencken argues that the people have a clear right to be _____ when the spirit moves them.", "back": "Wanton"}, {"front": "According to the text, what happened to the city councils in hundreds of municipalities?", "back": "They were abolished by the people."}, {"front": "What does Mencken suggest is the only reason the typical democrat does not sell his vote for cash?", "back": "The price offered is usually too low."}, {"front": "How does Mencken characterize the bargaining process between politicians and the masses?", "back": "As simple and sordid as the sale of a mule."}, {"front": "Term: Yokel", "back": "Definition: Mencken's pejorative term for rural voters who receive disproportionately heavy representation."}, {"front": "In the context of Mencken's essay, who are the 'jackals' in the 'master transaction' of democracy?", "back": "The professional politicians."}, {"front": "According to Mencken, what is the status of natural rights in American democracy during prosperous periods?", "back": "They are disregarded in favor of usable, material boons."}, {"front": "Mencken argues that the American people could legalise _____ by public officers for malfeasance within their constitutional rights.", "back": "Assassination"}, {"front": "What does Mencken identify as the 'sovereign' force in the United States?", "back": "The majority of the people."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
