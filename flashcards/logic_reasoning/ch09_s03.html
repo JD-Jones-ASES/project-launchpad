@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic and Reasoning for Middle School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Logic and Reasoning for Middle School &mdash; Chapter 9, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#logic_reasoning">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary goal of a 4x4 Sudoku puzzle?", "back": "To fill every empty cell with a number from 1 to 4 so that each number appears exactly once in each row, column, and bold-outlined 2x2 box."}, {"front": "What common misconception do students often have about the numbers used in Sudoku?", "back": "Students often think Sudoku requires math, but the numbers are just symbols that could be replaced with colors or letters, and the puzzle would still work the same way."}, {"front": "List the three main rules for placing numbers in a 4x4 Sudoku grid.", "back": "1. Fill every empty cell with a number from 1 to 4. 2. Each row must contain each number exactly once. 3. Each column must contain each number exactly once. 4. Each bold-outlined 2x2 box must contain each number exactly once."}, {"front": "What is the primary strategy for solving Sudoku puzzles, especially the 4x4 version?", "back": "Elimination. For each empty cell, identify numbers already present in its row, column, and box, then fill in the only remaining possible number."}, {"front": "Define 'lateral thinking.'", "back": "Lateral thinking is a way of solving problems by approaching them from an unexpected direction, stepping sideways to consider possibilities that aren't immediately obvious."}, {"front": "How do lateral thinking riddles often 'trick' solvers?", "back": "They trick solvers by exploiting hidden assumptions that aren't explicitly stated, causing people to assume extra, non-existent constraints."}, {"front": "In the 'Elevator Riddle,' what was the core lateral thinking insight needed to solve it?", "back": "Realizing that the girl couldn't reach the button for the 20th floor, rather than assuming she chose to walk the remaining floors."}, {"front": "Explain the precise language trick in the 'Two Coins Riddle' (two coins total 30 cents, one is not a nickel).", "back": "The riddle states 'one of them is not a nickel,' which is true if one coin is a quarter (not a nickel) and the other is a nickel. People often misinterpret it to mean *neither* coin is a nickel."}, {"front": "What advice is given to students who get stuck on lateral thinking riddles due to making assumptions?", "back": "Remind them that only the information given in the puzzle matters, and they should question any extra constraints they might be assuming."}, {"front": "What is an 'escape-room logic chain'?", "back": "An escape-room logic chain is a series of puzzles where the answer to each puzzle provides information or a clue needed to solve the subsequent puzzle in the sequence, creating a connected chain of logic."}, {"front": "Why are escape-room logic chains considered an 'ultimate test' of logic skills?", "back": "They often require integrating and applying a variety of different logic skills learned previously (e.g., syllogisms, fallacies, truth tables) to solve a connected sequence of challenges."}, {"front": "What methodical approach is encouraged for solving multi-step logic chains?", "back": "Work one step at a time, rather than trying to skip ahead, as the solution to each step is crucial for unlocking the next."}, {"front": "According to the general strategies, what is the first step you should always take when starting any logic puzzle?", "back": "Read all the clues first before attempting to solve the puzzle."}, {"front": "Besides elimination, what other general problem-solving strategy involves making a choice and following its implications?", "back": "'Assume and check' – pick an option, follow the chain of logic it implies, and watch for any contradictions."}, {"front": "How does 'questioning your assumptions' specifically help with lateral thinking puzzles?", "back": "Lateral thinking puzzles are designed to exploit hidden or unstated assumptions, so actively challenging what you implicitly believe is key to seeing the non-obvious solution."}, {"front": "What is a potential consequence of skipping steps in a multi-step logic chain?", "back": "Skipping steps can lead to missing crucial information needed for later stages, making it impossible to solve subsequent puzzles or the entire chain."}, {"front": "If you were to replace the numbers in a Sudoku puzzle with colors, would the puzzle still function the same way? Explain.", "back": "Yes, it would. Sudoku rules are about the unique placement of symbols (regardless of what they are) within rows, columns, and boxes, not their mathematical value."}, {"front": "What general strategy is recommended if you find yourself stuck on a logic puzzle?", "back": "Try a different starting point or re-read the clues carefully to see if you missed any information or an alternative approach."}, {"front": "Name the three main types of logic challenges introduced in this textbook section.", "back": "Sudoku, Lateral Thinking, and Escape-Room Logic."}, {"front": "What differentiation strategy is suggested for advanced students when solving Sudoku puzzles?", "back": "Try 6x6 Sudoku puzzles instead of the standard 4x4 or 9x9."}, {"front": "What '20 Questions'-like technique can help students with lateral thinking riddles?", "back": "Letting students ask yes/no questions to narrow down the answer, which also builds deductive reasoning skills."}, {"front": "The 'Hiccups Riddle' demonstrates what key aspect of lateral thinking regarding solutions?", "back": "It shows that the most obvious solution to a problem might not be the only one; an unexpected alternative can achieve the same desired outcome (e.g., startling hiccups away instead of drinking water)."}, {"front": "The 'Locker Code' example puzzle integrated concepts from which three previous chapters?", "back": "Syllogisms (Chapter 3), identifying fallacies (Chapter 5), and truth tables (Chapter 4)."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

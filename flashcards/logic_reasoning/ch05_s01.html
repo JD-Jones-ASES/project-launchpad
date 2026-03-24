@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic and Reasoning for Middle School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Logic and Reasoning for Middle School &mdash; Chapter 5, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#logic_reasoning">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What are relevance fallacies?", "back": "Bad arguments that try to win by bringing up something irrelevant to the real issue. The 'evidence' offered does not actually connect to the conclusion."}, {"front": "What is the core problem with 'relevance fallacies'?", "back": "The information or 'evidence' provided is irrelevant; it has nothing to do with the actual point being argued, distracting from the real issue."}, {"front": "Define the 'Ad Hominem' fallacy.", "back": "An ad hominem fallacy (Latin for 'to the person') attacks the person making the argument instead of addressing the argument itself, implying 'This person is bad, so their argument must be bad too.'"}, {"front": "Why is an ad hominem attack considered a fallacy?", "back": "The validity of an argument depends on its logic and evidence, not on the character, qualities, or actions of the person making it. Even a disliked person can make a good argument."}, {"front": "Maya argues for more time between classes. Jake says, 'Maya was late to school three times this month. Why should we listen to her?' What fallacy is this?", "back": "Ad Hominem. Jake attacks Maya's attendance record, which is irrelevant to the validity of her argument about class transition time."}, {"front": "Name three common disguises of ad hominem attacks.", "back": "Direct attack ('You're just a kid — what do you know?'), questioning motives ('You only say that because you want to be class president'), and guilt by association ('Your older brother got in trouble, so I don't trust your opinion')."}, {"front": "What is a common misconception about the ad hominem fallacy?", "back": "Students often think any insult during an argument is an ad hominem. However, it specifically means rejecting someone's argument because of who they are, not just being rude."}, {"front": "Define the 'Straw Man' fallacy.", "back": "A straw man fallacy misrepresents or twists someone's argument to make it easier to attack. Instead of responding to what the person actually said, you respond to a weaker, distorted version of it."}, {"front": "How does a straw man fallacy work to 'win' an argument?", "back": "It exaggerates or slightly changes an opponent's argument, then tears apart this new, distorted version, creating the illusion that the original argument has been refuted."}, {"front": "Aisha asks to stay up until 10:00 on weekends instead of 9:00. Her dad responds, 'So you want to stay up all night with no bedtime at all?' What fallacy is this?", "back": "Straw Man. Aisha's dad twisted her request for one extra hour into an extreme, easy-to-reject claim of 'no bedtime at all,' which was not her original argument."}, {"front": "What is the key difference between a straw man and a red herring fallacy?", "back": "A straw man changes or distorts the opponent's *argument* itself, while a red herring changes the *topic of the discussion* entirely."}, {"front": "Define the 'Red Herring' fallacy.", "back": "A red herring fallacy introduces an unrelated topic to distract from the original argument. The name comes from an old trick of using a smoked fish to throw hunting dogs off a scent."}, {"front": "Why are red herring fallacies sometimes effective, even though they are illogical?", "back": "The distracting topic might sound interesting or important, successfully diverting attention away from the original, unresolved issue."}, {"front": "Teacher asks, 'Why didn't you turn in your homework?' Student replies, 'Homework policies are really different in other countries; in Finland, they barely have any!' What fallacy is this?", "back": "Red Herring. The student introduces an interesting but irrelevant topic (international homework policies) to distract from the question about their missing assignment."}, {"front": "Who were the Sophists in ancient Greece, and what was their role in relation to fallacies?", "back": "The Sophists were traveling teachers over 2,400 years ago who taught people how to win arguments, even when wrong, often using tricks like straw man and red herring. Socrates argued against them, prioritizing truth over winning."}, {"front": "Define the 'Tu Quoque' fallacy.", "back": "A tu quoque fallacy (Latin for 'you also') deflects criticism by pointing out that the other person does the same thing. It's the classic 'you do it too!' defense."}, {"front": "Why is 'Tu Quoque' considered a fallacy?", "back": "Even if the person making the criticism is a hypocrite and does the same thing, their personal behavior does not invalidate the truth or logic of their original argument."}, {"front": "Mom tells you, 'You need to stop spending so much time on your phone.' You respond, 'But Mom, you're on your phone all the time too!' What fallacy is this?", "back": "Tu Quoque. Your mom's phone usage, while potentially hypocritical, does not address whether you are spending too much time on your phone, which could still be a valid concern."}, {"front": "Why is the tu quoque fallacy tempting to use, and what should one remember instead?", "back": "It's satisfying to point out hypocrisy. However, one should remember that the real question is whether the *argument* itself makes sense, regardless of the arguer's personal actions (e.g., a smoking doctor is still correct that smoking is unhealthy)."}, {"front": "What are the four relevance fallacies covered in this section?", "back": "Ad Hominem, Straw Man, Red Herring, and Tu Quoque."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic and Reasoning for Middle School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Logic and Reasoning for Middle School &mdash; Chapter 8, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#logic_reasoning">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is \"evidence\" in the context of evaluating information?", "back": "Evidence is information—facts, data, observations, or expert testimony—that supports or goes against a claim. Good arguments are built on good evidence."}, {"front": "Define \"source\" as it relates to information.", "back": "A source is where information comes from, such as books, websites, news articles, interviews, research studies, or social media posts."}, {"front": "What does \"credibility\" mean when evaluating a source?", "back": "Credibility means how trustworthy and believable a source is. A credible source is one that gives good reasons to believe its information is accurate."}, {"front": "What is the primary purpose of the CRAAP test?", "back": "The CRAAP test is a systematic tool for checking a source's reliability by asking five key questions: Currency, Relevance, Authority, Accuracy, and Purpose."}, {"front": "In the CRAAP test, what does \"Currency\" refer to?", "back": "Currency asks when the information was written or updated. Old information can be outdated and may have been replaced by newer discoveries."}, {"front": "Explain \"Relevance\" as a CRAAP test criterion.", "back": "Relevance asks if the information actually relates to your specific question or topic. A source might be good, but if it doesn't address your topic, it's not useful."}, {"front": "What question does \"Authority\" address in the CRAAP test?", "back": "Authority asks who wrote the information and what their qualifications are. A doctor writing about health is more credible than a random username with no bio."}, {"front": "What does \"Accuracy\" check for in the CRAAP test?", "back": "Accuracy checks if the information is supported by evidence and can be verified elsewhere. If a claim has no sources, data, or references, be suspicious."}, {"front": "What does \"Purpose\" reveal about a source in the CRAAP test?", "back": "Purpose asks why the information was written. Is the author trying to inform, persuade, sell, or entertain? Knowing the purpose helps you spot potential bias."}, {"front": "A website looks very professional with slick graphics. Is it automatically trustworthy?", "back": "No. Students often assume that a professional-looking website is trustworthy, but design quality and factual accuracy are different things. Always evaluate content independently."}, {"front": "Are \"fake news\" sites the only unreliable sources?", "back": "No. Even well-known or reputable sources can sometimes have bias or errors in individual articles, meaning all sources, regardless of initial reputation, require evaluation."}, {"front": "Why shouldn't you assume information from a top search engine result is always true?", "back": "Search engine rankings are often based on popularity, SEO, or other algorithms, not necessarily on factual accuracy or credibility. High ranking does not equal truth."}, {"front": "What is \"lateral reading\"?", "back": "Lateral reading is a fact-checking technique where you open new tabs and search for what other reputable sources say about a particular source or claim, rather than just reading the source itself."}, {"front": "How does lateral reading help evaluate a source?", "back": "It helps determine the credibility of a source or claim by quickly verifying information, checking the author's reputation, or finding corroborating/contradictory evidence from multiple sources."}, {"front": "What is a significant \"red flag\" if an article has no author listed?", "back": "If nobody is willing to put their name on it, it suggests a lack of accountability, makes it impossible to check qualifications, and significantly reduces trustworthiness."}, {"front": "Why is \"no date listed\" a red flag for a source?", "back": "Without a date, it's impossible to tell if the information is current and still relevant or if it has been outdated by newer developments or discoveries."}, {"front": "Why should you be cautious of headlines that are highly emotional or sensational (e.g., \"You WON'T BELIEVE What Happens Next!\")?", "back": "Emotional headlines are designed to grab clicks, not necessarily to inform objectively. They often indicate a sensationalized approach, potential bias, or lack of factual accuracy."}, {"front": "What does the \"red flag\" \"too good to be true\" refer to?", "back": "If a claim sounds incredibly amazing or offers a simple, miraculous solution to a complex problem (e.g., \"One weird trick cures all disease!\"), it's likely not real and should be viewed with extreme skepticism."}, {"front": "Why is the absence of sources or references a major red flag?", "back": "Reliable information points you toward the evidence behind its claims. A lack of sources means you cannot verify the information independently, making it untrustworthy and unverifiable."}, {"front": "What is \"anecdotal evidence\"?", "back": "Anecdotal evidence is when someone uses a single personal story or isolated example as proof for a general claim, rather than relying on broader, systematic data or scientific evidence."}, {"front": "Why is anecdotal evidence generally unreliable for making broad conclusions?", "back": "One person's experience (or a few examples) doesn't represent a general truth and cannot outweigh systematic data or evidence from a larger population. It lacks statistical validity."}, {"front": "Before sharing a surprising online claim, what two critical questions should you ask yourself?", "back": "1. Does this pass the CRAAP test? 2. Can I find this information confirmed by other reliable sources (using lateral reading)?"}, {"front": "What is the difference in credibility between a research study published by a university and a random blog post with no author?", "back": "A university research study typically has high credibility due to peer review, named authors with credentials, and rigorous methodology, whereas a random blog post lacks authority, accuracy, and clear purpose, making it far less credible."}, {"front": "How can knowing a source's \"Purpose\" help you identify bias?", "back": "If a source's purpose is to persuade, sell, or entertain rather than purely inform, it's more likely to present information selectively or with a particular slant to achieve its goal, indicating bias."}, {"front": "What is the significance of the fact-checking website Snopes, as mentioned in the text?", "back": "Snopes started as a hobby debunking urban legends and grew into one of the most well-known fact-checking sites, demonstrating a high public demand for verifying information and correcting misinformation."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic and Reasoning for Middle School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Logic and Reasoning for Middle School &mdash; Chapter 5, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#logic_reasoning">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary characteristic of 'appeal fallacies'?", "back": "Appeal fallacies try to win an argument by manipulating your emotions instead of providing logical evidence or reasons."}, {"front": "Why are appeal fallacies considered 'sneakier' than fallacies that attack a person or change the subject?", "back": "They mess with your emotions, making it hard to stop and think logically when you feel excited, scared, or sympathetic, which is exactly what these fallacies exploit."}, {"front": "What is a common misconception about using emotion in an argument?", "back": "Many think any use of emotion in an argument is a fallacy. However, emotions can be part of a good argument; the fallacy occurs when emotion is used *instead of* evidence."}, {"front": "Define the bandwagon fallacy.", "back": "The bandwagon fallacy (also called appeal to popularity) argues that something must be true or good because lots of people believe it or do it."}, {"front": "Explain why popularity is not considered proof in an argument.", "back": "The number of people doing or believing something tells you nothing about whether it's actually a good or true idea. Large groups of people can be wrong together."}, {"front": "Identify the fallacy: 'You should definitely sign up for the talent show. Literally everyone in our grade is doing it.'", "back": "Bandwagon fallacy. The argument relies on popularity rather than sound reasons for participation."}, {"front": "Identify the fallacy in this advertisement: 'Over 10 million people have switched to BrightSmile toothpaste! Join them today!'", "back": "Bandwagon fallacy. It suggests the toothpaste is good because of its widespread use, not because of actual evidence of its quality or effectiveness."}, {"front": "Define the appeal to authority fallacy.", "back": "An appeal to authority fallacy uses a famous or powerful person's opinion as evidence, even when that person has no special knowledge or relevant expertise about the topic."}, {"front": "When is citing an authority *not* considered an appeal to authority fallacy?", "back": "It is not a fallacy when the cited authority is a genuine expert in the *relevant* field (e.g., a heart surgeon giving advice about heart surgery)."}, {"front": "Explain why it would be an appeal to authority fallacy to take a heart surgeon's advice on which basketball team will win a championship.", "back": "While a heart surgeon is an expert in medicine, their medical degree does not make them an authority or expert in sports predictions, making their opinion irrelevant as 'evidence'."}, {"front": "Identify the fallacy: 'My favorite singer posted that pineapple juice cures sore throats. She has 30 million followers, so she probably knows what she's talking about.'", "back": "Appeal to authority fallacy. Being a talented singer with many followers does not make someone a medical expert on health remedies."}, {"front": "Define the appeal to emotion fallacy.", "back": "An appeal to emotion fallacy tries to win an argument by making you feel a strong emotion (pity, happiness, anger, guilt) instead of giving you real evidence or logical reasons."}, {"front": "What is the key difference between a legitimate use of emotion and an appeal to emotion fallacy?", "back": "Emotions can be part of a good argument, but an appeal to emotion fallacy occurs when emotion *replaces* logic and evidence entirely as the basis for a conclusion."}, {"front": "Identify the fallacy: A commercial shows a sad puppy sitting alone in the rain, then asks for donations, stating, 'For just $5 a month, you can make a difference. Don't turn away.'", "back": "Appeal to emotion fallacy. It is designed to make you feel guilty and donate based on pity, bypassing logical questions about how the money will be used or the organization's effectiveness."}, {"front": "Define the appeal to fear fallacy.", "back": "An appeal to fear fallacy tries to scare you into agreeing with a conclusion. It warns about terrible things that will happen if you don't agree, instead of proving the conclusion is true."}, {"front": "How does fear impact critical thinking?", "back": "Fear is one of our strongest emotions and can quickly shut down clear thinking, making people more susceptible to pressure and less likely to evaluate arguments logically."}, {"front": "Identify the fallacy: 'If you don't come to the party on Saturday, everyone will think you're weird, and nobody will invite you to anything ever again.'", "back": "Appeal to fear fallacy. It uses an exaggerated threat of social ostracism to pressure a decision, rather than providing good reasons to attend the party."}, {"front": "List two appeal fallacies commonly found in political advertisements.", "back": "Bandwagon ('Join the millions of Americans who support Candidate X!') and Appeal to Fear ('If Candidate Y wins, our schools will be ruined!'). Appeal to Emotion is also common."}, {"front": "Who was Aristotle, and what was his contribution to the study of logical fallacies?", "back": "Aristotle, the inventor of formal logic, wrote 'Sophistical Refutations' (around 350 BC), which was the world's first systematic catalog of logical fallacies, identifying thirteen types."}, {"front": "Which ancient work is considered the world's first systematic catalog of logical fallacies?", "back": "Aristotle's 'Sophistical Refutations'."}, {"front": "How do appeal fallacies differ from other fallacies like *ad hominem* or straw man?", "back": "While *ad hominem* and straw man fallacies win by being irrelevant (attacking the person, twisting words), appeal fallacies specifically target and manipulate a person's emotions."}, {"front": "What key question should you ask yourself when encountering an advertisement that seems to use an appeal fallacy?", "back": "Ask: 'What evidence did they actually give me? Or did they just try to make me feel something?'"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
