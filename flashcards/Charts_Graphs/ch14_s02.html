@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Charts, Graphs, and Diagrams &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Reading Charts, Graphs, and Diagrams &mdash; Chapter 14, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Charts_Graphs">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary objective of understanding misleading chart techniques?", "back": "To identify common tricks, explain how they distort perception, and apply that knowledge to spot them in new chart examples."}, {"front": "Can a chart be misleading even if all the numerical data it presents is technically accurate?", "back": "Yes, absolutely. The deception often lies in the visual design and presentation of the data, not in the accuracy of the underlying numbers themselves."}, {"front": "Define a 'truncated axis' in the context of data visualization.", "back": "A truncated axis is a value axis (most commonly the y-axis) that does not start at zero. It cuts off the bottom portion of the value scale."}, {"front": "How does a truncated y-axis typically mislead a viewer, especially in a bar chart?", "back": "By cutting off the bottom of the scale, it greatly exaggerates small differences between bars or lines, making them appear much larger and more significant than they truly are."}, {"front": "What is the first thing you should check on a bar or line chart to spot a potential truncated y-axis?", "back": "Always look at where the y-axis begins. If it does not start at zero, consider how the visual would change if it did."}, {"front": "Explain how 3D effects can distort data perception in pie or bar charts.", "back": "The tilt and perspective depth in 3D charts create an optical illusion, making slices or bars at the front appear larger than those at the back, even if their data values are identical."}, {"front": "What type of chart is generally more accurate for data comparison than a 3D chart?", "back": "Flat (2D) charts are always more accurate for comparing data because they avoid the distortions caused by perspective."}, {"front": "What does 'cherry-picking' mean when applied to data presentation?", "back": "Cherry-picking means deliberately selecting only the data points or a specific time range that supports a particular conclusion, while ignoring other data that might contradict it, even if the selected data is accurate."}, {"front": "How can a 'cherry-picked time range' mislead a viewer looking at a line graph showing trends?", "back": "By only displaying a short, favorable segment of a longer timeline, it can create a false impression of consistent growth, decline, or stability that doesn't reflect the full historical context."}, {"front": "How can you spot a chart that uses a 'cherry-picked time range'?", "back": "Examine the x-axis (timeline) carefully. Ask yourself if the displayed period represents the full picture, or if it might be a convenient slice chosen to tell a specific story."}, {"front": "What problem arises when a time-series chart uses 'inconsistent intervals' on its x-axis?", "back": "Uneven spacing between time ticks (e.g., 2010, 2015, 2016, 2017, 2020) distorts the visual slope of lines, making changes appear faster or slower than they truly occurred over time."}, {"front": "How can you accurately evaluate changes on a time-series chart that might have inconsistent intervals?", "back": "Always read the actual year or date labels on the axis, rather than just relying on the visual slope or apparent spacing of the lines."}, {"front": "Explain 'area and volume distortion' when icons or bubbles are used to represent data values.", "back": "This occurs when the size of an icon or bubble is scaled by its height or radius instead of its total area. For example, doubling the height of an icon actually quadruples its perceived area."}, {"front": "If an icon representing a data value is made twice as tall, how much larger does it *appear* to the human eye due to distortion?", "back": "It appears four times larger (2x height and 2x width = 4x area), creating a significant visual exaggeration of the actual data difference."}, {"front": "List four common types of 'missing context' that can make a chart misleading.", "back": "No comparison point, no source or date for the data, no total or baseline (e.g., 'X out of how many?'), and units not labeled (e.g., dollars, thousands, or millions)."}, {"front": "A chart proclaims 'Sales up 200%!' without further information. Why might this still be misleading?", "back": "Without context, a 200% increase from a very small base (e.g., from 1 unit to 3 units) can sound dramatic but represent an insignificant absolute change, making the percentage misleading."}, {"front": "How does 'dual-axis deception' work to mislead a viewer?", "back": "By independently adjusting the scales of two different y-axes, a chart maker can visually force two completely unrelated or weakly correlated variables to appear to move together or converge, implying a strong relationship that doesn't exist."}, {"front": "What is the crucial step to take when trying to spot 'dual-axis deception'?", "back": "Always carefully read both y-axis labels and their respective scales. The visual overlap or tracking of lines does not guarantee a relationship if the scales are different."}, {"front": "Why are 'rainbow color scales' (e.g., red-orange-yellow-green-blue) often misleading in heatmaps or choropleth maps?", "back": "The human eye does not perceive rainbow colors as a smooth progression from low to high. Certain colors, like yellow, stand out disproportionately, making mid-range values appear extreme or more important than they are."}, {"front": "What are two more effective types of color scales recommended for data visualization than a rainbow scale?", "back": "Sequential color scales (light to dark within a single hue for continuous data) and diverging color scales (two hues extending from a shared neutral midpoint for data with a meaningful midpoint)."}, {"front": "What are the two key questions to ask when evaluating percentages presented in a chart to avoid being misled?", "back": "You should ask: 'What is the base (the starting value)?' and 'Is this a percentage of what?' Also, consider if the percentage change corresponds to a meaningful absolute change."}, {"front": "A bar chart compares two phone brands: Brand X has 31% market share, Brand Y has 29%. The y-axis runs from 28% to 32%, making Brand X's bar look nearly twice as tall. What misleading trick is this?", "back": "This is a 'truncated y-axis'. If the axis started at 0%, the 2-percentage-point difference would appear very small, revealing the modest real-world difference."}, {"front": "A company's website shows a line graph of its stock price over 'the past year' with a steep upward trend. Closer inspection shows the x-axis labels are only for October through December of that year. What trick is being used?", "back": "This is a 'cherry-picked time range'. It highlights a short period of growth while concealing the stock's performance earlier in the year, which might have been flat or declining."}, {"front": "A pictograph compares School A (300 students) and School B (600 students). School B's icon is shown twice as tall and twice as wide as School A's. How many times larger does School B's icon actually *appear* to be?", "back": "School B's icon appears four times larger (2 \times 2 = 4). This is 'area distortion,' as the visual area is quadrupled even though the student count is only doubled."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

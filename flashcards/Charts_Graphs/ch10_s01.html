@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Charts, Graphs, and Diagrams &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Reading Charts, Graphs, and Diagrams &mdash; Chapter 10, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Charts_Graphs">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a histogram?", "back": "A type of bar chart that displays the distribution of a set of continuous numerical data. The x-axis is divided into equal-width intervals (bins), and the height of each bar shows how many data values fall within that interval. Unlike a regular bar chart, there are no gaps between the bars."}, {"front": "What is the critical difference between a histogram and a bar chart?", "back": "The critical difference is that histogram bars touch each other, with no gaps, because they represent continuous numerical data. Bar charts, however, typically have gaps between bars because they represent separate, distinct categories."}, {"front": "Why do the bars in a histogram have no gaps between them?", "back": "The bars have no gaps because histograms represent continuous data, which can take any value within a range. There is no natural gap between consecutive measurement intervals, so the bars for those ranges should also not have a gap."}, {"front": "Define continuous data and provide examples.", "back": "Continuous data is numerical data that can take any value within a specified range. Examples include heights, weights, temperatures, and times."}, {"front": "What is a 'bin' in the context of a histogram?", "back": "A bin (also called an interval) is one of the equal-width groups into which the continuous data is divided on the x-axis of a histogram. Each bar represents the frequency of data within its corresponding bin."}, {"front": "What do the x-axis and y-axis represent on a histogram?", "back": "The x-axis represents the equal-width numerical intervals (bins) of the continuous data, and the y-axis represents the frequency (the count of how many data values fall into each bin)."}, {"front": "What does the height of each bar in a histogram indicate?", "back": "The height of each bar indicates the frequency, which is how many data values fall within that specific interval or bin."}, {"front": "What does 'distribution' describe in the context of data analysis with histograms?", "back": "A distribution describes how data values are spread out, including where they cluster, where they are sparse, and whether the overall pattern is symmetric or lopsided."}, {"front": "Describe a symmetric distribution and give an example.", "back": "A symmetric distribution is one where the left side of the histogram is a mirror image of the right side, with the peak in the middle and most data falling near the center. An example is the heights of a large group of adults."}, {"front": "Describe a right-skewed distribution and give an example.", "back": "A right-skewed distribution has the bulk of its data on the left side, with a long 'tail' stretching to the right. An example is salary data, where most people earn moderate amounts, and a few earn extremely high salaries."}, {"front": "Describe a left-skewed distribution and give an example.", "back": "A left-skewed distribution has the bulk of its data on the right side, with a long 'tail' stretching to the left. An example is age at retirement, where most people retire in their 60s, and a few retire very early."}, {"front": "What is a common misconception about identifying the direction of skewness in a histogram?", "back": "A common misconception is confusing 'skewed left' or 'skewed right' with the direction the peak (or hump) of the data leans. The skew direction actually refers to the direction of the long tail, not the bulk of the data."}, {"front": "What is the first step when learning how to read a histogram?", "back": "The first step is to read the title and axis labels to understand what is being measured, the units involved, and what each bar's height represents."}, {"front": "After reading labels, what should you identify about a histogram's structure?", "back": "You should identify the bins: specifically, what interval each bar covers and how wide each bin is."}, {"front": "How do you determine the frequency of data within a specific range on a histogram?", "back": "You read the height of the corresponding bar on the y-axis; this height represents the frequency, or how many data values fall within that bin."}, {"front": "What aspects of a distribution's shape should you describe from a histogram?", "back": "You should describe if the distribution is symmetric, right-skewed, or left-skewed, and identify where the peak (the tallest bar) is located."}, {"front": "How do you identify the center and spread of data from a histogram?", "back": "You identify the bin that contains the most data (often indicating the center) and determine the overall range of the data from the x-axis to understand its spread."}, {"front": "What unusual features should you look for when analyzing a histogram?", "back": "You should look for any gaps (empty bins) or bars that are unusually tall or short, as these can highlight important characteristics or anomalies in the data."}, {"front": "In the example of student heights (150-179 cm range, peak 160-164 cm), how would you describe the histogram's shape?", "back": "The histogram is roughly symmetric, with the tallest bar in the middle (160-164 cm range), and the bars decrease in a similar pattern on both sides."}, {"front": "Based on the student heights example, which height range is the most common among students?", "back": "The 160-164 cm range is the most common, as its bar is the tallest, indicating 14 students fall within that height bin."}, {"front": "What is the approximate spread of heights for the students in the example histogram?", "back": "The data spreads from 150 cm to about 179 cm, covering an approximate range of 29 cm."}, {"front": "Why is it generally not appropriate to reorder the bars in a histogram?", "back": "It is not appropriate to reorder the bars because the x-axis represents continuous numerical intervals that must be kept in their sequential, numerical order to accurately display the data's distribution."}, {"front": "Who first coined the term 'histogram' and what was its etymological origin?", "back": "The term 'histogram' was first used by statistician Karl Pearson in 1891. He invented the term from the Greek words 'histos' (mast) and 'gramma' (diagram), imagining the bars as the masts of many ships side by side."}, {"front": "When creating a histogram, why is it important to emphasize that continuous data has no gaps between intervals?", "back": "It's important to emphasize this because students commonly try to put gaps between histogram bars, confusing them with bar charts. Continuous data's nature means the end of one interval is the start of the next, so bars should touch."}, {"front": "What data property distinguishes the x-axis of a histogram from that of a bar chart?", "back": "A histogram's x-axis uses numerical intervals (continuous data) that must be in order, while a bar chart's x-axis uses categories (discrete data) that can often be reordered."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Math: Practical Applications &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Business Math: Practical Applications &mdash; Chapter 10, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Business_Math">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a linear inequality in two variables?", "back": "A statement that looks like one of these forms: ax + by < c, ax + by le c, ax + by > c, or ax + by ge c, where a, b, c are real numbers and x, y are variables."}, {"front": "What defines a solution to a linear inequality in two variables?", "back": "Any ordered pair (x, y) that makes the inequality statement true."}, {"front": "When graphing a linear inequality, what is the first step?", "back": "Replace the inequality symbol with an equals sign (=) to define and graph the boundary line."}, {"front": "How do you determine whether to use a solid or a dashed line for the boundary when graphing a linear inequality?", "back": "Use a solid line if the inequality symbol includes \"equal to\" (le or ge). Use a dashed line if the symbol is strict (< or >)."}, {"front": "After graphing the boundary line, what is the next step in graphing a linear inequality?", "back": "Choose a test point not on the line (e.g., the origin (0, 0) if the line doesn't pass through it)."}, {"front": "How do you use a test point to determine which region to shade when graphing a linear inequality?", "back": "Substitute the test point into the original inequality. If the result is true, shade the side of the line containing the test point. If false, shade the other side."}, {"front": "What is a common mistake to avoid when graphing linear inequalities?", "back": "Mixing up solid lines (for le, ge) and dashed lines (for <, >) for the boundary."}, {"front": "Define a \"system of linear inequalities.\"", "back": "Two or more linear inequalities that are considered together."}, {"front": "In a system of linear inequalities, what is the \"feasible region\"?", "back": "The solution set, which is the set of all points that satisfy every inequality in the system simultaneously; it's the area where all shaded regions overlap."}, {"front": "How do you graphically find the feasible region for a system of linear inequalities?", "back": "Graph each inequality on the same coordinate plane. The feasible region is the area where all shaded regions overlap."}, {"front": "Why are non-negativity constraints (x ge 0 and y ge 0) typically included in business-related linear programming problems?", "back": "Because quantities like hours, dollars, or units produced cannot be negative, restricting the feasible region to the first quadrant."}, {"front": "What is a \"corner point\" (or vertex) of a feasible region?", "back": "A point where two boundary lines intersect on the edge of the feasible region."}, {"front": "How are corner points of a feasible region found?", "back": "By identifying pairs of boundary lines that intersect on the edge of the feasible region and solving their equations simultaneously (using substitution or elimination)."}, {"front": "For the system x + y le 8, 2x + y le 12, x ge 0, y ge 0, what is the corner point formed by the intersection of x = 0 and y = 0?", "back": "(0, 0)."}, {"front": "For the system x + y le 8, 2x + y le 12, x ge 0, y ge 0, find the corner point at the intersection of 2x + y = 12 and y = 0.", "back": "(6, 0) (because 2x + 0 = 12 Rightarrow x = 6)."}, {"front": "For the system x + y le 8, 2x + y le 12, x ge 0, y ge 0, find the corner point at the intersection of x + y = 8 and 2x + y = 12.", "back": "(4, 4) (Subtracting the first equation from the second yields x=4; substituting back yields y=4)."}, {"front": "What is an \"objective function\" in linear programming?", "back": "The expression, typically of the form Z = ax + by, that you want to maximize (e.g., profit) or minimize (e.g., cost)."}, {"front": "Define \"linear programming.\"", "back": "A method for finding the maximum or minimum value of an objective function, subject to a set of constraints written as linear inequalities."}, {"front": "State the \"Corner Point Theorem.\"", "back": "If a linear programming problem has an optimal solution, that solution occurs at a corner point of the feasible region."}, {"front": "Explain why the optimal solution in a linear programming problem always occurs at a corner point.", "back": "Imagine the objective function as a straight line that you slide across the feasible region. The first or last place it touches the region will always be at a corner point, never in the middle."}, {"front": "What are the main steps to find the optimal solution (maximum or minimum) for a linear programming problem once the feasible region is identified?", "back": "1. Find all corner points of the feasible region. 2. Evaluate the objective function at each corner point. 3. The largest value is the maximum; the smallest is the minimum."}, {"front": "To maximize Z = 5x + 4y given corner points (0,0), (6,0), (4,4), and (0,8), which point yields the maximum value?", "back": "(4,4), where Z = 5(4) + 4(4) = 20 + 16 = 36."}, {"front": "What are the first three steps in the overall linear programming process?", "back": "1. Define the decision variables (x and y). 2. Write the objective function (Z = ax + by). 3. Write the constraints as linear inequalities (including x ge 0, y ge 0)."}, {"front": "What are the final four steps in the overall linear programming process, after defining variables and constraints?", "back": "4. Graph the feasible region. 5. Find all corner points. 6. Evaluate the objective function at each corner. 7. Identify the maximum or minimum value and state the answer in context."}, {"front": "How do linear inequalities differ from equations in terms of their solutions?", "back": "Equations typically have a single solution or a finite set of solutions (e.g., one value for x), while linear inequalities have infinitely many solutions, forming a region on a coordinate plane."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

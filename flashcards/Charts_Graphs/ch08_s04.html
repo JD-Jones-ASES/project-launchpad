@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Charts, Graphs, and Diagrams &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Reading Charts, Graphs, and Diagrams &mdash; Chapter 8, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Charts_Graphs">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a truncated axis in a line graph?", "back": "A truncated axis is one (usually the y-axis) that starts at a value other than zero, cutting off the lower portion of the scale."}, {"front": "How does a truncated y-axis mislead viewers?", "back": "It makes small differences in data appear dramatically large, distorting the perceived significance of changes, and can cause large absolute values to disappear from view."}, {"front": "What is the primary method to detect if a line graph uses a truncated y-axis deceptively?", "back": "Always check where the y-axis starts. If it doesn't start at zero, evaluate whether the truncation makes a small change look disproportionately big relative to the full scale."}, {"front": "When might a truncated y-axis be appropriate and not misleading?", "back": "Truncation can be appropriate when tracking values that naturally vary within a narrow, non-zero range (e.g., human body temperature between 97°F and 103°F), as long as it doesn't create a false impression of magnitude."}, {"front": "Explain the misleading technique of 'inconsistent time intervals' on a line graph.", "back": "This occurs when the x-axis has unevenly spaced intervals. This distorts the perceived slope of the line, making changes that took different amounts of time appear to have similar rates or durations."}, {"front": "How can you spot inconsistent time intervals on a line graph's x-axis?", "back": "Carefully check the x-axis labels and the gaps between units (e.g., years, months, days) to ensure they are evenly spaced. Uneven gaps indicate a potential distortion."}, {"front": "Define 'cherry-picking' in the context of creating a line graph.", "back": "Cherry-picking is the practice of selecting only specific data points or a time period that supports a desired conclusion, while intentionally omitting data that would present a different or more complete story."}, {"front": "What question should you ask to identify if a line graph is using a cherry-picked time range?", "back": "Ask, 'How long does this graph's time range go back? Is there more data that is not being shown that might alter the narrative?'"}, {"front": "What is a dual-axis chart?", "back": "A dual-axis chart displays two different data series on the same line graph, each using its own y-axis (one on the left, one on the right). This allows variables with different units or scales to be shown together."}, {"front": "What is the main deceptive potential of a dual-axis chart?", "back": "By independently adjusting the scales of the two y-axes, a chart maker can make any two lines appear to move perfectly together, implying a strong correlation or causation that may not genuinely exist."}, {"front": "List two key steps to identify if a dual-axis chart is being used deceptively.", "back": "1) Look for two y-axes and immediately be suspicious. 2) Check the units and scales on each axis separately. 3) Ask: 'If I plotted each line on its own graph, would I still see the same relationship?'"}, {"front": "Is every dual-axis chart inherently misleading? Explain.", "back": "No. Dual-axis charts can be genuinely useful for comparing two related variables with different units (e.g., temperature and rainfall). The problem arises when it's used to imply a relationship that doesn't exist by manipulating scales."}, {"front": "Acme Company's profits appear to nearly double due to a graph. If the actual growth was 9%, what misleading trick is likely being used?", "back": "A truncated y-axis. By starting the axis at a value close to the initial profit, small increases look much more significant than they are relative to the total profit."}, {"front": "A company's sales graph displays monthly data for the first six months (showing high sales) and then jumps to an annual total for the rest of the year. Which misleading trick is this?", "back": "Inconsistent time intervals. The x-axis is not evenly spaced, making a period of potentially lower or stagnant annual sales appear shorter or less significant compared to the detailed monthly 'good' period."}, {"front": "A political ad uses a dual-axis chart to show a senator's approval rating rising at the same time local gas prices fell, implying causation. What trick is this and what is its goal?", "back": "This is dual-axis deception. The goal is to create a fake correlation between two variables by manipulating the independent y-axis scales, implying the senator was responsible for falling gas prices, even without evidence."}, {"front": "Why are line graphs particularly susceptible to misuse in creating misleading visuals?", "back": "Line graphs are powerful because we naturally trust the shape of a line to convey truth. This makes it easy to fool someone by tweaking the scale, the time range, or the axes."}, {"front": "What is the fundamental difference in how a 'truncated y-axis' misleads versus 'cherry-picked time ranges'?", "back": "A truncated y-axis misleads by distorting the *scale* of the data presented, exaggerating or downplaying magnitudes. Cherry-picked time ranges mislead by distorting the *scope* or *selection* of the data itself, hiding relevant information."}, {"front": "What general approach should a viewer adopt when examining any line graph for potential deception?", "back": "Always be critical. Scrutinize all axes (x and y), their starting points, scales, and the time ranges presented. Ask yourself what might be missing or manipulated to tell a particular story."}, {"front": "What lesson can be drawn from Charles Minard's map of Napoleon's Russian campaign in the context of data visualization?", "back": "Minard's map demonstrates that powerful and truthful data visualization can combine multiple complex variables into a single, clear, and compelling graphic, telling a complete story without needing external explanation, contrasting with deceptive graphs."}, {"front": "A graph of school test scores from September to December has a y-axis starting at 85 and going up to 100. The line looks like a rocket launch. What trick is being used?", "back": "A truncated y-axis. By starting the axis at 85, small, normal increases in scores (e.g., from 88 to 92) appear as a massive surge, even if the absolute change is minor."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
