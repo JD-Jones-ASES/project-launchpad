@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 13, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Mencken">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is Mencken's central argument regarding disproportional representation in democratic government?", "back": "Mencken argues that disproportional representation is not a flaw in democracy but a feature, a voluntary sacrifice of pure theory in favor of workable practice."}, {"front": "How does Mencken's view of disproportional representation differ from that of a typical reformer?", "back": "A reformer would propose remedies for its unfairness, while Mencken argues that it is an intentional expression of the democratic will."}, {"front": "Who is Mencken's primary audience for this section, and what is his rhetorical goal?", "back": "His audience is the educated reader who takes the unfairness of apportionment for granted. His goal is to complicate that assumption, showing the apparent injustice as an expression of democratic will, capable of absurdity."}, {"front": "Describe the dominant tone Mencken uses in the initial part of this section.", "back": "The dominant tone is sardonic patience, the voice of a practical political observer explaining something he feels ought to be obvious, with no patience for 'romantic fuglemen of so-called pure democracy.'"}, {"front": "How does Mencken's tone evolve as the section progresses?", "back": "It shifts from sardonic patience and explanation to exhibition, gathering comic energy, becoming increasingly reckless and giddy, eventually adopting the persona of a provocateur delighting in shocking the audience."}, {"front": "What does Mencken mean by 'fuglemen,' and what effect does its use achieve?", "back": "'Fuglemen' originally referred to soldiers demonstrating drill movements. Mencken uses it to reduce democratic reformers to parade-ground performers, implying they are all show and no substance."}, {"front": "Explain the significance of Mencken's use of 'puissant' when referring to Supreme Court justices.", "back": "'Puissant' means powerful/mighty, carrying a faint medieval echo that likens justices to feudal lords. The irony deepens as Mencken reveals them to be 'practical politicians' with 'limberness' in their posterior muscles."}, {"front": "What does the phrase 'elevated to the ermine' symbolize, and how does Mencken subvert its meaning?", "back": "It is a mock-ceremonial phrase symbolizing judicial authority, treating appointment to the Supreme Court as a coronation. Mencken subverts it by implying these justices were careerists who 'struggled desperately' for less exalted honors."}, {"front": "How does Mencken's oscillation between technical and colloquial vocabulary contribute to his overall message?", "back": "By alternating constitutional language with 'barnyard contempt,' Mencken drags the machinery of government out of civics textbooks and into the 'mud of actual politics,' making it seem less pristine and more grounded in reality."}, {"front": "Give an example of Mencken's 'barnyard contempt' diction.", "back": "Examples include 'yokels,' 'bucolic imbecilities,' and 'the cross-roads grocery-stores and barber-shops,' contrasting with formal political terms."}, {"front": "Explain Mencken's use of 'medical vocabulary' in describing political institutions.", "back": "Mencken applies medical terms to political entities, such as the Senate reflecting 'the high incidence of senile deterioration' or justices demonstrating 'limberness' of specific muscles, to diagnose political conditions satirically."}, {"front": "What specific anatomical terms does Mencken use to describe Supreme Court justices, and what is the underlying joke?", "back": "He refers to 'the biceps femoris, semitendinosus and semimembranosus' (hamstring muscles). The joke is that these muscles are used for bending the knee, implying the justices are adept at genuflection or subservience."}, {"front": "What is the primary syntactic technique Mencken uses in the second half of this section to demonstrate popular sovereignty?", "back": "He uses an extraordinary catalogue of actions based on anaphoric repetition, specifically 'They could ______ They could ______ They could _____' through parallel constructions."}, {"front": "Define parallelism as a rhetorical device, and explain its general effect in writing.", "back": "Parallelism is the use of similar or identical grammatical structures in successive clauses, sentences, or passages. It creates rhythm, emphasis, and a sense of logical inevitability for the reader."}, {"front": "How does the escalating absurdity within Mencken's parallel 'They could...' clauses contribute to his argument?", "back": "The escalating absurdity (from plausible to surreal) demonstrates the unlimited scope of popular sovereignty, making that sovereignty seem farcical and highlighting how its unchecked power could lead to ridiculous conclusions."}, {"front": "What is the significance of the 'equal syntactic weight' Mencken gives to both reasonable and absurd actions in his catalogue?", "back": "It emphasizes Mencken's point that, under democracy, the reasonable and the insane can have equal constitutional standing, blurring the lines between logical and illogical exercises of power."}, {"front": "What is a periodic sentence, and how does Mencken use it in the opening paragraphs?", "back": "A periodic sentence builds long, qualifying structures that withhold their main point until the final clause. Mencken uses it to build a full portrait of reformers before revealing the ultimate failure of their remedies."}, {"front": "Describe the structural irony that underpins Mencken's entire argument in this section.", "back": "Mencken's argument is paradoxical: he proves that the people are sovereign precisely to demonstrate that their sovereignty is worthless. The more power he attributes to them, the more contemptible their failure to use it wisely becomes."}, {"front": "Elaborate on the 'anatomy metaphor' Mencken applies to Supreme Court justices, detailing its multi-layered humor.", "back": "It describes their 'limberness' of posterior thigh muscles, a verbose way of saying they genuflect. Humor arises from mocking the Court's dignity, juxtaposing legal and opaque medical language, and rewarding the reader who grasps the insider's joke."}, {"front": "What is *reductio ad absurdum*, and how does Mencken employ it as his dominant argumentative strategy?", "back": "*Reductio ad absurdum* is an argument mode demonstrating a proposition's falsity by showing it leads to ridiculous conclusions. Mencken uses it by cataloguing preposterous exercises of popular sovereignty, allowing its logic to collapse under its own weight."}, {"front": "In the close reading passage, how does Mencken use the word 'desperately' to deflate the ceremonial language?", "back": "The phrase 'struggling desperately for less exalted honours' immediately deflates the ceremonial 'elevated to the ermine' by stripping the judicial struggle of all nobility, revealing them as careerists rather than sages."}, {"front": "In the close reading passage, what is the effect of Mencken lumping Supreme Court justices with 'Representatives, Senators and Presidents'?", "back": "It is a devastating parenthetical that collapses the entire system of checks and balances, presenting all these political figures as a single class of self-interested operators, reinforcing their equivalence through parallelism."}, {"front": "Analyze the irony in Mencken's use of 'beautiful' in 'a beautiful talent for reconciling the ideally just with the privately profitable.'", "back": "The word 'beautiful' is savagely ironic, masking contempt. It highlights the justices' 'talent' for blending noble ideals with personal gain, exposing a core corruption without explicit condemnation."}, {"front": "Identify the antithesis in the phrase 'reconciling the ideally just with the privately profitable' and explain its impact.", "back": "The antithesis is between 'ideally just' and 'privately profitable.' It starkly contrasts public virtue with private self-interest, exposing the perceived corruption at the heart of the system in a single, balanced phrase."}, {"front": "How does Mencken ultimately portray the power of 'the sovereign people' through his analysis of disproportional representation?", "back": "He portrays it as limitless and capable of anything, including absurdity, but also implies it's often wasted or misguided. The more power he attributes, the more contemptible their failure to use it wisely becomes."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

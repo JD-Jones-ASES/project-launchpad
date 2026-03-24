@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 14, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Mencken">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "According to Michels and Mencken, what is the democratic politician's primary role, metaphorically speaking?", "back": "The democratic politician is a 'courtier of democracy,' whose art is to flatter the employer (the mob) in order to victimize and rule them."}, {"front": "What does Mencken identify as the politician's 'technical equipment' under democracy?", "back": "An 'armamentarium of deceits.'"}, {"front": "How does Mencken contrast the politician's ostensible purpose with their actual aim?", "back": "Ostensibly, the politician is an altruist devoted to public service; actually, they are a 'sturdy rogue' whose main goal is self-interest ('to butter his parsnips') and keeping public office."}, {"front": "How does Mencken describe the politician's 'moral code' in professional matters?", "back": "Anything is moral that furthers their main concern: 'to keep a place at the public trough.' This includes getting into office by false pretenses or changing convictions overnight (e.g., during the Prohibition movement)."}, {"front": "How does a politician, according to Mencken, adapt to maintain power when existing lies fail?", "back": "If lying 'peters out,' they will 'try to hold it by embracing new truths,' always keeping an ear to the ground to detect or even 'whoop up' popular delusions."}, {"front": "Mencken argues that politicians flourish on 'lower levels,' where public honor is an inconvenience. What do they content themselves with instead?", "back": "Power."}, {"front": "What are the primary sources of power for the 'boss' or lower-level politician, according to Mencken?", "back": "The 'gross weaknesses and knaveries of the common people,' including their inability to grasp complex issues, tendency for 'preposterous alarms,' venality, self-seeking, and 'congenital incapacity for the elemental duties of citizens.'"}, {"front": "What term does Mencken use to describe the common or vulgar species of human being?", "back": "Homo vulgaris."}, {"front": "How does Mencken characterize the 'boss' as the 'reductio ad absurdum' of the democratic process?", "back": "The boss exemplifies democracy's reduction of all ideas to a few elemental wants and reflects the 'inferior man’s congenital fear of liberty' and incapacity for independent action."}, {"front": "What error did American reformers make in their attempts to dismantle the 'boss' system, according to Mencken?", "back": "They mistakenly believed the boss imposed himself from without, failing to realize that the common people have a 'congenital fear of liberty' and a need for a 'bell-wether,' meaning another leader (like a parson or 'grand goblin') would simply emerge in their place."}, {"front": "What are the two 'branches' of the art of politics under democracy, according to Mencken?", "back": "The art of the demagogue and the art of the demaslave."}, {"front": "How does Mencken define a 'demagogue'?", "back": "A demagogue is one who 'preaches doctrines he knows to be untrue to men he knows to be idiots.'"}, {"front": "How does Mencken define a 'demaslave'?", "back": "A demaslave is one who 'listens to what these idiots have to say and then pretends that he believes it himself.'"}, {"front": "Why does Mencken claim that 'No educated man, stating plainly the elementary notions that every educated man holds about the matters that principally concern government, could be elected to office in a democratic state'?", "back": "His frankness would 'arouse fears' against him; a politician's business is to 'arouse fears that will run in favour of him.'"}, {"front": "How do 'minorities' (like the Anti-Saloon League) intimidate 'place-seeking politicians' in a democracy?", "back": "They have efficient techniques to arouse the mob's fears, envy, dislike of privilege, and hatred of 'betters,' forcing politicians to submit to their dictation to gain office."}, {"front": "What 'vast advantages' do dishonest politicians enjoy under democracy, leading them to 'monopolize all the public offices'?", "back": "The mob, 'insensitive to their dishonour,' is 'edified and exhilarated by their success,' making the competition too powerful for 'men of a decenter habit' to meet."}, {"front": "How does Mencken describe the 'typical American law-maker' in 'the full sunshine of normalcy'?", "back": "He is a man who has 'lied and dissembled,' 'crawled,' 'suffered kicks,' 'taken orders from his superiors in knavery,' and 'wooed and flattered his inferiors in sense.' His public life is an 'endless series of evasions and false pretences.'"}, {"front": "What 'axiom' does Mencken propose about making a career in politics in the Republic?", "back": "'No man may make a career in politics in the Republic without stooping to such ignobility: it is as necessary as a loud voice.'"}, {"front": "What is the ultimate 'price' that a man who 'loves the clapper-clawing of the vulgar' must pay for a political career under democracy?", "back": "He becomes a 'coward and a trimmer ex officio,' losing his dignity and replacing it with 'vanity, but not pride.'"}, {"front": "Mencken compares politicians who compromise their honor to what other profession, and why?", "back": "To a 'chorus girl who, in order to get her humble job, has had to admit the manager to her person,' implying a necessary moral compromise or degradation for professional advancement."}, {"front": "What are the two main rewards that public office offers to a politician, making it their 'main concern'?", "back": "Public honor (which 'caresses him and makes him happy') and power (which 'is the commodity that he has for sale')."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

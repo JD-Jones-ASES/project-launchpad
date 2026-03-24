@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sage of Baltimore (Mencken) &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Sage of Baltimore (Mencken) &mdash; Chapter 25, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Mencken">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What rhetorical challenge did Mencken face in the final section of 'Notes on Democracy'?", "back": "The challenge of how to end a sustained polemic without simply repeating previous charges, needing a new angle to leave the reader with something more than contempt."}, {"front": "What was Mencken's unexpected solution to ending his book 'Notes on Democracy'?", "back": "Instead of a final denunciation, he delivers a confession: he enjoys democracy, not because it works, but because it is incomparably idiotic and amusing."}, {"front": "How does Mencken's confession retroactively transform the entire book?", "back": "What appeared to be an attack is revealed as a 'performance of connoisseurship,' where Mencken has been savoring the very thing he has been demolishing."}, {"front": "Who is the primary audience for this final section?", "back": "The reader who has stayed with Mencken throughout the book and shares, or has been taught to share, his aristocratic detachment."}, {"front": "Describe the significant tonal shift in Mencken's final section.", "back": "After chapters of sustained attack, Mencken relaxes; the prose becomes warmer, more conversational, almost confiding, with barbs delivered with a lighter touch."}, {"front": "What does Mencken's use of the word 'confess' imply about his enjoyment of democracy?", "back": "It implies that enjoying democracy is something slightly shameful, a guilty pleasure, and it creates intimacy by drawing the reader into a private understanding."}, {"front": "Beneath the apparent geniality, what darker undertone exists in Mencken's enjoyment of democracy?", "back": "His enjoyment is ruthless and a form of cruelty, like watching a building collapse or a cat enjoying a mouse – not despite its suffering, but because of it."}, {"front": "Define 'understatement' (litotes) and explain how Mencken uses it in the final section.", "back": "Understatement is deliberately saying less than one means. After sustained hyperbole, Mencken uses quieter, more modest language (e.g., 'I do not know,' 'I report only') to imply the case is already thoroughly made."}, {"front": "What is the rhetorical effect of understatement arriving after a book full of hyperbole?", "back": "It arrives with devastating force because the reader has been conditioned to expect fireworks, making the quiet claims carry more weight and inviting the reader to supply the missing intensity."}, {"front": "How does Mencken's vocabulary change in the final section compared to earlier chapters?", "back": "The elevated, Latinate medical and scientific terminology (e.g., 'psychopathology') largely gives way to simpler, more direct language (e.g., 'charm,' 'delight,' 'amusement')."}, {"front": "Explain how the word 'charming' is used deceptively in Mencken's final section.", "back": "While conventionally positive, in context, calling a system of government 'charming' is devastating; it reduces democracy from the serious to the decorative, implying its appeal is aesthetic rather than rational."}, {"front": "Define 'maudlin' and how Mencken applies it to democratic citizens.", "back": "Maudlin means weakly and effusively sentimental. Mencken applies it to the democratic citizen's 'maudlin herding after rogues and mountebanks,' reducing voting to a tearful pursuit of con men."}, {"front": "What is the meaning and impact of the word 'dunderheads' in Mencken's text?", "back": "Dunderheads refers to stupid people. It is a blunt, Anglo-Saxon word that, after pages of elaborate vocabulary, lands with the force of a slap, highlighting contempt for democratic leaders."}, {"front": "Explain the syntactic technique Mencken employs with rhetorical questions followed by declarative answers.", "back": "This creates a 'catechistic rhythm,' similar to religious instruction, implying Mencken already knows the answers and is leading the reader to a predetermined conclusion."}, {"front": "What is the effect of the catechistic rhythm Mencken uses in the closing paragraph?", "back": "Each question concedes a charge against democracy, and each answer dismisses it with a shrug, creating a paradoxically reassuring effect that enacts acceptance."}, {"front": "What is the nature of the final sentence of 'Notes on Democracy,' and what effect does it have on the reader?", "back": "The final sentence, 'How can any man be a democrat who is sincerely a democrat?', is a genuine paradox that Mencken does not answer, leaving the reader suspended with an unresolvable puzzle."}, {"front": "Besides litotes, what other figure of speech dominates the closing pages of Mencken's book?", "back": "Paradox, which yokes together incompatible qualities (e.g., democracy is charming because it is false; amusing because fraudulent; enjoyable because idiotic)."}, {"front": "How do Mencken's paradoxes serve as his final argument about democracy?", "back": "They are not decorative but rather the argument itself, enacting the contradiction Mencken sees in democracy by praising what he has spent an entire book condemning."}, {"front": "What is 'The Spectator's Confession' and how does it represent an audacious rhetorical move?", "back": "It is Mencken's confession of enjoying democracy, audaciously shifting his role from democracy's prosecutor to its audience or spectator, transforming the book from an indictment to a review."}, {"front": "How does Mencken's shift from 'prosecutor' to 'spectator' affect the reader?", "back": "It implicates the reader, suggesting that if Mencken enjoyed the spectacle of democratic folly, then the reader, who savored Mencken's attacks, also shared in that enjoyment, implying the audience is never innocent."}, {"front": "Analyze the significance of the word 'confess' and the phrase 'for my part' in the opening sentences of the final paragraph.", "back": "'Confess' establishes an intimate, conspiratorial tone, implying guilt and a shared secret. 'For my part' reinforces this personal statement while simultaneously distancing Mencken from others who might disagree."}, {"front": "Why is the simplicity of the sentence 'I enjoy democracy immensely' rhetorically significant?", "back": "After hundreds of pages of elaborate syntax, its plainness indicates that the case against democracy is so thoroughly made that the conclusion needs no ornamentation, conveying finality and unshakeable conviction."}, {"front": "Explain the paradoxical logic in Mencken's statement: 'It is incomparably idiotic, and hence incomparably amusing.'", "back": "Mencken creates a rhetorical parallel between idiocy and amusement, presenting the latter as a logical consequence of the former. This logic is perverse by conventional morality, highlighting Mencken's non-conventional moral stance."}, {"front": "How does Mencken use the word 'palpably' to dismiss democratic theory?", "back": "In the phrase 'propositions that are palpably not true,' 'palpably' implies 'obviously' or 'readily perceived,' dismissing democratic theory with calm finality as stating the self-evident, needing no further argument."}, {"front": "What is 'contumacy' and how does Mencken apply it within a democratic context?", "back": "Contumacy is stubborn refusal to obey or comply. Mencken uses this legal term to suggest that intellectual independence or dissent beyond a certain age is treated as a form of criminal disobedience in a democracy."}, {"front": "In the final section, what is the cause of Mencken's amusement with democracy, according to his confession?", "back": "The cause of his amusement is its 'incomparable idiocy' and the folly of its participants and processes, which he finds entertaining."}, {"front": "What is the rhetorical purpose of the repeated word 'democrat' in the book's final sentence?", "back": "The repetition of 'democrat' in two different senses ('any man be a democrat' and 'sincerely a democrat') creates a syntactic loop or an unresolvable puzzle, leaving the reader suspended in a contradiction."}, {"front": "How does Mencken's final position on democracy contrast with traditional political commentary?", "back": "Traditional commentary might seek justice or effectiveness; Mencken's final position is that democracy is a contradiction in terms, enjoyable for its inherent flaws rather than its virtues, which is a highly unconventional and cynical view."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
