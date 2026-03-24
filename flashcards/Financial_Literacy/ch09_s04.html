@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy for High School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Financial Literacy for High School &mdash; Chapter 9, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Financial_Literacy">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary challenge associated with having an emergency fund, beyond just building it?", "back": "The discipline to use it only when appropriate and to replenish it immediately after use."}, {"front": "What are the three essential criteria an expense must meet for it to be a legitimate use of your emergency fund?", "back": "The expense must be: 1. Unexpected, 2. Necessary, and 3. Significant."}, {"front": "Explain the 'Unexpected' criterion for using an emergency fund.", "back": "You did not see it coming and could not have planned for it with a sinking fund."}, {"front": "Explain the 'Necessary' criterion when deciding to use your emergency fund.", "back": "Failing to address the expense would cause real harm to your health, housing, safety, ability to work, or legal standing."}, {"front": "Explain the 'Significant' criterion for using an emergency fund.", "back": "The cost is large enough that it cannot be covered from your regular monthly budget by reducing other categories."}, {"front": "Provide two examples of legitimate uses for an emergency fund.", "back": "Losing your job and needing to cover essential expenses, or a critical home repair like a burst pipe or failed heating system."}, {"front": "Name two situations that are NOT appropriate uses for an emergency fund, even if they feel urgent.", "back": "A sale/deal you don't want to miss, a vacation, holiday/birthday gifts, normal car maintenance, or upgrading electronics that still function."}, {"front": "What is the key difference between an expense suitable for an emergency fund and one better handled by a sinking fund?", "back": "Emergency fund expenses are unexpected, necessary, and significant. Sinking fund expenses are predictable or planned for, even if large (e.g., car maintenance, gifts, vacations)."}, {"front": "Why is saying 'I'll pay it back next month' a dangerous approach to using your emergency fund for non-emergencies?", "back": "Without a specific, concrete plan, the money often stays gone, leading to the gradual depletion of the emergency fund."}, {"front": "What is the first step you should take immediately after using your emergency fund?", "back": "Calculate the damage: determine how much was withdrawn and how much remains in the fund."}, {"front": "Describe the most effective strategy for setting a replenishment plan after using your emergency fund.", "back": "Treat the replenishment like a non-negotiable monthly bill, committing to a specific dollar amount until the fund is restored, rather than 'saving when you can'."}, {"front": "What temporary financial adjustment should be considered while actively rebuilding an emergency fund?", "back": "Temporarily redirect money from discretionary categories (e.g., dining out, entertainment, clothing) until the fund is whole again."}, {"front": "If an emergency costs more than your fund contains, what is the *very first* action you should take?", "back": "Use all available emergency fund savings first."}, {"front": "After depleting your emergency fund for a larger crisis, what are potential next steps *before* resorting to credit cards or loans?", "back": "Look for additional sources like reducing other budget categories, selling unneeded items, or taking on temporary additional work."}, {"front": "When should using a credit card or personal loan be considered for an emergency that exceeds your fund, and what is crucial if you do?", "back": "As a last resort, *only if* you have a specific payoff plan already in mind."}, {"front": "Why is a larger emergency fund (e.g., 6-month target) generally more protective than a minimum 3-month target?", "back": "The extra months provide more insurance against larger or multiple emergencies, offering greater peace of mind and flexibility."}, {"front": "Situation: You lose your job and rent is due in two weeks. Should you use your emergency fund? Explain why.", "back": "Yes. This is unexpected, necessary (shelter), and significant, meeting all criteria for a legitimate use to cover essential living expenses."}, {"front": "Situation: Your friend group is taking a spring break trip and you want to go. Should you use your emergency fund? Explain why.", "back": "No. This is a discretionary expense, not unexpected, necessary, or significant. It should be planned for with a sinking fund or skipped."}, {"front": "Situation: Your refrigerator stops working and you cannot store food. Should you use your emergency fund? Explain why.", "back": "Yes. This is unexpected, necessary (food safety/health), and likely significant. It meets the criteria for an emergency."}, {"front": "Situation: Your phone screen cracked, but the phone still works. Should you use your emergency fund? Explain why.", "back": "No. While inconvenient, it's not 'necessary' in the sense of causing immediate harm to health, housing, or ability to work, especially if the phone is still functional. It's a non-critical repair or upgrade."}, {"front": "Situation: You have a dental emergency—a broken tooth causing severe pain. Should you use your emergency fund? Explain why.", "back": "Yes. This is unexpected, necessary (health/pain relief), and likely significant. It meets the criteria for a legitimate medical emergency."}, {"front": "Situation: You want to take advantage of a 40%-off sale on new shoes you've been wanting. Should you use your emergency fund? Explain why.", "back": "No. This is a discretionary purchase, not an unexpected, necessary, or significant expense. It is a 'want,' not a 'need'."}, {"front": "According to the 'Real World' example of Priya, what was a key benefit of having an emergency fund during her job loss beyond just covering expenses?", "back": "It provided a 'cushion' that allowed her to avoid taking the first job offered out of desperation, enabling her to hold out for the 'right' position, potentially at a higher salary."}, {"front": "What does it mean to 'restore and maintain' your emergency fund after using and replenishing it?", "back": "Once the fund is back to its target amount, you should return to your regular savings allocation and continue to maintain the fund at its desired level."}, {"front": "What is the danger of thinking 'I will save when I can' to replenish your emergency fund?", "back": "This approach almost never works because it lacks a specific, non-negotiable commitment, making it easy to deprioritize or forget to replenish the fund."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
