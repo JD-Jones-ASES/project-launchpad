@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Discover Science &mdash; Chapter 21, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Discover_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a food chain?", "back": "A diagram that shows a single path of energy from one organism to the next, beginning with a producer."}, {"front": "What do scientists use food chains and food webs to show in an ecosystem?", "back": "They use them to show 'who eats whom' and how energy flows through the ecosystem."}, {"front": "Where does the energy for every food chain ultimately originate?", "back": "Every food chain starts with energy from the Sun, captured by a producer through photosynthesis."}, {"front": "In a food chain diagram, what do the arrows indicate?", "back": "The arrows mean 'gives energy to' or 'energy flows to,' showing the direction of energy transfer."}, {"front": "Define a primary consumer.", "back": "An animal that eats producers (plants). Primary consumers are herbivores."}, {"front": "Define a secondary consumer.", "back": "An animal that eats primary consumers. Secondary consumers are often carnivores or omnivores."}, {"front": "What is a top predator?", "back": "The consumer at the very end of a food chain, which no other animal in that ecosystem regularly hunts."}, {"front": "How do predator and prey differ?", "back": "A predator is an animal that hunts and eats other animals, while prey is an animal that is hunted and eaten by a predator."}, {"front": "In the grassland food chain (Sun → Grass → Rabbit → Hawk), identify the producer, primary consumer, and top predator.", "back": "Grass is the producer, the Rabbit is the primary consumer, and the Hawk is the secondary consumer and top predator."}, {"front": "Describe the principle of energy flow in a food chain.", "back": "Energy flows in one direction: from the Sun to producers, then to consumers. It does not flow backward."}, {"front": "Why are food chains typically short, often only three to five links long?", "back": "At every link, organisms use most of the energy they get for their own life processes (moving, breathing, warmth). Only a small part of the energy is passed to the next link, limiting the number of levels that can be supported."}, {"front": "What happens to the amount of available energy as it moves from one link to the next in a food chain?", "back": "Most of the energy is used up by the organism at each link, meaning only a small fraction of the original energy is transferred to the next link."}, {"front": "Why are animals usually part of many food chains at the same time, rather than just one?", "back": "In real life, animals typically eat more than one type of food, and can be eaten by multiple predators, creating multiple feeding connections."}, {"front": "What is a food web?", "back": "A diagram that shows many connected food chains in an ecosystem, providing a more complete and realistic picture of 'who eats whom.'"}, {"front": "How does a food web visually differ from a food chain?", "back": "A food web looks like a tangled net of criss-crossing arrows, illustrating the complex, interconnected feeding relationships, whereas a food chain is a single, linear path."}, {"front": "In building a food web, where are producers typically placed and what initial energy source connects to them?", "back": "Producers (like grass, oak trees, wildflowers) are placed at the bottom, and arrows are drawn from the Sun to every producer."}, {"front": "What is the primary role of decomposers in a food web, and how do they connect to other organisms and the environment?", "back": "Decomposers (like mushrooms, earthworms) break down all types of dead material. Arrows are drawn from dead organisms to decomposers, and from decomposers back to the soil (cycling nutrients)."}, {"front": "If all the grass in an ecosystem suddenly disappeared, what would be the immediate effect on primary consumers like rabbits and grasshoppers?", "back": "They would lose their main food source, leading to a significant decrease in their populations or forcing them to find alternative plant foods if available."}, {"front": "Following the disappearance of grass and the decline of primary consumers, what would likely happen to secondary consumers and top predators in the food web?", "back": "Their food sources would diminish, causing their populations to decline as well due to lack of food."}, {"front": "What common mistake do students make when drawing arrows in food chains or webs, and what is the correct way to think about arrow direction?", "back": "Students sometimes draw arrows from the eater to the eaten (e.g., hawk to rabbit). The correct way is that arrows show where the energy *goes*, so they should point from the organism being eaten (prey) to the organism that eats it (predator)."}, {"front": "How does the concept of energy flow in a food chain relate to what students learned about energy in Unit 14?", "back": "It reinforces that energy can change form but is never created or destroyed. The Sun's light energy is converted to chemical energy in plants and then transferred as organisms consume one another."}, {"front": "Based on the provided 'Organism Cards', list two examples of producers.", "back": "Grass, Oak tree, or Wildflowers."}, {"front": "Based on the 'Organism Cards', list two examples of omnivores.", "back": "Mouse or Fox."}, {"front": "If an insect eats plants, and a frog eats that insect, what type of consumer is the frog?", "back": "The frog is a secondary consumer because it eats a primary consumer (the insect)."}, {"front": "Imagine a food web where rabbits, mice, and deer all eat grass. If a disease wipes out the rabbit population, what are the potential effects on the grass and other primary consumers?", "back": "The grass population might increase due to fewer herbivores eating it. Other primary consumers, like mice and deer, might face increased competition for the available grass or could have more resources depending on how much they compete with rabbits."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
