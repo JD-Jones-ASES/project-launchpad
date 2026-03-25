@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking Toolkit &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Thinking Toolkit &mdash; Chapter 23, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Thinking_Toolkit">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who developed the pre-mortem technique and in what year?", "back": "Gary Klein, a psychologist specializing in naturalistic decision-making, in 2007."}, {"front": "What is the primary psychological bias the pre-mortem technique aims to overcome?", "back": "The optimism bias that distorts project planning and risk assessment."}, {"front": "What is the core question a post-mortem asks, and when is it asked?", "back": "A post-mortem asks: 'The project failed. What went wrong?' It is asked after the project is complete."}, {"front": "How does a pre-mortem reframe the question of failure compared to a post-mortem, and when is it asked?", "back": "A pre-mortem asks: 'Imagine we are a year in the future. The project has failed spectacularly. Now — write down why.' It is asked before the project begins."}, {"front": "Why do conventional risk assessment meetings often fail to identify deep-seated risks?", "back": "Social pressure suppresses dissent; team members are reluctant to challenge the plan or leader, making pointing out risks feel unsupportive, pessimistic, or disloyal."}, {"front": "How does the pre-mortem technique transform group dynamics regarding risk identification?", "back": "It changes the frame from criticizing the plan (socially risky) to explaining an already occurred failure (a creative exercise), putting everyone on the same team."}, {"front": "What is the result of changing the social dynamics in a pre-mortem exercise?", "back": "A dramatic increase in the quantity and quality of identified risks, surfacing problems teams were aware of but reluctant to mention, and generating new failure scenarios."}, {"front": "What cognitive ability does the pre-mortem technique harness to its advantage?", "back": "It harnesses the same cognitive abilities that produce hindsight bias—our skill at constructing plausible narratives for known outcomes—and redirects them toward the future."}, {"front": "Describe the first two steps in conducting a pre-mortem procedure.", "back": "1. Gather the project team after the plan has been developed but before execution begins. 2. Ask each member to imagine that the project has been completed and has failed badly."}, {"front": "Why is independent writing crucial in the early stages of a pre-mortem?", "back": "Independent thinking prevents groupthink, ensuring a broader and more diverse range of potential failure reasons before group discussion influences individual thoughts."}, {"front": "What are the final two steps of a pre-mortem procedure after reasons for failure have been shared?", "back": "1. Review the list, identify the most plausible and most damaging failure modes. 2. Modify the plan to address these identified risks."}, {"front": "Does the pre-mortem guarantee project success or the identification of the *real* failure mode?", "back": "No, it does not guarantee success or that the *real* failure mode will be identified."}, {"front": "What crucial benefit does the pre-mortem offer to team members who are naturally pessimistic?", "back": "It gives pessimists permission to speak and surfaces risks that everyone knows about but nobody wants to say aloud, without requiring anyone to oppose the leader or the plan directly."}, {"front": "Why are humans better at explaining *why* something happened than at predicting *if* it will happen?", "back": "We are skilled at constructing plausible narratives for known outcomes (hindsight bias), which the pre-mortem exploits by framing failure as an already-occurred event."}, {"front": "What is the core idea behind 'Imagine Failure Before It Happens,' a key concept of the pre-mortem?", "back": "By asking teams to imagine a project has already failed and to explain why, the pre-mortem overcomes social pressure, harnesses natural cognitive abilities, and surfaces risks that conventional risk assessment misses."}, {"front": "Explain the military concept of 'red teaming' and its similarity to a pre-mortem.", "back": "'Red teaming' involves assigning a group to argue the enemy's case and attack the plan. It serves a similar function to a pre-mortem by making failure a legitimate subject of analysis rather than a taboo topic."}, {"front": "Provide a real-world example where 'red teaming' was used effectively.", "back": "Before the 2011 operation that killed Osama bin Laden, CIA analysts conducted a structured exercise to identify ways intelligence could be wrong and the mission could fail, informing enhanced contingency planning."}, {"front": "What is the 'Planning Fallacy' and how does the pre-mortem relate to it?", "back": "The Planning Fallacy is a cognitive bias where people underestimate the time, costs, and risks of future actions. The pre-mortem is designed to systematically counteract the optimism bias inherent in this fallacy."}, {"front": "How does 'Hindsight Bias' relate to the effectiveness of the pre-mortem?", "back": "Hindsight bias (the tendency to see past events as more predictable than they actually were) is the cognitive mechanism the pre-mortem *harnesses* by asking people to explain a 'known' past failure, making it easier to generate specific reasons."}, {"front": "What is 'Inversion' as a broader problem-solving strategy, and how does the pre-mortem exemplify it?", "back": "Inversion is the strategy of approaching problems by thinking about failure rather than success. The pre-mortem applies this by asking 'It went wrong — why?' instead of 'What could go wrong?' to generate a more realistic list of risks."}, {"front": "What kind of risks does a pre-mortem typically surface that standard risk assessments miss?", "back": "It surfaces deeper, more uncomfortable risks, and problems teams were aware of but reluctant to mention due to social pressure or fear of seeming unsupportive."}, {"front": "In a pre-mortem, when does discussion of the independently generated reasons for failure begin?", "back": "Discussion begins after each person has independently written down their reasons and then shared them, one reason at a time, until all are captured."}, {"front": "What is the ultimate goal of reviewing the identified failure modes in a pre-mortem?", "back": "The ultimate goal is to identify the most plausible and most damaging failure modes, and then to modify the project plan to proactively address and mitigate those identified risks."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

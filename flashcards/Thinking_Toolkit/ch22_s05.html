@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking Toolkit &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Thinking Toolkit &mdash; Chapter 22, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Thinking_Toolkit">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the core idea behind the Law of Unintended Consequences?", "back": "It states that interventions in complex systems often produce outcomes that differ from what was planned, in unanticipated directions, due to the system's inherent complexity."}, {"front": "Who gave the concept of unintended consequences its most rigorous treatment?", "back": "The sociologist Robert K. Merton in his 1936 essay “The Unanticipated Consequences of Purposive Social Action.”"}, {"front": "How does the Law of Unintended Consequences differ from Murphy's Law?", "back": "Murphy's Law states things go wrong. The Law of Unintended Consequences says things go differently than planned, in unanticipated directions, because complex systems are not fully predictable."}, {"front": "According to Robert Merton, what is the most important reason why purposive actions produce unanticipated consequences?", "back": "Sheer complexity: social systems have too many interacting variables for any actor to model completely."}, {"front": "List four reasons identified by Robert Merton for purposive actions producing unanticipated consequences.", "back": "Sheer complexity, ignorance (not knowing enough), error (miscalculation), the “imperious immediacy of interest” (focusing on short-term goals), and the self-defeating prophecy."}, {"front": "Are unintended consequences always negative?", "back": "No, unintended consequences can be positive, negative, or neutral. While negative ones often get more attention, positive ones, like the internet or penicillin, have also had profound impacts."}, {"front": "Provide an example of a positive unintended consequence mentioned in the text.", "back": "The internet, originally developed by the U.S. Department of Defense for a resilient communications network, transformed global commerce, communication, entertainment, education, and social organization."}, {"front": "Provide another example of a positive unintended consequence related to medical discovery.", "back": "Penicillin was discovered by accident when Alexander Fleming noticed mold killing bacteria, leading to the antibiotic revolution that saved hundreds of millions of lives."}, {"front": "Describe a negative unintended consequence from an ecological intervention.", "back": "The introduction of cane toads to Australia in 1935 to control sugar cane beetles. The toads ignored the beetles, multiplied explosively, poisoned native predators, and worsened the ecological situation."}, {"front": "What were the intended goals of Prohibition in the United States (1920–1933)?", "back": "To reduce alcohol consumption, improve public health, and decrease crime."}, {"front": "List three unintended consequences of Prohibition in the United States.", "back": "Rapid growth of organized crime, widespread corruption of law enforcement, loss of tax revenue from legal alcohol sales, and proliferation of dangerous unregulated spirits."}, {"front": "Why is it called a 'Law' of Unintended Consequences rather than an occasional surprise?", "back": "Because of its regularity: all interventions in complex systems produce consequences beyond their intended scope. It's a consistent feature of complexity, not an anomaly."}, {"front": "What key question should be asked regarding interventions in complex systems, according to the Law of Unintended Consequences?", "back": "The question is never 'Will there be unintended consequences?' but 'What will they be, and how severe?'"}, {"front": "Does the Law of Unintended Consequences mean we should never act?", "back": "No. Inaction also has its own unintended consequences. It means we should act with humility and careful consideration."}, {"front": "How should one act wisely when faced with the inevitability of unintended consequences?", "back": "Act with humility, monitor the effects of actions, be willing to adjust, and build in reversibility wherever possible."}, {"front": "What types of interventions are considered most dangerous in the context of unintended consequences?", "back": "The ones that go wrong and cannot be undone."}, {"front": "What is the core message of the 'Complexity Produces Surprise' concept?", "back": "All interventions in complex systems produce effects beyond their intended scope. This is a structural feature of complexity, not a failure of intelligence or planning."}, {"front": "What characteristics define sound decision-making in systems where unintended consequences are inevitable?", "back": "Favoring reversible actions, monitoring outcomes, and maintaining the flexibility to adjust course when surprises emerge."}, {"front": "How is the Law of Unintended Consequences sometimes misused, and why is this a misapplication?", "back": "It is misused as a blanket argument against any policy intervention ('We cannot predict all consequences, so do nothing'). This is a misapplication because inaction also has unintended consequences."}, {"front": "Explain 'imperious immediacy of interest' as a reason for unintended consequences.", "back": "It refers to an actor's tendency to focus narrowly on achieving short-term goals and immediate interests, thereby ignoring potential long-term or secondary effects of their actions."}, {"front": "What is a 'self-defeating prophecy' in the context of unanticipated consequences?", "back": "A self-defeating prophecy occurs when a prediction or statement about a future outcome causes people to change their behavior in ways that prevent the predicted outcome from happening."}, {"front": "Name two early thinkers whose ideas are associated with the roots of the Law of Unintended Consequences.", "back": "Adam Smith and Frédéric Bastiat."}, {"front": "What was the 'first-order logic' behind introducing cane toads to Australia, and why did it collapse?", "back": "The first-order logic was 'predator eats pest.' It collapsed because it encountered the complexity of an actual ecosystem, where the toads ignored the target pest and caused widespread negative impacts."}, {"front": "What does 'The Cobra Effect' (mentioned in connections) illustrate regarding unintended consequences?", "back": "It illustrates a vivid example of an intervention that worsened the problem it was designed to solve, often through perverse incentives."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

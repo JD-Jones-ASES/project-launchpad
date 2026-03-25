@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking Toolkit &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Thinking Toolkit &mdash; Chapter 23, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Thinking_Toolkit">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is overfitting in the context of statistics and machine learning?", "back": "Overfitting occurs when a model is tuned so precisely to past data that it captures the noise (random, unrepeatable patterns) rather than the signal (genuine, repeatable patterns)."}, {"front": "What is the primary practical problem caused by overfitting in predictive modeling?", "back": "Models that perform brilliantly on historical (training) data fail miserably or collapse when encountering new, unseen data."}, {"front": "Explain the concept of overfitting using the history exam analogy provided in the text.", "back": "Overfitting is like memorizing exact questions from last year's exam instead of understanding the subject. If new questions are asked, you fail because you learned specific answers, not general principles."}, {"front": "In the context of data, what does an overfit model capture instead of genuine, repeatable patterns?", "back": "An overfit model captures noise, which refers to random fluctuations and unrepeatable patterns specific to the historical data."}, {"front": "How does an overfit model typically perform on the data it was trained on versus new data it has never seen before?", "back": "It performs spectacularly well on the training data but collapses and performs poorly on new, unseen data."}, {"front": "What characteristic of a model with many parameters increases its likelihood of fitting random fluctuations instead of having predictive value?", "back": "A model with enough parameters can fit any dataset perfectly, including random fluctuations that have no predictive value, leading to overfitting."}, {"front": "How can overfitting manifest in stock-trading algorithms backtested on historical market data?", "back": "The algorithm might find patterns that would have generated enormous returns in those specific historical years, but these patterns may be coincidences (noise) that fail in live markets."}, {"front": "Beyond technical data science, identify overfitting as a 'universal thinking error'.", "back": "It is a universal thinking error that appears wherever people mistake the specific for the general, or prepare for yesterday's problems instead of tomorrow's."}, {"front": "How did the Maginot Line exemplify overfitting in military strategy?", "back": "The Maginot Line was an elaborate system of fortifications perfectly designed to stop the trench warfare of World War I (the last war), but Germany simply went around it in 1940, rendering it obsolete."}, {"front": "What was the consequence of France's Maginot Line being overfit to past warfare?", "back": "It was optimized for yesterday's attack, failing to protect France when Germany employed different tactics in World War II, effectively going around the fixed defenses."}, {"front": "How can educational curricula overfit to current economic needs?", "back": "They can overfit by being designed around specific skills employers need today, without accounting for how the economy will change in the future, making those skills obsolete."}, {"front": "Contrast students trained in narrow, immediately marketable skills with those trained in broad capacities regarding future job market robustness.", "back": "Students with narrow skills are optimized for today's market but vulnerable to obsolescence. Students with broad capacities (critical thinking, communication) are less optimized for today but more robust to tomorrow's changes."}, {"front": "Describe how investment strategies can be overfit through extensive backtesting.", "back": "A strategy backtested to perfection may find patterns existing only in a specific historical period, leading to impressive historical returns that do not hold up in new market conditions."}, {"front": "What makes an investment strategy more likely to fail on new data after extensive backtesting?", "back": "The more parameters the strategy has and the more precisely it is tuned to historical data, the more likely it is to fail on new, unseen data."}, {"front": "What is the general 'antidote' to overfitting?", "back": "The general antidote to overfitting is deliberate simplicity."}, {"front": "Name one specific technique to combat overfitting related to model complexity.", "back": "Use fewer parameters in the model or strategy."}, {"front": "What kind of testing is crucial to prevent overfitting by ensuring a model generalizes well?", "back": "Testing the model on data it has never seen before (out-of-sample testing)."}, {"front": "When designing strategies, what quality should be valued over optimization to avoid overfitting?", "back": "Value robustness (working reasonably well across many conditions) over optimization (working perfectly in one specific condition)."}, {"front": "Briefly describe the Long-Term Capital Management (LTCM) failure as a real-world example of overfitting.", "back": "LTCM, a hedge fund with models exquisitely calibrated to historical data, failed catastrophically in 1998 during the Russian financial crisis when market conditions fell outside their models' historical range."}, {"front": "What specifically caused LTCM's overfit models to fail catastrophically in 1998?", "back": "Their models were tuned to specific patterns of the recent past and were fragile to any deviation from those patterns, leading to collapse when unprecedented market conditions arose during the Russian financial crisis."}, {"front": "Which concept from 'How Systems Fail and Survive' relates to the unpredictable, high-impact events that overfit models are least prepared for?", "back": "The Black Swan (Chapter X)."}, {"front": "Which psychological tendency, mentioned as a connection, can contribute to overfitting by causing people to perceive patterns where none objectively exist?", "back": "Confirmation Bias (Chapter X)."}, {"front": "What mathematical principle suggests that no single model outperforms all others in every possible condition, providing a theoretical limit to universal optimization?", "back": "The No Free Lunch Theorem (Chapter X)."}, {"front": "What fundamental insight highlights that models are simplifications of reality, relevant to understanding why an overfit model might fail when reality diverges?", "back": "The Map Is Not the Territory (Introduction)."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

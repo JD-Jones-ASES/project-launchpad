@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encountering Spanish &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Encountering Spanish &mdash; Chapter 22, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Spanish_I">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "¿Qué habilidades fundamentales has adquirido al completar este libro de español?", "back": "Ahora puedes saludar a la gente, describirte a ti mismo y a otros, hablar de tu familia, discutir colores y tamaños, nombrar comidas y rutinas diarias, decir la hora y fechas, conjugar verbos en presente, expresar lo que tienes y cómo te sientes, hablar de ir a lugares, expresar deseos y habilidades, describir el tiempo y la naturaleza, hablar de lo que te gusta, ir de compras, navegar por una ciudad, dar y seguir mandatos, hablar de viajes y rutinas, narrar eventos pasados, describir sentimientos, contar historias del pasado, hablar de la naturaleza y recuerdos de la infancia, y expresar esperanzas y deseos usando el subjuntivo."}, {"front": "¿Cómo se usan correctamente los verbos 'ser' y 'estar' en español?", "back": "'Ser' se usa para descripciones permanentes o inherentes (identidad, nacionalidad, profesión) y 'estar' para estados temporales, emociones, ubicación y acciones progresivas."}, {"front": "Nombra al menos cinco verbos irregulares clave que aprendiste a conjugar en el presente de indicativo.", "back": "Ser, estar, ir, tener, hacer, decir, poder (o→ue), querer (e→ie), gustar."}, {"front": "¿Cuál es la expresión para hablar de planes en el futuro cercano en español?", "back": "La expresión es 'ir + a + infinitivo', que significa 'going to do [something]'."}, {"front": "Explica la diferencia entre 'saber' y 'conocer'.", "back": "'Saber' se usa para conocimiento de hechos, información o habilidades ('to know how to do something'). 'Conocer' se usa para conocer personas, lugares o cosas de forma familiar ('to be acquainted with')."}, {"front": "¿Qué es 'A la rueda de San Miguel'?", "back": "Es un alegre juego de círculo de América Latina donde los niños se toman de las manos y caminan en círculo cantando."}, {"front": "¿Por qué la imagen de una rueda girando es una buena metáfora para el aprendizaje de idiomas?", "back": "Porque el aprendizaje de idiomas es un proceso circular: se vuelve a vocabulario y gramática, construyendo y reforzando lo que ya se sabe en cada 'vuelta' o ciclo de revisión."}, {"front": "¿Qué significa la frase 'El aprendizaje es un ciclo'?", "back": "Significa que aprender es un proceso continuo y repetitivo, donde se revisitan y refuerzan los conceptos para lograr un dominio más fuerte y duradero."}, {"front": "¿Cuándo se usa el pretérito en español?", "back": "Se usa para describir una acción completada, un evento específico, una secuencia de eventos en el pasado, o como una 'instantánea' de un momento pasado."}, {"front": "Nombra los cuatro verbos irregulares clave que conservan la misma forma para 'fui/fue' en el pretérito.", "back": "Ser e Ir (ambos usan fui/fue). Otros irregulares clave son hacer (hice/hizo), tener (tuve/tuvo) y estar (estuve/estuvo)."}, {"front": "¿Cuándo se usa el imperfecto en español?", "back": "Se usa para describir hábitos en el pasado, estados continuos, descripciones de fondo, o para decir lo que alguien 'solía hacer' (como un 'video corriendo en segundo plano')."}, {"front": "¿Cuáles son los únicos tres verbos irregulares en el imperfecto?", "back": "Ser (era/eran), ir (iba/iban) y ver (veía/veían)."}, {"front": "¿Cuál es la regla para formar un mandato afirmativo de 'tú'?", "back": "Se usa la forma de 'él/ella' del presente de indicativo."}, {"front": "Nombra los ocho mandatos afirmativos irregulares de 'tú'.", "back": "Ven, ten, sal, haz, di, sé, pon, ve."}, {"front": "¿Cuál es la regla para formar un mandato negativo de 'tú'?", "back": "Se usa 'no' seguido de la forma de 'tú' del presente de subjuntivo."}, {"front": "¿Cuál es la 'receta' básica para formar el presente de subjuntivo?", "back": "Se toma la forma de 'yo' del presente de indicativo, se quita la '-o', y se añaden las terminaciones de vocal opuesta (-e para verbos -ar; -a para verbos -er/-ir)."}, {"front": "Nombra cinco expresiones desencadenantes comunes que requieren el uso del subjuntivo.", "back": "Quiero que, es importante que, es necesario que, espero que, ojalá que."}, {"front": "Según el libro, ¿cuáles son algunas formas de seguir mejorando tu español?", "back": "Encontrar un compañero de conversación, ver programas y películas en español (con subtítulos en español), leer libros fáciles, escuchar música en español, visitar una comunidad hispanohablante y continuar tus estudios formalmente."}, {"front": "¿Cómo se describe el español en 'Una carta de despedida'?", "back": "Se describe como 'una llave' que permite entrar en la cultura de más de 20 países, conocer a millones de personas y entender el mundo desde otra perspectiva."}, {"front": "Según la 'Carta de despedida', ¿qué es lo más importante al intentar hablar español?", "back": "La valentía. Ser valiente al intentar hablar español, incluso si se cometen errores, se buscan palabras o se habla despacio."}, {"front": "Describe cómo el libro sugiere combinar el pretérito y el imperfecto para contar historias del pasado.", "back": "Se usan de la forma en que lo hacen los hablantes nativos: el pretérito para acciones completadas y específicas (instantáneas) y el imperfecto para descripciones, hábitos o acciones en curso (fondo)."}, {"front": "¿Qué significa 'con mucho cariño' en una carta de despedida?", "back": "Significa 'con mucho afecto' o 'cordialmente', expresando calidez y buenos deseos."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking Toolkit &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Thinking Toolkit &mdash; Chapter 11, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Thinking_Toolkit">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the core scenario of the original Trolley Problem introduced by Philippa Foot?", "back": "A runaway trolley is hurtling toward five workers who cannot escape. You can pull a lever to divert it onto a side track where one worker stands. Five will be saved; one will die."}, {"front": "In the original Trolley Problem, what is the most common intuitive response and why?", "back": "Most people say yes to pulling the lever. The arithmetic (one death vs. five) seems straightforward, and you are redirecting, not creating, the danger."}, {"front": "What moral principle was Philippa Foot investigating when she introduced the Trolley Problem?", "back": "The Doctrine of Double Effect."}, {"front": "Define the Doctrine of Double Effect (DDE).", "back": "A moral principle, rooted in medieval Catholic theology, that distinguishes between harm you intend and harm you merely foresee as a side effect of pursuing a good end."}, {"front": "How does the Doctrine of Double Effect apply to the original Trolley Problem?", "back": "Pulling the lever intends to save five people; the death of the one worker is a foreseen but unintended consequence (side effect), making the action permissible under DDE."}, {"front": "Describe Judith Jarvis Thomson's 'Footbridge Variant' of the Trolley Problem.", "back": "A runaway trolley is heading toward five workers. You are on a footbridge over the tracks next to a very large man. Pushing him off the bridge onto the tracks will stop the trolley, saving five but killing him."}, {"front": "How does the common intuition in the Footbridge Variant differ from the original Trolley Problem, despite the identical outcome?", "back": "Most people recoil from pushing the man. Pushing a man to his death feels fundamentally different from pulling a lever, even though the outcome is identical (one death for five saved)."}, {"front": "What is one explanation for the difference in intuition between the original Trolley Problem and the Footbridge Variant based on the type of harm caused?", "back": "In the original, the one worker's death is a *side effect* of diverting the trolley. In the footbridge, the large man's death is the *means* by which the five are saved, which the Doctrine of Double Effect prohibits."}, {"front": "Explain the 'Personal vs. Impersonal Force' argument for the differing intuitions in trolley problems.", "back": "Pulling a lever feels mechanical and impersonal, whereas pushing a human being off a bridge requires physical contact and feels viscerally like killing, suggesting an emotional response is at play."}, {"front": "What is the 'Contact Principle' in the context of moral intuitions?", "back": "Experimental philosophers have found that people are more reluctant to cause harm when the action involves direct physical contact with the victim, suggesting moral intuitions track *how* harm is caused rather than just the outcome."}, {"front": "Describe the 'Transplant Surgeon' variant and its ethical dilemma.", "back": "A surgeon has five patients dying from different organ failures. A healthy person walks in for a checkup. The surgeon could kill this healthy person, harvest their organs, and save all five patients."}, {"front": "Why do most people reject the surgeon's action in the Transplant Surgeon variant, even though it saves a net four lives?", "back": "The healthy person has a fundamental right not to be killed, even if killing them would produce a better outcome. This suggests that 'rights' are important beyond pure outcomes."}, {"front": "What is 'pure consequentialism,' and which Trolley Problem variant challenges its adequacy?", "back": "Pure consequentialism is the view that the right action is the one that produces the best outcome. The Transplant Surgeon variant challenges it by showing that outcomes alone don't always determine moral rightness."}, {"front": "How does the factor of 'Doing vs. Allowing' influence moral judgments in Trolley Problem variants?", "back": "We tend to judge actively causing harm ('doing'—like pushing) more harshly than passively allowing harm to occur ('allowing'—like diverting a trolley), even when the outcome is identical."}, {"front": "What does 'Deontological ethics' mean, and which philosopher is most associated with its principle that people have inherent dignity?", "back": "Deontological ethics (from Greek 'deon' meaning 'duty') holds that some actions are right or wrong regardless of their consequences. Immanuel Kant is most associated with the principle that persons have inherent dignity and may not be used merely as means to others' ends."}, {"front": "According to Joshua Greene's research, how do 'personal' vs. 'impersonal' moral dilemmas activate different brain regions?", "back": "Greene's neuroscience research suggests that 'personal' moral dilemmas (involving direct physical harm) activate emotional brain regions, while 'impersonal' dilemmas (like pulling a lever) engage more calculating, utilitarian reasoning."}, {"front": "What is the primary value of the Trolley Problem in philosophical debate?", "back": "Its power lies not in settling the debate between consequentialism and deontology, but in making these abstract philosophical positions vivid and relatable as gut-level choices with human faces."}, {"front": "Give one real-world example where the Trolley Problem framework is explicitly invoked.", "back": "In programming autonomous vehicles, deciding how a self-driving car should act if it must choose between hitting one pedestrian or swerving into a group."}, {"front": "How does the Trolley Problem relate to medical triage decisions?", "back": "During pandemics, allocating scarce ventilators (e.g., removing one from a patient to give to multiple others with better chances of survival) is a 'trolley lever in a hospital gown' situation."}, {"front": "What larger contribution to philosophy is Philippa Foot known for beyond introducing the Trolley Problem?", "back": "A revival of virtue ethics, which focuses on character and human flourishing rather than abstract rules or calculations of utility."}, {"front": "What is Judith Jarvis Thomson known for besides her Trolley Problem variants?", "back": "Her vivid and provocative thought experiments, such as the 'violinist analogy,' which reframed debates about bodily autonomy."}, {"front": "What is the overall 'key concept' the Trolley Problem reveals about our moral judgments?", "back": "Our moral judgments are not driven by a single principle. We care about outcomes (how many die) but also how those outcomes are produced—whether harm is a side effect or a means, personal or impersonal, or violates rights."}, {"front": "How do 'intended vs. foreseen harm' factor into moral judgments according to the Doctrine of Double Effect?", "back": "The Doctrine of Double Effect states that foreseen harm (a side effect) is more permissible than intended harm (a means to an end)."}, {"front": "Give an example of how the Doctrine of Double Effect is relevant in military decisions.", "back": "It helps determine if it's permissible to bomb a military target knowing civilians will die as collateral damage, distinguishing intended target destruction from foreseen civilian casualties."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

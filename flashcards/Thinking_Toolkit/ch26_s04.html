@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking Toolkit &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">The Thinking Toolkit &mdash; Chapter 26, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Thinking_Toolkit">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who proposed and analyzed the St. Petersburg Paradox, and when?", "back": "Nicolaus Bernoulli proposed it in 1713; his cousin Daniel Bernoulli analyzed it in a 1738 paper."}, {"front": "Describe the rules of the St. Petersburg game.", "back": "A fair coin is flipped repeatedly until it lands tails. If tails appears on flip 'n', the player wins $2^n$ dollars."}, {"front": "How much would a player win if tails appeared on the 1st, 2nd, or 3rd flip in the St. Petersburg game?", "back": "Flip 1: $2; Flip 2: $4; Flip 3: $8."}, {"front": "What is a common intuitive amount people say they would pay to play the St. Petersburg game?", "back": "Most people say something between $5 and $25."}, {"front": "In the St. Petersburg game, what is the probability of winning more than $64?", "back": "Less than 2%."}, {"front": "How is the expected monetary value of the St. Petersburg game calculated?", "back": "It's the sum of (probability of outcome * payoff of outcome) for all possible outcomes: E = (1/2 * $2) + (1/4 * $4) + (1/8 * $8) + ..."}, {"front": "What is the calculated expected monetary value of the St. Petersburg game?", "back": "The expected value is infinite, because each term in the sum (1 + 1 + 1 + ...) contributes exactly $1, and there are infinitely many terms."}, {"front": "What is the core paradox presented by the St. Petersburg game?", "back": "The conflict between the game's infinite expected monetary value and people's very limited, finite willingness to pay, which standard decision theory cannot reconcile."}, {"front": "What was Daniel Bernoulli's proposed resolution to the St. Petersburg Paradox?", "back": "He proposed that rational decision-makers consider not the expected monetary value, but the 'expected utility' — the subjective satisfaction or usefulness of the money."}, {"front": "Define 'expected utility' in the context of decision theory.", "back": "The probability-weighted average of the subjective satisfaction or usefulness (utility) derived from all possible outcomes, rather than just their objective monetary value."}, {"front": "What is the economic concept of 'diminishing marginal utility'?", "back": "The property that utility increases with wealth, but at a decreasing rate; the satisfaction gained from an additional unit of wealth decreases as total wealth increases."}, {"front": "How does the utility difference of acquiring $1,000 change with existing wealth?", "back": "The difference between having $0 and $1,000 is life-changing, while the difference between $1,000,000 and $1,001,000 is barely noticeable due to diminishing marginal utility."}, {"front": "How did Bernoulli propose that utility is proportional to wealth?", "back": "He proposed that utility is proportional to the logarithm of wealth, rather than to wealth itself."}, {"front": "What is the effect of using a logarithmic utility function on the expected utility of the St. Petersburg game?", "back": "Under this assumption, the expected utility of the game becomes finite, a modest number that roughly matches what people are actually willing to pay."}, {"front": "What fundamental distinction did Bernoulli's insight identify that became central to economics?", "back": "The difference between the objective magnitude of an outcome (e.g., dollar amount) and its subjective value or usefulness (utility) to the person experiencing it."}, {"front": "Why is the St. Petersburg Paradox still considered important in modern economics and decision theory?", "back": "It was one of the first formal demonstrations that expected monetary value alone is not a sufficient guide to rational decision-making; expected utility is also crucial."}, {"front": "How does expected utility theory explain why people buy insurance, even if it has a negative expected value?", "back": "People pay more than the expected loss because the utility cost of a catastrophic financial loss far exceeds the utility cost of the premium, making it rational under expected utility."}, {"front": "Explain how the St. Petersburg Paradox (and expected utility) accounts for risk aversion, using the example of preferring $50 for certain vs. a 50% chance of $100.", "back": "Most people prefer the certain $50 because the utility of the guaranteed amount exceeds the expected utility of the gamble, even though the expected monetary values are identical."}, {"front": "How does the St. Petersburg Paradox relate to 'tail risk' in financial markets?", "back": "It illustrates that focusing only on expected value and ignoring the non-linear relationship between money and disaster (expected utility) can lead to major crises, such as the 2008 financial crisis, which involved rare events with enormous consequences."}, {"front": "What is the main lesson learned from the St. Petersburg Paradox regarding rational decision-making?", "back": "Rational decision-making must account for the diminishing marginal value of money (expected utility), not just the objective expected monetary value, as a dollar's value is subjective and context-dependent."}, {"front": "Using the St. Petersburg insight, explain why people buy lottery tickets despite their negative expected value.", "back": "People buy them because the utility derived from dreaming about a jackpot or the thrill of playing offers value beyond the negative expected monetary return, making it rational under expected utility."}, {"front": "How can the concept of diminishing marginal utility explain why wealthy individuals might take enormous financial risks for relatively modest expected gains?", "back": "For wealthy individuals, the marginal utility of additional wealth is low, so the excitement or utility of the gamble itself can outweigh the relatively small expected monetary gain."}, {"front": "What later theory extended Bernoulli's insight about subjective value and introduced reference-dependent evaluation?", "back": "Kahneman and Tversky's Loss Aversion and Prospect Theory."}, {"front": "What other concept, mentioned in the connections, highlights how intuitions about probability can be wrong?", "back": "The Gambler's Fallacy."}, {"front": "What related concept contrasts with the St. Petersburg Paradox by demonstrating an infinite series that *does* converge?", "back": "Zeno's Paradoxes Revisited."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
