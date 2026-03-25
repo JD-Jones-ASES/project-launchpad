@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 6, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the general form of a rational function?", "back": "A rational function has the form $f(x) = p(x)/q(x)$, where $p$ and $q$ are polynomials and $q(x)$ is not identically zero."}, {"front": "What unique graphical features can a rational function have that are not seen in polynomial graphs?", "back": "Rational function graphs can have breaks, gaps, and horizontal 'ceiling/floor' lines (asymptotes)."}, {"front": "Define a vertical asymptote.", "back": "The line $x = a$ is a vertical asymptote of $f$ if $f(x) \\to \\pm \\infty$ as $x \\to a$ from either side."}, {"front": "How do you find the vertical asymptotes of a rational function?", "back": "Vertical asymptotes occur at values where the simplified denominator equals zero."}, {"front": "Define a horizontal asymptote.", "back": "The line $y = L$ is a horizontal asymptote if $f(x) \\to L$ as $x \\to \\pm \\infty$. It describes the end behavior of the graph."}, {"front": "How do you find the horizontal asymptote if the degree of the numerator ($n$) is less than the degree of the denominator ($d$)?", "back": "The horizontal asymptote is $y = 0$ (the x-axis)."}, {"front": "How do you find the horizontal asymptote if the degree of the numerator ($n$) is equal to the degree of the denominator ($d$)?", "back": "The horizontal asymptote is $y = a_n / b_d$, where $a_n$ and $b_d$ are the leading coefficients of the numerator and denominator, respectively."}, {"front": "What happens regarding horizontal asymptotes if the degree of the numerator ($n$) is greater than the degree of the denominator ($d$)?", "back": "There is no horizontal asymptote. (The function grows without bound; there may be a slant asymptote, covered in Section 6-5)."}, {"front": "How do you find the x-intercepts of a rational function?", "back": "Set the numerator equal to zero and check that the denominator is nonzero at those x-values."}, {"front": "How do you find the y-intercept of a rational function?", "back": "Evaluate $f(0)$, provided $0$ is in the domain of the function."}, {"front": "What is the very first step in the sketching procedure for a rational function $f(x) = p(x)/q(x)$?", "back": "Simplify the function by factoring both the numerator and denominator and canceling any common factors. Note any values that leave the domain (potential holes)."}, {"front": "After simplification, what are the next two steps in sketching a rational function?", "back": "Identify vertical asymptotes (set the simplified denominator equal to zero) and horizontal asymptotes (compare degrees of numerator and denominator)."}, {"front": "What are the steps that follow asymptote identification when sketching a rational function?", "back": "Find intercepts ($x$-intercepts by setting the simplified numerator to zero, $y$-intercept by evaluating $f(0)$) and create a sign chart (test one point in each interval between critical values)."}, {"front": "What is the final step in sketching a rational function?", "back": "Draw asymptotes as dashed lines, plot intercepts, and sketch branches in each interval consistent with the sign chart and end behavior."}, {"front": "For $f(x) = 2x / (x - 3)$, identify the vertical and horizontal asymptotes.", "back": "Vertical asymptote: $x = 3$. Horizontal asymptote: $y = 2$ (degrees are equal, ratio of leading coefficients is $2/1$).\n\n"}, {"front": "For $g(x) = (x^2 + 1) / (x - 2)$, identify the vertical and horizontal asymptotes.", "back": "Vertical asymptote: $x = 2$. Horizontal asymptote: None (numerator degree $n=2$ is greater than denominator degree $d=1$).\n\n"}, {"front": "For $g(x) = (x^2 + 1) / (x - 2)$, identify the x-intercepts and y-intercept.", "back": "No x-intercepts (since $x^2+1=0$ has no real solutions). Y-intercept: $g(0) = (0^2+1)/(0-2) = -1/2$."}, {"front": "If a rational function has a vertical asymptote at $x = 2$ and an x-intercept at $x = 0$, what factors must be present in its numerator and denominator, respectively?", "back": "The denominator must have a factor of $(x - 2)$. The numerator must have a factor of $x$ (or $ax$).\n\n"}, {"front": "Construct a simple rational function with a vertical asymptote at $x = 2$, a horizontal asymptote at $y = 3$, and an x-intercept at $x = 0$.", "back": "One possible function is $f(x) = 3x / (x - 2)$. (Denominator has $x-2$ for VA, numerator $3x$ for $x$-intercept and leading coefficient ratio $3/1$ for HA)."}, {"front": "What is the key difference in what vertical and horizontal asymptotes describe about a graph?", "back": "Vertical asymptotes describe the behavior of the graph as $x$ approaches a specific finite value (discontinuities/breaks), while horizontal asymptotes describe the end behavior of the graph as $x$ approaches positive or negative infinity."}, {"front": "For $h(x) = (3x - 6) / (x^2 - 4)$, first simplify, then identify all asymptotes and intercepts.", "back": "First, simplify: $h(x) = 3(x-2) / ((x-2)(x+2)) = 3 / (x+2)$ for $x \\neq 2$. This means there is a hole at $x=2$. The vertical asymptote is $x=-2$. The horizontal asymptote is $y=0$ (since $n<d$). There are no x-intercepts (numerator $3 \\neq 0$). The y-intercept is $h(0) = 3/(0+2) = 3/2$."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

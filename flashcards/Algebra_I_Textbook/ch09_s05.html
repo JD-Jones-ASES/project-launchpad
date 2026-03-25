@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The First Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The First Year &mdash; Chapter 9, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_I_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What condition must be met to add or subtract radical expressions?", "back": "The expressions must have the same radicand."}, {"front": "What is the term for radical expressions that have the same radicand?", "back": "Like radicals."}, {"front": "Like radicals are conceptually similar to what algebraic concept?", "back": "Like terms."}, {"front": "Simplify the expression $3\\sqrt{5} + 7\\sqrt{5}$.", "back": "$10\\sqrt{5}$."}, {"front": "Why is it often necessary to simplify radicals before adding or subtracting them?", "back": "To determine if they can be converted into like radicals."}, {"front": "What is the first step in simplifying the expression $3\\sqrt{12} + 5\\sqrt{27} - 2\\sqrt{48}$?", "back": "Simplify each individual radical term."}, {"front": "Simplify the radical term $3\\sqrt{12}$.", "back": "$6\\sqrt{3}$."}, {"front": "Simplify the radical term $5\\sqrt{27}$.", "back": "$15\\sqrt{3}$."}, {"front": "Simplify the radical term $2\\sqrt{48}$.", "back": "$8\\sqrt{3}$."}, {"front": "After simplifying, how is $6\\sqrt{3} + 15\\sqrt{3} - 8\\sqrt{3}$ combined?", "back": "By combining the coefficients: $(6 + 15 - 8)\\sqrt{3}$."}, {"front": "What are the two primary mathematical properties used to multiply radical expressions?", "back": "The product property of square roots and the distributive property."}, {"front": "State the product property of square roots used during multiplication.", "back": "$\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{ab}$."}, {"front": "In the example $\\sqrt{3}(2\\sqrt{6} - \\sqrt{15})$, what is the result of the first distribution step?", "back": "$2\\sqrt{18} - \\sqrt{45}$."}, {"front": "Simplify the expression $2\\sqrt{18}$.", "back": "$6\\sqrt{2}$."}, {"front": "Simplify the expression $\\sqrt{45}$.", "back": "$3\\sqrt{5}$."}, {"front": "What is the final simplified form of $2\\sqrt{18} - \\sqrt{45}$?", "back": "$6\\sqrt{2} - 3\\sqrt{5}$."}, {"front": "Concept: Conjugate", "back": "Definition: For an expression $a + \\sqrt{c}$, the conjugate is $a - \\sqrt{c}$."}, {"front": "What is the conjugate of the expression $a + b\\sqrt{c}$?", "back": "$a - b\\sqrt{c}$."}, {"front": "What is the result of multiplying a radical binomial by its conjugate?", "back": "The radical terms cancel out, leaving a rational expression."}, {"front": "The formula $(a + b\\sqrt{c})(a - b\\sqrt{c}) = a^2 - b^2 c$ is an application of which algebraic pattern?", "back": "The difference-of-squares pattern."}, {"front": "How do you rationalize a denominator that is a binomial containing a radical?", "back": "Multiply both the numerator and denominator by the conjugate of the denominator."}, {"front": "In the expression $\\frac{6}{3 + \\sqrt{5}}$, what is the conjugate of the denominator?", "back": "$3 - \\sqrt{5}$."}, {"front": "When simplifying $\\frac{6}{3 + \\sqrt{5}}$, what is the product of the denominator and its conjugate?", "back": "$3^2 - (\\sqrt{5})^2$, which simplifies to $4$."}, {"front": "Simplify the fraction $\\frac{6(3 - \\sqrt{5})}{4}$ by reducing the common factor.", "back": "$\\frac{3(3 - \\sqrt{5})}{2}$."}, {"front": "What is the final distributed form of $\\frac{3(3 - \\sqrt{5})}{2}$?", "back": "$\\frac{9 - 3\\sqrt{5}}{2}$."}, {"front": "The process of removing a radical from the bottom of a fraction is called _____ the denominator.", "back": "rationalizing"}, {"front": "According to the 'Working with Radicals' summary, how should you rationalize a single-term denominator $\\sqrt{a}$?", "back": "Multiply the fraction by $\\frac{\\sqrt{a}}{\\sqrt{a}}$."}, {"front": "Under what condition can you add or subtract radicals immediately without simplification?", "back": "When they already have the same radicand."}, {"front": "In Algebra II, Section 1-5, operations will extend to higher-index radicals, such as _____ roots.", "back": "cube"}, {"front": "What is the conjugate of $x - \\sqrt{y}$?", "back": "$x + \\sqrt{y}$."}, {"front": "What term describes the number or expression located inside a radical symbol?", "back": "Radicand."}, {"front": "True or False: You can combine $2\\sqrt{3}$ and $2\\sqrt{5}$ into a single radical term.", "back": "False (they are not like radicals)."}, {"front": "Calculate the denominator result: $(\\sqrt{7} + 2)(\\sqrt{7} - 2)$.", "back": "$3$."}, {"front": "What property justifies the step $\\sqrt{2} \\cdot \\sqrt{3} = \\sqrt{6}$?", "back": "The product property of square roots."}, {"front": "Identify the conjugate: $5 + \\sqrt{2}$.", "back": "$5 - \\sqrt{2}$."}, {"front": "Identify the conjugate: $\\sqrt{6} - 3$.", "back": "$\\sqrt{6} + 3$."}, {"front": "When multiplying radicals, the product property states that $\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{ab}$ for all non-negative real numbers _____.", "back": "$a$ and $b$"}, {"front": "In the expression $3\\sqrt{12}$, the number $3$ is the coefficient and $12$ is the _____.", "back": "radicand"}, {"front": "What is the value of $(\\sqrt{x})^2$ for any non-negative $x$?", "back": "$x$."}, {"front": "Simplify $10\\sqrt{3} - 4\\sqrt{3} + \\sqrt{3}$.", "back": "$7\\sqrt{3}$."}, {"front": "To simplify $\\frac{1}{\\sqrt{2} + 1}$, you should multiply the numerator and denominator by _____.", "back": "$\\sqrt{2} - 1$."}, {"front": "Which algebraic rule allows us to say $3\\sqrt{x} + 7\\sqrt{x} = (3+7)\\sqrt{x}$?", "back": "The distributive property."}, {"front": "What is the next step in simplifying $\\sqrt{18} + \\sqrt{50}$?", "back": "Simplify the radicals to $3\\sqrt{2} + 5\\sqrt{2}$."}, {"front": "Multiply: $\\sqrt{5}(\\sqrt{5} + 2)$.", "back": "$5 + 2\\sqrt{5}$."}, {"front": "Simplify the product: $\\sqrt{2} \\cdot \\sqrt{32}$.", "back": "$8$ (from $\\sqrt{64}$)."}, {"front": "When rationalizing $\\frac{4}{2-\\sqrt{3}}$, what is the resulting denominator after multiplying by the conjugate?", "back": "$1$ (from $2^2 - (\\sqrt{3})^2 = 4 - 3$)."}, {"front": "Simplify: $2\\sqrt{3} \\cdot 5\\sqrt{6}$.", "back": "$10\\sqrt{18}$ or $30\\sqrt{2}$."}, {"front": "What is the conjugate of $-\\sqrt{10} - 4$?", "back": "$-\\sqrt{10} + 4$."}, {"front": "Is the expression $5\\sqrt{2} + 2\\sqrt{5}$ considered a pair of like radicals?", "back": "No, because the radicands ($2$ and $5$) are different."}, {"front": "The summary notes that in Algebra II, radicals will also be expressed using _____ exponents.", "back": "rational"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

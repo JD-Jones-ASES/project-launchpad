@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 7, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What are tectonic plates?", "back": "Tectonic plates are roughly fifteen major pieces (and several smaller ones) of Earth's rigid outer shell (lithosphere) that are in slow but constant motion."}, {"front": "Why are plate boundaries considered the most geologically active places on Earth?", "back": "Plate boundaries are where tectonic plates meet and interact, leading to phenomena like earthquakes, volcanoes, mountain ranges, and ocean trenches."}, {"front": "Define the lithosphere.", "back": "The lithosphere is the rigid outer layer of Earth, consisting of all of the crust (oceanic or continental) and the uppermost, coolest portion of the mantle. It is solid, brittle, and broken into tectonic plates."}, {"front": "Define the asthenosphere.", "back": "The asthenosphere is the partially molten, plastically deforming layer of the upper mantle beneath the lithosphere. It is hot enough to flow slowly, allowing tectonic plates to move on top of it."}, {"front": "How do plate tectonics classify Earth's outer layers differently than chemical composition?", "back": "Plate tectonics classifies layers (lithosphere and asthenosphere) based on their mechanical behavior (how rock responds to stress), rather than chemical composition (crust, mantle, core)."}, {"front": "Describe the mechanical behavior of the lithosphere.", "back": "The lithosphere is solid and brittle; it cracks and breaks when stress builds up, producing earthquakes."}, {"front": "Describe the mechanical behavior of the asthenosphere.", "back": "The asthenosphere behaves plastically, meaning it deforms and flows slowly over time, even though it is mostly solid, like warm modeling clay."}, {"front": "What are the three fundamental ways tectonic plates interact at their boundaries?", "back": "Tectonic plates can move apart (divergent), come together (convergent), or slide horizontally past each other (transform)."}, {"front": "What is a divergent plate boundary?", "back": "A divergent boundary is where two tectonic plates move apart from each other. Magma rises from the mantle to fill the gap, creating new crust."}, {"front": "What happens to the crust at a divergent boundary?", "back": "New lithosphere is created at divergent boundaries as hot mantle material rises, partially melts, and solidifies to form new crust."}, {"front": "What geological feature forms when divergence occurs beneath an ocean, and give an example.", "back": "A mid-ocean ridge forms, such as the Mid-Atlantic Ridge or East Pacific Rise. New oceanic crust is continuously produced here."}, {"front": "What geological feature forms when divergence occurs beneath a continent, and give an example.", "back": "A rift valley forms, such as the East African Rift Valley, where continental crust is stretched and thinned, potentially leading to a new ocean basin."}, {"front": "What is a convergent plate boundary?", "back": "A convergent boundary is where two tectonic plates move toward each other. The geological outcomes depend on the type of crust involved."}, {"front": "Define subduction.", "back": "Subduction is the process by which a denser tectonic plate (usually oceanic) is forced beneath a less dense plate at a convergent boundary, sinking into the mantle to be recycled."}, {"front": "Describe the geological features formed at an oceanic-continental convergent boundary.", "back": "The denser oceanic plate subducts beneath the continental plate, forming a deep ocean trench, a chain of volcanic mountains on the continent, and frequent earthquakes."}, {"front": "Give an example of a mountain range formed by oceanic-continental convergence.", "back": "The Andes Mountains of South America, formed as the Nazca Plate subducts beneath the South American Plate."}, {"front": "What occurs when two oceanic plates converge?", "back": "The older, cooler, and denser oceanic plate subducts beneath the younger one. This creates a deep ocean trench and a chain of volcanic islands called an island arc."}, {"front": "Name an example of an island arc formed by oceanic-oceanic convergence.", "back": "Japan, the Philippines, or the Aleutian Islands of Alaska."}, {"front": "Why does subduction *not* occur at continental-continental convergent boundaries, and what happens instead?", "back": "Neither continental plate can subduct because both are too buoyant (low density). Instead, the crust crumples, folds, and thickens, pushing rock upward to form towering mountain ranges."}, {"front": "Give an example of a mountain range formed by continental-continental convergence.", "back": "The Himalayan Mountains, which are still rising today as the Indian Plate continues to push into the Eurasian Plate."}, {"front": "What is a transform plate boundary?", "back": "A transform boundary is where two tectonic plates slide horizontally past each other. Crust is neither created nor destroyed here."}, {"front": "What geological event is characteristic of transform boundaries?", "back": "Frequent earthquakes are characteristic. Stress builds up along faults where plates grind past each other until the rock suddenly breaks and slips."}, {"front": "Name a famous example of a transform boundary.", "back": "The San Andreas Fault in California, where the Pacific Plate slides northwestward past the North American Plate."}, {"front": "What are the three primary mechanisms identified as driving plate motion?", "back": "The three primary mechanisms are mantle convection, ridge push, and slab pull."}, {"front": "Explain the 'ridge push' mechanism of plate motion.", "back": "At mid-ocean ridges, newly formed, hot crust is elevated. Gravity causes this elevated material to slide downward and outward away from the ridge, pushing the plate."}, {"front": "Explain the 'slab pull' mechanism of plate motion.", "back": "At subduction zones, the cold, dense edge of a subducting plate sinks into the mantle under its own weight, pulling the rest of the plate behind it."}, {"front": "Which mechanism is considered the dominant force driving plate motion by most geophysicists?", "back": "Slab pull is considered the dominant force driving plate motion."}, {"front": "How does plate tectonics influence the history of life on Earth?", "back": "When continents drift apart, populations of organisms become isolated and evolve independently, leading to the formation of new, unique species, such as Australia's unique wildlife."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

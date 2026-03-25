@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 3, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary purpose of 'completing the square' as a mathematical technique?", "back": "It transforms any quadratic expression into a perfect square trinomial plus a constant, making the equation solvable by the square-root method. More importantly, it is used to derive the Quadratic Formula."}, {"front": "What is the discriminant in the context of quadratic equations, and what initial information does it provide?", "back": "The discriminant is the expression $b^2 - 4ac$ from the quadratic formula. It tells us how many real solutions (or if they are complex) exist for a quadratic equation before we finish solving it."}, {"front": "What is the characteristic pattern of a perfect square trinomial like $(x+k)^2$?", "back": "The constant term equals the square of half the linear coefficient (i.e., $k^2 = (2k/2)^2$). For $x^2+2kx+k^2$, the constant term $k^2$ is the square of half of $2k$ ($k$)."}, {"front": "How do you complete the square for a monic expression of the form $x^2+bx$?", "back": "To make $x^2+bx$ a perfect square trinomial, add $(b/2)^2$. The expression becomes $x^2+bx+(b/2)^2$, which factors as $(x+b/2)^2$."}, {"front": "What value must be added to $x^2-6x$ to make it a perfect square trinomial?", "back": "Here $b=-6$, so $b/2 = -3$. The value to add is $(b/2)^2 = (-3)^2 = 9$."}, {"front": "List the steps to solve a monic quadratic equation $x^2+bx+c=0$ by completing the square.", "back": "1. Move the constant to the right: $x^2+bx = -c$. 2. Add $(b/2)^2$ to both sides. 3. Write the left side as a perfect square. 4. Apply the square-root property. 5. Solve the two resulting linear equations."}, {"front": "Why is it crucial to add the value $(b/2)^2$ to *both* sides of an equation when completing the square?", "back": "Adding $(b/2)^2$ only to one side changes the original equation, which leads to incorrect solutions. Adding it to both sides maintains the equality of the equation."}, {"front": "What is the first step when solving $ax^2+bx+c=0$ by completing the square if the leading coefficient $a$ is not equal to 1?", "back": "Divide every term in the entire equation by $a$ to make the leading coefficient 1."}, {"front": "Conceptually, how would you solve $2x^2-5x+1=0$ by completing the square?", "back": "First, divide the entire equation by 2. Then, move the constant term to the right side. Add the square of half the new linear coefficient to both sides. Factor the left side as a perfect square. Apply the square-root property, and finally solve for $x$."}, {"front": "What is the significance of applying the completing-the-square procedure to the general quadratic equation $ax^2+bx+c=0$?", "back": "Applying the completing-the-square procedure to the general quadratic equation $ax^2+bx+c=0$ is how the Quadratic Formula is derived."}, {"front": "State the Quadratic Formula.", "back": "If $ax^2+bx+c=0$ with $a \neq 0$, then $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$."}, {"front": "Define the discriminant of a quadratic equation and its standard notation.", "back": "The discriminant of $ax^2+bx+c=0$ is denoted by $\\Delta$ (Delta) and is defined as $\\Delta = b^2-4ac$."}, {"front": "How does the discriminant classify the roots of a quadratic equation when $\\Delta > 0$?", "back": "If $\\Delta > 0$, the equation has two distinct real solutions."}, {"front": "How does the discriminant classify the roots of a quadratic equation when $\\Delta = 0$?", "back": "If $\\Delta = 0$, the equation has exactly one real solution (a repeated root)."}, {"front": "How does the discriminant classify the roots of a quadratic equation when $\\Delta < 0$?", "back": "If $\\Delta < 0$, the equation has two complex (non-real) conjugate solutions."}, {"front": "If the discriminant ($\\Delta$) of a quadratic equation is less than zero, what does this imply graphically for the parabola $y=ax^2+bx+c$?", "back": "If $\\Delta < 0$, the entire parabola floats either above or below the x-axis, meaning it does not intersect the x-axis, which corresponds to having non-real complex roots."}, {"front": "Without solving, classify the roots of the equation $3x^2-x+2=0$.", "back": "For $3x^2-x+2=0$, $a=3$, $b=-1$, $c=2$. The discriminant is $\\Delta = (-1)^2 - 4(3)(2) = 1 - 24 = -23$. Since $\\Delta < 0$, the equation has two complex (non-real) conjugate solutions."}, {"front": "When using the Quadratic Formula, what important step should you take regarding the discriminant if it is negative?", "back": "If the discriminant ($\\Delta$) is negative, write $\\sqrt{\\Delta} = i\\sqrt{|\\Delta|}$ at that step. This prevents attempting to take a real square root of a negative number and avoids common errors."}, {"front": "Compare the primary use cases or advantages of 'completing the square' versus the 'Quadratic Formula' for solving quadratic equations.", "back": "Completing the square is a foundational algebraic technique used to *derive* the Quadratic Formula and is helpful for transforming expressions. The Quadratic Formula is a universal *solver* for quadratic equations, often quicker for directly finding solutions once derived."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

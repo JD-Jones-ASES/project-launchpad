@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 2, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the primary function of Earth's magnetic field?", "back": "It acts as an invisible shield, deflecting a relentless stream of charged particles (solar wind) from the Sun, which is crucial for life on Earth's surface by protecting the atmosphere and living organisms."}, {"front": "What is the definition of a magnetic field?", "back": "A region of space around a magnet or a moving electric charge in which magnetic forces can be detected. Earth's magnetic field extends from the interior out into space."}, {"front": "What is a common misconception about the source of Earth's magnetic field, and what is its actual source?", "back": "The misconception is that it's generated by a giant bar magnet. The actual source is the churning motion of liquid iron in the outer core, acting as a natural dynamo."}, {"front": "Explain the Dynamo theory.", "back": "The scientific explanation for Earth's magnetic field, proposing that the field is generated by the convective motion of electrically conducting liquid iron in the outer core. The flowing metal acts like a self-sustaining electromagnetic generator."}, {"front": "What are the three key ingredients required for a planet to generate a magnetic field according to dynamo theory?", "back": "1) An electrically conducting fluid (liquid iron and nickel in Earth's outer core). 2) Convection (heat-driven circulation of this fluid). 3) Rotation (Earth's rotation twists convection currents via the Coriolis effect)."}, {"front": "Briefly describe the self-sustaining feedback loop of the geodynamo.", "back": "Motion of the electrically conducting fluid generates electric currents. These electric currents, in turn, produce their own magnetic field, which sustains and amplifies the original field."}, {"front": "For how long has Earth's geodynamo been continuously running?", "back": "At least 3.5 billion years, based on paleomagnetic evidence from ancient rocks."}, {"front": "How do Earth's magnetic poles differ from its geographic poles?", "back": "Geographic poles are where the rotation axis meets the surface. Magnetic poles are where the field lines are vertical. They do not coincide exactly, and magnetic poles wander over time."}, {"front": "What is magnetic declination?", "back": "The angle between the direction a compass needle points (magnetic north) and true geographic north, which varies depending on where you stand on Earth's surface."}, {"front": "Why do Earth's magnetic poles wander, and why must navigational charts be regularly updated?", "back": "The wandering reflects changes in the convection patterns of the liquid outer core. Navigational charts must be updated because magnetic declination changes over shorter timescales due to this wandering."}, {"front": "What is paleomagnetism?", "back": "The study of the record of Earth's past magnetic field preserved in rocks. Magnetic minerals within igneous or sedimentary rocks align with Earth's field, creating a permanent record when the rock forms."}, {"front": "How do scientists know that Earth's magnetic field has repeatedly reversed its polarity throughout geologic history?", "back": "Through paleomagnetism: when magma cools and solidifies, magnetic minerals within the rock align with Earth's magnetic field at that time, preserving a record of the field's direction and intensity."}, {"front": "What is the approximate average frequency of Earth's magnetic reversals?", "back": "On average, reversals occur every 200,000 to 300,000 years, though the timing is irregular. The current 'normal' polarity has persisted for about 780,000 years."}, {"front": "How did paleomagnetic data provide crucial evidence for seafloor spreading?", "back": "Scientists discovered symmetrical stripes of alternating normal and reversed magnetism on either side of mid-ocean ridges. This pattern indicated that new ocean crust is created at ridges and spreads outward."}, {"front": "What is the magnetosphere?", "back": "The region of space surrounding Earth that is dominated by Earth's magnetic field. It forms a vast protective bubble that deflects most of the solar wind."}, {"front": "How does the magnetosphere protect Earth from the solar wind?", "back": "It acts as a shield, deflecting most of the solar wind's high-energy charged particles around the planet, preventing them from stripping away Earth's atmosphere and bombarding the surface with damaging radiation."}, {"front": "What is the solar wind?", "back": "A continuous stream of charged particles (mostly protons and electrons) streaming outward from the Sun at high speeds."}, {"front": "What are auroras, and how are they formed?", "back": "Auroras are spectacular curtains of light (e.g., green, red, purple) visible near Earth's poles. They form when solar wind particles, funneled toward the poles along magnetic field lines, collide with gas molecules in the upper atmosphere, exciting them to emit light."}, {"front": "What are geomagnetic storms, and what are their potential effects?", "back": "Geomagnetic storms occur during periods of intense solar activity (solar flares, coronal mass ejections), causing stronger-than-usual blasts of charged particles. Effects can include disrupting satellite communications, damaging power grids, and pushing auroras to lower latitudes."}, {"front": "Why did Mars lose its global magnetic field, and what were the consequences for its atmosphere and potential for life?", "back": "Mars's smaller size caused its core to cool faster than Earth's, stopping the convection that powered its dynamo. Without a global magnetic field, the solar wind gradually stripped away its atmosphere, leading to its current cold, dry, and apparently lifeless surface."}, {"front": "What does Mars's experience tell us about the importance of Earth's magnetic field for life?", "back": "It highlights that Earth's magnetic field is essential for maintaining a stable atmosphere and protecting life from harmful solar radiation, making it a critical factor for a planet's habitability."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

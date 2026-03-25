@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 0, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How does science approach questions about the natural world?", "back": "Science approaches questions by observing carefully, testing ideas, and following the evidence wherever it leads, rather than by guessing."}, {"front": "What is the defining characteristic that makes science unique compared to other subjects?", "back": "Science is unique because it relies on empirical evidence to answer questions about the natural world."}, {"front": "Define 'empirical evidence' in a scientific context.", "back": "Empirical evidence is information gathered through observation and experimentation."}, {"front": "Why is scientific knowledge always open to revision? Is this a weakness?", "back": "Scientific knowledge is open to revision because if new evidence contradicts an old idea, scientists must update their understanding. This willingness to change is considered one of science's greatest strengths, not a weakness."}, {"front": "What is the 'scientific method'?", "back": "The scientific method is a general process of inquiry that includes making observations, asking questions, forming hypotheses, designing experiments, collecting data, and drawing conclusions."}, {"front": "Is the scientific method a rigid, step-by-step process? Explain.", "back": "No, the scientific method is not a rigid recipe. Real scientific investigations are flexible and iterative, often looping back to earlier steps like forming new questions or redesigning experiments based on unexpected findings."}, {"front": "What is the starting point for every scientific investigation?", "back": "Every scientific investigation begins with an observation."}, {"front": "Differentiate between qualitative and quantitative observations. Which is often preferred for precise comparisons?", "back": "Qualitative observations are descriptive (e.g., 'the solution turned blue'), while quantitative observations are numerical (e.g., 'the solution reached 72°C'). Quantitative observations are preferred for precise comparisons and identifying mathematical relationships."}, {"front": "What makes a scientific question 'testable'?", "back": "A testable question points toward an experiment that could produce an answer and focuses on aspects that can be investigated through observation and experiment, not subjective feelings."}, {"front": "Define 'hypothesis.' How is it often structured?", "back": "A hypothesis is a testable prediction that proposes an explanation for an observation. It is often written as an 'if...then' statement that connects a change in one variable to a predicted outcome in another."}, {"front": "Is a hypothesis a random guess?", "back": "No, a hypothesis is not a random guess. It should be based on prior knowledge, background research, or patterns noticed in observations."}, {"front": "What is the primary value of a scientific hypothesis?", "back": "The primary value of a hypothesis lies in being testable. Even if an experiment doesn't support it, the result is useful because it eliminates one possible explanation and guides scientists toward better ideas."}, {"front": "How does the scientific definition of 'theory' differ from its use in everyday conversation?", "back": "In everyday conversation, 'theory' often means a hunch or a guess. In science, a theory is a well-tested, widely accepted explanation for a broad set of observations, supported by extensive evidence."}, {"front": "What is a 'scientific theory'? Give an example.", "back": "A scientific theory is a well-tested, widely accepted explanation for a broad set of observations, supported by large amounts of evidence from many independent investigations. Examples include the theory of evolution or atomic theory."}, {"front": "Can a well-established scientific theory be easily overturned?", "back": "No, well-established scientific theories are not easily overturned. Overturning one requires extraordinary new evidence and a better explanation that accounts for all data the old theory explained, plus new observations."}, {"front": "What is a 'scientific law'? Give an example.", "back": "A scientific law is a statement, often expressed mathematically, that describes a consistent pattern in nature. Laws tell us *what* happens under certain conditions but do not explain *why* it happens. Newton's second law of motion (F=ma) is an example."}, {"front": "What is the fundamental difference in purpose between a scientific theory and a scientific law? Can one 'graduate' into the other?", "back": "A scientific theory explains *why* something happens, while a scientific law describes *what* happens. A theory does not 'graduate' into a law; they are simply different kinds of scientific knowledge."}, {"front": "Why is it crucial for scientific results to be evaluated and reproduced by other scientists?", "back": "A scientific result only becomes trustworthy when other scientists can examine it and reproduce it. This process helps filter out mistakes, ensure validity, and maintain high standards."}, {"front": "What is 'peer review' in scientific publishing?", "back": "Peer review is the process by which scientific work is evaluated by other experts in the same field before it is published. Reviewers check the experimental design, data analysis, and conclusions for errors or weaknesses."}, {"front": "What is 'replication' in scientific research?", "back": "Replication is the process of repeating an experiment to verify that the results are consistent. When multiple independent teams obtain similar results, confidence in those results increases significantly."}, {"front": "A research team claims a new material conducts electricity with zero resistance, but no other lab has replicated it. Why might other scientists be cautious?", "back": "Other scientists would be cautious because extraordinary claims require extraordinary evidence. Without independent replication, the result could be due to error, uncontrolled variables, or simple chance, not necessarily a true discovery."}, {"front": "For a significant new scientific claim (like zero resistance material) to be considered reliable, what steps would the scientific community need to take?", "back": "The scientific community would need to see the results undergo rigorous peer review and, most importantly, successful replication by multiple independent laboratories using the same methods, ensuring consistency and accuracy."}, {"front": "When scientists express caution about a new, un-replicated claim, does this mean they are closed-minded?", "back": "No, being cautious reflects scientific skepticism, which is a commitment to demanding evidence for claims. It is not closed-mindedness, but an adherence to the core principles of scientific validation."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

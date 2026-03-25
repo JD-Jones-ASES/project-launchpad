@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy for High School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Financial Literacy for High School &mdash; Chapter 24, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Financial_Literacy">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a 'return policy'?", "back": "A store's stated rules for accepting merchandise back for a refund or exchange."}, {"front": "Before making a purchase, what are three key questions to ask about a store's return policy?", "back": "How many days do you have to return the item? Must you have the original receipt/packaging? Is it a full refund, store credit, or exchange? Are there restocking fees? Are certain categories non-returnable? (Any three are acceptable)."}, {"front": "What is a 'warranty'?", "back": "A promise that a product will work as described for a defined period. If it fails, the manufacturer or seller is responsible for repair or replacement."}, {"front": "Explain the difference between a 'manufacturer warranty' and an 'extended warranty' (or service plan).", "back": "A manufacturer warranty comes with the product at no extra charge, covering defects under normal use. An extended warranty is purchased separately, usually at the time of sale, to extend coverage beyond the manufacturer's period."}, {"front": "What does a standard manufacturer warranty typically cover, and what does it usually *not* cover?", "back": "It typically covers defects in materials or workmanship under normal use. It usually does NOT cover accidental damage, misuse, or normal wear."}, {"front": "Why are extended warranties often considered a poor investment for consumers?", "back": "Most products fail either very early (covered by manufacturer warranty) or after a long time (when outdated). The 'middle period' where extended warranties apply sees relatively few failures, and retailers often earn significant profit margins on them."}, {"front": "What is a recommended alternative to purchasing an extended warranty?", "back": "Build a small 'electronics repair fund' in your sinking fund budget to self-insure minor products."}, {"front": "Which federal agency enforces laws against deceptive advertising, unfair business practices, and fraud?", "back": "The Federal Trade Commission (FTC)."}, {"front": "What is the primary role of the Consumer Financial Protection Bureau (CFPB)?", "back": "It handles complaints about financial products such as loans, credit cards, and debt collectors."}, {"front": "How can your State Attorney General help protect consumers?", "back": "Each state's Attorney General can investigate and prosecute businesses that violate consumer protection laws."}, {"front": "What is the Better Business Bureau (BBB), and what service does it provide to consumers?", "back": "The BBB is a private organization that records business complaints and accredits businesses that meet standards, useful for checking a company's reputation."}, {"front": "What is the *first* step a consumer should take when trying to resolve a problem with a purchase?", "back": "Contact the seller directly, being polite, factual, clear about what you want, and keep records of communication."}, {"front": "If contacting the initial seller representative doesn't resolve a dispute, what is the next step within the company?", "back": "Escalate the issue by asking to speak to a manager or supervisor."}, {"front": "What is a 'chargeback,' and why is it a significant advantage of using a credit card for purchases?", "back": "A chargeback is when your credit card company investigates a dispute and can reverse a charge. It provides strong consumer protection against fraudulent or unfulfilled transactions."}, {"front": "After exhausting company-level resolution and credit card disputes, which consumer protection agencies can you file a complaint with?", "back": "The FTC, your State Attorney General, or the Better Business Bureau (BBB)."}, {"front": "When might small claims court be an appropriate step for resolving a consumer dispute?", "back": "For purchases up to a few thousand dollars, if all other resolution steps have failed. It allows consumers to sue a business without a lawyer."}, {"front": "List three warning signs that an online store might be fraudulent or selling counterfeit products.", "back": "Prices dramatically below market value, no physical address or phone number, very recent website creation date, poor grammar/spelling, no secure connection (https://), or unusually limited payment options (any three)."}, {"front": "Why is paying for major purchases with a credit card (if paid off monthly) generally safer than using a debit card or cash?", "back": "Credit cards offer built-in consumer protections like purchase protection, potential extended warranty, and the right to file a chargeback, which debit cards and cash generally do not."}, {"front": "What kind of information should you look for to ensure an online store has a secure connection?", "back": "Look for 'https://' in the website's URL and a padlock icon in the browser address bar."}, {"front": "What types of product categories are often non-returnable, even with a store's general return policy?", "back": "Opened electronics, swimwear, and digital downloads are common examples."}, {"front": "What is the overall purpose of consumer rights laws and regulations?", "back": "To protect consumers from deceptive practices, defective products, and fraudulent sellers, ensuring they are not powerless in the marketplace."}, {"front": "When resolving a dispute, why is keeping records of all communication with the seller important?", "back": "Records provide factual evidence and documentation of your efforts and the seller's responses, which is crucial if you need to escalate the dispute to higher authorities."}, {"front": "What is the key condition for responsibly using a credit card to take advantage of its consumer protections?", "back": "You must pay the balance in full each month to avoid accumulating interest and debt."}, {"front": "If you suspect an online store is fake after making a purchase with your credit card, what should you do immediately?", "back": "Dispute the charge with your credit card company immediately."}, {"front": "What is the significance of a very recent website creation date for an online store?", "back": "It can be a warning sign of a quickly set up fraudulent store; legitimate businesses typically have an older online presence."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

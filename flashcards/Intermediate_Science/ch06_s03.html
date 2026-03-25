@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 6, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What are the two major recurring patterns to observe when studying human body systems?", "back": "The two patterns are: structure matches function (the design of each organ suits its job), and systems interact (no system works in isolation)."}, {"front": "What are the main functions of the skeletal system?", "back": "The skeletal system provides support for the body, protects internal organs, produces movement in partnership with muscles, and stores minerals. Bone marrow also produces blood cells."}, {"front": "What vital process occurs within the bone marrow found in many bones?", "back": "Bone marrow contains stem cells that produce red blood cells, white blood cells, and platelets."}, {"front": "Differentiate between tendons and ligaments.", "back": "Tendons are strong cords of connective tissue that connect muscles to bones. Ligaments are tough bands of connective tissue that hold bones together at joints."}, {"front": "Name the three types of muscle tissue and provide an example of where each is found.", "back": "Skeletal muscle (e.g., biceps, connected to bones for voluntary movement), smooth muscle (e.g., walls of internal organs and blood vessels for involuntary movement), and cardiac muscle (only in the heart for rhythmic, involuntary pumping)."}, {"front": "How do skeletal muscles typically work in pairs to produce movement?", "back": "When one skeletal muscle contracts, the opposing muscle relaxes. For example, bending your arm at the elbow involves contracting the biceps while relaxing the triceps."}, {"front": "Trace the path of food through the major organs of the digestive system, starting from the mouth.", "back": "Food enters the mouth (digestion begins) -> esophagus -> stomach (protein breakdown) -> small intestine (most digestion and nutrient absorption) -> large intestine (water/mineral absorption) -> elimination of waste."}, {"front": "What specific roles do the liver and pancreas play in digestion?", "back": "The liver produces bile to emulsify fats. The pancreas secretes digestive enzymes and bicarbonate into the small intestine."}, {"front": "Explain the function of arteries, veins, and capillaries in the circulatory system.", "back": "Arteries carry oxygen-rich blood away from the heart. Veins return oxygen-poor blood to the heart. Capillaries are tiny vessels where oxygen, nutrients, and waste products are exchanged between blood and body cells."}, {"front": "What is the primary function of the respiratory system?", "back": "The respiratory system is responsible for taking in oxygen (O2) and expelling carbon dioxide (CO2)."}, {"front": "Where does gas exchange primarily occur in the lungs, and how does it happen?", "back": "Gas exchange occurs in the alveoli. Oxygen diffuses from the alveoli into the blood, and carbon dioxide diffuses from the blood into the alveoli to be exhaled."}, {"front": "What are the two main divisions of the nervous system, and what does each include?", "back": "The Central Nervous System (CNS) includes the brain and spinal cord. The Peripheral Nervous System (PNS) includes all nerves outside the brain and spinal cord."}, {"front": "How does the nervous system communicate throughout the body?", "back": "The nervous system uses rapid electrical signals that can travel up to 120 meters per second, forming the body's rapid communication network."}, {"front": "How does the endocrine system communicate throughout the body, contrasting with the nervous system?", "back": "The endocrine system communicates through hormones, which are chemical messengers released into the bloodstream by glands. This is a slower, longer-lasting communication method compared to the nervous system's electrical signals."}, {"front": "What are hormones, and how do they ensure specific responses in the body?", "back": "Hormones are chemical messengers that travel throughout the body via the bloodstream and affect only specific 'target cells' that possess the appropriate receptors."}, {"front": "What is the primary role of the immune system, and what are pathogens?", "back": "The immune system is the body's defense force. It identifies and destroys pathogens, which are disease-causing organisms such as bacteria, viruses, and fungi."}, {"front": "How does the immune system's 'memory' function, and what medical innovation is based on this principle?", "back": "After fighting off a specific pathogen, the immune system can respond more quickly if it encounters the same pathogen again. Vaccination is based on this principle."}, {"front": "What is the main function of the excretory system, and what key role do the kidneys play?", "back": "The excretory system removes toxic metabolic waste products. Kidneys filter the blood, removing excess water, salts, and nitrogen-containing waste (urea) to produce urine."}, {"front": "Name two organs, other than the kidneys, that contribute to the excretory system and specify what they excrete.", "back": "The lungs excrete carbon dioxide. Sweat glands in the skin excrete small amounts of urea and salt dissolved in water."}, {"front": "List three important functions of the integumentary system.", "back": "The integumentary system (skin, hair, nails) prevents water loss, blocks pathogen entry, shields from UV radiation, helps regulate body temperature, and provides sensory information."}, {"front": "What specialized cells are produced by the reproductive system, and what is their role?", "back": "The reproductive system produces specialized cells called gametes (sperm in males, eggs/ova in females). Their role is to combine during fertilization to form a zygote, which develops into a new organism."}, {"front": "How does the reproductive system influence puberty and reproductive function?", "back": "The reproductive system produces hormones (e.g., testosterone, estrogen, progesterone) that drive the physical changes of puberty and regulate reproductive function."}, {"front": "Provide an example from the text illustrating how multiple body systems work together during an activity like running a race.", "back": "During a race, the nervous system signals muscles to contract (muscular system), which need oxygen delivered by the circulatory and respiratory systems. Heat is regulated by the integumentary system, adrenaline from the endocrine system increases heart rate, and the excretory system removes waste."}, {"front": "What does the principle 'structure matches function' mean in the context of body systems?", "back": "This principle means that the design or anatomy of each organ or body part is specifically suited to perform its particular job or function efficiently. For example, alveoli are tiny and numerous, providing a large surface area for gas exchange."}, {"front": "Approximately how many times does the heart beat per day, and what is its primary role?", "back": "The heart, a muscular pump, beats roughly 100,000 times per day. Its primary role is to pump blood through the circulatory system, delivering oxygen and nutrients and removing waste."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

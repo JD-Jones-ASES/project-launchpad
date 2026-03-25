@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 4, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "In physics, what defines 'motion'?", "back": "Motion is defined as a change in an object's position."}, {"front": "Why is a 'reference frame' crucial when describing motion?", "back": "Motion is relative; an object's movement must be described in relation to a specific viewpoint or background, which is the reference frame."}, {"front": "Define 'reference frame' in the context of physics.", "back": "A reference frame is a coordinate system used to define the position of an object. It includes an origin (a chosen 'zero' point) and a set of directions."}, {"front": "What are the essential elements chosen when setting up a one-dimensional motion problem?", "back": "The first step is to pick a starting point (the origin) and label one direction as positive, then measure positions from there."}, {"front": "What is 'position' in physics, and what does it include?", "back": "Position is the location of an object measured relative to a reference frame's origin. It is described by both a number (distance from the origin) and a direction (which side of the origin), often represented by 'x' in meters."}, {"front": "If an origin is set at a mailbox, what does a position of $x = -15\\,m$ for a bicycle signify?", "back": "The bicycle is $15\\,m$ away from the mailbox in the negative direction (e.g., to the left of the mailbox)."}, {"front": "Define 'distance' as a fundamental concept in physics.", "back": "Distance is the total length of the path traveled by an object, regardless of direction. It is always positive and measured in meters (m)."}, {"front": "You walk $100\\,m$ to the cafeteria and $100\\,m$ back. What is your total distance traveled?", "back": "Your total distance traveled is $200\\,m$. Distance accounts for the entire path covered, irrespective of your final position relative to your start."}, {"front": "What is a 'scalar' quantity? Provide an example from the text.", "back": "A scalar quantity is a physical measurement that has magnitude (size) only, with no direction. Distance, speed, mass, and temperature are examples."}, {"front": "Is distance a scalar or vector quantity? Explain.", "back": "Distance is a scalar quantity because it only tells 'how far' an object traveled (magnitude) without specifying any particular direction."}, {"front": "Define 'displacement' in physics.", "back": "Displacement is the change in an object's position, measured as the straight-line distance and direction from the starting point to the ending point. It is a vector quantity."}, {"front": "How do distance and displacement differ when considering a trip to a cafeteria and back?", "back": "If you walk $100\\,m$ to the cafeteria and $100\\,m$ back, your distance is $200\\,m$. Your displacement, however, is $0\\,m$ because you ended up at your starting position."}, {"front": "What is the formula for calculating displacement, and what do its components mean?", "back": "The formula is $\\Delta x = x_f - x_i$, where $\\Delta x$ is displacement, $x_f$ is the final position, and $x_i$ is the initial position."}, {"front": "What does the Greek letter $\\Delta$ (delta) represent in physics equations, such as $\\Delta x$?", "back": "The symbol $\\Delta$ (delta) means 'change in,' so $\\Delta x$ literally means 'change in position.'"}, {"front": "What is a 'vector' quantity? Provide an example from the text.", "back": "A vector quantity is a physical measurement that has both magnitude (size) and direction. Displacement, velocity, and force are examples."}, {"front": "An object starts at $x_i = +50\\,m$ and moves to $x_f = +20\\,m$. Calculate its displacement and explain what the sign indicates.", "back": "The displacement is $\\Delta x = x_f - x_i = 20\\,m - 50\\,m = -30\\,m$. The negative sign indicates movement in the negative direction relative to the reference frame."}, {"front": "What is a 'position-time graph' ($x$-$t$ graph) and how are its axes labeled?", "back": "A position-time graph is a powerful tool in kinematics that plots an object's position over time. The horizontal axis represents time ($t$), and the vertical axis represents position ($x$). "}, {"front": "On a position-time graph, what does a horizontal line segment indicate about an object's motion?", "back": "A horizontal line indicates that the object is stationary; its position is not changing over time."}, {"front": "What does a straight line sloping upward on an $x$-$t$ graph signify?", "back": "A straight line sloping upward indicates that the object is moving in the positive direction at a constant rate (constant positive velocity)."}, {"front": "What does a straight line sloping downward on an $x$-$t$ graph signify?", "back": "A straight line sloping downward indicates that the object is moving in the negative direction at a constant rate (constant negative velocity)."}, {"front": "How does the steepness of a line on a position-time graph relate to an object's speed?", "back": "A steeper line on a position-time graph means the object is moving faster."}, {"front": "What does a curved line on a position-time graph imply about an object's motion?", "back": "A curved line indicates that the object's speed is changing, meaning it is accelerating."}, {"front": "What physical quantity does the slope of a position-time graph represent?", "back": "The slope of a position-time graph represents the object's velocity."}, {"front": "Can the magnitude of displacement ever be greater than the distance traveled? Explain.", "back": "No, the magnitude of displacement can never be greater than the distance traveled. Displacement is the straight-line path (shortest possible) between two points, while distance is the total path length, which can be much longer."}, {"front": "How do GPS navigation apps illustrate the concepts of distance and displacement?", "back": "GPS apps typically show both the 'driving distance' (the total path along roads, representing distance) and the 'as the crow flies' distance (the straight-line distance from start to finish, representing the magnitude of displacement)."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

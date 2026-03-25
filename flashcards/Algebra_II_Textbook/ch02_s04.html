@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 2, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a primary reason linear functions are powerful modeling tools in mathematics?", "back": "They are effective for modeling many real-world processes that change at a constant rate."}, {"front": "In a linear model $f(x) = mx + b$, what does the slope 'm' represent?", "back": "The rate of change of the dependent variable with respect to the independent variable."}, {"front": "In a linear model $f(x) = mx + b$, what does the y-intercept 'b' represent?", "back": "The initial value, or the value of the dependent variable when the independent variable ($x$) is 0."}, {"front": "What is the first step when building a linear model from a real-world scenario?", "back": "Identify the independent variable ($x$) and the dependent variable ($y$), or use a descriptive function name."}, {"front": "How do you identify the slope 'm' when constructing a linear model from a given problem?", "back": "Identify the rate of change within the problem description."}, {"front": "How do you identify the y-intercept 'b' when constructing a linear model from a given problem?", "back": "Identify the starting value or the fixed component of the model."}, {"front": "A taxi charges a flat fee of $3.00 plus $1.80 per mile. Write a function $C(d)$ for the total cost of a ride of $d$ miles.", "back": "$C(d) = 1.80d + 3.00$."}, {"front": "Using the taxi cost function $C(d) = 1.80d + 3.00$, what is the cost of a 12-mile ride?", "back": "$C(12) = 1.80(12) + 3.00 = $24.60."}, {"front": "For the taxi fare model $C(d) = 1.80d + 3.00$, for what distance does the fare exceed $15.00?", "back": "The fare exceeds $15.00 for any ride longer than approximately $6.7$ miles ($d > 6.6$ miles)."}, {"front": "Define 'direct variation'.", "back": "We say $y$ varies directly as $x$ (or $y$ is directly proportional to $x$) if $y = kx$ for some nonzero constant $k$."}, {"front": "In the direct variation equation $y = kx$, what is 'k' called?", "back": "The constant of variation (or constant of proportionality)."}, {"front": "What is a key characteristic of a linear function that represents direct variation?", "back": "Its y-intercept is zero ($b=0$). In other words, $f(0)=0$."}, {"front": "If $y$ varies directly as $x$, and $y = 15$ when $x = 4$, what is the constant of variation $k$?", "back": "$k = 15/4$."}, {"front": "Given $y$ varies directly as $x$, and $y = 15$ when $x = 4$, find $y$ when $x = 10$.", "back": "$y = 37.5$."}, {"front": "A swimming pool holds 15,000 gallons and drains at 250 gallons per minute. Write a function $V(t)$ for the volume of water remaining after $t$ minutes.", "back": "$V(t) = 15,000 - 250t$."}, {"front": "Using the function $V(t) = 15,000 - 250t$, calculate the time it takes for the pool to be completely empty.", "back": "60 minutes."}, {"front": "Plan A charges $25 per month plus $0.05 per text message. Plan B charges $45 per month with unlimited texts. Write cost functions $A(n)$ and $B(n)$ in terms of $n$ (number of texts).", "back": "$A(n) = 0.05n + 25$, $B(n) = 45$."}, {"front": "For the phone plans ($A(n) = 0.05n + 25$, $B(n) = 45$), find the number of texts for which both plans cost the same.", "back": "400 texts."}, {"front": "For the phone plans, which plan is cheaper for fewer than 400 texts?", "back": "Plan A is cheaper for fewer than 400 texts."}, {"front": "For the phone plans, which plan is the better value for more than 400 texts?", "back": "Plan B is the better value for more than 400 texts."}, {"front": "The boiling point of water decreases by $0.5^$C for every 150-meter increase in elevation. What is the rate of change (slope) in degrees Celsius per meter?", "back": "$-0.5/150 = -1/300$ degrees Celsius per meter."}, {"front": "At sea level (0 m) water boils at $100^$C. Write a function $B(h)$ for the boiling point (in $^$C) at elevation $h$ meters, using the calculated rate of change.", "back": "$B(h) = 100 - (1/300)h$."}, {"front": "Using the function $B(h) = 100 - (1/300)h$, find the boiling point at an elevation of 3,000 m.", "back": "$B(3000) = 100 - (3000/300) = 100 - 10 = 90^$C."}, {"front": "In a linear model $f(x) = mx + b$, what information does the slope 'm' convey regarding the relationship between $f$ and $x$?", "back": "It describes the rate of change of $f$ with respect to $x$, and its units are (units of $f$) per (unit of $x$). This means for every one unit increase in $x$, $f$ changes by 'm' units."}, {"front": "In a linear model $f(x) = mx + b$, what is another contextual description for the y-intercept $b = f(0)$?", "back": "It represents the starting value or the fixed component of the model, independent of $x$."}, {"front": "Why is it important to always attach units to the slope in a linear model derived from a real-world problem?", "back": "Attaching units prevents misinterpretation and clearly defines what the rate of change represents (e.g., '$1.80 per mile' versus just '1.80')."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

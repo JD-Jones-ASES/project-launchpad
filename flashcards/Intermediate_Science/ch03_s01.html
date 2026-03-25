@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 3, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How do scientists study the internal structure of atoms?", "back": "By devising increasingly clever experiments to probe atoms indirectly, revising models as new evidence emerges, similar to describing a wrapped present without opening it."}, {"front": "Define 'atom.'", "back": "The smallest unit of an element that retains its chemical properties, consisting of a dense, positively charged nucleus surrounded by negatively charged electrons."}, {"front": "What is an 'atomic model'?", "back": "A simplified representation of the structure of an atom, showing the arrangement of its subatomic particles, which changes over time with new experimental evidence."}, {"front": "Who was Democritus and what was his contribution to early atomic theory?", "back": "A Greek philosopher (around 400 BCE) who proposed that matter could be cut into smaller pieces until an 'uncuttable' particle, an 'atomos,' was reached. He lacked experimental evidence."}, {"front": "What were the four key ideas of John Dalton's atomic theory (1803)?", "back": "1. All matter is made of extremely small particles called atoms. 2. Atoms of a given element are identical in mass and properties. 3. Atoms cannot be created, destroyed, or divided into smaller particles. 4. Atoms combine in simple whole-number ratios to form compounds."}, {"front": "Describe Dalton's 'Solid Sphere Model.'", "back": "The atom was pictured as a tiny, solid, indestructible sphere, like a microscopic billiard ball, with nothing inside it."}, {"front": "What was the main limitation of Dalton's Solid Sphere Model?", "back": "It incorrectly assumed that atoms were indivisible and had no internal structure, which was disproven with the discovery of subatomic particles."}, {"front": "What discovery did J. J. Thomson make in 1897?", "back": "He discovered the electron, a negatively charged particle with an extremely small mass, by experimenting with cathode rays."}, {"front": "Define 'electron.'", "back": "A subatomic particle with a negative electric charge and a very small mass (about 1/1,836 the mass of a proton), found outside the nucleus of an atom."}, {"front": "Describe Thomson's 'Plum Pudding Model.'", "back": "An atom was envisioned as a sphere of uniformly distributed positive charge with tiny negative electrons embedded throughout, like raisins in a pudding."}, {"front": "How did Thomson's model address the electrical neutrality of atoms?", "back": "It proposed that the positive 'pudding' charge balanced the negative charges of the embedded electrons, making the atom neutral overall."}, {"front": "What critical assumption in Thomson's Plum Pudding Model was later proven wrong?", "back": "The assumption that the positive charge is spread evenly throughout the atom."}, {"front": "Describe the basic setup of Rutherford's gold foil experiment.", "back": "A beam of dense, positively charged alpha particles was aimed at an extremely thin sheet of gold foil, surrounded by a fluorescent screen to detect deflections."}, {"front": "What were the surprising observations from Rutherford's gold foil experiment?", "back": "Most alpha particles passed straight through, but a small fraction (about 1 in 8,000) bounced back at large angles, some almost straight back."}, {"front": "How did Rutherford interpret the results of the gold foil experiment?", "back": "He concluded that the positive charge and nearly all the mass of an atom are concentrated in an incredibly small, dense center called the nucleus, with electrons orbiting at large distances. Most of the atom is empty space."}, {"front": "Define 'nucleus' in the context of an atom.", "back": "The small, dense, positively charged center of an atom, containing protons and neutrons. It contains nearly all of the atom's mass but occupies only a tiny fraction of its volume."}, {"front": "What was the major theoretical problem with Rutherford's Nuclear Model?", "back": "According to classical electromagnetism, orbiting electrons (charged particles moving in a circle) should continuously radiate energy, spiral inward, and crash into the nucleus, which atoms clearly do not do."}, {"front": "How did Niels Bohr solve the problem of Rutherford's unstable atom?", "back": "He proposed that electrons do not orbit at just any distance, but in specific, fixed circular paths called energy levels (or shells), where they do not radiate energy and remain stable."}, {"front": "According to Bohr's model, what happens when an electron moves between energy levels?", "back": "To move to a higher level, it must absorb a precise amount of energy. To drop to a lower level, it must release that same amount of energy, typically as a photon (light particle)."}, {"front": "What phenomenon did Bohr's Orbital Model successfully explain?", "back": "It explained the specific colors of light emitted by hydrogen and other simple atoms, corresponding to electrons making specific energy jumps."}, {"front": "What was a limitation of Bohr's Orbital Model?", "back": "It worked perfectly only for hydrogen (one electron); for larger atoms with many electrons, its predictions became less accurate."}, {"front": "What scientific revolution led to the Modern Electron Cloud Model?", "back": "Quantum mechanics, developed in the 1920s and 1930s by physicists like Heisenberg, Schrödinger, and Born."}, {"front": "How does the Modern Electron Cloud Model describe the location of electrons?", "back": "Electrons exist in fuzzy regions of probability called electron clouds (or orbitals), which are 3D regions around the nucleus where an electron is most likely to be found, rather than in fixed orbits."}, {"front": "What is the Heisenberg uncertainty principle in relation to electrons?", "back": "It states that you can never predict an electron's exact position and velocity simultaneously."}, {"front": "In the Modern Electron Cloud Model, what are the key characteristics of the nucleus?", "back": "It is at the center, incredibly small (about 10^-15 m), contains protons and neutrons, and holds more than 99.9% of the atom's mass."}, {"front": "In the Modern Electron Cloud Model, what are the key characteristics of electrons?", "back": "They occupy a much larger region (about 10^-10 m) around the nucleus, forming a cloud of probability (denser in some regions), and occupy different orbitals with characteristic shapes."}, {"front": "Why is the Bohr model still used in some chemistry courses despite the more accurate Electron Cloud Model?", "back": "It is an excellent helpful simplification for understanding energy levels and valence electrons, even though it's not an exact portrait of reality for multi-electron atoms."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

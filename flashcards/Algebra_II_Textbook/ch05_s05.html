@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 5, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What new factoring topics are introduced in the 'Factoring II' section?", "back": "Sum and Difference of Cubes, advanced trinomial strategies (quadratic form), and the Factor Theorem."}, {"front": "State the formula for the Difference of Squares.", "back": "$a^2 - b^2 = (a+b)(a-b)$."}, {"front": "How can the Difference of Squares pattern appear 'in disguise'?", "back": "When $a$ or $b$ involve higher powers, such as $25x^4 - 16y^2$, where $a=5x^2$ and $b=4y$."}, {"front": "State the formula for the Sum of Cubes ($a^3 + b^3$).", "back": "$a^3 + b^3 = (a + b)(a^2 - ab + b^2)$."}, {"front": "State the formula for the Difference of Cubes ($a^3 - b^3$).", "back": "$a^3 - b^3 = (a - b)(a^2 + ab + b^2)$."}, {"front": "What does the SOAP mnemonic help remember for factoring sums/differences of cubes?", "back": "It refers to the signs in the factors: *S*ame sign as original, *O*pposite sign for the middle term of the trinomial, *A*lways *P*ositive for the last term of the trinomial."}, {"front": "What is special about the trinomial factor ($a^2 \\pm ab + b^2$) in the sum/difference of cubes formulas?", "back": "It does not factor further over the real numbers."}, {"front": "Factor $x^3 + 27$.", "back": "$(x+3)(x^2 - 3x + 9)$."}, {"front": "Factor $8x^3 - 125$.", "back": "$(2x - 5)(4x^2 + 10x + 25)$."}, {"front": "What is the first step when factoring an expression like $54t^3 + 16$?", "back": "First, factor out the Greatest Common Factor (GCF), which is 2, resulting in $2(27t^3 + 8)$. Then factor the sum of cubes."}, {"front": "What does it mean for a polynomial to be in 'quadratic form'?", "back": "A polynomial is in quadratic form if it can be written as $au^2 + bu + c$, where $u$ itself is a power of $x$ (e.g., $u = x^2$ or $u = x^3$). This allows for substitution to simplify factoring."}, {"front": "Describe the substitution used to factor $x^4 - 5x^2 + 4$.", "back": "Let $u = x^2$. The expression becomes $u^2 - 5u + 4$."}, {"front": "Factor $x^4 - 5x^2 + 4$ completely.", "back": "$(x^2 - 1)(x^2 - 4) = (x-1)(x+1)(x-2)(x+2)$."}, {"front": "State the Factor Theorem.", "back": "For a polynomial $P(x)$, $(x - c)$ is a factor of $P(x)$ if and only if $P(c) = 0$."}, {"front": "What is an equivalent way to state the condition $P(c)=0$ in the context of the Factor Theorem?", "back": "$c$ is a zero of $P(x)$, and $(x-c)$ divides $P(x)$ with a remainder of 0."}, {"front": "How is the Factor Theorem related to the Remainder Theorem?", "back": "The Factor Theorem is a direct consequence of the Remainder Theorem, which states that the remainder when dividing $P(x)$ by $(x-c)$ is $P(c)$. So, if $P(c)=0$, the remainder is 0, meaning $(x-c)$ is a factor."}, {"front": "How would you show that $(x - 2)$ is a factor of $P(x) = x^3 - 6x^2 + 11x - 6$ using the Factor Theorem?", "back": "Evaluate $P(2)$. If $P(2) = 0$, then $(x-2)$ is a factor. (In this example, $P(2) = 8 - 24 + 22 - 6 = 0$)."}, {"front": "After verifying $(x-2)$ is a factor of $P(x) = x^3 - 6x^2 + 11x - 6$, what are the next steps to factor $P(x)$ completely?", "back": "Divide $P(x)$ by $(x-2)$ using synthetic division to find the quadratic quotient. Then factor the quadratic quotient. ($P(x) = (x-2)(x^2 - 4x + 3) = (x-2)(x-1)(x-3)$)."}, {"front": "If $x = -3$ is a zero of $Q(x) = 2x^3 + 5x^2 - 4x - 3$, how would you find all other zeros?", "back": "Use synthetic division with $c = -3$ to divide $Q(x)$ by $(x+3)$. The resulting quadratic quotient can then be factored to find the remaining zeros."}, {"front": "According to the Rational Root Theorem, if $p/q$ (in lowest terms) is a rational zero of a polynomial $P(x) = a_n x^n + ... + a_0$ with integer coefficients, what does $p$ divide?", "back": "$p$ divides the constant term $a_0$."}, {"front": "According to the Rational Root Theorem, if $p/q$ (in lowest terms) is a rational zero of a polynomial $P(x) = a_n x^n + ... + a_0$ with integer coefficients, what does $q$ divide?", "back": "$q$ divides the leading coefficient $a_n$."}, {"front": "What is the primary purpose of the Rational Root Theorem?", "back": "To narrow down the search for rational zeros of a polynomial with integer coefficients to a finite list of candidates."}, {"front": "Does the Rational Root Theorem guarantee that rational zeros exist for a polynomial?", "back": "No, it only provides a list of *possible* rational zeros. A polynomial may have no real zeros or only irrational zeros."}, {"front": "For $P(x) = 2x^3 - 3x^2 - 8x - 3$, what are the possible rational zeros according to the Rational Root Theorem?", "back": "Possible $p$ (divisors of -3): $\\pm 1, \\pm 3$. Possible $q$ (divisors of 2): $\\pm 1, \\pm 2$. Candidates: $\\pm 1, \\pm 3, \\pm 1/2, \\pm 3/2$."}, {"front": "After finding a rational zero using the Rational Root Theorem, what steps are taken to find all remaining zeros?", "back": "Use synthetic division with the found zero to reduce the polynomial to a quadratic. Then, factor the quadratic or use the quadratic formula to find any remaining zeros (rational, irrational, or complex)."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

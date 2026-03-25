@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 10, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What type of plate boundary is found off the coast of Chile, and what is its significance for earthquakes?", "back": "Chile sits along a convergent boundary where the Nazca Plate subducts beneath the South American Plate. This geological setting causes enormous stress buildup, making the region prone to powerful earthquakes."}, {"front": "Briefly describe the geological process that leads to an earthquake at a subduction zone.", "back": "As an oceanic plate dives into the mantle, stress builds along the fault. When this stress exceeds the strength of the rock, the plates suddenly slip, releasing energy as seismic waves that radiate outward from the focus."}, {"front": "Describe the motion of P-waves during an earthquake and how they affect the ground.", "back": "P-waves are primary seismic waves that compress and stretch the ground in the direction of their travel."}, {"front": "Describe the motion of S-waves during an earthquake and how they differ from P-waves.", "back": "S-waves are secondary seismic waves that shake the ground side to side, perpendicular to their direction of travel."}, {"front": "Which type of seismic wave typically causes the most damage to buildings?", "back": "Surface waves, because they combine both compressional/stretching and side-to-side motions, resulting in more complex and destructive ground movement."}, {"front": "How does an understanding of Earth Science (plate tectonics, seismology, wave types) inform an engineer designing an earthquake-resistant building?", "back": "Engineers use plate tectonics to know where earthquakes will occur, seismology to predict how intensely the ground will shake, and knowledge of wave types to anticipate the specific directions of forces on a structure."}, {"front": "Explain the role of inertia (Newton's first law) when seismic waves reach a building.", "back": "Due to inertia, when seismic waves move the ground, the building's mass resists the change in motion. The base accelerates with the ground, while the upper floors try to stay in place, creating a net force that can twist, bend, and break the structure."}, {"front": "According to Newton's second law ($F=ma$), how does a building's mass influence the forces it experiences during an earthquake, and what design implication arises from this?", "back": "A heavier building experiences a greater force for the same ground motion. This means engineers should use lighter materials where possible to reduce the overall forces on the building during an earthquake."}, {"front": "How do base isolation systems help a building withstand an earthquake, based on principles of physics?", "back": "Base isolation systems (rubber-and-steel pads between the building and its foundation) allow the ground to slide beneath the building, reducing the acceleration transmitted to the structure and, consequently, the forces acting on it ($F=ma$). "}, {"front": "How does Newton's third law apply to a building's foundation during an earthquake?", "back": "The building pushes down on its foundation, and the foundation pushes back up (action-reaction). If the ground shifts horizontally, the friction between the foundation and the soil determines how much of the ground's motion is transmitted to the building."}, {"front": "From a chemistry perspective, why is steel a preferred material for earthquake-resistant buildings?", "back": "Steel, an alloy with a metallic bonding structure, is ductile, meaning it can bend and stretch without breaking. This allows it to deform elastically (or plastically) under seismic forces, rather than shattering like brittle materials."}, {"front": "Why are unreinforced concrete and brick structures particularly vulnerable to earthquake damage?", "back": "These materials have ionic or covalent bonding, making them brittle. While strong in compression, they crack and crumble when twisted or bent by the side-to-side shaking of an earthquake, leading to catastrophic failure."}, {"front": "Explain how reinforced concrete improves earthquake resistance compared to unreinforced concrete.", "back": "Reinforced concrete combines concrete (strong in compression) with embedded steel bars (rebar, which handles tension and bending). This combination leverages the complementary structures of both materials to resist a wider range of seismic forces."}, {"front": "From a life science perspective, what is the ultimate purpose of earthquake engineering, and what are specific vulnerabilities of the human body?", "back": "The ultimate purpose is to protect human life. Organs like the brain and spinal cord are particularly vulnerable to sudden impacts and violent shaking, leading to injuries such as concussions or ruptured organs, even without building collapse."}, {"front": "How does an understanding of human biological vulnerabilities influence earthquake engineering safety standards and building codes?", "back": "Engineers set safety standards by specifying maximum allowable accelerations and inter-story drift (how much one floor can shift relative to another), based on what the human body can tolerate to prevent severe injuries."}, {"front": "Why is a cross-branch analysis, involving Earth Science, Physics, Chemistry, and Life Science, essential for designing earthquake-resistant buildings?", "back": "No single branch can solve the problem alone: Earth Science explains where/why earthquakes occur, Physics quantifies the forces, Chemistry determines suitable materials, and Life Science defines the biological constraints for safety."}, {"front": "How does the tuned mass damper in Taipei 101 work to stabilize the skyscraper during winds or earthquakes?", "back": "The 730-ton steel pendulum swings in the opposite direction of forces (wind or seismic) pushing the building, reducing the building's overall motion through principles like Newton's third law and conservation of momentum."}, {"front": "Despite a much higher magnitude (8.8 vs. 7.0), why was the death toll significantly lower in the 2010 Chile earthquake compared to the 2010 Haiti earthquake?", "back": "A major reason was that Chile's buildings were designed to withstand earthquakes, thanks to stringent building codes and advanced engineering, unlike many structures in Haiti."}, {"front": "In seismology, what is the 'focus' of an earthquake?", "back": "The focus is the point within the Earth's crust where the rupture first occurs and seismic waves originate."}, {"front": "Imagine designing a hospital in an earthquake zone. Using Earth Science principles, what is one critical design decision you would make?", "back": "I would use detailed seismic hazard maps and local fault data to carefully site the hospital, avoiding active fault lines and areas prone to liquefaction or landslides to ensure a stable foundation."}, {"front": "Imagine designing a hospital in an earthquake zone. Using Physics principles, what is one critical design decision you would make?", "back": "I would implement base isolation systems (like rubber-and-steel pads) to decouple the building from ground motion, reducing the acceleration transmitted to the structure and protecting sensitive equipment and patients."}, {"front": "Imagine designing a hospital in an earthquake zone. Using Chemistry principles, what is one critical design decision you would make?", "back": "I would specify the use of ductile materials like high-grade steel for the primary structural frame and reinforced concrete for load-bearing elements, ensuring the building can deform without shattering during seismic events."}, {"front": "Imagine designing a hospital in an earthquake zone. Using Life Science principles, what is one critical design decision you would make?", "back": "I would design for minimal inter-story drift and maximum allowable acceleration within the building, adhering to safety standards based on human tolerance to protect patients, staff, and delicate medical equipment from injury or damage caused by excessive motion."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

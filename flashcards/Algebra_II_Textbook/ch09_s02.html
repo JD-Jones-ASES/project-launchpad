@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 9, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the geometric definition of a parabola?", "back": "A parabola is the set of all points $(x,y)$ in a plane that are equidistant from a fixed point (the focus) and a fixed line (the directrix)."}, {"front": "Define the key components of a parabola according to its conic definition.", "back": "The **focus** is a fixed point. The **directrix** is a fixed line. The **vertex** is the midpoint between the focus and the directrix. The **axis of symmetry** passes through the vertex and the focus."}, {"front": "What is the vertex form equation for a vertical parabola?", "back": "$y = a(x - h)^2 + k$, where $(h, k)$ is the vertex and $a \\neq 0$."}, {"front": "How does the value of 'a' determine the opening direction of a vertical parabola?", "back": "If $a > 0$, the parabola opens upward. If $a < 0$, the parabola opens downward."}, {"front": "For a vertical parabola in vertex form $y = a(x - h)^2 + k$, what are the coordinates of the focus?", "back": "Focus: $(h,\\; k + \\frac{1}{4a})$."}, {"front": "For a vertical parabola in vertex form $y = a(x - h)^2 + k$, what is the equation of the directrix?", "back": "Directrix: $y = k - \\frac{1}{4a}$."}, {"front": "Given the equation $y = 2(x - 1)^2 + 3$, what are its vertex, focus, and directrix?", "back": "Vertex: $(1, 3)$. Focus: $(1, \\frac{25}{8})$. Directrix: $y = \\frac{23}{8}$."}, {"front": "Where is the focus always located relative to the parabola and its vertex?", "back": "The focus always lies inside the parabola, on its axis of symmetry. For a vertical parabola, it's above the vertex if $a>0$ and below if $a<0$."}, {"front": "What is the vertex form equation for a horizontal parabola?", "back": "$x = a(y - k)^2 + h$, where $(h, k)$ is the vertex and $a \\neq 0$."}, {"front": "How does the value of 'a' determine the opening direction of a horizontal parabola?", "back": "If $a > 0$, the parabola opens to the right. If $a < 0$, the parabola opens to the left."}, {"front": "For a horizontal parabola in vertex form $x = a(y - k)^2 + h$, what are the coordinates of the focus?", "back": "Focus: $(h + \\frac{1}{4a},\\; k)$."}, {"front": "For a horizontal parabola in vertex form $x = a(y - k)^2 + h$, what is the equation of the directrix?", "back": "Directrix: $x = h - \\frac{1}{4a}$."}, {"front": "Why is a horizontal parabola not considered a function of $x$?", "back": "A horizontal parabola fails the vertical line test, meaning for some $x$-values, there are two corresponding $y$-values. It is, however, a function of $y$."}, {"front": "Given the equation $x = -\\frac{1}{2}(y + 3)^2 + 4$, what are its vertex, focus, and directrix?", "back": "Vertex: $(4, -3)$. Focus: $(\\frac{7}{2}, -3)$. Directrix: $x = \\frac{9}{2}$."}, {"front": "What type of general second-degree equation always represents a parabola?", "back": "A general second-degree equation containing only one squared variable (e.g., $Ax^2 + Dx + Ey + F = 0$ or $Ay^2 + Dx + Ey + F = 0$, where coefficients for the linear terms of the other variable are non-zero)."}, {"front": "How do you convert a parabola's equation from general form to vertex form?", "back": "Complete the square on the squared variable (either $x$ or $y$). This allows you to identify $a, h, k$ for the vertex form."}, {"front": "Convert $y = x^2 - 8x + 11$ to vertex form and identify its focus and directrix.", "back": "Vertex form: $y = (x - 4)^2 - 5$. Vertex: $(4, -5)$. Focus: $(4, -\\frac{19}{4})$. Directrix: $y = -\\frac{21}{4}$."}, {"front": "Convert $x = y^2 + 6y + 5$ to vertex form and identify its vertex, focus, and directrix.", "back": "Vertex form: $x = (y + 3)^2 - 4$. Vertex: $(-4, -3)$. Focus: $(-\\frac{15}{4}, -3)$. Directrix: $x = -\\frac{17}{4}$."}, {"front": "Describe the \"Reflective Property of a Parabola.\"", "back": "Any ray parallel to the axis of symmetry reflects off the parabolic surface and passes through the focus. Conversely, any ray emanating from the focus reflects parallel to the axis."}, {"front": "List some real-world applications that utilize the reflective property of parabolas.", "back": "Satellite dishes (collect parallel signals at the focus), flashlights and car headlights (source at focus produces a parallel beam), telescope mirrors, solar collectors."}, {"front": "In a satellite dish design problem, if the dish is parabolic with a diameter of 6 ft and a depth of 1.5 ft, and the vertex is placed at the origin opening upward, where should the receiver be placed?", "back": "The receiver should be placed at the focus. By substituting a point on the rim (e.g., $(3, 1.5)$) into $y = ax^2$, we find $a = \\frac{1}{6}$. The focus is at $y = \\frac{1}{4a} = \\frac{1}{4(\\frac{1}{6})} = \\frac{6}{4} = 1.5$ ft above the vertex."}, {"front": "What is the main difference in the equation structure between a vertical parabola and a horizontal parabola in vertex form?", "back": "A vertical parabola has the $x$ term squared ($y = a(x-h)^2 + k$), while a horizontal parabola has the $y$ term squared ($x = a(y-k)^2 + h$)."}, {"front": "What is the significance of the 'a' value in both vertical and horizontal parabola equations, besides determining opening direction?", "back": "The magnitude of 'a' (specifically $|a|$) affects how wide or narrow the parabola is; a larger $|a|$ means a narrower parabola. It also dictates the distance from the vertex to the focus and directrix (which is $1/(4|a|)$)."}, {"front": "If a parabola's equation is $y = 3(x + 2)^2 - 1$, what are its vertex, focus, and directrix?", "back": "Vertex: $(-2, -1)$. Focus: $(-2, -1 + \\frac{1}{12}) = (-2, -\\frac{11}{12})$. Directrix: $y = -1 - \\frac{1}{12} = -\\frac{13}{12}$."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

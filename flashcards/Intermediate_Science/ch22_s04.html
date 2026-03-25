@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 22, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a star?", "back": "A star is a massive, luminous sphere of plasma (hot, ionized gas) held together by gravity, powered by nuclear fusion in its core."}, {"front": "Where and how do stars begin their lives?", "back": "Stars are born inside a nebula, which is a cloud of gas (mostly hydrogen) and dust. Gravity causes a region of the cloud to collapse and heat up, forming a dense, hot core called a protostar."}, {"front": "Describe the 'main sequence' phase of a star's life.", "back": "When a protostar's core temperature reaches about 10 million K, hydrogen nuclei begin fusing into helium nuclei, releasing enormous amounts of energy. The star then enters the main sequence phase, where it spends most of its life (e.g., our Sun for ~10 billion years)."}, {"front": "What happens after a star exhausts its core hydrogen and leaves the main sequence?", "back": "The star's core contracts and heats up further, while its outer layers expand and cool, turning the star red. A star like the Sun becomes a red giant; a much more massive star becomes a red supergiant."}, {"front": "What are the final stages for a low-to-medium mass star (up to about 8 solar masses)?", "back": "Its outer layers drift away as a planetary nebula (a shell of glowing gas), leaving behind a dense, Earth-sized remnant called a white dwarf. White dwarfs slowly cool and fade over billions of years."}, {"front": "How does a high-mass star (above about 8 solar masses) end its life?", "back": "Its core collapses violently, triggering a supernova—a spectacular explosion. The remnant core is crushed into either a neutron star or, if the mass is great enough, a black hole."}, {"front": "What is a supernova?", "back": "A supernova is an incredibly powerful explosion caused by the violent collapse of a high-mass star's core, so bright it can outshine an entire galaxy for weeks."}, {"front": "Distinguish between a white dwarf, a neutron star, and a black hole.", "back": "A white dwarf is the dense, Earth-sized remnant of a low-to-medium mass star. A neutron star is an incredibly dense (about 20 km diameter) remnant of a high-mass star's supernova. A black hole is a region where gravity is so strong that not even light can escape, formed from the collapse of a very massive star."}, {"front": "How do stars act as the 'universe's element factories'?", "back": "During their lives, stars fuse lighter elements (hydrogen to helium, then helium to carbon, etc., up to iron). Elements heavier than iron are created during supernovae. All atoms heavier than hydrogen and helium in our bodies were forged in stars."}, {"front": "What is the Hertzsprung-Russell (H-R) diagram used for?", "back": "The H-R diagram is a graph that plots a star's luminosity (brightness) against its surface temperature, used by astronomers to classify stars and determine their life stage."}, {"front": "Where do most stars lie on the H-R diagram, and what does this region signify?", "back": "About 90% of all stars lie on the main sequence, which runs diagonally from hot, luminous blue stars (upper left) to cool, dim red stars (lower right). Stars on the main sequence are in their hydrogen-fusing phase."}, {"front": "Where are red giants/supergiants and white dwarfs located on the H-R diagram?", "back": "Red giants and supergiants occupy the upper right (cool but very luminous due to enormous size). White dwarfs occupy the lower left (hot but dim due to tiny size)."}, {"front": "Define a light-year and explain its significance.", "back": "A light-year is the distance that light travels in one year (approximately 9.46 trillion kilometers). It's used to measure vast distances between stars and galaxies, implying that when we look at distant objects, we are literally looking back in time."}, {"front": "If the nearest star system, Alpha Centauri, is about 4.37 light-years away, what does that mean for our observations?", "back": "It means the light we see from Alpha Centauri tonight left that star about 4.37 years ago, so we are seeing the star as it appeared in the past."}, {"front": "Why is scientific notation commonly used for astronomical distances?", "back": "Astronomical distances involve numbers so large (e.g., trillions of kilometers) that writing them in standard form is impractical. Scientific notation expresses these numbers concisely as a coefficient between 1 and 10 multiplied by a power of 10."}, {"front": "What is a galaxy?", "back": "A galaxy is a massive collection of stars, gas, dust, and dark matter bound together by gravity. Galaxies contain billions to trillions of stars, like our Milky Way."}, {"front": "What are the three main types of galaxies classified by shape?", "back": "The three main types are Spiral galaxies (like the Milky Way, with a central bulge and arms), Elliptical galaxies (ranging from nearly spherical to elongated ovals, mostly older stars), and Irregular galaxies (no definite shape, often rich in gas and young stars)."}, {"front": "What is the Big Bang theory?", "back": "The Big Bang is the scientific theory that the universe began as an extremely hot, dense point approximately 13.8 billion years ago and has been expanding and cooling ever since."}, {"front": "What are the main lines of evidence supporting the Big Bang theory?", "back": "Key evidence includes the expansion of the universe (Hubble's law), the cosmic microwave background radiation, and the observed abundance of light elements (hydrogen and helium)."}, {"front": "What is an exoplanet, and what is a 'habitable zone' in this context?", "back": "An exoplanet is a planet orbiting a star other than our Sun. A habitable zone is the range of distances from a star where liquid water could exist on a planet's surface, considered crucial for life."}, {"front": "How did Vera Rubin's observations provide evidence for dark matter?", "back": "Rubin observed that stars at the edges of spiral galaxies orbit just as fast as those near the center, which defies normal gravitational laws for visible matter. This implied galaxies contain much more unseen mass—dark matter."}, {"front": "What is dark matter?", "back": "Dark matter is a mysterious, invisible substance that exerts gravitational pull but does not emit or absorb light. It accounts for roughly 85% of the matter in the universe."}, {"front": "How does a star's surface temperature generally relate to its color?", "back": "Hotter stars tend to appear blue or white, while cooler stars tend to appear red or orange."}, {"front": "Why are textbook diagrams of the solar system usually not shown to scale for distances?", "back": "The distances between planets, especially the outer planets, are so vast compared to the inner planets that if shown to scale, the inner planets would be impossibly tiny or invisible on a typical page."}, {"front": "Our Sun is considered a medium-sized star. What phase of its life cycle is it currently in, and what is its future?", "back": "The Sun is currently a main sequence star. In about 5 billion years, it will exhaust its core hydrogen and expand to become a red giant, eventually shedding its outer layers to form a planetary nebula and leaving behind a white dwarf."}, {"front": "What is the significance of Hubble's Law?", "back": "Hubble's Law states that distant galaxies are moving away from us, and the farther away a galaxy is, the faster it is receding. This observation is key evidence for the expansion of the universe and supports the Big Bang theory."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

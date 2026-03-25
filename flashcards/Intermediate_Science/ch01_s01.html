@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 1, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who was Robert Hooke and what significant discovery did he make in 1665?", "back": "Robert Hooke was an English scientist who, in 1665, observed tiny, repeating, box-like compartments in a thin slice of cork under a simple microscope. He named these compartments 'cells' because they reminded him of monks' rooms."}, {"front": "What did Robert Hooke's 'cells' in cork actually represent?", "back": "Hooke's 'cells' were actually the dead, air-filled cell walls of plant cells that had long since lost their living contents."}, {"front": "Define 'cell' according to the provided text.", "back": "A cell is the basic structural and functional unit of all living organisms. Cells carry out the chemical reactions that sustain life and contain the genetic information needed to reproduce."}, {"front": "Who was Antonie van Leeuwenhoek and what were his key contributions to biology in the 1670s?", "back": "Antonie van Leeuwenhoek was a Dutch cloth merchant who discovered a teeming universe of living creatures (like bacteria and protists, which he called 'animalcules') using his powerful, self-ground lenses. He is often called the 'Father of Microbiology.'"}, {"front": "How did van Leeuwenhoek's observations differ from Hooke's?", "back": "Hooke observed dead plant cell walls, while van Leeuwenhoek observed living microorganisms, revealing the living world inside cells."}, {"front": "What is a microscope?", "back": "A microscope is an instrument that uses lenses or beams of electrons to produce magnified images of objects too small to see with the unaided eye."}, {"front": "Who first proposed that all plants are made of cells, and in what year?", "back": "Botanist Matthias Schleiden concluded that all plants are made of cells in 1838."}, {"front": "Who first proposed that all animals are made of cells, and in what year?", "back": "Zoologist Theodor Schwann reached the same conclusion about animals in 1839."}, {"front": "What joint conclusion did Schleiden and Schwann reach regarding living organisms?", "back": "Together, Schleiden and Schwann proposed that every living organism is composed of one or more cells, a revolutionary unifying principle for all life."}, {"front": "What critical insight did Rudolf Virchow add to the developing cell theory in 1855?", "back": "Rudolf Virchow added the critical insight that new cells can only arise from the division of existing cells. He summarized this with the Latin phrase 'Omnis cellula e cellula' ('Every cell from a cell')."}, {"front": "What did Virchow's principle 'Omnis cellula e cellula' explain about living organisms?", "back": "Virchow's principle explained how organisms grow, how wounds heal, and how life continues from one generation to the next, replacing the old idea of 'spontaneous generation.'"}, {"front": "State the three principles of the Cell Theory.", "back": "1. All living things are made of one or more cells. 2. The cell is the basic unit of structure and function in living things. 3. All cells arise from pre-existing cells."}, {"front": "How did the Cell Theory challenge the outdated idea of 'spontaneous generation'?", "back": "The third principle of cell theory, stating that 'All cells arise from pre-existing cells,' directly contradicted the idea of spontaneous generation, which held that living things could appear from nonliving matter."}, {"front": "What are the basic components and mechanism of a light microscope?", "back": "A light microscope passes visible light through a thin specimen and uses glass lenses (objective and eyepiece) to magnify the image."}, {"front": "What is the main limitation of a light microscope, and what causes it?", "back": "The main limitation of a light microscope is its resolution (the ability to distinguish two close objects), which is limited to about 200 nm because of the wavelength of visible light."}, {"front": "For what types of biological observations are light microscopes ideal?", "back": "Light microscopes are ideal for observing living cells, watching cell division in real time, and examining stained tissue samples."}, {"front": "How does an electron microscope differ fundamentally from a light microscope?", "back": "An electron microscope uses a beam of electrons instead of visible light, allowing for far greater resolution and magnification due to the much shorter wavelength of electrons."}, {"front": "What is a significant drawback of using an electron microscope for studying biological samples?", "back": "Specimens for electron microscopy must be placed in a vacuum and are usually killed and chemically preserved, meaning living processes cannot be observed in real-time."}, {"front": "Describe the function of a Transmission Electron Microscope (TEM).", "back": "A TEM sends electrons through an ultra-thin specimen, producing detailed images of internal cell structures, such as organelles like the nucleus or mitochondria."}, {"front": "Describe the function of a Scanning Electron Microscope (SEM).", "back": "A SEM bounces electrons off the surface of a specimen coated with metal, creating dramatic three-dimensional images of cell surfaces or other external features."}, {"front": "Define 'organelle' and give an example.", "back": "An organelle is a specialized structure within a cell that performs a specific function, much like an organ performs a specific function in the body. Examples include the nucleus, mitochondria, and ribosomes."}, {"front": "Why did it take over 160 years from the first observation of cells to the formal statement of cell theory?", "back": "This delay was due to several factors: early microscopes had limited resolution, communication between scientists was slow, there was no established framework for generalizing individual observations into a universal principle, and the widely accepted idea of spontaneous generation had to be overturned."}, {"front": "Why do biologists use both light microscopes and electron microscopes, rather than just one type?", "back": "Biologists use both because each has unique advantages. Light microscopes allow observation of living cells and dynamic processes, while electron microscopes provide much higher resolution and magnification for detailed internal and surface structures, even though specimens must be dead."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

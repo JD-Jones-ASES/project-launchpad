@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How have scientists been able to map Earth's interior in detail without direct observation?", "back": "Scientists use seismic waves, generated by earthquakes, to study how vibrations travel through Earth, which reveals the structure and properties of its hidden layers."}, {"front": "What is the definition of Earth's crust?", "back": "The thin, rocky outermost layer of Earth, ranging from about 5 km thick under oceans to 70 km thick under mountain ranges on the continents."}, {"front": "Compare the key characteristics of oceanic crust and continental crust.", "back": "Oceanic crust is thinner (5-10 km), denser (3.0 g/cm³), and composed mainly of basalt. Continental crust is thicker (30-70 km), less dense (2.7 g/cm³), and composed primarily of granite."}, {"front": "Why do continents 'float' higher than ocean floors?", "back": "Continental crust is significantly less dense than oceanic crust, causing continents to sit higher on the mantle, similar to how a lighter object floats higher in water."}, {"front": "Define the mantle and describe its general composition and thickness.", "back": "The mantle is the thick layer of hot, mostly solid rock between Earth's crust and core, extending from about 30 km to 2,900 km below the surface. It is composed of silicate rocks rich in iron and magnesium and makes up about 67% of Earth's total mass."}, {"front": "Describe the physical behavior of the mantle rock.", "back": "Although mostly solid, the mantle rock behaves plastically over long timescales due to extreme heat. It can flow slowly, measured in centimeters per year, much like very thick liquid or silly putty left on a table."}, {"front": "What is the lithosphere, and what is its significance in plate tectonics?", "back": "The lithosphere is the rigid outer layer of Earth, composed of the crust and the uppermost part of the mantle. It is this layer that breaks into tectonic plates, whose movement is central to plate tectonics."}, {"front": "What is the asthenosphere and how does it relate to plate movement?", "back": "The asthenosphere is a partially molten, slowly flowing zone directly beneath the lithosphere. Its ability to flow allows the rigid tectonic plates of the lithosphere above it to move across Earth's surface."}, {"front": "What are the primary elements that make up Earth's core?", "back": "Earth's core is composed primarily of iron and nickel."}, {"front": "Describe the outer core, including its state of matter and a key process that occurs there.", "back": "The outer core is a liquid layer of iron and nickel, extending from 2,900 km to 5,150 km depth. The flowing motions of this electrically conducting liquid metal generate Earth's magnetic field."}, {"front": "Describe the inner core, including its state of matter and depth.", "back": "The inner core is a solid sphere of iron and nickel, located at the very center of the planet from 5,150 km depth to 6,371 km. Despite extreme temperatures, it remains solid."}, {"front": "Why is the inner core solid, even though its temperature may exceed 5,000°C?", "back": "The inner core is solid due to immense pressure. The weight of all the overlying rock and metal compresses the iron and nickel so intensely that their atoms are locked in place, unable to flow even at extreme temperatures."}, {"front": "What is a seismic wave?", "back": "A seismic wave is a wave of energy that travels through Earth's interior or along its surface, typically generated by earthquakes, volcanic eruptions, or human-made explosions."}, {"front": "Distinguish between P-waves and S-waves based on their travel capabilities and speed.", "back": "P-waves (primary waves) are compressional, travel through solids, liquids, and gases, and are the fastest seismic waves. S-waves (secondary waves) are shear waves, travel only through solids (cannot pass through liquids), and are slower than P-waves."}, {"front": "What is the S-wave shadow zone, and what does it tell us about Earth's interior?", "back": "The S-wave shadow zone is a large region on Earth (beyond 104° from an earthquake's epicenter) where no S-waves are detected. Its existence is the strongest evidence that Earth's outer core is liquid, as S-waves cannot travel through liquids."}, {"front": "How is the P-wave shadow zone formed?", "back": "The P-wave shadow zone (a band between 104° and 140° from an epicenter) occurs because P-waves refract (bend) when they pass from the mantle into the much denser liquid outer core, redirecting them away from this specific area."}, {"front": "What major discovery did Inge Lehmann make regarding Earth's core?", "back": "Inge Lehmann discovered the existence of Earth's solid inner core in 1936. She observed faint P-waves in the P-wave shadow zone and theorized they were refracting and reflecting off a solid inner region of the core."}, {"front": "List three types of evidence, besides seismic waves, that support Earth's layered structure.", "back": "Other evidence includes: the iron-nickel composition of meteorites, Earth's overall high average density compared to surface rocks, the existence of Earth's global magnetic field, and Earth's moment of inertia (mass concentrated at the center)."}, {"front": "How do meteorites provide evidence for the composition of Earth's core?", "back": "Iron meteorites are fragments of ancient asteroids with an iron-nickel composition. Since Earth and asteroids formed from the same material, this composition matches scientists' predictions for Earth's iron-nickel core."}, {"front": "How does Earth's magnetic field support the idea of a liquid core?", "back": "The existence of a global magnetic field requires a layer of electrically conducting liquid metal inside the planet, which is consistent with the flowing, liquid iron and nickel of the outer core."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

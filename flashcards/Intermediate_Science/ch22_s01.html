@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 22, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What were common early beliefs about the Sun's motion relative to Earth?", "back": "For thousands of years, most people believed the Sun moved around a stationary Earth."}, {"front": "What are the two primary motions of Earth that influence our sense of time and seasons?", "back": "Earth's rotation (spinning on its axis) and revolution (orbiting the Sun)."}, {"front": "Define 'rotation' in the context of a planet's motion.", "back": "Rotation is the spinning of a planet on its axis."}, {"front": "How long does it take Earth to complete one full rotation, and what phenomenon does it produce?", "back": "Earth completes one full rotation in approximately 24 hours, producing the cycle of day and night."}, {"front": "Describe Earth's axis of rotation.", "back": "Earth's axis is an imaginary line running from the North Pole to the South Pole through the planet's center."}, {"front": "What is the 'terminator' in relation to Earth's day and night cycle?", "back": "The terminator is the boundary between day and night on Earth, which is a gradual transition (not a sharp line) producing dawn and dusk."}, {"front": "Why do we not feel Earth's rotation, even though it moves at high speed at the equator?", "back": "We don't feel the motion because everything around us – the atmosphere, oceans, and ground – moves with us, consistent with Newton's first law."}, {"front": "Define 'revolution' in the context of celestial bodies.", "back": "Revolution is the orbital motion of one body around another."}, {"front": "How long does it take Earth to complete one full revolution around the Sun, and what does this duration define?", "back": "Earth completes one revolution around the Sun in approximately 365.25 days, defining one year."}, {"front": "Why do we add a 'leap day' to the calendar every four years?", "back": "A leap day is added every four years to account for the extra 0.25 day in Earth's revolution period (365.25 days)."}, {"front": "Describe the shape of Earth's orbit around the Sun.", "back": "Earth's orbit is not a perfect circle but a slightly elongated ellipse."}, {"front": "When is Earth closest to the Sun (perihelion) and farthest (aphelion) in its orbit?", "back": "Earth is closest to the Sun (perihelion) in January and farthest (aphelion) in July."}, {"front": "Does Earth's varying distance from the Sun cause the seasons? Explain.", "back": "No, Earth's distance from the Sun does not cause the seasons. If it did, the Northern Hemisphere would have summer in January (when Earth is closest)."}, {"front": "What is the approximate tilt angle of Earth's axis relative to the plane of its orbit?", "back": "Earth's axis is tilted at approximately 23.5 degrees relative to the plane of its orbit."}, {"front": "How does Earth's axial tilt create the seasons?", "back": "The tilt causes different parts of Earth to receive varying amounts of direct sunlight at different times of the year as Earth orbits the Sun."}, {"front": "Explain why the Northern Hemisphere experiences summer when its North Pole is tilted toward the Sun.", "back": "When tilted toward the Sun, sunlight strikes the Northern Hemisphere at a more direct angle, days are longer, the Sun is higher, and more energy per square meter leads to higher temperatures."}, {"front": "What happens in the Southern Hemisphere when the Northern Hemisphere is experiencing winter?", "back": "When the Northern Hemisphere has winter, the North Pole is tilted away from the Sun, meaning the Southern Hemisphere is tilted towards the Sun and experiences summer."}, {"front": "Define 'solstice' and name the two annual solstices.", "back": "A solstice is either of the two days each year when the Sun reaches its highest or lowest point in the sky at noon. These are the summer solstice and winter solstice."}, {"front": "What are the approximate dates and characteristics of the summer and winter solstices in the Northern Hemisphere?", "back": "The summer solstice (around June 21) is the longest day, and the winter solstice (around December 21) is the shortest day."}, {"front": "Define 'equinox' and name the two annual equinoxes.", "back": "An equinox is either of the two days each year when day and night are approximately equal in length everywhere on Earth. These are the vernal (spring) equinox and autumnal (fall) equinox."}, {"front": "How does the angle at which sunlight strikes Earth's surface affect the intensity of solar energy received?", "back": "When sunlight strikes at a direct angle (close to 90°), energy is concentrated over a small area. When it strikes at an oblique angle, the same energy is spread over a larger area, reducing intensity."}, {"front": "How many degrees of longitude does Earth rotate through in one hour?", "back": "Earth rotates 15 degrees of longitude per hour (360 degrees / 24 hours)."}, {"front": "How many time zones divide the world, and what is the approximate longitudinal width of each?", "back": "The world is divided into 24 time zones, each covering approximately 15 degrees of longitude."}, {"front": "What is the International Date Line and its significance?", "back": "The International Date Line is located roughly at 180° longitude in the Pacific Ocean, where the calendar date changes by one day."}, {"front": "If Earth's axis were not tilted at all (0° tilt), what would happen to the seasons?", "back": "If Earth's axis had no tilt, there would be no seasons; every location would receive the same amount of sunlight every day of the year."}, {"front": "If Earth's axis had no tilt, would the equator still be warmer than the poles? Explain.", "back": "Yes, the equator would still be warmer than the poles because sunlight would always strike the equator at a more direct angle (closer to 90°) than the poles, regardless of tilt."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

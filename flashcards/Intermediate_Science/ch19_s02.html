@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 19, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a sound wave?", "back": "A longitudinal wave formed by compressions and rarefactions that travel through a medium, interpreted by the brain as sound."}, {"front": "Why is sound considered a “mechanical wave”?", "back": "Because it requires a medium (like air, water, or solids) to travel; it cannot propagate through a vacuum."}, {"front": "Explain how sound travels through a medium at a molecular level.", "back": "A vibrating object creates compressions (molecules pushed together) and rarefactions (molecules spread apart). These disturbances propagate outward as molecules push on their neighbors, while individual molecules only vibrate tiny distances."}, {"front": "Can sound travel through outer space? Why or why not?", "back": "No, sound cannot travel through outer space because it is a vacuum. Sound requires a medium to transmit its vibrations."}, {"front": "What two factors primarily determine the speed of sound?", "back": "The medium through which it travels and the temperature of that medium."}, {"front": "How does the density and stiffness of a medium affect the speed of sound?", "back": "Sound travels faster through denser, stiffer materials because their particles are closer together and transmit compressions more efficiently."}, {"front": "What is the approximate speed of sound in air at 20°C?", "back": "Approximately 343 meters per second (m/s)."}, {"front": "Why do you see a lightning flash before you hear the thunder?", "back": "Light travels nearly a million times faster than sound. Light arrives almost instantaneously, while sound takes several seconds to reach you."}, {"front": "You see a lightning flash and count 9 seconds before hearing the thunder. Estimate how far away the lightning struck, using the speed of sound in air (343 m/s).", "back": "Distance = speed × time = 343 m/s × 9 s = 3087 m, or approximately 3.1 km."}, {"front": "Define \"pitch\" in the context of sound.", "back": "Pitch is the perceived highness or lowness of a sound, determined by the frequency of the sound wave."}, {"front": "How is frequency related to pitch?", "back": "A higher frequency produces a higher pitch, while a lower frequency produces a lower pitch."}, {"front": "What is the approximate range of frequencies that the human ear can detect?", "back": "From about 20 Hz to 20,000 Hz."}, {"front": "Define infrasound and give an example of its use.", "back": "Infrasound refers to frequencies below 20 Hz. Elephants and whales use infrasound to communicate over long distances."}, {"front": "Define ultrasound and give an example of its use.", "back": "Ultrasound refers to frequencies above 20,000 Hz. It is used in medical imaging and by animals like bats and dolphins for echolocation."}, {"front": "What physical property of a sound wave is related to its \"loudness\"?", "back": "Loudness is related to the amplitude of the sound wave, specifically the maximum pressure variation from normal."}, {"front": "How does the amplitude of a sound wave relate to its energy?", "back": "A louder sound has a greater amplitude, which means it carries more energy."}, {"front": "What scale is used to measure sound intensity, and what kind of scale is it?", "back": "The decibel (dB) scale, which is a logarithmic scale."}, {"front": "On the decibel scale, what does an increase of 10 dB represent?", "back": "Every increase of 10 dB represents a tenfold increase in sound intensity."}, {"front": "Why is it important to wear ear protection in loud environments?", "back": "Prolonged exposure to sounds above 85 dB can cause permanent hearing damage, which cannot be restored."}, {"front": "Define the \"Doppler effect.\"", "back": "The change in the perceived frequency of a wave when the source and the observer are moving relative to each other."}, {"front": "How does the Doppler effect manifest when a sound source is approaching an observer?", "back": "As the source approaches, the observed frequency increases, resulting in a higher perceived pitch."}, {"front": "How does the Doppler effect manifest when a sound source is moving away from an observer?", "back": "As the source moves away, the observed frequency decreases, resulting in a lower perceived pitch."}, {"front": "Is the Doppler effect limited to sound waves? Give an example outside of sound.", "back": "No, it also applies to light waves. For example, light from galaxies moving away from Earth is \"redshifted\" (shifted toward longer wavelengths), indicating an expanding universe."}, {"front": "Define \"resonance.\"", "back": "The dramatic increase in amplitude that occurs when a vibrating force is applied at an object's natural frequency."}, {"front": "How do musical instruments like a guitar use resonance?", "back": "When a guitar string is plucked, the hollow body of the guitar resonates at the string's frequency to amplify the sound, making it louder."}, {"front": "How does a flute player change the pitch of the notes produced?", "back": "By opening and closing holes, which changes the effective length of the resonating air column. Shorter columns produce higher pitches, and longer columns produce lower pitches."}, {"front": "What is medical ultrasound, and what frequencies does it use?", "back": "Medical ultrasound uses sound waves with frequencies above 20,000 Hz (beyond human hearing) to create images of internal body structures."}, {"front": "How does medical ultrasound create images?", "back": "A probe sends ultrasound pulses into the body. When waves hit boundaries between different tissues, some energy reflects back as echoes. A computer uses the time delay and intensity of these echoes to construct an image."}, {"front": "What is a key safety advantage of medical ultrasound compared to other imaging techniques?", "back": "It does not use ionizing radiation, making it one of the safest imaging techniques available, particularly for monitoring fetal development."}, {"front": "Distinguish between the Doppler effect and a change in loudness when a siren approaches.", "back": "The Doppler effect refers specifically to the change in pitch (perceived frequency) due to relative motion. A change in loudness is due to the varying intensity of the sound as the source's proximity changes."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

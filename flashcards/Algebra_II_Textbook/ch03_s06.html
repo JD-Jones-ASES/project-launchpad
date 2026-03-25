@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 3, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What defines a quadratic function?", "back": "A polynomial function of degree two, represented as f(x) = ax^2+bx+c where a ≠ 0."}, {"front": "What is the graph of a quadratic function always called?", "back": "A parabola."}, {"front": "What are the three key features required to understand the graph of a quadratic function?", "back": "The vertex, the axis of symmetry, and the intercepts (x and y)."}, {"front": "What is the standard form of a quadratic function?", "back": "f(x) = ax^2+bx+c, where a ≠ 0."}, {"front": "How does the value of 'a' in standard form f(x) = ax^2+bx+c determine the opening direction of a parabola?", "back": "If a > 0, the parabola opens upward. If a < 0, it opens downward."}, {"front": "What is the vertex form of a quadratic function?", "back": "f(x) = a(x-h)^2+k."}, {"front": "In vertex form f(x) = a(x-h)^2+k, what are the coordinates of the vertex?", "back": "The vertex is the point (h,k)."}, {"front": "In vertex form f(x) = a(x-h)^2+k, what is the equation of the axis of symmetry?", "back": "The axis of symmetry is the vertical line x=h."}, {"front": "How does the value of 'a' in vertex form f(x) = a(x-h)^2+k determine if the vertex is a minimum or maximum point?", "back": "If a > 0, the vertex is a minimum. If a < 0, the vertex is a maximum."}, {"front": "Describe the symmetry property of a parabola with respect to its axis of symmetry.", "back": "For every point (h+d, y) on the graph, its mirror point (h-d, y) is also on the graph."}, {"front": "What algebraic technique is used to convert a quadratic function from standard form to vertex form?", "back": "Completing the square."}, {"front": "When converting f(x)=x^2-6x+5 to vertex form, what is the first step in completing the square?", "back": "Take half of the coefficient of the x term (-6), which is -3, then square it ((-3)^2=9). Add and subtract 9."}, {"front": "When converting f(x)=2x^2+8x-3 to vertex form, what is the first step in completing the square?", "back": "Factor out the coefficient a=2 from the first two terms: f(x) = 2(x^2+4x)-3."}, {"front": "What is the shortcut formula for finding the x-coordinate of the vertex of a parabola from its standard form f(x)=ax^2+bx+c?", "back": "x_vertex = -b/(2a)."}, {"front": "How do you find the y-coordinate of the vertex using the shortcut formula after finding the x-coordinate from standard form?", "back": "Substitute the x-coordinate of the vertex back into the original function: y_vertex = f(x_vertex)."}, {"front": "For f(x)=a(x-h)^2+k, how do you find the y-intercept?", "back": "Substitute x=0 into the function to find f(0). The y-intercept is (0, f(0))."}, {"front": "For f(x)=a(x-h)^2+k, how do you find the x-intercepts (zeros)?", "back": "Set f(x)=0 and solve the resulting quadratic equation for x. There may be 0, 1, or 2 real values."}, {"front": "How does the absolute value of 'a' in f(x)=a(x-h)^2+k affect the steepness or width of the parabola?", "back": "If |a|>1, the parabola is narrower. If |a|<1, the parabola is wider, relative to the parent function y=x^2."}, {"front": "If a parabola has vertex (h,k) and passes through a point (x₁, y₁), how do you find the value of 'a' for its vertex form equation?", "back": "Substitute the vertex (h,k) into f(x)=a(x-h)^2+k, then substitute the coordinates of the given point (x₁, y₁) and solve for 'a'."}, {"front": "What is the connection between the x-intercepts of f(x)=ax^2+bx+c and the solutions of ax^2+bx+c=0?", "back": "The x-intercepts are precisely the real solutions (roots) of the quadratic equation."}, {"front": "How does the discriminant (b^2-4ac) relate to the number of x-intercepts of a quadratic function?", "back": "If b^2-4ac > 0, there are two x-intercepts. If b^2-4ac = 0, there is one x-intercept. If b^2-4ac < 0, there are no x-intercepts."}, {"front": "What is a common mistake when identifying the vertex from the vertex form f(x)=a(x-h)^2+k?", "back": "Confusing (h,k) with (-h,k). The vertex is (h,k) because the form includes (x-h). For example, in f(x)=3(x-5)^2+2, the vertex is (5,2), not (-5,2)."}, {"front": "Convert f(x)=x^2+4x-1 to vertex form and state the vertex.", "back": "Vertex form: (x+2)^2-5. Vertex: (-2,-5)."}, {"front": "Find the vertex of f(x)=2x^2-12x+7 using the shortcut formula.", "back": "Vertex: (3,-11)."}, {"front": "How many x-intercepts does f(x)=x^2+2x+5 have? (Use the discriminant.)", "back": "None. The discriminant b^2-4ac = 2^2-4(1)(5) = 4-20 = -16, which is less than 0."}, {"front": "A parabola opens upward, has vertex (-1,4) and passes through (1,12). Write its equation in vertex form.", "back": "f(x)=2(x+1)^2+4."}, {"front": "State the axis of symmetry and y-intercept of f(x)=-2(x+3)^2+7.", "back": "Axis of symmetry: x=-3. Y-intercept: (0, -11)."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

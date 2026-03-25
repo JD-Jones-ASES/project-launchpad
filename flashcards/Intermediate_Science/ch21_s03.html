@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 21, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the most fundamental definition of evolution?", "back": "Evolution is a change in allele frequencies in a population over time."}, {"front": "Define 'population' in the context of evolutionary biology.", "back": "A population is a group of interbreeding organisms of the same species living in the same area."}, {"front": "What is a 'gene pool'?", "back": "The gene pool is the total collection of all the alleles (versions of genes) present in a population. It represents the total genetic diversity available."}, {"front": "What is 'allele frequency' and why is it an important measure in studying evolution?", "back": "Allele frequency is the relative proportion of a specific allele compared to all alleles for that gene in a population. When allele frequencies change over time, evolution is occurring."}, {"front": "How does natural selection lead to changes in allele frequencies?", "back": "Natural selection favors individuals with certain traits, causing them to survive and reproduce at higher rates. Over generations, the alleles for these favored traits become more common in the gene pool."}, {"front": "Describe directional selection and provide an example.", "back": "Directional selection shifts the population toward one extreme phenotype. For example, if larger beak size is favored during a drought, the average beak size of the population will increase over time."}, {"front": "Describe stabilizing selection and provide an example.", "back": "Stabilizing selection favors the average phenotype and reduces variation. For example, human birth weight, where very small and very large babies have lower survival rates, thus favoring average-weight babies."}, {"front": "Describe disruptive selection and provide an example.", "back": "Disruptive selection favors both extreme phenotypes and selects against the intermediate phenotype. For example, a population of finches where both very large and very small beaks are favored because they exploit different food sources."}, {"front": "What is genetic drift, and how does it primarily differ from natural selection?", "back": "Genetic drift is a random change in allele frequencies that occurs by chance, especially in small populations. Unlike natural selection, it is not driven by an allele's effect on survival or reproduction, but by random sampling."}, {"front": "In what type of population does genetic drift have the greatest effect?", "back": "Genetic drift has the greatest effect in small populations because random events have a larger proportional impact on allele frequencies."}, {"front": "Explain the 'bottleneck effect' as a specific scenario of genetic drift.", "back": "The bottleneck effect occurs when a disaster (e.g., fire, flood, disease) kills a large portion of a population. The survivors are a random, smaller sample whose allele frequencies may differ significantly from the original population, leading to reduced genetic diversity."}, {"front": "Explain the 'founder effect' as a specific scenario of genetic drift.", "back": "The founder effect occurs when a small group colonizes a new area. These 'founders' carry only a fraction of the original population's allele diversity, so the new population may have very different allele frequencies purely by chance of who settled."}, {"front": "What is gene flow?", "back": "Gene flow is the movement of alleles between populations, usually through migration of individuals or the dispersal of seeds, pollen, or spores."}, {"front": "How does gene flow affect the genetic similarity between populations?", "back": "Gene flow tends to make populations more genetically similar to each other by introducing new alleles and reducing genetic differences. It can also counteract the effects of genetic drift."}, {"front": "What is the evolutionary significance of mutation?", "back": "Mutations are random changes in DNA that create new alleles. They are the ultimate source of all genetic variation, providing the raw material upon which natural selection and other evolutionary forces can act."}, {"front": "What is sexual selection, and how does it relate to but differ from general natural selection?", "back": "Sexual selection is a special form of natural selection where individuals with certain traits are more successful at attracting mates. While it still involves differential reproduction (like natural selection), the favored traits may not directly enhance survival."}, {"front": "Provide an example of a trait that has evolved due to sexual selection.", "back": "The peacock's extravagant tail is an example. It makes the bird more visible to predators (not beneficial for survival), but peahens prefer males with larger, more colorful tails, leading to higher reproductive success for those males."}, {"front": "What is the primary purpose of the Hardy-Weinberg principle in evolutionary biology?", "back": "The Hardy-Weinberg principle describes the conditions under which allele frequencies in a population would *not* change from generation to generation, serving as a null model or baseline for comparison to detect if evolution is occurring."}, {"front": "List the five conditions that must be met for a population to be in Hardy-Weinberg equilibrium (i.e., not evolving).", "back": "1) No natural selection, 2) No genetic drift (infinitely large population), 3) No gene flow, 4) No mutation, and 5) Random mating."}, {"front": "Why is the Hardy-Weinberg principle considered a 'null model'?", "back": "It describes a hypothetical scenario where no evolution occurs. Real populations rarely meet all five conditions, so finding that a population is *not* in Hardy-Weinberg equilibrium indicates that evolution *is* happening, prompting investigation into which mechanism is responsible."}, {"front": "A population of 500 lizards is reduced to 15 survivors by a hurricane. Which mechanism of evolution does this scenario illustrate, and how will it likely affect the population's genetic diversity?", "back": "This illustrates the bottleneck effect, a form of genetic drift. The genetic diversity of the population would decrease significantly because only a small, random sample of alleles from the original population survived."}, {"front": "What is the key implication of the statement 'Evolution does not happen to individuals'?", "back": "It means that individuals do not change their genetic makeup during their lifetime in response to the environment. Evolution is a change in the genetic composition (allele frequencies) of an entire population over generations, affecting the traits passed on to offspring."}, {"front": "What is one way gene flow can counteract the effects of genetic drift?", "back": "Gene flow can introduce new alleles into a population, increasing its genetic diversity and potentially reintroducing alleles lost through genetic drift. It also helps to prevent populations from diverging too much."}, {"front": "If a population's allele frequencies are changing, what does this immediately tell scientists?", "back": "It tells them that evolution is occurring in that population. They can then investigate which specific mechanisms (natural selection, genetic drift, gene flow, mutation, or non-random mating/sexual selection) are driving the change."}, {"front": "Why are most mutations considered neutral or harmful, but still essential for evolution?", "back": "Most mutations have no effect or are detrimental because they are random changes in complex systems. However, they are essential because they are the ultimate source of *new* genetic variation, providing the raw material that, rarely, can be advantageous and acted upon by natural selection."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

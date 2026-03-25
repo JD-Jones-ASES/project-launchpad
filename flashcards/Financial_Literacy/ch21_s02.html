@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy for High School &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Financial Literacy for High School &mdash; Chapter 21, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Financial_Literacy">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a 'deductible' in an insurance policy?", "back": "A deductible is the amount you must pay out of pocket before your insurance company begins to pay for covered services."}, {"front": "If you have a $500 deductible and file a $2,000 claim, how much do you pay and how much does your insurer pay initially?", "back": "You pay the first $500 (your deductible), and your insurer pays the remaining $1,500."}, {"front": "Define 'copay' and give an example of its application.", "back": "A copay (copayment) is a fixed dollar amount you pay for a specific medical service, regardless of the total cost (e.g., $30 for a primary care visit)."}, {"front": "When do copays typically apply in relation to your deductible?", "back": "Copays often apply even before you meet your deductible for routine services."}, {"front": "What is 'coinsurance' in the context of insurance?", "back": "Coinsurance is a percentage split between you and your insurer for covered costs *after* you have paid your deductible."}, {"front": "Explain a common coinsurance split like '80/20' and apply it to a $10,000 bill after the deductible.", "back": "An 80/20 split means the insurer pays 80% and you pay 20% of covered costs beyond the deductible. For a $10,000 bill, you pay $2,000, and the insurer pays $8,000."}, {"front": "What is the 'out-of-pocket maximum' and its primary purpose?", "back": "The out-of-pocket maximum is the most you will ever pay for covered healthcare services in a single plan year. Its purpose is to protect you from catastrophic medical bills."}, {"front": "What happens once you reach your out-of-pocket maximum?", "back": "Once you reach this limit, your insurance pays 100% of covered costs for the rest of the plan year."}, {"front": "Define 'coverage limit' and explain the financial implication if a claim exceeds it.", "back": "A coverage limit is the maximum dollar amount your insurance company will pay for a covered loss. If a claim exceeds this limit, you are responsible for the difference."}, {"front": "What is an 'exclusion' in an insurance policy?", "back": "An exclusion is a specific situation, condition, or event that your policy does not cover."}, {"front": "List some common examples of insurance exclusions.", "back": "Common exclusions include cosmetic procedures, intentional self-harm, and pre-existing conditions (in some non-health insurance policies)."}, {"front": "In what order are insurance costs (deductible, coinsurance, out-of-pocket maximum) typically applied when you receive a large medical bill?", "back": "First, you pay the deductible. Then, coinsurance applies to remaining costs. Finally, the out-of-pocket maximum caps your total spending."}, {"front": "Scenario: $500 deductible, 20% coinsurance, $3,000 OOP max, $15,000 bill. How much do you pay as the deductible?", "back": "You pay $500."}, {"front": "Scenario: After a $500 deductible on a $15,000 bill, what is the remaining balance subject to coinsurance?", "back": "$15,000 - $500 = $14,500."}, {"front": "Scenario: With 20% coinsurance on a $14,500 remaining bill, how much is your coinsurance share?", "back": "Your share is $14,500 * 0.20 = $2,900."}, {"front": "Scenario: What is your total payment (deductible + coinsurance) before applying the out-of-pocket maximum in this case ($500 deductible, $2,900 coinsurance)?", "back": "$500 + $2,900 = $3,400."}, {"front": "Scenario: Given a $3,000 out-of-pocket maximum and a calculated total of $3,400, how much do you actually pay?", "back": "You actually pay $3,000 (the out-of-pocket maximum)."}, {"front": "Scenario: For a $15,000 bill where you paid the $3,000 out-of-pocket maximum, how much does the insurer pay?", "back": "The insurer pays $15,000 - $3,000 = $12,000."}, {"front": "Try It: A plan has a $1,000 deductible, 20% coinsurance, and a $4,000 OOP max. For a $10,000 bill, how much do you pay as the deductible?", "back": "You pay $1,000."}, {"front": "Try It: After paying a $1,000 deductible on a $10,000 bill, what is the remaining bill?", "back": "$10,000 - $1,000 = $9,000."}, {"front": "Try It: With 20% coinsurance on a $9,000 remaining bill, how much do you pay in coinsurance?", "back": "$9,000 * 0.20 = $1,800."}, {"front": "Try It: What is your total payment (deductible + coinsurance) before applying the OOP max ($1,000 deductible, $1,800 coinsurance)?", "back": "$1,000 + $1,800 = $2,800."}, {"front": "Try It: Given a $4,000 OOP max and a calculated total of $2,800, how much do you actually pay?", "back": "You pay $2,800 (since this is less than the OOP max, the cap is not reached)."}, {"front": "Try It: If your total payment is $2,800 for a $10,000 bill, how much does the insurer pay?", "back": "The insurer pays $10,000 - $2,800 = $7,200."}, {"front": "What is an insurance 'premium'?", "back": "An insurance premium is the regular payment (often monthly) you make to the insurance company to maintain your coverage."}, {"front": "If a health insurance plan costs $180 per month in premiums, what is its annual premium?", "back": "Annual premium = $180 * 12 = $2,160 per year."}, {"front": "What is a crucial financial tip when comparing different insurance plans?", "back": "Always convert everything to an annual basis (annual premium + expected out-of-pocket costs) to understand the true cost, especially considering how deductibles affect your total spending."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

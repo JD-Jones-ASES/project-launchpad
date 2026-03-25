@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra: The Second Year &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Algebra: The Second Year &mdash; Chapter 6, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Algebra_II_Textbook">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the fundamental requirement for adding or subtracting rational expressions?", "back": "A common denominator."}, {"front": "How do you add or subtract rational expressions that already have the same denominator, Q?", "back": "Add or subtract the numerators ($P \\pm R$) and keep the common denominator ($Q$). Then simplify the result, if possible."}, {"front": "What is the final step after combining the numerators of rational expressions, regardless of whether they initially had the same or different denominators?", "back": "Simplify the resulting rational expression by factoring the numerator and denominator and canceling any common factors."}, {"front": "Define the Least Common Denominator (LCD) of two or more rational expressions.", "back": "The product of all distinct prime polynomial factors, each raised to the highest power in which it appears in any denominator."}, {"front": "List the steps for finding the LCD of two or more rational expressions.", "back": "1. Factor each denominator completely. 2. List all distinct factors. 3. For repeated factors, use the highest power that appears. 4. The LCD is the product of these factors."}, {"front": "What is the LCD of $5/(6x^2)$ and $7/(4x)$?", "back": "Factors of $6x^2$: $2 \\cdot 3 \\cdot x^2$. Factors of $4x$: $2^2 \\cdot x$. LCD $= 2^2 \\cdot 3 \\cdot x^2 = 12x^2$."}, {"front": "What is the LCD of $3/(x^2-4)$ and $1/(x^2-4x+4)$?", "back": "$x^2-4 = (x-2)(x+2)$. $x^2-4x+4 = (x-2)^2$. LCD $= (x-2)^2(x+2)$."}, {"front": "Outline the four steps for adding or subtracting rational expressions with *different* denominators.", "back": "1. Find the LCD of all denominators. 2. Rewrite each fraction with the LCD by multiplying numerator and denominator by the missing factor(s). 3. Add or subtract the numerators; keep the LCD. 4. Simplify the result if possible."}, {"front": "How is the process of adding/subtracting rational expressions with different denominators analogous to adding/subtracting numeric fractions (e.g., $1/4 + 2/3$)?", "back": "Both require finding an LCD, rewriting each fraction with the LCD, combining the numerators over the common denominator, and then simplifying."}, {"front": "When adding $3/(x-1) + 2/(x+4)$, what is the first step and what is the resulting LCD?", "back": "Find the LCD. Since $(x-1)$ and $(x+4)$ share no common factors, the LCD is $(x-1)(x+4)$."}, {"front": "After finding the LCD for $3/(x-1) + 2/(x+4)$ as $(x-1)(x+4)$, how would you rewrite the first term, $3/(x-1)$, to have the LCD?", "back": "Multiply its numerator and denominator by $(x+4)$: $3(x+4)/((x-1)(x+4))$."}, {"front": "When subtracting $x/(x^2-x-2) - 2/(x^2-4)$, what are the completely factored denominators?", "back": "$x^2-x-2 = (x-2)(x+1)$ and $x^2-4 = (x-2)(x+2)$."}, {"front": "For $x/(x^2-x-2) - 2/(x^2-4)$, what is the LCD after factoring the denominators?", "back": "Denominators are $(x-2)(x+1)$ and $(x-2)(x+2)$. The LCD is $(x-2)(x+1)(x+2)$."}, {"front": "What are the restrictions on $x$ for the expression $x^2/(x+3) - 9/(x+3)$?", "back": "$x \\neq -3$, because this value would make the denominator zero."}, {"front": "Simplify the expression $3x/(x-2) + 6/(x-2)$.", "back": "Combine numerators: $(3x+6)/(x-2)$. Factor numerator: $3(x+2)/(x-2)$. (No further simplification possible.)"}, {"front": "Simplify the expression $x^2/(x+3) - 9/(x+3)$.", "back": "Combine numerators: $(x^2-9)/(x+3)$. Factor numerator: $(x-3)(x+3)/(x+3)$. Cancel common factor: $x-3$. (Restriction $x \\neq -3$)."}, {"front": "What is the LCD for simplifying $1/x + 2/(x+1) - 3/(x^2+x)$?", "back": "Factor $x^2+x$ as $x(x+1)$. The distinct factors are $x$ and $(x+1)$. The LCD is $x(x+1)$."}, {"front": "When is it permissible to cancel common factors between the numerator and denominator of a rational expression?", "back": "Only after the entire numerator and the entire denominator have been completely factored. You cannot cancel individual terms that are part of a sum or difference unless they constitute a complete factor of the whole expression."}, {"front": "In the expression $x/(x-2)(x+1)(x+2) - 2/(x-2)(x+1)(x+2)$, what is the numerator after combining?", "back": "$x(x+2) - 2(x+1)$ which simplifies to $x^2+2x-2x-2 = x^2-2$."}, {"front": "Explain why it's crucial to identify restrictions on variables in rational expressions.", "back": "Restrictions prevent the denominator from becoming zero, which would make the expression undefined. They are crucial for maintaining the domain of the original expression, even after simplification."}, {"front": "What missing factor(s) would you multiply $4/(x-3)$ by to achieve the LCD $(x-3)(x+1)$?", "back": "$(x+1)/(x+1)$."}, {"front": "What missing factor(s) would you multiply $x/(x+1)$ by to achieve the LCD $(x-3)(x+1)$?", "back": "$(x-3)/(x-3)$."}, {"front": "What is the value of $(x+1)/(x+1)$ for $x \\neq -1$?", "back": "1. This demonstrates why multiplying the numerator and denominator by the same non-zero factor doesn't change the value of the expression."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

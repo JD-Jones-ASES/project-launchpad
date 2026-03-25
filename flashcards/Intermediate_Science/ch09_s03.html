@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 9, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What does Newton's second law tell us about an object's motion?", "back": "It tells us how much an object accelerates and in what direction when a net force acts on it."}, {"front": "State Newton's second law in words.", "back": "The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The direction of the acceleration is the same as the direction of the net force."}, {"front": "What is the mathematical equation for Newton's second law? Define each variable.", "back": "$F_{net} = ma$, where $F_{net}$ is the net force in newtons (N), $m$ is the mass in kilograms (kg), and $a$ is the acceleration in meters per second squared (m/s²)."}, {"front": "What is the SI unit of force, and how is it defined?", "back": "The SI unit of force is the newton (N). One newton is the force required to accelerate a one-kilogram mass at one meter per second squared ($1N = 1kg \\cdot m/s^2$). "}, {"front": "If you double the net force on an object (keeping mass constant), what happens to its acceleration?", "back": "The acceleration doubles, demonstrating a direct proportionality between force and acceleration."}, {"front": "If you double an object's mass (keeping the net force constant), what happens to its acceleration?", "back": "The acceleration is halved, demonstrating an inverse proportionality between mass and acceleration."}, {"front": "Rearrange Newton's second law to solve for acceleration ($a$).", "back": "$a = F_{net} / m$."}, {"front": "Rearrange Newton's second law to solve for mass ($m$).", "back": "$m = F_{net} / a$."}, {"front": "Describe the steps for finding the net force when multiple forces act on an object along a single line.", "back": "1. Choose a positive direction. 2. Assign positive values to forces in the positive direction and negative values to forces in the opposite direction. 3. Add all force values algebraically."}, {"front": "A box has a $25N$ push to the right, $8N$ friction to the left, and $3N$ air resistance to the left. If right is positive, what is the net force?", "back": "$F_{net} = (+25N) + (-8N) + (-3N) = +14N$. The net force is $14N$ to the right."}, {"front": "Define mass.", "back": "Mass is a measure of the amount of matter in an object and a measure of its inertia. It is a scalar quantity, measured in kilograms (kg), and does not change with location."}, {"front": "Define weight.", "back": "Weight is the gravitational force that a planet or other large body exerts on an object. It is a vector quantity, measured in newtons (N), and depends on both the object's mass and the local gravitational field strength."}, {"front": "What is the equation for weight, and what does each variable represent?", "back": "$W = mg$, where $W$ is weight (force), $m$ is mass, and $g$ is the acceleration due to gravity (approximately $9.8m/s^2$ near Earth's surface)."}, {"front": "How does the weight equation ($W = mg$) relate to Newton's second law ($F = ma$)?", "back": "The weight equation ($W = mg$) is a specific application of Newton's second law, where the force ($F$) is the gravitational force (weight, $W$) and the acceleration ($a$) is the acceleration due to gravity ($g$). "}, {"front": "An astronaut has a mass of $75kg$. What is their mass on the Moon, where $g_{Moon} = 1.6m/s^2$?", "back": "The astronaut's mass remains $75kg$ on the Moon, as mass is an intrinsic property and does not change with location."}, {"front": "An astronaut has a mass of $75kg$. Calculate their weight on Earth ($g = 9.8m/s^2$).", "back": "$W_{Earth} = mg = (75kg)(9.8m/s^2) = 735N$."}, {"front": "An astronaut has a mass of $75kg$. Calculate their weight on the Moon ($g = 1.6m/s^2$).", "back": "$W_{Moon} = mg = (75kg)(1.6m/s^2) = 120N$."}, {"front": "List three types of problems you can solve using Newton's second law ($F = ma$).", "back": "You can: 1. Calculate the net force needed to produce a desired acceleration. 2. Determine how fast an object will accelerate under a known force. 3. Find the mass of an object by measuring the force applied and the resulting acceleration."}, {"front": "What are the general problem-solving steps when applying Newton's second law?", "back": "1. Draw a free-body diagram. 2. Choose a positive direction and assign signs to each force. 3. Calculate the net force algebraically. 4. Use $a = F_{net}/m$ (or rearranged) to find the unknown. 5. Check that your answer has the correct units and makes physical sense."}, {"front": "Explain how Newton's second law applies to a rocket launching into space.", "back": "A rocket's acceleration ($a = F/m$) depends on the thrust force ($F$) and its mass ($m$). As the rocket burns fuel, its mass decreases, so the same thrust produces greater acceleration, causing the rocket to speed up faster."}, {"front": "A $4.0kg$ cart is pushed with $20N$ to the right, and $8N$ friction acts to the left. What is the net force on the cart?", "back": "Taking right as positive, $F_{net} = (+20N) + (-8N) = 12N$ to the right."}, {"front": "Using the previous problem: A $4.0kg$ cart has a net force of $12N$ to the right. What is its acceleration?", "back": "$a = F_{net}/m = 12N / 4.0kg = 3.0m/s^2$ to the right."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

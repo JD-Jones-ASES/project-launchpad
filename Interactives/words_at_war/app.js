@@ -130,10 +130,6 @@ function renderNode(nodeId, animate) {
     // Ending row
     document.getElementById("ending-row").hidden = !node.is_ending;
 
-    // Header stats
-    document.getElementById("header-stats").textContent =
-      `${state.vocabSeen.size} terms learned`;
-
     // Breadcrumb
     renderPath();
 
@@ -257,7 +253,7 @@ function showGraphStats() {
       <div style="font-size:0.85rem;color:#696969;margin-bottom:1rem">${endingLines}</div>
       <div style="font-size:0.85rem;color:#2F4F4F;margin-bottom:1rem">${eraLines}</div>
       <div style="border-top:1px solid #D2B48C;padding-top:0.8rem;font-size:0.85rem;color:#696969">
-        Your journey: <strong>${visited}</strong> scenes visited \u00B7 <strong>${state.vocabSeen.size}</strong> terms learned
+        Your journey: <strong>${visited}</strong> scenes visited
       </div>
       <button onclick="this.closest('div[style]').parentElement.remove()" style="margin-top:1rem;background:transparent;border:2px solid #D2B48C;border-radius:8px;padding:0.4rem 1.5rem;font-family:'Cinzel',serif;font-size:0.8rem;color:#8B4513;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em">Close</button>
     </div>`;

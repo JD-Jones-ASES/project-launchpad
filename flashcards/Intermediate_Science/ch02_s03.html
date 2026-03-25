@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 2, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the precise definition of a mineral?", "back": "A naturally occurring, inorganic solid with a definite chemical composition and an orderly internal arrangement of atoms (a crystal structure)."}, {"front": "What four criteria must a substance meet to be classified as a mineral?", "back": "It must be (1) naturally occurring, (2) inorganic, (3) a solid with a definite chemical composition, and (4) a characteristic crystal structure."}, {"front": "Name some of the most common 'rock-forming minerals' found in Earth's crust.", "back": "Quartz, feldspar, mica, calcite, and olivine."}, {"front": "Explain what a 'crystal structure' is and how it relates to the external shape of a mineral.", "back": "A crystal structure is the orderly, repeating three-dimensional pattern of atoms within a mineral. When minerals grow freely, their external crystal shapes (like quartz's six-sided prisms) reflect this internal atomic arrangement."}, {"front": "What scale measures a mineral's resistance to scratching, and how does it work?", "back": "The Mohs hardness scale. It ranks ten reference minerals from 1 (talc, softest) to 10 (diamond, hardest). A mineral can scratch any mineral with a lower number and is scratched by any mineral with a higher number."}, {"front": "You scratch an unknown mineral with your fingernail (hardness ~2.5) and it leaves a scratch. Then you try a copper penny (hardness ~3.5) and it *doesn't* scratch the mineral. What can you infer about the mineral's hardness?", "back": "The mineral's hardness is greater than 2.5 but less than 3.5."}, {"front": "What is 'luster' in the context of mineral identification, and what are its two main categories?", "back": "Luster describes how a mineral's surface reflects light. Its two main categories are metallic (shiny like polished metal) and nonmetallic (which includes descriptions like glassy, waxy, pearly, silky, earthy, or dull)."}, {"front": "Why is 'streak' often a more reliable property than a mineral's surface color for identification, and what is a limitation of this test?", "back": "Streak is the color of a mineral's powder, obtained by rubbing it on an unglazed porcelain plate. It's more reliable because it's not affected by weathering or impurities. The limitation is that it only works for minerals softer than the streak plate (about hardness 7), as harder minerals will scratch the plate instead of leaving powder."}, {"front": "Name two special properties that can help identify specific minerals and give an example for each.", "back": "Magnetism (e.g., magnetite) and reaction with acid (e.g., calcite fizzes in dilute hydrochloric acid). Fluorescence is another example."}, {"front": "What is a rock, and how does its composition differ from that of a mineral?", "back": "A rock is a naturally occurring solid made of one or more minerals (or sometimes non-mineral materials like volcanic glass or organic matter). A mineral has a definite chemical composition and crystal structure, while a rock is an aggregate of these components."}, {"front": "How are igneous rocks formed, and what determines their crystal size?", "back": "Igneous rocks form from the cooling and solidification of molten rock (magma underground or lava at the surface). Their crystal size is determined by the cooling rate: slow cooling forms large crystals (coarse-grained, e.g., granite), while rapid cooling forms tiny crystals (fine-grained, e.g., basalt) or no crystals (volcanic glass, e.g., obsidian)."}, {"front": "Distinguish between clastic and chemical/biochemical sedimentary rocks, providing an example for each.", "back": "Clastic sedimentary rocks are formed from fragments (clasts) of other rocks that are weathered, eroded, transported, deposited, and then compacted and cemented (e.g., sandstone, shale, conglomerate). Chemical/biochemical sedimentary rocks form when minerals precipitate from water or when organisms accumulate (e.g., limestone from shells, rock salt from evaporation)."}, {"front": "Why are sedimentary rocks particularly important for understanding Earth's history?", "back": "Sedimentary rocks are especially important because they often contain fossils, which are preserved remains or traces of ancient organisms, providing clues about past life and environments."}, {"front": "How are metamorphic rocks formed, and what distinguishes their formation process from that of igneous rocks?", "back": "Metamorphic rocks form when existing rocks are transformed by intense heat, pressure, or chemically active fluids deep within the Earth *without fully melting*. This distinguishes their formation from igneous rocks, which form from the cooling and solidification of molten material."}, {"front": "What type of rock is formed when limestone is metamorphosed, and what about sandstone?", "back": "When limestone is metamorphosed, it becomes marble. When sandstone is metamorphosed, it becomes quartzite."}, {"front": "Define the rock cycle and explain its fundamental nature.", "back": "The rock cycle is the continuous process by which rocks are created, transformed, destroyed, and re-created over geologic time. It has no beginning and no end."}, {"front": "Name the two primary energy sources that drive the rock cycle, and give examples of processes each one powers.", "back": "The two primary energy sources are: (1) Internal heat, which drives volcanism, mountain building, and metamorphism. (2) Solar energy, which drives weathering, erosion, and the water cycle at the surface."}, {"front": "Describe the process by which an igneous rock can become a sedimentary rock.", "back": "An igneous rock exposed at the surface undergoes weathering and erosion, breaking it down into sediments. These sediments are then transported, deposited, and eventually compacted and cemented together (lithified) to form sedimentary rock."}, {"front": "Describe how a sedimentary rock can become a metamorphic rock.", "back": "When a sedimentary rock is buried deep within the Earth and subjected to intense heat, pressure, or chemically active fluids due to burial and tectonic forces, it can be transformed into a metamorphic rock without melting."}, {"front": "Describe how a metamorphic rock can become an igneous rock.", "back": "If a metamorphic rock is subjected to even greater heat and pressure deep within the Earth, it can melt to form magma. When this magma then cools and solidifies, it forms new igneous rock."}, {"front": "A student measures a rock's density to be 2.69 g/cm³. What general type of rock might this suggest, and how does it compare to basalt or iron?", "back": "A density of about 2.7 g/cm³ is typical of continental crustal rocks such as granite (a felsic igneous or metamorphic rock). This density is lower than basalt (~3.0 g/cm³) and much lower than iron (~7.9 g/cm³), confirming it's a silicate rock rather than a metal."}, {"front": "In the silicon atom journey through the rock cycle (granite to sandstone to quartzite to magma to new igneous rock), when might the silicon atom change the *mineral* it belongs to, versus just changing the *rock type*?", "back": "The silicon atom remains part of a quartz mineral as the rock type changes from granite to sandstone to quartzite. It would only change the *mineral* it belongs to if, after melting into magma, it recrystallized into a different silicon-bearing mineral (not quartz) when the new igneous rock formed, or if chemical reactions during weathering and sediment formation created new silicon minerals other than quartz. This highlights that a mineral is a specific compound, while a rock is an aggregate of minerals."}, {"front": "How does the formation of granite differ from the formation of basalt, in terms of cooling environment and resulting texture?", "back": "Granite forms from magma cooling slowly underground, allowing large mineral crystals to grow, resulting in a coarse-grained (phaneritic) texture. Basalt forms from lava cooling rapidly at the Earth's surface, resulting in tiny crystals and a fine-grained (aphanitic) texture."}, {"front": "What happens when shale undergoes further metamorphism beyond slate?", "back": "With further metamorphism, shale (after becoming slate) can transform into phyllite, schist, and eventually gneiss, with increasing heat and pressure."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
