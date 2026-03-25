@@ -33,12 +33,11 @@ const ENDING_META = {
 
 const ERA_LABELS = {
   frame:         "Theo's Journey",
-  gracchi:       "The Gracchi Era (133\u2013121 BC)",
-  marius_sulla:  "Marius & Sulla (107\u201378 BC)",
-  caesar_rise:   "Caesar's Rise (60\u201349 BC)",
-  ides:          "The Ides of March (44 BC)",
-  triumvirate:   "The Triumvirate (43\u201331 BC)",
-  augustus:       "Augustus (31\u201327 BC)",
+  medici_fall:   "Fall of the Medici (1494)",
+  savonarola:    "Savonarola's Florence (1494\u20131498)",
+  chancery:      "The Chancery Years (1498\u20131512)",
+  borgia:        "Borgia's Shadow (1502\u20131503)",
+  exile:         "Exile & The Prince (1512\u20131527)",
 };
 
 // ── Text processing ───────────────────────────────────────────────────────
