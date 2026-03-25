@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 26, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is biodiversity, and at what three levels is it measured?", "back": "Biodiversity is the variety of life in a particular habitat or ecosystem, measured at three levels: genetic diversity, species diversity, and ecosystem diversity."}, {"front": "Define genetic diversity and explain its importance.", "back": "Genetic diversity is the range of genetic variation within a species. High genetic diversity makes a population more resilient to changing conditions because some individuals are more likely to have traits for survival."}, {"front": "How is species diversity measured?", "back": "Species diversity is measured by species richness (the number of different species in an area) combined with species evenness (how evenly individuals are distributed among those species)."}, {"front": "What does ecosystem diversity refer to?", "back": "Ecosystem diversity is the variety of different ecosystems within a region, such as forests, wetlands, grasslands, and rivers."}, {"front": "Explain the latitudinal diversity gradient.", "back": "The latitudinal diversity gradient is the observed trend where species diversity increases from the poles toward the equator, likely due to more solar energy, warmer temperatures, higher rainfall, and more stable climates in tropical regions."}, {"front": "What are ecosystem services, and why are they important?", "back": "Ecosystem services are the benefits humans receive from natural ecosystems, such as clean air and water, food, and climate regulation. They are essential for human survival and well-being."}, {"front": "List the four categories of ecosystem services with an example for each.", "back": "1. Provisioning services (e.g., food, medicines); 2. Regulating services (e.g., pollination, climate regulation); 3. Supporting services (e.g., nutrient cycling, soil formation); 4. Cultural services (e.g., recreation, aesthetic beauty)."}, {"front": "How do economists value ecosystem services, and what happens when they degrade?", "back": "Economists estimate the total value of Earth's ecosystem services at tens of trillions of dollars per year. When ecosystems degrade, these services either disappear or must be replaced by expensive human-engineered alternatives."}, {"front": "What acronym helps remember the five major threats to biodiversity?", "back": "The acronym HIPCO: H - Habitat loss and degradation, I - Invasive species, P - Pollution, C - Climate change, O - Overexploitation."}, {"front": "Why is habitat loss considered the greatest threat to biodiversity, and what is habitat fragmentation?", "back": "Habitat loss is the single greatest threat because species lose their homes. Habitat fragmentation is when large habitats are broken into smaller, isolated patches, reducing genetic diversity and blocking migration."}, {"front": "Define invasive species and give an example of their impact.", "back": "An invasive species is a non-native species introduced to a new environment where it outcompetes or preys upon native species. The brown tree snake in Guam, for example, drove multiple bird species to extinction."}, {"front": "How can pollution, like DDT, impact biodiversity through bioaccumulation?", "back": "Pollutants like DDT can bioaccumulate, meaning their concentration increases as they move up trophic levels in a food chain. This nearly drove the bald eagle to extinction by thinning its eggshells."}, {"front": "How does climate change threaten biodiversity?", "back": "Climate change causes rising temperatures that shift habitats faster than many species can adapt or migrate, leading to issues like coral bleaching, loss of sea ice for polar bears, and species being pushed to higher elevations."}, {"front": "What is overexploitation? Provide an historical example.", "back": "Overexploitation is the overhunting, overfishing, or overcollecting of species, reducing populations below sustainable levels. The passenger pigeon, once abundant, was hunted to extinction by 1914 due to overexploitation."}, {"front": "How is a species classified as endangered?", "back": "A species is classified as endangered when its population is so small or declining so rapidly that it faces a high risk of extinction."}, {"front": "What is the IUCN Red List?", "back": "The IUCN (International Union for Conservation of Nature) Red List is a global assessment of species' conservation status, categorizing them from 'Least Concern' to 'Extinct'."}, {"front": "Who was Edward O. Wilson, and what were his key contributions to biodiversity?", "back": "Edward O. Wilson was an American biologist known as the 'father of biodiversity.' He was an expert on ants, coined the term 'biodiversity,' and advocated passionately for conservation, including his 'Half-Earth' proposal."}, {"front": "What are protected areas, and how do they contribute to conservation?", "back": "Protected areas (e.g., national parks, wildlife reserves) are designated habitats where species can live with minimal human disturbance, preserving ecosystems and allowing species to recover."}, {"front": "Explain habitat restoration as a conservation strategy.", "back": "Habitat restoration involves replanting forests, removing dams, or cleaning up polluted wetlands to restore degraded ecosystems, bring back ecosystem services, and support species recovery."}, {"front": "How do captive breeding and reintroduction programs help critically endangered species?", "back": "Captive breeding programs maintain a population of critically endangered species in zoos or wildlife centers while habitat is restored, with the goal of reintroducing them to the wild, as seen with the California condor."}, {"front": "What are wildlife corridors, and how do they benefit biodiversity?", "back": "Wildlife corridors are protected connections between isolated habitat fragments. They allow animals to move between populations, maintaining genetic diversity and enabling migration."}, {"front": "Name an important piece of legislation or an international agreement for conservation.", "back": "The Endangered Species Act (United States, 1973) and the Convention on International Trade in Endangered Species (CITES) are examples of legal frameworks protecting threatened species and regulating wildlife trade."}, {"front": "What is sustainable resource use in the context of conservation?", "back": "Sustainable resource use involves harvesting natural resources (e.g., timber, fish) at a rate that allows populations to replenish, ensuring long-term availability and reducing pressure on ecosystems."}, {"front": "How does biodiversity relate to ecosystem stability and resilience?", "back": "Research shows that more biodiverse ecosystems are generally more stable and resilient. An ecosystem with many species is better able to withstand disturbances and less likely to collapse."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

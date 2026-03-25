@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 24, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Intermediate_Science">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is electrical power?", "back": "Electrical power is the rate at which electrical energy is converted into other forms of energy (light, heat, motion, sound)."}, {"front": "What are the SI unit for electrical power and its equivalent?", "back": "The SI unit for electrical power is the watt (W), where 1W = 1J/s (one joule per second)."}, {"front": "State the primary equation for electrical power and explain the role of its variables.", "back": "The primary equation is P = IV, where P is power (W), I is current (A), and V is voltage (V). Voltage (V) indicates energy per coulomb, and current (I) indicates coulombs per second, so their product gives energy per second (power)."}, {"front": "How can Ohm's law be used to derive another form of the electrical power equation involving current and resistance?", "back": "By substituting V = IR (from Ohm's law) into P = IV, you get P = I^2 R."}, {"front": "How can Ohm's law be used to derive another form of the electrical power equation involving voltage and resistance?", "back": "By substituting I = V/R (from Ohm's law) into P = IV, you get P = V^2 / R."}, {"front": "When solving a problem, which form of the power equation (P=IV, P=I^2R, or P=V^2/R) should you use?", "back": "All three forms are equivalent. You should choose the one that uses the quantities you already know or are given in the problem."}, {"front": "What is a kilowatt-hour (kWh), and what does it measure?", "back": "A kilowatt-hour (kWh) is a unit of energy equal to the energy used by a 1 kW device operating for one hour. Electric companies charge by the total amount of energy consumed, measured in kilowatt-hours. (1kWh = 3.6e6J)."}, {"front": "How do you calculate the total electrical energy consumed?", "back": "Energy consumed (E) is calculated by E = Pt, where P is power and t is time. If power is in kilowatts (kW) and time is in hours (h), the energy is in kilowatt-hours (kWh)."}, {"front": "A 100W light bulb is on for 8 hours/day for 30 days. If electricity costs $0.12/kWh, how do you calculate the monthly cost?", "back": "1. Convert power: 100W = 0.100kW. 2. Calculate total time: 8 h/day * 30 days = 240h. 3. Calculate energy: E = Pt = (0.100kW)(240h) = 24kWh. 4. Calculate cost: Cost = E * rate = (24kWh)($0.12/kWh) = $2.88."}, {"front": "Why is replacing a 100W incandescent bulb with a 15W LED bulb producing the same brightness a significant saving?", "back": "The LED bulb consumes significantly less electrical power (15W compared to 100W) to produce the same light output. This reduction in power consumption directly translates to lower energy usage (kWh) and thus lower electricity costs over time."}, {"front": "How dangerous is electric current to the human body?", "back": "Electric current can cause burns, muscle contractions, and cardiac arrest. A current as small as 0.1A passing through the heart can be fatal."}, {"front": "What is a fuse, and how does it protect an electrical circuit?", "back": "A fuse is a thin strip of metal designed to melt and break the circuit if the current exceeds a safe level. This interrupts the circuit before wires can overheat and start a fire. A blown fuse must be replaced."}, {"front": "What is a circuit breaker, and how does it differ from a fuse?", "back": "A circuit breaker performs the same function as a fuse but uses an electromagnetic switch. When current exceeds the rated value, the switch trips and opens the circuit. Unlike a fuse, a circuit breaker can be reset by flipping the switch back to the 'on' position."}, {"front": "What is the purpose of grounding in electrical safety?", "back": "Grounding provides a low-resistance path for current to flow safely into the Earth in case of an electrical fault (e.g., a loose wire touching an appliance's metal case). This prevents the current from passing through a person who touches the appliance."}, {"front": "List two general electrical safety precautions mentioned in the text.", "back": "1. Never touch electrical devices with wet hands. 2. Never use damaged cords or plugs. 3. Do not overload circuits by plugging too many devices into one outlet. 4. Stay away from downed power lines. (Any two are acceptable.)"}, {"front": "In a series circuit, what is true about the current at different points?", "back": "The current is the same at all points in a series circuit."}, {"front": "In a series circuit, how do the voltage drops across individual components relate to the total battery voltage?", "back": "The sum of the voltage drops across each individual component in a series circuit adds up to the total voltage supplied by the battery."}, {"front": "In a parallel circuit, what is true about the voltage across each branch?", "back": "The voltage is the same across each branch in a parallel circuit and is equal to the total voltage supplied by the battery."}, {"front": "In a parallel circuit, how do the branch currents relate to the total current from the battery?", "back": "The sum of the currents flowing through each individual branch in a parallel circuit adds up to the total current supplied by the battery."}, {"front": "If two identical light bulbs are connected to the same battery, which circuit arrangement (series or parallel) makes the bulbs brighter, and why?", "back": "A parallel circuit makes the bulbs brighter. In parallel, each bulb receives the full battery voltage, allowing more current to flow through each compared to a series circuit where the voltage is divided among the bulbs."}, {"front": "What happens to other bulbs in a series circuit if one bulb is unscrewed or burns out?", "back": "All other bulbs in the series circuit will go out because the circuit becomes open (incomplete), stopping the flow of current through the entire path."}, {"front": "What happens to other bulbs in a parallel circuit if one bulb is unscrewed or burns out?", "back": "The other bulbs in the parallel circuit will remain lit. Each branch in a parallel circuit is an independent path for current, so only the branch with the removed or burnt-out bulb is affected."}, {"front": "How must an ammeter be connected in a circuit to measure current, and what can happen if it's connected incorrectly?", "back": "An ammeter must be connected in series with the component through which the current is being measured. Connecting an ammeter in parallel (across a component) can damage the meter due because of its very low internal resistance."}, {"front": "How must a voltmeter be connected in a circuit to measure voltage?", "back": "A voltmeter must be connected in parallel (across) the component to measure the voltage drop across it."}, {"front": "What are common sources of error in practical circuit measurements compared to theoretical calculations?", "back": "Common sources of error include internal battery resistance, contact resistance (e.g., in wires and alligator clips), and the inherent accuracy limitations of the measuring instruments (multimeters)."}, {"front": "Why should students avoid leaving circuits connected for extended periods during an investigation?", "back": "Leaving circuits connected for extended periods can cause wires and resistors to get warm. This poses a safety risk (potential burns) and can affect the components' performance or lifespan."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
