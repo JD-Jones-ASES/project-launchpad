@@ -1,0 +1,2274 @@
+const STORY_DATA = {
+  "start": "start",
+  "nodes": {
+    "start": {
+      "title": "A Peculiar Afternoon",
+      "text": "Theodore Ernest O'Hare — Theo to everyone who knows him — is seventeen, restless, and supposed to be studying for a political philosophy exam. The textbook lies open to a chapter about Niccolò Machiavelli: princes, foxes, lions, something about Fortune being a river. His eyelids are heavy. The afternoon light turns golden, then amber, then impossibly warm.\n\nWhen Theo opens his eyes, the desk is gone. The textbook is gone. He is standing on a narrow stone bridge over a brown river. The air smells of leather, woodsmoke, and rain. Below him, the river surges against its banks — swollen, violent, tearing at the pilings of a row of shops built right over the water.\n\nOn both sides of the river, a city of red tile rooftops and pale stone towers climbs toward the hills. A massive dome — the largest Theo has ever seen — rises above everything, terracotta and white marble, impossibly confident against the grey sky.\n\nA boy about his age, in a mud-spattered doublet, grabs his arm. 'You! Are you deaf? The **Signoria** has called the citizens to the piazza. The Medici are finished — **Piero** ran away in the night like a dog! The French are coming!' The boy's eyes are wild with something between terror and exhilaration. 'Come ON!'\n\nTheo has no idea where — or *when* — he is. But the dome tells him one thing: this is Florence. And if the Medici have just fallen, this is 1494 — the year everything changed.",
+      "choices": [
+        {
+          "text": "Follow the boy toward the piazza",
+          "target": "act1_medici_piazza"
+        },
+        {
+          "text": "Stay on the bridge and watch the river",
+          "target": "act1_medici_bridge"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "frame",
+      "vocabulary": [
+        {
+          "term": "Signoria",
+          "definition": "The governing council of Florence, consisting of nine members (priori) elected for two-month terms. The head of the Signoria was the Gonfaloniere di Giustizia."
+        },
+        {
+          "term": "Piero de' Medici",
+          "definition": "Piero di Lorenzo de' Medici (1472–1503), son of Lorenzo the Magnificent. His clumsy surrender to Charles VIII of France in 1494 led to the Medici's expulsion from Florence."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "entry",
+        "frame_story",
+        "arrival"
+      ]
+    },
+    "act1_medici_piazza": {
+      "title": "The Piazza of the Signoria",
+      "text": "Theo lets the boy drag him through streets that smell of wet stone and panic. They emerge into a vast square dominated by a fortress-like palace with a tall tower — the **Palazzo della Signoria**. The piazza is packed. Merchants, priests, soldiers, beggars — all shouting.\n\nOn a wooden platform near the palace steps, a man in the robes of a Dominican friar raises both arms. He is gaunt, hook-nosed, with eyes that burn like coals. The crowd falls silent as if a hand has closed over their mouths.\n\n'Citizens of Florence!' The voice is enormous — not loud exactly, but penetrating, as if it comes from inside Theo's own chest. 'God has answered your prayers. The tyrant has fled! The scourge of France comes as God's instrument to purify this city of its sins!'\n\nThe boy whispers, 'That's **Fra Girolamo Savonarola**. He *predicted* this. He said a sword would come from the north, and it came.'\n\nThe friar's voice rises. 'Florence shall be a city of God! No more Medici corruption! No more pagan art! No more usury! We shall build a **New Jerusalem** right here on the banks of the Arno!'\n\nThe crowd erupts. Some weep. Some cheer. Some look afraid.",
+      "choices": [
+        {
+          "text": "Push closer to hear Savonarola",
+          "target": "act1_savonarola_close"
+        },
+        {
+          "text": "Look for someone who seems skeptical",
+          "target": "act1_skeptic_merchant"
+        },
+        {
+          "text": "Slip away to explore the city",
+          "target": "act1_florence_streets"
+        },
+        {
+          "text": "Follow a well-dressed man hurrying away from the crowd",
+          "target": "act1_medici_loyalist"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Palazzo della Signoria",
+          "definition": "The seat of Florentine government (also called Palazzo Vecchio). Built in 1299, it housed the Signoria and was the symbolic center of republican power."
+        },
+        {
+          "term": "Savonarola",
+          "definition": "Girolamo Savonarola (1452–1498), a Dominican friar who became the de facto ruler of Florence after the Medici's expulsion. He preached moral reform and theocratic government before being excommunicated and executed."
+        }
+      ],
+      "figures": [
+        "Girolamo Savonarola"
+      ],
+      "tags": [
+        "act1",
+        "savonarola_intro",
+        "crowd_scene"
+      ]
+    },
+    "act1_medici_bridge": {
+      "title": "The River and the Metaphor",
+      "text": "Theo stays on the bridge, gripping the stone railing as the brown water churns below. Something about it tugs at his memory — the textbook, the chapter he was reading before he fell asleep. Something about rivers and fortune...\n\n*Fortune is like one of those raging rivers which, when in flood, overflows the plains, sweeps away trees and buildings...*\n\nThat was Machiavelli. Machiavelli wrote that. And if this is 1494, then Machiavelli is alive right now — a young clerk in Florence, about twenty-five years old, watching the same flood that Theo is watching.\n\nThe river surges. A timber beam sweeps past, spinning lazily. On the far bank, Theo can see soldiers — not Italian soldiers. Their armor is different, their banners blue and gold. The French. Charles VIII's army, marching into Italy like a river nobody bothered to dam.\n\nA man in a dark cloak appears beside Theo on the bridge. He is thin, sharp-featured, with clever eyes and an ironic mouth. He leans on the railing and watches the soldiers. 'Quite a flood,' he says quietly. 'And no one built the **embankments**.'\n\nTheo stares at him. Could it be...?",
+      "choices": [
+        {
+          "text": "'Are you... Niccolò Machiavelli?'",
+          "target": "act1_meet_niccolo"
+        },
+        {
+          "text": "Say nothing — just watch the river together",
+          "target": "act1_river_silence"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Embankments",
+          "definition": "In Machiavelli's metaphor (Prince, Ch. XXV), embankments and dikes represent preparations made in calm times to control Fortune's destructive floods. Leaders who prepare can resist; those who don't are swept away."
+        }
+      ],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "fortune_metaphor",
+        "machiavelli_intro"
+      ]
+    },
+    "act1_meet_niccolo": {
+      "title": "The Clerk on the Bridge",
+      "text": "The man turns sharply. His eyes narrow — not with hostility, but with the quick, assessing look of someone who weighs everything.\n\n'Who wants to know?' A pause. Then a thin smile. 'I am Niccolò, yes. A clerk. Nobody of importance. But you —' He looks Theo up and down, taking in his strange clothes, his bewildered expression. 'You are not Florentine. You are not French. And you are not afraid, which tells me you are either very brave or very ignorant.'\n\n'A bit of both,' Theo admits.\n\nNiccolò laughs — a quick, dry sound. 'Then we will get along. Every political education begins with a healthy dose of ignorance.' He gestures toward the far bank, where the French soldiers are making camp. 'The Medici ran rather than fight. **Piero** surrendered three fortresses without consulting the Signoria — handed them over like a servant giving away his master's silver. Now the friar says God sent the French to punish us.'\n\n'And what do you think?' Theo asks.\n\nNiccolò's smile vanishes. 'I think **fortune** punishes those who do not prepare. God had nothing to do with it. Piero was weak, and weak men invite conquest.' He straightens. 'Come. The Signoria is meeting. There are choices being made right now that will decide whether Florence survives or becomes a French province. Do you want to see how a republic governs itself in a crisis?'",
+      "choices": [
+        {
+          "text": "Go with Niccolò to the Palazzo",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "'What about Savonarola? Is he in charge now?'",
+          "target": "act1_niccolo_on_savonarola"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Fortune (Fortuna)",
+          "definition": "In Machiavelli's philosophy, Fortune represents the unpredictable forces — luck, timing, circumstance — that shape political outcomes. He personifies Fortune as a powerful, capricious force that can only be resisted through preparation and boldness."
+        }
+      ],
+      "figures": [
+        "Niccolò Machiavelli",
+        "Piero de' Medici"
+      ],
+      "tags": [
+        "act1",
+        "machiavelli_dialogue",
+        "key_concepts"
+      ]
+    },
+    "act1_river_silence": {
+      "title": "Two Watchers",
+      "text": "They stand in silence. The river roars. The French banners snap in the wind. After a long while, the man says, almost to himself: 'Whoever built this bridge was wise. He did not try to stop the river. He built *above* it.'\n\nHe turns to Theo with a look that is part curiosity, part challenge. 'If you had to choose — would you build bridges, or would you try to dam the flood?'\n\nSomething about the question feels important — as if Theo's answer will determine what happens next.",
+      "choices": [
+        {
+          "text": "'Build bridges. You can't stop the flood, but you can survive it.'",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "'Dam the flood. If you're strong enough, you can control anything.'",
+          "target": "act1_savonarola_close"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act1",
+        "philosophical_choice",
+        "fortune_metaphor"
+      ]
+    },
+    "act1_niccolo_on_savonarola": {
+      "title": "The Unarmed Prophet",
+      "text": "Niccolò's expression shifts — something between admiration and pity. 'Savonarola is... extraordinary. He speaks and people believe. He predicted the French invasion. He predicted the fall of the Medici. Half of Florence thinks he is a genuine prophet.'\n\n'And you?'\n\n'I think he is a man who reads the signs well and speaks with conviction.' Niccolò leans against the bridge railing. 'But here is the question that matters: he has no army. He has no money. He has no alliance with any foreign power. He has only his voice and the people's faith.'\n\nHe holds up a finger. 'All **armed prophets** have conquered. All **unarmed prophets** have failed. Moses had the Israelites. Muhammad had his warriors. Savonarola has... sermons.'\n\n'You think he'll fail?'\n\n'I think a man who rules by faith alone is building a house on sand. When the people's faith wavers — and it will — he will have nothing to fall back on.' Niccolò pushes off the railing. 'But that is a problem for later. Right now, the question is what Florence does about the French army camped outside our walls. Come.'",
+      "choices": [
+        {
+          "text": "Go with Niccolò to the Palazzo",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "Go hear Savonarola preach instead",
+          "target": "act1_savonarola_close"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Armed Prophet",
+          "definition": "Machiavelli's term (Prince, Ch. VI) for leaders who back their vision with military force. He argues that all armed prophets — Moses, Cyrus, Romulus — conquered, while unarmed prophets like Savonarola failed."
+        }
+      ],
+      "figures": [
+        "Girolamo Savonarola"
+      ],
+      "tags": [
+        "act1",
+        "armed_unarmed_prophets",
+        "key_concepts"
+      ]
+    },
+    "act1_savonarola_close": {
+      "title": "The Prophet's Fire",
+      "text": "Theo pushes through the crowd toward the platform. Up close, Savonarola is terrifying. Not physically — he is slight, almost fragile. But his voice fills the piazza like thunder fills a valley. His eyes seem to look at everyone and no one.\n\n'The time of vanity is over!' he cries. 'Bring your mirrors, your silks, your paintings of pagan gods! Bring your dice and your cards and your books of lies! We shall make a **Bonfire of the Vanities** and the smoke will rise to heaven as a sweet offering!'\n\nA woman beside Theo is weeping. A merchant clutches a small painting of Venus to his chest, his face torn between devotion and grief. A group of young men in white robes — Savonarola's followers, the **Piagnoni** — move through the crowd collecting objects: a silk scarf, a deck of cards, a mirror.\n\nOne of the young men stops in front of Theo. 'Brother. Will you give something for the fire? A token of your commitment to the new Florence?'\n\nTheo pats his pockets. He has nothing from this world — but he finds, absurdly, the pen he was using to take notes on Machiavelli. A plastic ballpoint pen. In 1494 Florence, it might as well be an alien artifact.",
+      "choices": [
+        {
+          "text": "Give the pen — it means nothing here anyway",
+          "target": "act1_give_pen"
+        },
+        {
+          "text": "Refuse — 'I have nothing to give'",
+          "target": "act1_refuse_pen"
+        },
+        {
+          "text": "Show the pen and claim it's a holy relic",
+          "target": "act1_fox_pen"
+        },
+        {
+          "text": "Join the Piagnoni — Savonarola is right, Florence needs purification",
+          "target": "act1_join_piagnoni"
+        },
+        {
+          "text": "Stay in Florence long enough to witness Savonarola's trial",
+          "target": "act1_savonarola_trial"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [
+        {
+          "term": "Bonfire of the Vanities",
+          "definition": "Public bonfires organized by Savonarola's followers in 1497 and 1498, where Florentines burned luxury goods, art, books, and cosmetics deemed sinful. Some Renaissance artworks were destroyed, including works attributed to Botticelli."
+        },
+        {
+          "term": "Piagnoni",
+          "definition": "'Weepers' or 'Wailers' — the nickname for Savonarola's devoted followers, who wept during his passionate sermons. They formed the core of his political support in Florence."
+        }
+      ],
+      "figures": [
+        "Girolamo Savonarola"
+      ],
+      "tags": [
+        "act1",
+        "savonarola_sermon",
+        "moral_choice"
+      ]
+    },
+    "act1_join_piagnoni": {
+      "title": "The Prophet's Disciple",
+      "text": "Theo gives the pen and more — he gives himself. He joins the white-robed Piagnoni, swept up in the certainty that Savonarola is right: Florence is corrupt, the Medici were thieves, and only radical moral renewal can save the city.\n\nFor four years, Theo follows the prophet. He watches the Bonfires of the Vanities — paintings, mirrors, books of poetry feeding the flames. He watches Savonarola defy the Pope, refuse to submit to Rome, declare Florence a theocracy governed by God's law.\n\nAnd then he watches it end. The Pope excommunicates Savonarola. The people's faith wavers — a plague, a famine, and suddenly the sermons are not enough. The Arrabbiati riot. The Signoria arrests the friar. He is tortured, convicted, and on May 23, 1498, he is hanged and burned in the Piazza della Signoria — the same piazza where Theo first heard him preach.\n\nTheo stands in the crowd and watches the fire consume everything Savonarola built. The **unarmed prophet** has failed, exactly as a thin man on a bridge once predicted.",
+      "choices": [
+        {
+          "text": "The prophet burned, and so did everything he promised",
+          "target": "end_savonarola_path"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [],
+      "figures": [
+        "Girolamo Savonarola"
+      ],
+      "tags": [
+        "act1",
+        "savonarola_fall",
+        "unarmed_prophet"
+      ]
+    },
+    "act1_skeptic_merchant": {
+      "title": "The Man Who Wasn't Weeping",
+      "text": "While most of the crowd is either cheering or sobbing, Theo spots a man near the edge of the piazza who is doing neither. He is well-dressed — a merchant or banker, maybe fifty, with a shrewd, watchful face. He observes Savonarola the way a doctor observes a patient: clinically, without sentiment.\n\nTheo drifts toward him. 'You don't seem impressed,' he says.\n\nThe man glances at him. 'I am impressed. Extremely. That friar is the most talented speaker I have ever heard. He could sell snow to a Muscovite.' A pause. 'Which is precisely why he is dangerous.'\n\n'Dangerous?'\n\n'He has no plan. He has no army. He has no revenue. He has faith and a voice, and when those fail — as they must — what then? A city cannot eat sermons. A city cannot defend its walls with prayers.' The man shakes his head. 'The Medici were corrupt, yes. But they kept the peace. They kept the banks running. They kept the condottieri paid. Now?' He gestures at the cheering crowd. 'Now we are governed by enthusiasm. And enthusiasm, young man, is the most perishable commodity in politics.'\n\nHe extends a hand. 'I am Francesco. A banker. And I suspect you are about to learn a great deal about how republics die.'",
+      "choices": [
+        {
+          "text": "'What would you do if you were in charge?'",
+          "target": "act1_banker_advice"
+        },
+        {
+          "text": "'Maybe Savonarola is right. Maybe Florence needs to change.'",
+          "target": "act1_defend_savonarola"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Condottieri",
+          "definition": "Professional mercenary military leaders in Renaissance Italy, hired by city-states to fight their wars. Machiavelli despised the condottieri system, arguing that a state relying on mercenaries for defense was building on sand."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act1",
+        "realist_perspective",
+        "political_analysis"
+      ]
+    },
+    "act1_florence_streets": {
+      "title": "A City Between Masters",
+      "text": "Theo slips out of the piazza and into the narrow streets. Florence in upheaval is a strange thing to see. In one alley, men are looting a Medici-allied merchant's warehouse. In another, a priest kneels in prayer while children play around him. Everywhere, the same question hangs in the air: *what happens now?*\n\nHe passes the great dome of the **Cattedrale** — Brunelleschi's impossible dome, soaring above the chaos below like an argument that beauty can outlast politics.\n\nNear the Bargello, he hears shouting. A group of men has cornered someone — a well-dressed young man, maybe twenty, with ink-stained fingers and a terrified expression. 'Medici spy!' they shout. 'Working for Piero!'\n\nThe young man protests: 'I am a *clerk*! I work for the chancery! I am nobody's spy!'\n\nTheo can see the crowd's mood hardening. In a revolution, being accused is the same as being guilty.",
+      "choices": [
+        {
+          "text": "Step in and defend the clerk",
+          "target": "act1_defend_clerk"
+        },
+        {
+          "text": "Watch and see what happens — don't get involved",
+          "target": "act1_watch_mob"
+        },
+        {
+          "text": "Follow the sound of singing toward an artist's workshop",
+          "target": "act1_botticelli_studio"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Cattedrale",
+          "definition": "The Cathedral of Santa Maria del Fiore, topped by Brunelleschi's famous dome (completed 1436). The largest dome built since antiquity, it symbolized Florentine ambition and engineering genius."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act1",
+        "moral_choice",
+        "revolution_chaos"
+      ]
+    },
+    "act1_give_pen": {
+      "title": "A Strange Offering",
+      "text": "Theo hands over the pen. The Piagnone turns it over in his fingers, bewildered. He clicks the button — the point extends. He clicks again — it retracts. His eyes widen.\n\n'What sorcery is this?'\n\n'It's just a pen,' Theo says. 'A writing instrument. Nothing magical.'\n\nBut the young man isn't listening. He holds the pen up and shows it to the crowd. 'See! Even the instruments of worldly cleverness are offered to God's fire!' The crowd cheers.\n\nTheo watches his ballpoint pen — a $1.50 pen from a 10-pack — get carried toward the growing pile of 'vanities' like a holy sacrifice. He feels a pang. Not for the pen, but for what it represents: the idea that knowledge and tools are things to be burned.\n\nSomeone touches his elbow. It is a thin, sharp-featured man with clever eyes. 'That was either very generous or very foolish,' the man says. 'I could not decide which. I am Niccolò. Come — I want to show you something.'",
+      "choices": [
+        {
+          "text": "Go with Niccolò",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "transition",
+        "meets_machiavelli"
+      ]
+    },
+    "act1_refuse_pen": {
+      "title": "A Stubborn Outsider",
+      "text": "Theo shakes his head. 'I have nothing to give.'\n\nThe Piagnone's expression hardens. 'Everyone has something. A vanity. A pride. If you will not surrender it willingly, perhaps your heart is not with Florence.'\n\nHeads turn. In a crowd seized by collective fervor, standing still is the same as standing against. Theo feels the mood shift — the warmth of belonging becoming the heat of suspicion.\n\nA hand grabs his collar from behind and pulls him backward through the crowd. 'Walk,' a voice hisses. 'Walk and do not look back.'\n\nThe hand belongs to a thin man with sharp eyes and an ironic mouth. He steers Theo down a side street and releases him. 'You are either very principled or very stupid,' he says. 'In this city, right now, both are dangerous. I am Niccolò.'",
+      "choices": [
+        {
+          "text": "'Thank you. What was that about?'",
+          "target": "act1_niccolo_on_savonarola"
+        },
+        {
+          "text": "'I can take care of myself.'",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "resistance",
+        "meets_machiavelli"
+      ]
+    },
+    "act1_fox_pen": {
+      "title": "The Fox's First Trick",
+      "text": "Something reckless flickers in Theo's mind. He pulls out the pen, holds it up, and clicks the button. The point extends with a *snap* that silences the nearby Piagnoni.\n\n'This,' Theo says, with as much gravity as he can muster, 'is a writing instrument blessed by Saint Jerome, patron of scholars. It writes without ink — the words flow directly from the saint's inspiration.' He clicks the pen again. Retract. Click. Extend. The Piagnoni stare.\n\n'It is not a vanity,' Theo continues. 'It is a tool of sacred learning. To burn it would be to burn wisdom itself.'\n\nThere is a long, tense silence. Then the lead Piagnone nods slowly. 'Keep it, brother. We do not burn the instruments of God.'\n\nTheo pockets the pen, his heart hammering. He just lied — convincingly — to a crowd of zealots. He used *appearances* to protect something real. He feels both clever and slightly sick.\n\nBehind him, someone laughs quietly. Theo turns to find a thin man with sharp features watching him with undisguised delight. 'Oh, I *like* you,' the man says. 'That was the work of a natural **fox**. I am Niccolò. We need to talk.'",
+      "choices": [
+        {
+          "text": "Go with the man who called you a fox",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [
+        {
+          "term": "The Fox",
+          "definition": "In Machiavelli's famous metaphor (Prince, Ch. XVIII), the fox represents cunning and the ability to recognize traps. A prince must be both fox (shrewd) and lion (strong). 'One who deceives will always find those who allow themselves to be deceived.'"
+        }
+      ],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "fox_metaphor",
+        "deception",
+        "meets_machiavelli"
+      ]
+    },
+    "act1_defend_clerk": {
+      "title": "Against the Mob",
+      "text": "Theo steps forward. He doesn't know why — instinct, maybe, or the memory of every book he's read where nobody stepped forward and bad things happened.\n\n'He's a clerk!' Theo shouts. 'Look at his hands — ink, not blood. If you beat every clerk in Florence, who's going to keep the city's records? Who's going to run the government you just overthrew the Medici to create?'\n\nThe mob hesitates. Practical arguments are surprisingly effective against revolutionary zeal — for about thirty seconds. Then the loudest man in the crowd starts forward again.\n\nBut those thirty seconds were enough. A patrol of the Signoria's guard rounds the corner — six men with halberds. The mob scatters. The clerk sags against the wall, gasping.\n\n'Thank you,' he manages. 'I am — my name is Niccolò. Niccolò Machiavelli. I really am just a clerk.' He peers at Theo with the same sharp, measuring look Theo has seen in the textbook portrait. 'But you — that was well done. You calculated correctly that an appeal to self-interest would delay them longer than an appeal to mercy. That is a useful instinct.'",
+      "choices": [
+        {
+          "text": "'I just said the first thing that came to mind.'",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "'It seemed like the practical thing to do.'",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "courage",
+        "meets_machiavelli",
+        "practical_wisdom"
+      ]
+    },
+    "act1_watch_mob": {
+      "title": "The Cost of Caution",
+      "text": "Theo hangs back. The crowd closes in on the clerk. There are shouts, a scuffle, and then the sound of someone crying out in pain. Theo feels sick. He didn't act, and now—\n\nA Signoria patrol arrives, scattering the mob. The clerk is bruised, bleeding from a cut above his eye, but alive. As the guards help him up, he catches Theo's eye. The look is not accusation, exactly. It's something worse: *understanding*.\n\n'You were afraid,' the clerk says flatly, as the guards lead him away. 'Everyone was. But some people act despite the fear, and some people watch.' He touches the blood on his forehead. 'I will remember the ones who watched.'\n\nTheo stands in the empty street, the clerk's words ringing. He was cautious. He was *prudent*. But prudence that lets an innocent man get beaten is not prudence — it's cowardice.\n\nHe follows the guards toward the Palazzo. He owes that clerk an apology, at least.",
+      "choices": [
+        {
+          "text": "Find the clerk and apologize",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "inaction_consequence",
+        "shame"
+      ]
+    },
+    "act1_banker_advice": {
+      "title": "The Realist's Prescription",
+      "text": "Francesco leans close, his voice dropping beneath the crowd's noise. 'If I were in charge? First: negotiate with the French. Not surrender, negotiate. Charles wants money and a path through Tuscany to Naples — give him both, take a treaty. Second: maintain the banks. The Medici bank is collapsing — someone must step in before credit vanishes. Third...' He looks at the cheering Piagnoni. 'Find a way to use the friar's popularity without being consumed by it.'\n\n'That sounds... Machiavellian,' Theo says, before he can stop himself.\n\nFrancesco raises an eyebrow. 'I do not know the word. But if it means practical, I accept it.' He glances toward the Palazzo. 'There is a young man working in the chancery — clever, ambitious, a reader of the Romans. Niccolò, something. If Florence has a future, it will be built by men like him, not by weeping friars. Come — let me introduce you.'",
+      "choices": [
+        {
+          "text": "Go meet this 'Niccolò'",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act1",
+        "political_strategy",
+        "transition"
+      ]
+    },
+    "act1_defend_savonarola": {
+      "title": "The Idealist's Argument",
+      "text": "Francesco studies Theo with the patient expression of a man who has heard this argument a hundred times. 'Change. Yes. Florence *needs* to change. But change requires *power*, young man. Not moral power — real power. Money, arms, alliances.'\n\nHe gestures at Savonarola on the platform. 'That man has none of those things. He has a voice and a vision. Beautiful. Inspiring. And entirely insufficient. When the Pope excommunicates him — and he will — when the people grow tired of austerity — and they will — what then? You cannot eat visions. You cannot fight armies with sermons.'\n\nTheo opens his mouth to argue, then closes it. Because he knows, with the unfair advantage of someone from the future, that Francesco is exactly right. Savonarola will be excommunicated in 1497 and burned at the stake in 1498. The unarmed prophet will fail.\n\n'I see you understand,' Francesco says gently. 'Come. Let me introduce you to someone who thinks about these problems for a living.'",
+      "choices": [
+        {
+          "text": "Go with Francesco",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act1",
+        "idealism_vs_realism",
+        "transition"
+      ]
+    },
+    "act1_palazzo_niccolo": {
+      "title": "The Palazzo and a Proposition",
+      "text": "Inside the Palazzo della Signoria, the corridors are a controlled chaos of messengers, scribes, and nervous officials. Niccolò leads Theo through it all with the ease of someone who belongs.\n\n'I have been appointed to the Second Chancery,' he says, unable to hide his pride. 'Secretary to the **Ten of Liberty and Peace**. We handle foreign affairs and war — which, in Florence, are the same thing.'\n\nHe stops outside a wooden door. 'Theo — I will be direct. I need someone I can trust who is *not* entangled in Florentine factions. You are a stranger. You owe nothing to the Medici, the Piagnoni, or the **Arrabbiati**. That makes you useful.'\n\nHe opens the door to a small office piled high with dispatches. 'In three months, the Republic will send me on a diplomatic mission. To France, perhaps, or to one of the Italian courts. I need an assistant who can observe, report, and — most importantly — keep his mouth shut.' He looks at Theo. 'What do you say?'\n\nThe world has jumped forward. It is 1498 now — Savonarola is dead, executed in the piazza where Theo heard him preach. Niccolò does not seem surprised by the passage of time. Perhaps in this dream, time moves differently.",
+      "choices": [
+        {
+          "text": "Accept — become Niccolò's diplomatic assistant",
+          "target": "act2_chancery_accept"
+        },
+        {
+          "text": "'I'd rather stay in Florence and learn how the Republic works from here'",
+          "target": "act2_chancery_stay"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [
+        {
+          "term": "Ten of Liberty and Peace",
+          "definition": "A Florentine magistracy responsible for foreign affairs and military matters. Machiavelli served as their Secretary from 1498 to 1512, conducting diplomatic missions across Italy and Europe."
+        },
+        {
+          "term": "Arrabbiati",
+          "definition": "'The Angry Ones' — the aristocratic faction in Florence that opposed Savonarola's puritanical rule. After Savonarola's execution, they competed with the Piagnoni for control of the republic."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act2",
+        "chancery",
+        "call_to_adventure"
+      ]
+    },
+    "act2_chancery_accept": {
+      "title": "The Diplomat's Apprentice",
+      "text": "The next months are an education in themselves. Niccolò teaches Theo the art of the dispatch — how to compress a complex situation into a single page, how to read between the lines of what ambassadors say, how to distinguish between what a prince *wants* and what a prince *needs*.\n\n'Everyone lies,' Niccolò says one evening, bent over a coded letter. 'The question is never whether someone is lying. The question is: what truth are they trying to hide?'\n\nTheir first mission together comes in the autumn of 1502. The destination: the court of **Cesare Borgia**, Duke Valentino, who is carving out a principality in the Romagna with his father's papal armies and his own terrifying efficiency.\n\n'He is the most dangerous man in Italy,' Niccolò says, packing his traveling case. 'And therefore the most instructive. Watch everything he does. Take notes. And whatever you do —' He looks up with an expression that is not quite a smile. '— do not let him know what you are thinking.'",
+      "choices": [
+        {
+          "text": "Travel to Cesare Borgia's court",
+          "target": "act2_borgia_arrival"
+        },
+        {
+          "text": "Accept a diplomatic mission to France first",
+          "target": "act2_france_mission"
+        },
+        {
+          "text": "Propose training a citizen militia before leaving",
+          "target": "act3_militia_training"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [
+        {
+          "term": "Cesare Borgia",
+          "definition": "Duke Valentino (1475–1507). Son of Pope Alexander VI. Rose from nothing to carve out a principality in central Italy through a combination of his father's papal authority, military brilliance, and ruthless cunning. Machiavelli's most discussed example in The Prince."
+        }
+      ],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "diplomacy",
+        "borgia_mission"
+      ]
+    },
+    "act2_chancery_stay": {
+      "title": "The View from the Office",
+      "text": "Niccolò nods — disappointed, but accepting. 'Very well. There is plenty to learn here. The Republic is a school for anyone willing to watch.'\n\nTheo spends months in the chancery, reading dispatches, watching the Signoria debate, learning the mechanics of a republic under pressure. He sees how factions paralyze decision-making, how fear of offending one group prevents action against another.\n\nThen the news arrives: Cesare Borgia has massacred the Orsini condottieri at **Sinigaglia**. He invited them to a feast, embraced them — and had them strangled.\n\nNiccolò returns from the Romagna, his face haggard but his eyes alive. 'I watched it happen,' he says. 'I saw a man destroy his enemies with a single stroke — and the next morning, the people of the Romagna *loved* him for it, because their oppressors were dead.'\n\nHe drops a stack of dispatches on Theo's desk. 'Read these. Then decide: was Borgia a monster or a statesman? Because the answer to that question is the answer to *everything*.'",
+      "choices": [
+        {
+          "text": "'He was a monster. No one should murder allies at a feast.'",
+          "target": "act2_monster_debate"
+        },
+        {
+          "text": "'He was effective. He solved a problem with one decisive act.'",
+          "target": "act2_effective_debate"
+        },
+        {
+          "text": "'Can't he be both?'",
+          "target": "act2_both_debate"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [
+        {
+          "term": "Sinigaglia",
+          "definition": "The site of Cesare Borgia's most famous stratagem (December 31, 1502). Borgia lured his rebellious condottieri captains to a meeting, then had them arrested and killed. Machiavelli witnessed this and wrote a detailed account."
+        }
+      ],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "borgia_analysis",
+        "moral_question"
+      ]
+    },
+    "act2_borgia_arrival": {
+      "title": "The Court of the Duke",
+      "text": "Imola, the Romagna. October 1502.\n\nCesare Borgia's court is not what Theo expected. There is no grandeur — no marble halls, no fountains. The Duke operates from a military camp that happens to be inside a city. Armed men are everywhere. The atmosphere is efficient, paranoid, and electric.\n\nBorgia receives them in a plain room with a single table covered in maps. He is twenty-seven years old. Handsome, with a red beard and a scar running down one cheek. His eyes are the coldest Theo has ever seen — not cruel exactly, but *measuring*, as if everyone in the room is a variable in an equation he is solving.\n\n'Ah, the Florentine secretary,' Borgia says to Niccolò. 'And who is this?' He looks at Theo with an expression of mild curiosity.\n\n'My assistant,' Niccolò says smoothly.\n\nBorgia smiles. 'Everyone has assistants. The question is what they are *really* for.' He turns back to the maps. 'Tell your Signoria that I want Florence's friendship. But tell them also that friendship has a price, and neutrality—' He taps the map where Florence sits. '—neutrality in times like these is a luxury only the strong can afford.'\n\nLater, Niccolò whispers: 'He is testing us. He wants to know if Florence will ally with him or against him. We must give him **neither answer**.'",
+      "choices": [
+        {
+          "text": "'Why not just ally with him? He's winning.'",
+          "target": "act2_borgia_ally_question"
+        },
+        {
+          "text": "'What happens if we refuse him?'",
+          "target": "act2_borgia_refuse_question"
+        },
+        {
+          "text": "'Teach me how to say nothing while appearing to say something.'",
+          "target": "act2_diplomatic_art"
+        },
+        {
+          "text": "Investigate the strange engineer sketching war machines in camp",
+          "target": "act2_leonardo_encounter"
+        },
+        {
+          "text": "Offer to spy for Florence inside Borgia's court",
+          "target": "act2_borgia_spy"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "borgia_court",
+        "diplomacy"
+      ]
+    },
+    "act2_borgia_ally_question": {
+      "title": "The Danger of Alliance",
+      "text": "Niccolò shakes his head sharply. 'Because the man who allies with a stronger power has already surrendered. If Borgia wins his wars, Florence becomes his vassal. If he loses—' Niccolò draws a finger across his throat. 'His father is the Pope. When the Pope dies, Borgia's power collapses. Everyone who allied with him becomes a target.'\n\n'So we refuse?'\n\n'We *delay*. We compliment. We send messages that say much and commit to nothing. We buy time for Florence to arm itself.' He pauses. 'Borgia understands this game. He plays it better than anyone. But understanding the game and winning it are different things.'\n\nThat night, Borgia invites them to dinner. The Duke is charming — brilliant, even. He discusses Livy, quotes Plutarch, and asks Niccolò's opinion on whether it is better for a prince to be loved or feared.\n\nNiccolò answers carefully. Theo is asked directly.",
+      "choices": [
+        {
+          "text": "'Loved. A prince who is loved has willing subjects.'",
+          "target": "act2_borgia_loved"
+        },
+        {
+          "text": "'Feared. Love is fickle; fear is reliable.'",
+          "target": "act2_borgia_feared"
+        },
+        {
+          "text": "'Neither. A prince should be respected.'",
+          "target": "act2_borgia_respected"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "loved_vs_feared",
+        "key_question"
+      ]
+    },
+    "act2_borgia_refuse_question": {
+      "title": "The Cost of Refusal",
+      "text": "'If we refuse him?' Niccolò's voice is quiet. 'Then we become an obstacle. And Borgia does not tolerate obstacles — he removes them. He destroyed the Orsini. He crushed the Vitelli. Florence has no army worth the name — just mercenaries who will switch sides for the right price.'\n\nHe stares out the window at Borgia's soldiers drilling in the courtyard. 'This is the problem with Italian politics, Theo. Every city-state relies on **condottieri** instead of arming its own citizens. When the crisis comes, you discover that your defense has been rented, not built. And rented defenses can be outbid.'\n\n'So what do we tell the Signoria?'\n\n'That Florence must create a citizens' militia. That we must stop depending on mercenaries. That the **effectual truth** of our situation is that we are weak, and weak states either arm themselves or die.' He pauses. 'Of course, they will not listen. They never do. Not until the disaster is at the gates.'",
+      "choices": [
+        {
+          "text": "Ask Niccolò about his militia idea",
+          "target": "act2_militia_plan"
+        },
+        {
+          "text": "Focus on the immediate mission — what do we tell Borgia?",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [
+        {
+          "term": "Effectual Truth",
+          "definition": "Machiavelli's term (verità effettuale) for the reality of how things work, as opposed to how people imagine or wish they worked. The foundation of his political realism: study what IS, not what ought to be."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act2",
+        "militia",
+        "effectual_truth"
+      ]
+    },
+    "act2_diplomatic_art": {
+      "title": "The Art of Saying Nothing",
+      "text": "Niccolò grins — the grin of a man who loves his work. 'The art of diplomacy is this: make the other side feel heard without being committed. Praise their wisdom. Express Florence's deep admiration for the Duke's achievements. Regret that the Signoria moves slowly — 'a republic, you understand, so many voices to consult.' And above all, never say no. Say *not yet*.'\n\nOver the following weeks, Theo watches Niccolò practice this art at Borgia's court. It is extraordinary. Every audience with the Duke ends with Borgia believing he is *about* to get Florence's commitment — and every dispatch to Florence says exactly the opposite.\n\nBut then something happens that changes everything. Borgia's condottieri captains — the Orsini, the Vitelli — have been plotting against him. They raised a revolt. And Borgia, instead of panicking, invited them to a meeting at Sinigaglia to 'negotiate peace.'\n\nNiccolò looks at Theo with grim certainty. 'This is not a negotiation. This is a trap. We should go — to watch what happens.'",
+      "choices": [
+        {
+          "text": "Go to Sinigaglia with Niccolò",
+          "target": "act2_sinigaglia"
+        },
+        {
+          "text": "Stay in Imola — you've seen enough of Borgia",
+          "target": "act2_remirro"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "diplomatic_craft",
+        "sinigaglia_setup"
+      ]
+    },
+    "act2_sinigaglia": {
+      "title": "The Trap at Sinigaglia",
+      "text": "December 31, 1502. Sinigaglia.\n\nIt happens with terrible efficiency. The condottieri arrive for their 'peace meeting.' Borgia embraces them. Wine is served. And then, at a signal, Borgia's men seize them all. By morning, Vitellozzo Vitelli and Oliverotto da Fermo are strangled. The Orsini follow days later.\n\nTheo stands in the courtyard of the fortress, feeling physically ill. He just watched a man lure his enemies to a banquet and murder them. The textbook called it 'a masterstroke of political timing.' Standing here, it feels like something else.\n\nNiccolò is writing furiously. 'Did you see?' he says, not looking up. 'One act. One evening. He destroyed a coalition that threatened his entire state. No prolonged war, no siege, no famine. His subjects are *relieved* — the condottieri were oppressing them. Borgia solved the problem and the people love him for it.'\n\n'But he *murdered* them. At a feast. After embracing them.'\n\nNiccolò stops writing. 'Yes. And now ask yourself: what would have happened if he had not? A civil war. Thousands dead. The Romagna in flames.' He looks at Theo. 'Which is worse — a treacherous act that saves a state, or an honorable one that destroys it?'",
+      "choices": [
+        {
+          "text": "'The treachery is worse. You can't build trust on murder.'",
+          "target": "act2_sinigaglia_condemn"
+        },
+        {
+          "text": "'The outcome matters more than the method.'",
+          "target": "act2_sinigaglia_accept"
+        },
+        {
+          "text": "'I don't know. And I don't think you do either.'",
+          "target": "act2_sinigaglia_honest"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia",
+        "Vitellozzo Vitelli",
+        "Oliverotto da Fermo"
+      ],
+      "tags": [
+        "act2",
+        "sinigaglia",
+        "moral_crisis",
+        "key_scene"
+      ]
+    },
+    "act2_remirro": {
+      "title": "The Body in the Piazza",
+      "text": "Theo stays in the Romagna. And there, he witnesses something else.\n\nBorgia had appointed **Remirro de Orco** as governor of the Romagna — a cruel, efficient man who brought order through terror. The people hated Remirro but obeyed him. The province was pacified.\n\nThen, one morning, Theo walks into the piazza of Cesena to find Remirro's body — cut in half, laid out on a wooden block, with a bloody knife beside it. The message is unmistakable: *I did this. The cruelty was his, not mine. You are free of him now.*\n\nThe people cheer. They throw flowers. They chant Borgia's name.\n\nTheo stands in the piazza, staring at the bisected corpse of a man who was doing exactly what his master told him to do. Borgia used Remirro's cruelty to pacify the province, then destroyed him to win the people's love. The tool was discarded after use.\n\n'Brilliantly done,' Niccolò says when he hears. 'Borgia has **purged the minds of the people** and made himself their savior.'",
+      "choices": [
+        {
+          "text": "'This is monstrous. Remirro was loyal to him.'",
+          "target": "act2_remirro_condemn"
+        },
+        {
+          "text": "'It's horrible, but I understand the logic.'",
+          "target": "act2_remirro_understand"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [
+        {
+          "term": "Remirro de Orco",
+          "definition": "Borgia's governor of the Romagna. Appointed to bring order through harsh measures, then publicly executed by Borgia to shift blame for the cruelty and win popular support. Machiavelli called this episode one of the most instructive in politics (Prince, Ch. VII)."
+        }
+      ],
+      "figures": [
+        "Cesare Borgia",
+        "Remirro de Orco"
+      ],
+      "tags": [
+        "act2",
+        "remirro",
+        "well_used_cruelty",
+        "key_scene"
+      ]
+    },
+    "act2_borgia_loved": {
+      "title": "The Duke's Laugh",
+      "text": "Borgia laughs — not mockingly, but with genuine amusement. 'Love! You are young. Let me tell you what love gets a prince.' He leans forward. 'Love gets him flattered in the morning and abandoned by afternoon. Love is pleasant. Love is *fickle*. I had the love of the Orsini — until they decided my father's money wasn't enough.'\n\nHe picks up a wine glass. 'Fear, on the other hand, depends on me. I control the punishment. I decide when it falls and on whom. Love depends on *them* — on their mood, their interests, their appetites.' He sips. 'I prefer to depend on what I can control.'\n\nNiccolò nods almost imperceptibly. He will write exactly this argument in *The Prince*, Chapter XVII — Theo has read it.\n\n'But,' Borgia adds, 'there is a limit. A prince must never be *hated*. Fear is useful. Hatred is fatal. The line between them is thin.' He looks at Theo. 'Never forget that.'",
+      "choices": [
+        {
+          "text": "Ask about the Remirro de Orco situation",
+          "target": "act2_remirro"
+        },
+        {
+          "text": "Travel on to Sinigaglia",
+          "target": "act2_sinigaglia"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "loved_vs_feared",
+        "borgia_dialogue"
+      ]
+    },
+    "act2_borgia_feared": {
+      "title": "A Prince's Approval",
+      "text": "Borgia studies Theo for a long moment. 'You understand. Most people do not — they confuse sentimentality with wisdom.' He nods. 'Fear is the more reliable bond. But hear this: fear without reason is tyranny. The people must fear the *punishment*, not the prince. They must see that the punishment is just — or at least necessary. A prince who is feared for cruelty alone will be hated, and hatred is the death of princes.'\n\nHe stands and walks to the window. The Romagna stretches below — farms, villages, the winding road to the coast. 'I brought order to this province. The people were oppressed by petty tyrants. I destroyed those tyrants. The people fear me — yes. But they also know that under my rule, the roads are safe, the courts function, and no local lord will rob them blind.'\n\nHe turns back. 'The **effectual truth**, young man: a prince is judged by results, not by methods.'",
+      "choices": [
+        {
+          "text": "Ask about the Remirro de Orco situation",
+          "target": "act2_remirro"
+        },
+        {
+          "text": "Travel on to Sinigaglia",
+          "target": "act2_sinigaglia"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "loved_vs_feared",
+        "effectual_truth"
+      ]
+    },
+    "act2_borgia_respected": {
+      "title": "The Third Option",
+      "text": "Borgia's eyebrow rises. 'Respected. An interesting answer. Neither love nor fear, but something between.' He considers this. 'Respect requires *consistency*. The people must know what to expect from you. Reward merit. Punish disloyalty. Be predictable in your principles, even if unpredictable in your tactics.' He pauses. 'It is perhaps the hardest path. Love is cheap. Fear is easy. Respect must be earned, daily, through action.'\n\nNiccolò catches Theo's eye across the table and gives a tiny nod of approval.\n\nLater, walking back to their quarters, Niccolò says: 'That was a better answer than you know. In the book I will write someday, I will argue for fear over love. But the truth is more complicated. The best princes combine both — and add a quality that has no name. Call it *gravitas*. Call it **virtù**. It is the thing that makes people follow you because they *believe* in you, not because they are paid or afraid.'",
+      "choices": [
+        {
+          "text": "Ask about the Remirro de Orco situation",
+          "target": "act2_remirro"
+        },
+        {
+          "text": "Travel on to Sinigaglia",
+          "target": "act2_sinigaglia"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [
+        {
+          "term": "Virtù",
+          "definition": "Machiavelli's key term: a combination of skill, energy, determination, and political cunning — NOT moral virtue in the Christian sense. A leader with virtù seizes opportunities created by Fortune and shapes events through decisive action."
+        }
+      ],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "virtu",
+        "nuanced_answer"
+      ]
+    },
+    "act2_militia_plan": {
+      "title": "Citizens Under Arms",
+      "text": "Niccolò's eyes light up. This is his passion project. 'Every free republic in history — Rome, Sparta, the Swiss cantons — defended itself with its own citizens. Citizens fight for their homes, their families, their freedom. Mercenaries fight for money, and money can always be outbid.'\n\nHe sketches a plan on the back of a dispatch. 'We raise a militia from the Florentine countryside. Farmers, craftsmen — ordinary men given training and purpose. Not professional soldiers, but men who will fight because Florence is *their* city.'\n\n'Will the Signoria agree?'\n\n'Eventually. It took the Romans centuries to perfect their legions. Florence will be slower.' He rolls up the sketch. 'But this is the **effectual truth**: a state without its own arms is not a state at all. It is a client waiting to discover who its real master is.'\n\nNiccolò will get his militia — in 1506, he will personally organize and drill the Florentine citizen soldiers. They will capture Pisa. And then, in 1512, they will be crushed by Spanish veterans at Prato, and everything will fall apart.",
+      "choices": [
+        {
+          "text": "Focus on the immediate mission with Borgia",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "militia",
+        "citizen_army"
+      ]
+    },
+    "act2_monster_debate": {
+      "title": "The Moralist's Position",
+      "text": "Niccolò sighs — not with disappointment, but with the weariness of a man who has had this argument with himself a hundred times.\n\n'A monster. Yes. By any moral standard, Borgia committed a terrible crime. But tell me — those condottieri he killed? The Orsini were extorting the people of the Romagna. The Vitelli were looting villages. Oliverotto da Fermo gained *his* power by murdering his own uncle at a banquet. These were not innocents.'\n\nHe leans forward. 'I am not asking you to admire Borgia. I am asking you to *understand* him. There is a difference. The world is not divided into saints and monsters. It is divided into those who act and those who are acted upon.'\n\nThe debate continues late into the night. By the end, Theo's position has not changed — but it has grown more complicated.",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "moral_debate"
+      ]
+    },
+    "act2_effective_debate": {
+      "title": "The Realist's Position",
+      "text": "Niccolò nods slowly. 'You have the instinct. But be careful with it. Effectiveness without limits becomes tyranny. Borgia was effective — but when his father the Pope died, his **fortune** collapsed because he had built on another man's power, not his own.'\n\n'So effectiveness isn't enough?'\n\n'Effectiveness must be paired with **virtù** — with the ability to adapt, to prepare, to build institutions that outlast any single man. Borgia was brilliant in the moment but fragile in the long run. A truly great prince builds something that survives him.'\n\nHe picks up a book of Livy. 'The Romans understood this. Their republic lasted five centuries because it was built on laws and institutions, not on any one man's genius. *That* is the lesson.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "realist_debate",
+        "virtu"
+      ]
+    },
+    "act2_both_debate": {
+      "title": "The Complicated Truth",
+      "text": "Niccolò stares at Theo for a long moment. Then he laughs — a real laugh, warm and surprised. 'Both! Yes. That is exactly right, and it is exactly the answer that most people cannot bring themselves to give.'\n\nHe sits down. 'Borgia was a monster *and* a statesman. He committed terrible acts *and* brought peace to a province that had known nothing but war. The world does not arrange itself into neat categories for our comfort. The **effectual truth** — the truth of what actually happens — is always more complicated than the moralist's version or the cynic's version.'\n\n'So what do we do with that?'\n\n'We look clearly. We judge by results *and* by methods. We accept that sometimes there are no good choices — only less-bad ones. And we try—' His voice softens. '—we try to build a world where such choices are less necessary. That is what a republic is for.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "nuanced_debate",
+        "effectual_truth"
+      ]
+    },
+    "act2_sinigaglia_condemn": {
+      "title": "The Weight of Principles",
+      "text": "Niccolò listens. He does not argue. After a long silence, he says: 'You may be right. But answer me this: if Borgia had fought a conventional war against the condottieri, how many would have died? Hundreds? Thousands? And the Romagna — burned, looted, families destroyed. Instead, four men are dead, and the province is at peace.'\n\n'You can't measure murder by arithmetic,' Theo says.\n\n'No? Then by what? By *principle*? Whose principle? The Pope's? The condottieri's? They had no principles — only interests.' Niccolò's voice is gentle, not argumentative. 'I do not ask you to approve. I ask you to *see*.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "moral_debate",
+        "sinigaglia_aftermath"
+      ]
+    },
+    "act2_sinigaglia_accept": {
+      "title": "The Logic of Power",
+      "text": "Niccolò nods, but his expression is careful. 'You accept the logic. Good. But do not accept it *too* easily. The man who says 'the ends justify the means' without feeling the weight of the means is not a statesman — he is a butcher.'\n\n'Then what's the difference?'\n\n'The statesman acts from *necessità* — necessity — not from appetite. He takes no pleasure in cruelty. He uses it as a surgeon uses a knife: precisely, reluctantly, and only when the alternative is worse.' He pauses. 'Borgia — I am not certain he always meets that standard.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "necessita",
+        "measured_realism"
+      ]
+    },
+    "act2_sinigaglia_honest": {
+      "title": "The Honest Answer",
+      "text": "Niccolò looks at Theo for a long time. Then, slowly, he nods. 'That is perhaps the most honest answer anyone has ever given me. And I will tell you a secret: I do not know either.'\n\nHe sets down his pen. 'I have watched this man — this brilliant, terrifying man — for months. He does things that revolt me. And then I look at the *results*, and I cannot deny that the Romagna is more peaceful, more prosperous, and more justly governed than it has been in a generation.'\n\n'So you admire him?'\n\n'I *study* him. The way a doctor studies a disease — not because the disease is admirable, but because understanding it is the first step to defeating it. Or to using its methods for better ends.' He picks up his pen again. 'I will write a book about this someday. And people will misunderstand it for centuries.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "honest_uncertainty",
+        "book_foreshadow"
+      ]
+    },
+    "act2_remirro_condemn": {
+      "title": "Loyalty's Price",
+      "text": "'Remirro did what Borgia told him to do,' Theo says. 'He was loyal. And Borgia repaid that loyalty by cutting him in half and displaying him in a piazza. What kind of prince does that to his own man?'\n\nNiccolò considers this. 'A prince who understands that **loyalty without usefulness is a luxury**, and usefulness without loyalty is a tool. Remirro was a tool. His usefulness was over. His continued existence was a political liability.' He holds up a hand before Theo can object. 'I am not saying it is right. I am saying it is *how power works*. If you want to change it, you must first understand it.'",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "remirro_aftermath",
+        "moral_debate"
+      ]
+    },
+    "act2_remirro_understand": {
+      "title": "Well-Used Cruelty",
+      "text": "Niccolò nods. 'You see it. This is what I will call **well-used cruelty** — cruelty committed all at once, for a definite purpose, and then *stopped*. Remirro's reign of terror was finite. It ended with his death. The people's suffering ended with it. And they associate Borgia not with the suffering but with the liberation.'\n\n'Badly-used cruelty,' he continues, 'is the opposite: it escalates over time, grows worse as the prince becomes more afraid. A prince who starts with cruelty and can never stop is doomed. A prince who uses cruelty *once*, decisively, and then governs well — he can survive.'\n\nTheo thinks of every government he has studied. The pattern is there, over and over: the leaders who fall are the ones who cannot stop escalating.",
+      "choices": [
+        {
+          "text": "Continue to the fall of the Republic",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [
+        {
+          "term": "Well-Used Cruelty",
+          "definition": "Machiavelli's term (Prince, Ch. VIII) for cruelties committed all at once, out of necessity, and then discontinued. Contrasted with 'badly-used cruelty' that escalates over time. The political logic: decisive harshness followed by benevolent governance is more stable than prolonged, increasing severity."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act2",
+        "well_used_cruelty",
+        "key_concepts"
+      ]
+    },
+    "act3_fall_approach": {
+      "title": "The End of the Republic",
+      "text": "Time shifts again. It is August 1512.\n\nEverything Niccolò feared has come to pass. Pope Alexander VI died in 1503. Cesare Borgia's power collapsed overnight — the prince who built on his father's fortune was destroyed by that fortune's end. Florence survived, barely, and Niccolò spent the next decade building his dream: a citizens' militia, Florentine soldiers, armed and trained.\n\nAnd now they are about to be tested. A Spanish army — 5,000 veteran infantry, the best soldiers in Europe — is marching on Prato, twelve miles from Florence. They come to restore the Medici.\n\nNiccolò stands on the city walls, watching his militia assemble. These are the farmers and craftsmen he recruited, trained, equipped. They look brave. They look determined.\n\nThey also look terrified. Because the men they are about to face are not mercenaries — they are the **tercios**, Spain's professional soldiers who have conquered half of Italy.\n\n'Will they hold?' Theo asks.\n\nNiccolò does not answer. His face tells Theo everything.",
+      "choices": [
+        {
+          "text": "Stay with the militia — fight with them",
+          "target": "act3_prato_fight"
+        },
+        {
+          "text": "Ride to the Signoria — maybe a diplomatic solution",
+          "target": "act3_prato_negotiate"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [
+        {
+          "term": "Tercios",
+          "definition": "Spanish military units combining pike, sword, and firearms in disciplined formations. The tercios dominated European warfare from the early 1500s to the mid-1600s and were considered virtually invincible in open battle."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act3",
+        "prato",
+        "militia_test"
+      ]
+    },
+    "act3_prato_fight": {
+      "title": "The Battle of Prato",
+      "text": "It is over in two hours. The Spanish tercios breach the walls of Prato and pour in. Niccolò's militia — brave, earnest, untested — breaks. They run. The Spanish soldiers sack the city with medieval ferocity. Thousands die.\n\nTheo and Niccolò stand on a hilltop watching Prato burn. The column of smoke rises into a blue August sky like a question mark.\n\n'I was wrong,' Niccolò says quietly. 'Not about the principle — a republic must have its own arms. But about the *timing*. You cannot build an army in a decade and expect it to stand against professionals who have trained for a lifetime. I gave them courage but not experience. And courage without experience...' He watches the smoke. '...is just a more honorable way of dying.'\n\nTwo days later, the Republic falls. The Medici return. Niccolò is stripped of his office, arrested, and thrown into the Bargello. The **Stinche** — Florence's prison — swallows him.\n\nAnd then they come for Theo.",
+      "choices": [
+        {
+          "text": "Surrender — your fight is Niccolò's fight",
+          "target": "act3_prison"
+        },
+        {
+          "text": "Try to escape Florence before they find you",
+          "target": "act3_escape_attempt"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [
+        {
+          "term": "Stinche",
+          "definition": "Florence's main prison, located near the present-day Piazza Santa Croce. Machiavelli was imprisoned and tortured here in February 1513 on suspicion of conspiracy against the restored Medici government."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act3",
+        "prato",
+        "defeat",
+        "militia_failure"
+      ]
+    },
+    "act3_prato_negotiate": {
+      "title": "Too Late for Words",
+      "text": "Theo rides to the Palazzo, but the corridors that once hummed with republican energy are empty. The Signoria has already sent envoys. The answer came back: unconditional surrender. Restore the Medici. No negotiation.\n\nA clerk — one of Niccolò's colleagues — grabs Theo's arm. 'It's over. The Spanish took Prato. The militia broke in two hours. Niccolò's citizen army—' He shakes his head. 'It wasn't enough. Not against professionals.'\n\n'Where is Niccolò?'\n\n'Arrested. They're rounding up everyone connected to the Republic. You should leave — now — before they come for you too.'\n\nTheo stands in the empty corridor of the Palazzo della Signoria. The Florentine Republic, which he watched being born out of the Medici's fall, is dying. Everything Niccolò built — the chancery, the militia, the diplomatic network — is being dismantled.",
+      "choices": [
+        {
+          "text": "Go to the prison and try to help Niccolò",
+          "target": "act3_prison"
+        },
+        {
+          "text": "Escape Florence while you can",
+          "target": "act3_escape_attempt"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "republic_falls",
+        "crisis_choice"
+      ]
+    },
+    "act3_prison": {
+      "title": "The Strappado",
+      "text": "The cell is cold and dark. They accuse Niccolò of conspiracy — of plotting against the Medici. He denies it. They apply the **strappado**: his hands are tied behind his back, he is hoisted by a rope, and dropped. The shoulders nearly dislocate. They do this six times.\n\nNiccolò does not confess, because there is nothing to confess. He is not a conspirator — he is a civil servant who served the Republic loyally. But loyalty to a fallen government is itself suspicious.\n\nTheo, in the next cell, hears everything. When the guards finally leave, Niccolò's voice comes through the wall — hoarse, pained, but unmistakably alive.\n\n'Theo. Are you there?'\n\n'I'm here.'\n\n'Good. I have been thinking — in between the screaming — about **fortune**. About rivers. About how a man who does everything right can still be destroyed by forces beyond his control.' A pause. 'Borgia prepared for everything except his own illness coinciding with his father's death. I prepared my militia, but I could not give them ten years of experience in two. Fortune wins sometimes. The question is what you do *after* it wins.'\n\n'What do you do?'\n\n'You write. You think. You prepare the embankments for the next flood.'",
+      "choices": [
+        {
+          "text": "'What will you write?'",
+          "target": "act3_writing_prince"
+        },
+        {
+          "text": "'Do you regret any of it?'",
+          "target": "act3_regret_question"
+        },
+        {
+          "text": "Ask Niccolò about his deepest regrets",
+          "target": "act3_prison_conversation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [
+        {
+          "term": "Strappado",
+          "definition": "A form of torture where the subject's hands are tied behind their back and they are suspended by a rope, then dropped. Machiavelli endured six drops of the strappado in February 1513 and maintained his innocence throughout."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act3",
+        "prison",
+        "torture",
+        "fortune_reflection"
+      ]
+    },
+    "act3_escape_attempt": {
+      "title": "The Fox Runs",
+      "text": "Theo slips out of the city gates in the chaos. He takes nothing — just the clothes on his back and the plastic pen in his pocket. He follows the road south into the Tuscan hills.\n\nFor three days he walks, sleeping in haystacks, drinking from streams. He passes through villages where people are already adjusting to the new reality — Medici banners where republican symbols hung a week ago.\n\nOn the third day, outside a tiny village, he hears a familiar voice. Niccolò is sitting on a stone wall beside the road, looking thinner, older, with bruises on his wrists. He has been released from prison — amnestied, along with most of the minor officials, when a Medici pope was elected.\n\n'They let me go,' he says. 'But they will not let me work. I am exiled to my farm at **Sant'Andrea in Percussina**. No office, no missions, no politics.' He smiles crookedly. 'I am a secretary without a state.'\n\nHe looks at the Tuscan hills. 'Will you stay with me for a while? I have something I need to write, and I could use someone to argue with.'",
+      "choices": [
+        {
+          "text": "Stay with Niccolò on the farm",
+          "target": "act3_writing_prince"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [
+        {
+          "term": "Sant'Andrea in Percussina",
+          "definition": "A small village south of Florence where Machiavelli owned a farm. Exiled here after 1512, he spent his days doing farm work and his evenings writing. It was here, in late 1513, that he composed The Prince."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act3",
+        "exile",
+        "sant_andrea"
+      ]
+    },
+    "act3_regret_question": {
+      "title": "No Regrets",
+      "text": "There is a long silence from the other side of the wall.\n\n'Regret is for people who had choices and chose wrongly,' Niccolò says finally. 'I served Florence as best I could. I built a militia because Florence needed one. I negotiated with Borgia because Florence's survival required it. I studied power because someone had to understand how it works.'\n\nAnother silence. 'The only thing I regret is that I could not teach the Signoria to prepare while there was still time. They waited for the river to flood, and then wondered why they were drowning.'\n\nHe coughs — the torture has left him weakened. 'But I will not stop. They have taken my office, my freedom, my health. They have not taken my mind. And with that mind, I will write something that will outlast every prince who ever tortured a clerk.'",
+      "choices": [
+        {
+          "text": "'What will you write?'",
+          "target": "act3_writing_prince"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "resilience",
+        "defiance"
+      ]
+    },
+    "act3_writing_prince": {
+      "title": "The Farm at Sant'Andrea",
+      "text": "Sant'Andrea in Percussina, late 1513.\n\nNiccolò's life on the farm is a study in contradictions. By day, he chops wood, argues with the miller, plays cards at the inn with peasants who cheat. By evening, something changes.\n\nHe describes it in a letter: 'When evening comes, I return home and go into my study. On the threshold, I take off my mud-stained country clothes and put on my regal court dress. Dressed appropriately, I enter the ancient courts of ancient men. For four hours I feel no boredom. I forget every anxiety. I am not afraid of poverty. Death does not dismay me. I am completely absorbed in them.'\n\nHe is writing *The Prince*. Night after night, by candlelight, he pours everything he has learned — Borgia, Savonarola, the militia, the condottieri, fortune and virtù — into twenty-six chapters.\n\n'I am writing it for the Medici,' he tells Theo. 'Perhaps they will read it and give me a position. Perhaps not.' He dips his pen. 'But the real audience is not the Medici. The real audience is anyone — five years from now or five hundred — who wants to understand how power actually works.'\n\nHe pushes a manuscript page toward Theo. 'Tell me what you think.'",
+      "choices": [
+        {
+          "text": "Read the chapter on Fortune (Ch. XXV)",
+          "target": "act4_fortune_chapter"
+        },
+        {
+          "text": "Read the chapter on the Fox and the Lion (Ch. XVIII)",
+          "target": "act4_fox_lion_chapter"
+        },
+        {
+          "text": "Read the chapter on whether it is better to be loved or feared (Ch. XVII)",
+          "target": "act4_loved_feared_chapter"
+        },
+        {
+          "text": "Read the chapter on civil principalities (Ch. IX)",
+          "target": "act4_civil_principality"
+        },
+        {
+          "text": "Read the final chapter — the Exhortation to Liberate Italy",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "writing_prince",
+        "key_scene"
+      ]
+    },
+    "act4_fortune_chapter": {
+      "title": "Fortune Is a River",
+      "text": "Theo reads. The words are familiar — he has read them before, in a textbook, in another life. But here, in the candlelight, written in Niccolò's cramped hand on rough paper, they are different. They are *alive*.\n\n'*I compare Fortune to one of those raging rivers which, when in flood, overflows the plains, sweeps away trees and buildings, bears away the soil from place to place; everything flies before it, all yield to its violence, without being able in any way to withstand it...*'\n\nTheo remembers the bridge. The swollen Arno. The French soldiers on the far bank. He has *seen* this river.\n\n'*...and yet, though its nature be such, it does not follow therefore that men, when the weather becomes fair, shall not make provision, both with defences and barriers, in such a manner that, rising again, the waters may pass away by canal, and their force be neither so unrestrained nor so dangerous.*'\n\n'It's about Piero,' Theo says. 'And Borgia. And Florence.'\n\n'It is about *everyone*,' Niccolò says. 'Fortune governs half our actions. We govern the other half. The question is whether we spend the fair weather building embankments or lounging in the sun.'",
+      "choices": [
+        {
+          "text": "'What's the other half — the half we control?'",
+          "target": "act4_virtu_discussion"
+        },
+        {
+          "text": "Read the final chapter next",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "fortune_chapter",
+        "prince_text"
+      ]
+    },
+    "act4_fox_lion_chapter": {
+      "title": "Two Ways to Fight",
+      "text": "Theo reads Chapter XVIII — the fox and the lion. He remembers Borgia's banquet at Sinigaglia, the cunning of the fox. He remembers Borgia's soldiers breaking down doors, the force of the lion.\n\n'*Everyone admits how praiseworthy it is in a prince to keep faith, and to live with integrity. Nevertheless, our experience has been that those princes who have done great things have held good faith of little account, and have known how to circumvent the intellect of men by craft...*'\n\nTheo looks up. 'You're saying princes should break their promises?'\n\n'I am saying princes *do* break their promises — the successful ones, at least. I am describing reality, not endorsing it.' Niccolò takes the page back. 'But here is the part people miss: the prince must **appear** faithful, merciful, humane, sincere, and religious. Appearances are everything.'\n\n'Isn't that just... hypocrisy?'\n\n'It is politics. *Everyone sees what you appear to be; few experience what you really are.* The task of a prince is not to be virtuous but to *maintain the state*. If virtue serves that end, use it. If it does not—' He shrugs. '—then the prince must know how *not* to be good.'",
+      "choices": [
+        {
+          "text": "'But what about morality? What about right and wrong?'",
+          "target": "act4_morality_question"
+        },
+        {
+          "text": "Read the final chapter",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "fox_lion",
+        "appearances",
+        "prince_text"
+      ]
+    },
+    "act4_virtu_discussion": {
+      "title": "The Quality Without a Name",
+      "text": "'**Virtù**,' Niccolò says. 'The half we control is *virtù*. It is not what the Christians mean by virtue — not piety, not humility, not charity. It is something harder to define: energy, skill, determination, the ability to act decisively when Fortune gives you an opening.'\n\nHe counts on his fingers. 'Moses had it — he saw his people enslaved and acted. Cyrus had it — he found the Persians scattered and united them. Romulus had it. Theseus had it. Even Borgia had it, for a time.'\n\n'And Savonarola?'\n\nNiccolò's face darkens. 'Savonarola had *conviction*. That is not the same thing. Conviction without arms is impotence. Vision without the ability to execute is dreaming. Virtù is the bridge between seeing what must be done and *doing* it.'\n\nHe pauses. 'Florence — Italy — is waiting for a man of virtù. Someone who will see the crisis and act. That is what the last chapter is about.'",
+      "choices": [
+        {
+          "text": "Read the final chapter",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "virtu",
+        "key_concepts"
+      ]
+    },
+    "act4_morality_question": {
+      "title": "The Eternal Question",
+      "text": "Niccolò sets down his pen. For the first time, Theo sees something other than calculation in his eyes — something like pain.\n\n'Right and wrong,' he says softly. 'I believe in right and wrong. I believe the republic is morally superior to tyranny. I believe citizens should be free. I believe in justice.'\n\n'But—'\n\n'But the world does not arrange itself according to moral categories. A just prince who loses his state to a tyrant has not served justice — he has *destroyed* it, by being too scrupulous to fight the tyrant on his own terms.' He picks up the pen again. 'I am not writing a book about how the world should be. I am writing about how it *is*. And from that understanding — only from that understanding — can we build something better.'\n\nHe writes for a moment, then looks up. 'The last chapter. The one that matters most. Will you read it?'",
+      "choices": [
+        {
+          "text": "Read the final chapter",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "morality",
+        "realism_limits"
+      ]
+    },
+    "act4_exhortation": {
+      "title": "The Exhortation",
+      "text": "The last chapter is different from all the others. The cool, analytical voice — the voice of the surgeon — gives way to something raw and passionate. Niccolò is not analyzing anymore. He is *pleading*.\n\n'*Considering the present state of Italy... more enslaved than the Hebrews, more oppressed than the Persians, more scattered than the Athenians, without head, without order, beaten, despoiled, torn, overrun... she prays God to send someone who shall deliver her from these wrongs and barbarous insolences...*'\n\nTheo looks up. Niccolò is watching him, his face lit by candlelight, and for the first time Theo understands: *The Prince* is not a handbook for tyrants. It is a **love letter to Italy**. Everything — the cold analysis, the ruthless examples, the unflinching realism — has been leading to this moment: a desperate plea for someone to unite Italy and drive out the foreign invaders.\n\n'You wrote all of it,' Theo says slowly, 'the foxes and lions, Borgia and the condottieri, Fortune and the river — all of it was for *this*.'\n\nNiccolò nods. 'All of it. For Italy.'\n\nThe candle flickers. The room begins to dissolve.",
+      "choices": [
+        {
+          "text": "You understand now — Machiavelli was a patriot, not a cynic",
+          "target": "end_complete_understanding"
+        },
+        {
+          "text": "You're still not sure — the methods trouble you even if the goal is noble",
+          "target": "end_principled_doubt"
+        },
+        {
+          "text": "You understand, but you believe there must be a better way",
+          "target": "end_hopeful_realist"
+        },
+        {
+          "text": "This changes nothing — power is power, and the strong take what they can",
+          "target": "end_seduced_by_power"
+        },
+        {
+          "text": "You can't process this — the gap between the textbook and reality is too wide",
+          "target": "end_overwhelmed"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "exhortation",
+        "climax",
+        "revelation"
+      ]
+    },
+    "end_complete_understanding": {
+      "title": "The Effectual Truth",
+      "text": "The farm at Sant'Andrea dissolves. The candlelight becomes afternoon sunlight. Theo is back at his desk, the textbook open to Chapter 27: 'An Exhortation to Liberate Italy.'\n\nHe picks up his pen — his ballpoint pen, the same one he almost sacrificed to the Bonfire of the Vanities — and begins to write.\n\n*Machiavelli was not a monster. He was a patriot who loved his republic and grieved for his divided country. He studied power not because he admired tyrants but because he understood that good intentions without competence produce disaster. The 'effectual truth' is not cynicism — it is the refusal to let wishful thinking get people killed.*\n\n*He was a fox and a lion — clever enough to see the world as it was, and brave enough to write it down knowing he would be misunderstood for centuries.*\n\nTheo closes the textbook. He has read *The Prince* not as a student reading a dead text, but as a young man who walked through the world that produced it. He has met the author. He has seen the river in flood. He has watched the embankments fail and understood, finally, why they must be built.\n\nThe afternoon light turns golden. Theo smiles. He has an exam tomorrow, and for the first time, he cannot wait to take it.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "best",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "best",
+        "complete_understanding"
+      ]
+    },
+    "end_principled_doubt": {
+      "title": "The Uneasy Student",
+      "text": "The farm dissolves. Theo is back at his desk.\n\nHe stares at the textbook for a long time. He understands Machiavelli better now — the man, the motivation, the desperate love of Italy that drove the cold analysis. But understanding is not the same as agreement.\n\nHe picks up his pen and writes: *I understand what Machiavelli was trying to do. I understand why he believed the ends justified the means. But I cannot accept that the only way to build a just world is through unjust acts. Borgia brought order to the Romagna — but his methods destroyed something that order alone cannot replace: trust. And a state built without trust is a state waiting to fall.*\n\n*Maybe that makes me one of Machiavelli's 'unarmed prophets.' Maybe I'll fail. But I would rather fail with my principles than succeed without them.*\n\nTheo closes the textbook. He is not sure he agrees with Machiavelli. But he is sure he will never forget him — or the smell of smoke rising from the Bonfire of the Vanities, or the sound of Niccolò's voice through a prison wall, or the look in a man's eyes as he wrote by candlelight about the country he could not save.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "good",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "good",
+        "principled_disagreement"
+      ]
+    },
+    "end_hopeful_realist": {
+      "title": "Building Better Embankments",
+      "text": "The farm dissolves. The candlelight becomes sunlight.\n\nTheo is back at his desk. He picks up the textbook and flips to the chapter on Fortune and the river. He reads Machiavelli's metaphor one more time, and this time he sees something the textbook doesn't emphasize.\n\nMachiavelli didn't say Fortune was invincible. He said Fortune governs *half* our actions. The other half — the half that belongs to us — that's where the work is.\n\nHe writes: *Machiavelli was right that the world is not governed by good intentions. He was right that leaders must understand power as it actually works. He was right that preparation matters more than prayers.*\n\n*But he was also wrong — or at least incomplete. Because the best embankments are not built by princes alone. They are built by citizens who trust each other enough to work together. Not the trust of naivety — the trust of people who have looked at the effectual truth and decided to build something better anyway.*\n\n*The fox sees traps. The lion frightens wolves. But neither the fox nor the lion builds a republic. For that, you need something Machiavelli believed in but could never quite articulate: **citizens**.*\n\nTheo closes the textbook. The exam is tomorrow. He is ready.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "best",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "best",
+        "hopeful_realism",
+        "synthesis"
+      ]
+    },
+    "end_seduced_by_power": {
+      "title": "The Prince's Apprentice",
+      "text": "The farm dissolves. Theo is back at his desk.\n\nBut something is different. He looks at the textbook and sees not a historical curiosity but a *manual*. Borgia was right. Niccolò was right. The world belongs to those who seize it.\n\nHe writes: *Machiavelli understood what most people are too afraid to admit: power is the only reality. Everything else — morality, justice, fairness — is just a story the powerful tell to keep the weak in line. The prince who acts decisively wins. The moralist who hesitates loses.*\n\nTheo closes the textbook. He feels sharp, confident, *certain*. But something nags at him — the memory of Niccolò's face in the candlelight, writing about Italy. The passion in those final chapters. The love.\n\nMachiavelli studied power. But he did not worship it. He wanted power *for* something — for Italy, for the republic, for the citizens. Theo has learned the wrong lesson. He has become the reader Machiavelli feared: the one who sees the tools and forgets the purpose.\n\nThe afternoon light is cold. The exam is tomorrow. Theo will pass it. But he has missed the point.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "bad",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "bad",
+        "wrong_lesson"
+      ]
+    },
+    "end_overwhelmed": {
+      "title": "The Burnt Page",
+      "text": "The farm dissolves. Theo is back at his desk.\n\nHe stares at the textbook. The words swim. He has seen too much — the body in the piazza, the strappado, Prato burning. The political philosophy that seemed so clean on the page is, in reality, written in blood.\n\nHe closes the textbook. He does not write anything. The exam is tomorrow, and he will take it, and he will write correct answers about principalities and fortune and the fox and the lion. But he will do it mechanically, without conviction, because the gap between the textbook and the reality has swallowed his ability to care about either one.\n\nOutside the window, the afternoon light fades. Theo knows he will remember Florence. He will remember Niccolò. He will remember the smell of smoke and the sound of the river.\n\nBut he does not know what to *do* with any of it. Not yet.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "neutral",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "neutral",
+        "overwhelmed"
+      ]
+    },
+    "end_savonarola_path": {
+      "title": "The Prophet's Ashes",
+      "text": "The world dissolves. Theo is back at his desk.\n\nHe is shaking. He followed Savonarola's path — the path of absolute conviction, of moral certainty, of faith without arms. And he watched it end in the piazza, on a pyre, with the people who had worshipped the friar cheering as he burned.\n\nHe writes: *Savonarola believed he could change Florence through moral force alone. He was sincere. He was brave. And he was destroyed — not because he was wrong about Florence's corruption, but because he had no way to defend his vision when the people's faith wavered. The unarmed prophet.*\n\n*Machiavelli watched this happen. It changed him forever. He learned that good intentions are not enough — that the most righteous cause in the world will fail if it cannot protect itself.*\n\nTheo closes the textbook. He understands now why Machiavelli wrote *The Prince*. Not because he loved cruelty, but because he had watched goodness burn.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "good",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "good",
+        "unarmed_prophet_lesson"
+      ]
+    },
+    "act1_botticelli_studio": {
+      "title": "The Painter's Dilemma",
+      "text": "The streets near the Arno lead Theo past workshops and studios. Through an open door, he glimpses a man — perhaps fifty, with paint-stained hands and haunted eyes — standing before a canvas of Venus rising from the sea. Extraordinarily beautiful.\n\nThe man picks up a knife. Not a palette knife — a real blade. He holds it over the canvas, trembling.\n\n'No!' Theo blurts. The man turns. 'That painting — you can't destroy it.'\n\n'The friar says it is sin,' the painter whispers. 'Pagan vanity. He says I have led Florence astray with my images of false gods.' His eyes are red. 'I painted this for Lorenzo. Lorenzo is dead. The Medici are gone. And the friar says my life's work is fuel for his bonfire.'\n\nTheo realizes with a shock: this is **Sandro Botticelli**. And this painting — or one like it — may end up in the flames.",
+      "choices": [
+        {
+          "text": "'Your art will outlast any friar. Hide it.'",
+          "target": "act1_save_art"
+        },
+        {
+          "text": "'Maybe Savonarola has a point — art can distract from truth'",
+          "target": "act1_art_vs_truth"
+        },
+        {
+          "text": "Take the knife gently from his hand",
+          "target": "act1_take_knife"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Sandro Botticelli",
+          "definition": "Alessandro di Mariano di Vanni Filipepi (1445–1510), the great Florentine painter of The Birth of Venus and Primavera. He was deeply affected by Savonarola's preaching and may have voluntarily destroyed some of his own works."
+        }
+      ],
+      "figures": [
+        "Sandro Botticelli"
+      ],
+      "tags": [
+        "act1",
+        "art_dilemma",
+        "bonfire_vanities"
+      ]
+    },
+    "act1_save_art": {
+      "title": "The Smuggler's Instinct",
+      "text": "Botticelli stares at Theo, then slowly lowers the knife. 'Outlast the friar,' he murmurs. 'You think so? Savonarola speaks with the voice of God. What does a painter speak with?'\n\n'With the voice of Florence,' Theo says. 'With the voice of every person who has ever stood before your paintings and felt something they could not name. Savonarola wants to burn that. Don't let him.'\n\nThe painter wraps the canvas carefully and slides it behind a false panel in the wall. 'My patron hid things from the Inquisition in this studio,' he says. 'I never thought I would use his tricks.'\n\nHe turns to Theo. 'You should go to the piazza. The friar is speaking again. Or—' He glances toward the river. 'There is a man I know. A clerk in the chancery. Sharp. Dangerous. He sees things others miss. If you want to understand what is really happening in Florence, find him. His name is Niccolò.'",
+      "choices": [
+        {
+          "text": "Go find this Niccolò",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "Go hear Savonarola preach",
+          "target": "act1_savonarola_close"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [
+        "Sandro Botticelli"
+      ],
+      "tags": [
+        "act1",
+        "save_art",
+        "transition"
+      ]
+    },
+    "act1_art_vs_truth": {
+      "title": "The Puritan's Argument",
+      "text": "Botticelli's eyes widen. 'You — you agree with him?'\n\n'Not exactly,' Theo says carefully. 'But I wonder if a city that spent its wealth on paintings while its people starved might have lost its way. Maybe the art isn't the problem — but maybe the priorities were.'\n\nThe painter sits heavily on a stool. 'Lorenzo spent more on a single feast than a craftsman earns in a year. I painted goddesses while the wool workers went hungry.' He looks at his hands. 'Perhaps the friar is not entirely wrong. Perhaps he is wrong about the *remedy* — burning paintings solves nothing — but right about the *diagnosis*.'\n\nHe sets the knife down. 'I will not burn it. But I will not paint another Venus, either. If Florence needs new art, it must be art that serves the people, not the patrons.'\n\nTheo leaves the studio with a strange feeling — as if he has just witnessed someone change their entire life in the space of a conversation.",
+      "choices": [
+        {
+          "text": "Head to the Palazzo della Signoria",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "Stay with Botticelli — art matters more than politics",
+          "target": "end_artist_path"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [
+        "Sandro Botticelli"
+      ],
+      "tags": [
+        "act1",
+        "art_debate",
+        "nuance"
+      ]
+    },
+    "act1_take_knife": {
+      "title": "A Steady Hand",
+      "text": "Theo reaches out and gently takes the knife. Botticelli lets it go without resistance — a man too tired to fight for anything, even his own destruction.\n\n'Sit down,' Theo says. 'Tell me what happened.'\n\nThe painter talks for an hour. About Lorenzo's death. About Savonarola's sermons that made him weep. About the Piagnoni who came to his studio and asked — politely, firmly — whether he intended to offer his 'pagan images' to the purifying fire.\n\n'They did not threaten me. That was the worst part. They were sincere. They believed they were saving my soul.' He laughs bitterly. 'And I believed them. For a while.'\n\n'And now?'\n\n'Now I do not know what I believe. But I know I am tired of other men deciding what Florence should look like.' He stands. 'There is a young man in the chancery — a reader of Livy, sharp as a stiletto. He thinks about these things. Power, persuasion, why people believe what they believe. Find him. His name is Niccolò.'",
+      "choices": [
+        {
+          "text": "Find Niccolò at the chancery",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [
+        "Sandro Botticelli"
+      ],
+      "tags": [
+        "act1",
+        "compassion",
+        "transition"
+      ]
+    },
+    "act1_savonarola_trial": {
+      "title": "The Trial by Fire",
+      "text": "Months pass. Theo has stayed close to the Piagnoni, watching Savonarola's power grow — and then begin to crack.\n\nThe Pope excommunicates him. Savonarola ignores it. The city divides: Piagnoni against Arrabbiati, street fights at night, whispered plots. Then comes the challenge: a Franciscan friar proposes a **trial by fire** — both he and one of Savonarola's followers will walk through flames. If Savonarola's man survives, God vindicates the prophet.\n\nThe day arrives. The whole city gathers in the piazza. Two pyres are built. The Franciscan is ready. But Savonarola's man hesitates. There are arguments about what he can carry through the flames. Hours pass. Rain falls. The crowd grows restless, then angry.\n\nNobody walks through fire. The trial is called off. And in that moment, Theo sees the **people's faith shatter**. Yesterday they would have died for the prophet. Today they spit his name.\n\n'All unarmed prophets have failed,' Theo murmurs, remembering words from a bridge.",
+      "choices": [
+        {
+          "text": "Stay to watch Savonarola's end",
+          "target": "act1_savonarola_execution"
+        },
+        {
+          "text": "Find Niccolò — he must be watching this too",
+          "target": "act1_niccolo_at_execution"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [
+        {
+          "term": "Trial by Fire",
+          "definition": "An ordeal proposed in April 1498 to test Savonarola's divine authority. Neither side actually entered the flames, but the failed spectacle destroyed public confidence in Savonarola, leading to his arrest within days."
+        }
+      ],
+      "figures": [
+        "Girolamo Savonarola"
+      ],
+      "tags": [
+        "act1",
+        "savonarola_trial",
+        "faith_collapse"
+      ]
+    },
+    "act1_savonarola_execution": {
+      "title": "Ashes in the Piazza",
+      "text": "May 23, 1498. The same piazza. The same crowd.\n\nBut this time, the platform holds a gallows and a pyre, and the man ascending is Savonarola himself, chained between two of his fellow friars. He is thin — emaciated from weeks of torture. The same instruments Theo will later see used on Niccolò.\n\nThe crowd that wept at his sermons now jeers. Some throw stones. A woman who once carried her mirror to the bonfire now screams for his blood.\n\nSavonarola says nothing. He is hanged first, then the fire is lit. The flames rise.\n\nTheo stands in the crowd, unable to look away. He has just watched the entire arc of a political movement — from ecstasy to ashes — in the space of four years. The prophet who had no army. The reformer who had no plan beyond reform.\n\nA voice beside him: 'Now you understand.' It is Niccolò, watching the fire with an expression that is not triumph — it is grief. 'I liked him, you know. I admired his courage. But courage without power is—' He gestures at the pyre. '—this.'",
+      "choices": [
+        {
+          "text": "'Is there a way to have both? Courage AND power?'",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "You've seen enough. The prophet burned, and so did your idealism.",
+          "target": "end_savonarola_path"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [],
+      "figures": [
+        "Girolamo Savonarola",
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "savonarola_death",
+        "turning_point"
+      ]
+    },
+    "act1_niccolo_at_execution": {
+      "title": "The Secretary's Lesson",
+      "text": "Theo finds Niccolò in the crowd, near the back. He is not cheering. He is writing — scratching notes on a scrap of paper, his face tight with concentration.\n\n'You're *taking notes*?' Theo hisses.\n\n'Someone must,' Niccolò says without looking up. 'In fifty years, no one will remember what this looked like. They will remember the idea — the fanatic friar, the bonfire, the fall. But they will forget the *specifics*.' He looks up. 'And the specifics are everything. *How* did the people turn? *When* did they stop believing? *What* was the precise moment the faith broke?'\n\nHe taps his notes. 'The trial by fire. That was the moment. Not the excommunication — the people would have followed him despite the Pope. But when his follower refused to walk into the flames, the people saw *doubt*. And doubt in a prophet is fatal.'\n\n'What's the lesson?'\n\n'Never promise a miracle you cannot deliver. Never stake your authority on something you cannot control.' He folds the paper. 'Come. The Republic needs a new government. And I intend to be part of it.'",
+      "choices": [
+        {
+          "text": "Join Niccolò in building the new government",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "savonarola",
+      "vocabulary": [],
+      "figures": [
+        "Niccolò Machiavelli"
+      ],
+      "tags": [
+        "act1",
+        "observation",
+        "realism_lesson"
+      ]
+    },
+    "act1_medici_loyalist": {
+      "title": "The Other Side",
+      "text": "In the chaos of the piazza, Theo stumbles into a side street and nearly collides with a group of well-armed men loading a cart with strongboxes. They wear no livery, but their bearing screams *money*.\n\nThe leader — a thick-necked man with a banker's soft hands and a soldier's hard eyes — grabs Theo. 'You. Help us with these boxes or I'll assume you're a Piagnone spy.'\n\n'I'm nobody's spy.'\n\n'Good. Then help. We're moving the Medici accounts before Savonarola's zealots burn them. Two hundred years of Florentine banking records. Do you know what happens to a city that loses its financial records?'\n\nTheo doesn't, but he can guess: chaos.\n\n'The friar thinks God will provide,' the man says, heaving a box onto the cart. 'God has never provided a line of credit. That requires *bankers*. And without the Medici bank, Florence has no credit, no trade, and no way to pay the soldiers who are supposed to keep the French out.'",
+      "choices": [
+        {
+          "text": "Help save the records — the city's economy depends on it",
+          "target": "act1_save_records"
+        },
+        {
+          "text": "'The Medici stole from this city. Let the records burn.'",
+          "target": "act1_let_burn"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [
+        {
+          "term": "Medici Bank",
+          "definition": "Founded by Giovanni di Bicci de' Medici in 1397, the Medici Bank was the largest and most respected bank in 15th-century Europe. Its collapse in the 1490s contributed to the Medici family's political downfall."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act1",
+        "economic_angle",
+        "medici_bank"
+      ]
+    },
+    "act1_save_records": {
+      "title": "The Practical Man",
+      "text": "Theo heaves boxes. The records are heavy — ledgers, contracts, letters of credit spanning decades. Each box is a web of relationships: who owes what to whom, who guarantees whose debts, which foreign banks are tied to which Florentine families.\n\n'This,' the banker says, patting a ledger, 'is the real **constitution** of Florence. Not the Signoria, not the Great Council — this. Money is the blood of a state. Cut the blood and the state dies.'\n\nWhen the cart is loaded, the banker claps Theo on the shoulder. 'You think practically. That is rare in this city of poets and priests. There is a man in the chancery you should meet — young, ambitious, thinks about power the way I think about interest rates. Name of Machiavelli.'",
+      "choices": [
+        {
+          "text": "Go meet Machiavelli",
+          "target": "act1_palazzo_niccolo"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act1",
+        "practical_wisdom",
+        "economic_realism"
+      ]
+    },
+    "act1_let_burn": {
+      "title": "The Revolutionary's Error",
+      "text": "The banker stares at Theo. Then he laughs — a cold, knowing laugh. 'You think the Medici *stole*? Boy, the Medici *built*. This dome—' He points up at Brunelleschi's masterpiece. 'Medici money. That hospital for foundlings? Medici money. The libraries? Medici money. They were thieves, yes. Every banker is a thief at the margins. But they were thieves who built a civilization.'\n\nHe turns back to his cart. 'Let the records burn, he says. In six months, when the wool merchants cannot get credit and the craftsmen cannot buy supplies and the soldiers desert for lack of pay, remember this moment. Remember that you chose *purity* over *function*.'\n\nTheo watches the cart trundle away. The banker's words sting because they echo something Theo's textbook said: that Machiavelli valued **what works** over **what ought to be**.",
+      "choices": [
+        {
+          "text": "The banker is right — seek out practical people",
+          "target": "act1_palazzo_niccolo"
+        },
+        {
+          "text": "The banker is a Medici apologist — go hear Savonarola",
+          "target": "act1_savonarola_close"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "medici_fall",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act1",
+        "idealism_vs_pragmatism",
+        "consequence"
+      ]
+    },
+    "act2_france_mission": {
+      "title": "The Court of Louis XII",
+      "text": "Before Borgia, there is France. Niccolò's first major mission takes them north across the Alps to the court of **Louis XII**, who considers himself the rightful ruler of Milan and Naples.\n\nThe French court is everything Florence is not: vast, wealthy, and dripping with arrogance. Courtiers in silk and velvet look down their noses at the Florentine envoys in their modest black.\n\nLouis receives them in a gilded hall. He is affable — smiling, generous — and utterly indifferent to Florence's concerns. 'Tell your Signoria,' he says, 'that France is Florence's protector. We ask only for... cooperation.'\n\nNiccolò whispers: 'He means submission. Watch how he flatters. He gives us nothing and calls it generosity. He threatens us and calls it protection.'\n\n'What do we do?'\n\n'We learn. Louis is making every mistake in the book — the book I have not yet written. He strengthens the Pope, weakens the small Italian states, and invites Spain into the peninsula. **Five errors**. He will pay for all of them.'",
+      "choices": [
+        {
+          "text": "Ask about the five errors — what will Louis do wrong?",
+          "target": "act2_five_errors"
+        },
+        {
+          "text": "'Can we play France against Spain?'",
+          "target": "act2_balance_power"
+        },
+        {
+          "text": "Focus on the mission — what does Florence tell Louis?",
+          "target": "act2_florence_response"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [
+        {
+          "term": "Louis XII",
+          "definition": "King of France (1462–1515), who invaded Italy in 1499 to claim Milan and Naples. Machiavelli devoted the longest early chapter of The Prince (Ch. III) to analyzing Louis's five strategic errors in Italy."
+        }
+      ],
+      "figures": [
+        "Louis XII"
+      ],
+      "tags": [
+        "act2",
+        "france_mission",
+        "diplomacy"
+      ]
+    },
+    "act2_five_errors": {
+      "title": "The Book of Errors",
+      "text": "Niccolò ticks them off on his fingers, his voice low and fierce. 'One: he destroyed the smaller Italian powers who could have been his allies. Two: he strengthened the Pope — giving the Church temporal power it will use against France. Three: he brought Spain into Italy, creating a rival where there was none. Four: he did not come to live in Italy himself — a distant ruler is an impotent ruler. Five: he did not establish colonies to anchor his control.'\n\nHe pauses. 'The Romans never made these mistakes. When they conquered a territory, they colonized it, weakened the strong, protected the weak, and never let a rival power establish itself nearby. Louis did the opposite of everything the Romans did.'\n\n'And the result?'\n\n'The result will take a few years to arrive. But it will arrive. France will lose everything in Italy. Spain will dominate. And Florence—' He looks grim. '—Florence will be caught between them, as always, with nothing but cleverness to defend itself.'",
+      "choices": [
+        {
+          "text": "Return to Florence and prepare for the Borgia mission",
+          "target": "act2_borgia_arrival"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "five_errors",
+        "roman_comparison",
+        "key_concepts"
+      ]
+    },
+    "act2_balance_power": {
+      "title": "The Balance of Power",
+      "text": "Niccolò gives Theo a look of surprised approval. 'You think like a diplomat. Yes — in theory, a small state can survive between great powers by playing them against each other. The Swiss do it. Venice does it. But it requires something Florence lacks: a **consistent foreign policy** that outlasts any single Gonfaloniere.'\n\n'What does Florence have instead?'\n\n'Factions. The Piagnoni want to ally with France because France is Catholic and Savonarola blessed the alliance. The Arrabbiati want to ally with Spain because Spain will restore the Medici. The merchants want to ally with whoever buys the most wool.' He rubs his temples. 'A republic that cannot decide its own foreign policy is not a republic — it is a client waiting to be purchased.'\n\n'So what does Machiavelli recommend?'\n\nHe smiles thinly. 'Machiavelli recommends that Florence stop renting its defense from **condottieri** and build its own army. But Machiavelli is just a secretary. Nobody listens to the secretary.'",
+      "choices": [
+        {
+          "text": "Travel on to Borgia's court",
+          "target": "act2_borgia_arrival"
+        },
+        {
+          "text": "Realize diplomacy is where you belong — you've learned enough",
+          "target": "end_diplomat"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "balance_power",
+        "foreign_policy"
+      ]
+    },
+    "act2_florence_response": {
+      "title": "The Secretary's Craft",
+      "text": "Niccolò composes Florence's response in their cramped lodgings that evening. Theo watches him draft, cross out, redraft — each version more carefully calibrated than the last.\n\n'We cannot refuse Louis,' he explains. 'He has 30,000 soldiers and we have... enthusiasm. But we cannot commit to him either, because his position in Italy is weaker than he thinks.'\n\n'So what do we write?'\n\n'We write that Florence is profoundly grateful for France's protection. We express our deep desire to serve His Majesty. We regret that the complexities of republican government require us to consult the Great Council before making any binding commitment. And we promise to send a more senior delegation at the earliest possible moment — which will be never.'\n\nHe seals the letter. 'The art of diplomacy: say everything, commit to nothing, and buy time. Time is the only resource a weak state has in abundance.'\n\nThey return to Florence. And then: the Borgia mission.",
+      "choices": [
+        {
+          "text": "Travel to Cesare Borgia's court",
+          "target": "act2_borgia_arrival"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "diplomatic_craft",
+        "time_as_weapon"
+      ]
+    },
+    "act2_leonardo_encounter": {
+      "title": "The Engineer",
+      "text": "In the corridors of Borgia's palace, Theo encounters a man who seems entirely out of place: tall, left-handed, writing backwards in a leather notebook. He is sketching a fortification — walls angled to deflect cannonballs, ditches filled with Greek fire.\n\n'Pardon me,' Theo says, accidentally jostling the man's elbow.\n\nThe man looks up with mild, distracted eyes. 'No matter. I was only redesigning the Duke's artillery positions. They are quite inefficient.' He closes the notebook. 'You are with the Florentine delegation? I am **Leonardo**. The Duke's engineer.'\n\nTheo's jaw drops. Leonardo da Vinci is working for Cesare Borgia.\n\n'You seem surprised,' Leonardo says. 'An artist must eat. And the Duke pays well for practical solutions. He is not interested in my paintings — only my machines. It is... refreshing, in a way. No one has ever before valued my engineering above my art.'",
+      "choices": [
+        {
+          "text": "'How can you work for a man like Borgia?'",
+          "target": "act2_leonardo_morality"
+        },
+        {
+          "text": "'What kind of machines are you building?'",
+          "target": "act2_leonardo_machines"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [
+        {
+          "term": "Leonardo da Vinci",
+          "definition": "Leonardo di ser Piero da Vinci (1452–1519), the Florentine polymath. He served as Cesare Borgia's military engineer in 1502–03, surveying fortifications and designing war machines. He and Machiavelli knew each other in Florence."
+        }
+      ],
+      "figures": [
+        "Leonardo da Vinci"
+      ],
+      "tags": [
+        "act2",
+        "leonardo",
+        "talent_and_power"
+      ]
+    },
+    "act2_leonardo_morality": {
+      "title": "The Artist's Answer",
+      "text": "Leonardo considers the question as if it were a geometry problem. 'Work for a man like Borgia. What is a man *like* Borgia? He is intelligent. He is decisive. He patronizes excellence. He murders his enemies.' Leonardo shrugs. 'The Sforza of Milan patronized me for sixteen years. They were no more moral — merely less efficient in their cruelties.'\n\n'But doesn't it bother you?'\n\n'What bothers me is an unfinished bridge. What bothers me is a canal that could irrigate a thousand farms but remains unbuilt because the patron lacks vision. Borgia has vision. He may be terrible, but he *builds*.'\n\nHe pauses. 'Your friend the secretary — Niccolò — understands this. He watches Borgia the way I watch water flowing over stones: not to judge whether the water is good or evil, but to understand the forces at work. That is what it means to be a **realist**.'\n\nLeonardo returns to his sketches. 'Give my regards to Niccolò. Tell him I said: the best fortress is good artillery.'",
+      "choices": [
+        {
+          "text": "Return to Niccolò with Leonardo's message",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Leonardo da Vinci"
+      ],
+      "tags": [
+        "act2",
+        "realism",
+        "talent_serves_power"
+      ]
+    },
+    "act2_leonardo_machines": {
+      "title": "The New Art of War",
+      "text": "Leonardo opens his notebook — carefully, so Theo cannot read the mirror-script — and shows him a page of drawings. Fortifications with angular bastions. A movable bridge. Something that looks terrifyingly like a tank.\n\n'War is changing,' Leonardo says. 'Gunpowder has made the old castles obsolete. A cannon can breach a medieval wall in hours. The new fortification must be *designed for cannon* — low, thick, angled to deflect shot.' He taps a drawing. 'Borgia understands this. The old condottieri do not. They still fight as if it were 1400. They will be destroyed.'\n\n'Niccolò says the same thing about mercenaries,' Theo offers.\n\n'Your friend is correct. The age of the condottiero is ending. The future belongs to standing armies — disciplined, trained, equipped with modern weapons. Whoever builds that army first will rule Italy.' He closes the notebook. 'I build the weapons. Your friend will have to build the army.'",
+      "choices": [
+        {
+          "text": "Tell Niccolò about Leonardo's ideas",
+          "target": "act2_militia_plan"
+        },
+        {
+          "text": "Return to the diplomatic work",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Leonardo da Vinci"
+      ],
+      "tags": [
+        "act2",
+        "military_revolution",
+        "new_warfare"
+      ]
+    },
+    "act2_borgia_spy": {
+      "title": "The Duke's Eyes",
+      "text": "One evening, a servant slips Theo a folded note: *The Duke requests your company. Alone. His private chambers. Midnight.*\n\nTheo's blood runs cold. Borgia does not make casual invitations. He asks Niccolò's advice.\n\n'Go,' Niccolò says immediately. 'Refusing a prince's invitation is more dangerous than accepting it. But—' He grabs Theo's arm. '—tell him nothing about Florence's true position. If he asks about our defenses, our alliances, our finances — you know nothing. You are an assistant. You carry bags.'\n\nAt midnight, Borgia receives Theo in a candlelit room. Maps cover every surface. The Duke pours wine with his own hand — a gesture that Theo recognizes as calculated intimacy.\n\n'Your master is clever,' Borgia says. 'But you — you are different. You watch. You listen. You say little.' He sips. 'I value that quality. Would you consider... staying? Not as Florence's man. As *mine*.'",
+      "choices": [
+        {
+          "text": "'I'm flattered, but my loyalty is to Florence.'",
+          "target": "act2_borgia_loyalty_test"
+        },
+        {
+          "text": "'What would you want me to do?'",
+          "target": "act2_borgia_offer"
+        },
+        {
+          "text": "Say nothing — see what he reveals",
+          "target": "act2_borgia_silence"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "borgia_temptation",
+        "loyalty_test"
+      ]
+    },
+    "act2_borgia_loyalty_test": {
+      "title": "The Duke's Smile",
+      "text": "Borgia smiles — the smile of a man who has just learned what he wanted to know. 'Loyalty. Good. A man without loyalty is useless — he can be bought by anyone, which means he can be trusted by no one.'\n\nHe sets down his wine. 'But tell me — what is your loyalty *to*? To Florence? To the Republic? To your friend the secretary? Because these are not the same thing. Florence may not always be a republic. Your friend may not always be a secretary.'\n\nThe observation is chilling in its accuracy. Both of those things will come true.\n\n'I will tell you what I have learned,' Borgia continues. 'Loyalty to a *person* is fragile. Loyalty to an *institution* is slightly less fragile. Loyalty to a *purpose* — that is the only kind that lasts. What is your purpose?'\n\nTheo does not have an answer. Not yet.",
+      "choices": [
+        {
+          "text": "Return to Niccolò, troubled by the question",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "purpose",
+        "borgia_wisdom"
+      ]
+    },
+    "act2_borgia_offer": {
+      "title": "The Price of Service",
+      "text": "'I need men who can observe and report. Men who are invisible — not soldiers, not nobles, just... eyes.' Borgia leans forward. 'The Orsini are plotting against me. I know this. But I do not know the details. I need someone inside their councils. Someone they would not suspect — a Florentine clerk's assistant, perhaps.'\n\nHe is asking Theo to spy. To betray — not Florence exactly, but the condottieri. The men who will be strangled at Sinigaglia.\n\n'The Orsini are not your friends,' Borgia says softly. 'They have sacked Florentine territory three times. They extort your merchants. They would sell Florence to Spain for the right price.' He pauses. 'Helping me destroy them *helps Florence*. Think about it.'\n\nThe terrible thing is: he is not entirely wrong.",
+      "choices": [
+        {
+          "text": "Refuse — and tell Niccolò everything",
+          "target": "act2_diplomatic_art"
+        },
+        {
+          "text": "Agree — and become Borgia's spy",
+          "target": "act2_borgia_spy_path"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "temptation",
+        "moral_choice"
+      ]
+    },
+    "act2_borgia_silence": {
+      "title": "The Fox Listens",
+      "text": "Theo says nothing. He sips his wine and waits. Borgia watches him — and then laughs, a genuine laugh of delight.\n\n'You are learning. Silence is a weapon. Most men fill silence because they fear it — and in their rush to speak, they reveal themselves.' He raises his glass. 'You revealed nothing. That tells me more than any answer would have.'\n\nHe stands. 'Go back to your master. Tell him the Duke of Valentino respects Florentine cleverness — and suggest to him that cleverness without strength is a candle in the wind.'\n\nTheo returns to Niccolò. 'What did he want?' Niccolò demands.\n\n'To test me. And to send you a message: he thinks Florence is clever but weak.'\n\nNiccolò nods grimly. 'He is not wrong.'",
+      "choices": [
+        {
+          "text": "Continue the diplomatic mission",
+          "target": "act2_diplomatic_art"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "fox_tactic",
+        "silence_as_weapon"
+      ]
+    },
+    "act2_borgia_spy_path": {
+      "title": "The Double Agent",
+      "text": "Theo becomes Borgia's man — or pretends to. He moves among the Orsini, listening, watching. He reports to Borgia. But he also reports to Niccolò, who reports to Florence.\n\nFor weeks, Theo plays three sides. It is exhilarating and terrifying. He learns things: the Orsini are indeed plotting a revolt. Vitelli is gathering troops. Oliverotto da Fermo has been contacted.\n\nAnd then Borgia sends word: 'Tell the Orsini that I wish to negotiate. Invite them to Sinigaglia.'\n\nTheo freezes. He knows what Sinigaglia means — he has read the textbook. He knows those men will die. And he is the one delivering the invitation.\n\n'If I warn them,' he tells Niccolò, 'Borgia will know I betrayed him. If I don't warn them, I'm complicit in murder.'\n\nNiccolò is quiet for a long time. 'Welcome to politics,' he says finally.",
+      "choices": [
+        {
+          "text": "Deliver the invitation — let history take its course",
+          "target": "act2_sinigaglia"
+        },
+        {
+          "text": "Warn the Orsini — betray Borgia",
+          "target": "act2_warn_orsini"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [
+        "Cesare Borgia"
+      ],
+      "tags": [
+        "act2",
+        "double_agent",
+        "impossible_choice"
+      ]
+    },
+    "act2_warn_orsini": {
+      "title": "The Consequences of Mercy",
+      "text": "Theo sends a message to the Orsini: *Do not go to Sinigaglia. It is a trap.*\n\nThe Orsini ignore the warning. They go anyway — because Borgia has also sent them gifts, reassurances, a personal letter of safe-conduct. One anonymous warning against a duke's personal guarantee? The condottieri choose to believe the guarantee.\n\nThey die at Sinigaglia, exactly as history recorded.\n\nTheo is devastated. He tried to change the outcome and failed — not because his information was wrong, but because the Orsini's own greed and arrogance made them deaf to warning.\n\nNiccolò finds him sitting on a wall outside the fortress. 'You tried to save them,' Niccolò says. Not a question.\n\n'Yes.'\n\n'And they went anyway. Because they could not believe a man they had *just betrayed* would dare to betray them back.' Niccolò sits beside him. 'This is what I mean by the **effectual truth**. Intentions do not matter. Only results.'",
+      "choices": [
+        {
+          "text": "Continue — witness the aftermath",
+          "target": "act2_sinigaglia_condemn"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "borgia",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act2",
+        "failed_mercy",
+        "effectual_truth"
+      ]
+    },
+    "act3_militia_training": {
+      "title": "Citizen Soldiers",
+      "text": "1506. Four years after Borgia, and Niccolò has finally convinced the Signoria. The **Florentine militia** is real.\n\nTheo stands in a muddy field outside Florence, watching two hundred farmers try to march in formation. It is not inspiring. They trip over each other. They hold their pikes like brooms. A sergeant — a retired condottiero Niccolò hired — screams at them until he is hoarse.\n\nNiccolò watches with fierce pride. 'They are terrible,' he admits. 'But they are *ours*. Every man on that field is fighting for his own farm, his own family, his own city. That matters more than drill.'\n\n'Does it matter more than training?'\n\n'No. That is why we train them. But a trained mercenary who fights for money will never match a trained citizen who fights for his home.' He pauses. 'At least, that is my theory. We are about to find out if I am right.'",
+      "choices": [
+        {
+          "text": "Help train the militia — teach them what you've learned",
+          "target": "act3_militia_pisa"
+        },
+        {
+          "text": "'What if they're not ready when the test comes?'",
+          "target": "act3_militia_doubt"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [
+        {
+          "term": "Florentine Militia",
+          "definition": "Machiavelli's passion project: a citizens' army raised from the Florentine countryside, established in 1506. The militia successfully besieged Pisa in 1509 but was crushed by Spanish veterans at Prato in 1512."
+        }
+      ],
+      "figures": [],
+      "tags": [
+        "act3",
+        "militia",
+        "citizen_army"
+      ]
+    },
+    "act3_militia_pisa": {
+      "title": "The Siege of Pisa",
+      "text": "1509. The militia's first real test: the siege of **Pisa**, which has been in rebellion against Florence for fifteen years. Every previous attempt to retake it — using mercenaries — has failed.\n\nNiccolò's militia surrounds the city. They are not elegant. They do not charge. They dig trenches, cut supply lines, and wait. It is boring, dirty, unglamorous work.\n\nAnd it works. Pisa, starved and exhausted, surrenders.\n\nNiccolò is triumphant. 'Fifteen years of mercenary failures, and my farmers did it in months! Not by fighting — by *persisting*. Because they had something to go home to. Because they were not waiting for their next contract.'\n\nFlorence celebrates. Niccolò is the hero of the hour. For a brief, shining moment, everything he believed is vindicated.\n\nBut Theo, who has read the textbook, knows what comes next.",
+      "choices": [
+        {
+          "text": "Enjoy the victory — it won't last",
+          "target": "act3_fall_approach"
+        },
+        {
+          "text": "Warn Niccolò: 'The militia isn't ready for real soldiers'",
+          "target": "act3_militia_doubt"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "pisa_siege",
+        "militia_victory"
+      ]
+    },
+    "act3_militia_doubt": {
+      "title": "The Coming Storm",
+      "text": "Niccolò's face hardens. 'Not ready? They took Pisa. They held the line against—'\n\n'Against a starving city with no allies,' Theo says gently. 'What about Spanish tercios? What about professional infantry who have fought in a dozen campaigns?'\n\nNiccolò is silent for a long time. 'You are right,' he says finally. 'I know you are right. The militia needs ten more years of training, better equipment, experienced officers. But we do not have ten years.' He looks toward Rome. 'Pope Julius is dying. When the new Pope is elected, everything will change. If the Medici get a man on the papal throne—'\n\n'They'll come back.'\n\n'They'll come back. With Spanish soldiers. And my farmers will have to face them.' He squares his shoulders. 'Then we train harder. We fortify the towns. We prepare the embankments for the flood we cannot stop.'",
+      "choices": [
+        {
+          "text": "The flood arrives — 1512",
+          "target": "act3_fall_approach"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "chancery",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "foreshadowing",
+        "preparation"
+      ]
+    },
+    "act3_prison_conversation": {
+      "title": "Through the Wall",
+      "text": "The cell is dark. Time loses meaning. Theo hears Niccolò through the wall — sometimes talking, sometimes singing (badly), sometimes reciting Dante. The man they tortured six times on the strappado recites poetry from memory in the dark.\n\n'Theo. Tell me about the future.'\n\n'What?'\n\n'You come from somewhere else. Somewhere that has not happened yet. I have known this since the bridge. Your clothes, your pen, the way you look at things as if you already know how they end.' A pause. 'Does anyone remember me?'\n\nTheo hesitates. Then: 'Everyone remembers you. For five hundred years. You write a book that changes everything.'\n\nSilence from the other side of the wall. Then, very quietly: 'Good. Then it was worth it.'",
+      "choices": [
+        {
+          "text": "'What was worth it?'",
+          "target": "act3_worth_it"
+        },
+        {
+          "text": "Tell him about The Prince — what his book will become",
+          "target": "act3_tell_future"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "prison",
+        "emotional_core",
+        "time_travel_reveal"
+      ]
+    },
+    "act3_worth_it": {
+      "title": "The Cost of Understanding",
+      "text": "'All of it,' Niccolò says. 'The chancery, the missions, Borgia, the militia, the torture. All of it was an education. The most expensive education in the history of Florence — paid for with fourteen years of service and six drops on the strappado.'\n\nHe laughs — the dry, ironic laugh Theo has come to love. 'But you cannot understand power by reading about it. You must *touch* it. You must feel the heat of it. You must watch it build and destroy and build again. And then, when they take it all away from you — the office, the missions, the respect — you sit in a cell and you *write*. Because now you understand. And understanding is the one thing they cannot take.'\n\nThe prison door opens. Amnesty. A new Pope — a Medici, Giovanni de' Medici, now Leo X — has freed the political prisoners as a gesture of mercy.\n\nNiccolò walks into the sunlight, squinting. He is free. But he will never hold office again.",
+      "choices": [
+        {
+          "text": "Go with Niccolò to his farm",
+          "target": "act3_writing_prince"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "release",
+        "understanding"
+      ]
+    },
+    "act3_tell_future": {
+      "title": "Five Hundred Years",
+      "text": "Theo tells Niccolò everything. About The Prince being published after his death. About the word 'Machiavellian' becoming a synonym for cunning. About the book being banned by the Pope. About political realists for five centuries claiming him as their founder.\n\nNiccolò listens in silence. Then: 'They will misunderstand it.'\n\n'Yes.'\n\n'They will think I love tyranny.'\n\n'Many will. Some won't.'\n\n'And Italy?'\n\nTheo pauses. 'Italy unifies. In 1861. Three hundred and forty-eight years after you write the exhortation.'\n\nA long, long silence. Then Niccolò says, in a voice Theo has never heard from him — raw, unguarded, *young*: 'Three hundred and forty-eight years. But it happens.'\n\n'It happens.'\n\n'Then the book was not in vain.'",
+      "choices": [
+        {
+          "text": "Go with Niccolò to his farm",
+          "target": "act3_writing_prince"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act3",
+        "future_revelation",
+        "emotional_climax"
+      ]
+    },
+    "act4_loved_feared_chapter": {
+      "title": "Chapter XVII",
+      "text": "Niccolò reads aloud: '*Coming now to the other qualities mentioned above, I say that every prince ought to desire to be considered clement and not cruel. Nevertheless he ought to take care not to misuse this clemency.*'\n\nHe looks at Theo. 'You remember Borgia. You remember the Romagna. The people called him cruel — and yet they lived in peace under his rule. Florence was called merciful — and Pistoia tore itself apart because nobody would impose order.'\n\n'So mercy is weakness?'\n\n'Mercy without strength is irresponsibility. Strength without mercy is tyranny. The prince must hold both in his hands and know which to use when.' He pauses. 'It is better to be feared than loved. But it is best to be both. And it is *fatal* to be hated.'\n\n'Where is the line between feared and hated?'\n\n'Never touch the property of your subjects. Never touch their women. These are the things that breed hatred that no amount of fear can control.'",
+      "choices": [
+        {
+          "text": "Read the chapter on Fortune",
+          "target": "act4_fortune_chapter"
+        },
+        {
+          "text": "Read the Fox and the Lion chapter",
+          "target": "act4_fox_lion_chapter"
+        },
+        {
+          "text": "Read the Exhortation — the final chapter",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "loved_feared_chapter",
+        "prince_text"
+      ]
+    },
+    "act4_civil_principality": {
+      "title": "The People's Prince",
+      "text": "Niccolò pauses in his writing. 'There is something I want you to understand before you read the rest. People will think this book is about tyranny. It is not.'\n\nHe holds up a page. 'Chapter Nine: The Civil Principality. A prince can rise with the support of the nobles or with the support of the people. I argue — and I will always argue — that the people are the better foundation.'\n\n'Why?'\n\n'Because the **nobles want to oppress**. The **people want only not to be oppressed**. A prince who satisfies the people has satisfied the majority. A prince who satisfies only the nobles has satisfied a conspiracy waiting to replace him.'\n\nHe leans back. 'This is why I am a republican at heart, Theo. The best government is one where the people govern themselves through laws and institutions. But when a state is sick — when it is divided, invaded, corrupt — sometimes you need a prince first, to create the conditions in which a republic can survive. That is what this book is for. *Medicine*, not a prescription for tyranny.'",
+      "choices": [
+        {
+          "text": "Read the chapter on Fortune",
+          "target": "act4_fortune_chapter"
+        },
+        {
+          "text": "Read the Exhortation",
+          "target": "act4_exhortation"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "exile",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "act4",
+        "civil_principality",
+        "republican_heart"
+      ]
+    },
+    "end_diplomat": {
+      "title": "The Secretary's Apprentice",
+      "text": "The farm dissolves. Theo is back at his desk.\n\nHe picks up his pen and writes with a diplomat's precision: *The Prince is not a book about good and evil. It is a book about the gap between how things ought to be and how they are. Machiavelli's genius was to insist that political leaders must navigate that gap honestly, without pretending it does not exist.*\n\n*I watched him negotiate with Borgia — saying everything and committing to nothing. I watched him train a militia — giving farmers the dignity of defending their own city. I watched him survive torture and exile and emerge with his mind intact.*\n\n*He was not a monster or a saint. He was a civil servant who loved his city and spent his life trying to understand why good cities fail. That understanding cost him everything — his career, his freedom, his health. But it produced a book that five centuries of readers have not been able to put down.*\n\nTheo closes the textbook. He knows exactly what essay he is going to write tomorrow.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "best",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "best",
+        "diplomat_understanding"
+      ]
+    },
+    "end_artist_path": {
+      "title": "The Painter's Truth",
+      "text": "The studio dissolves. Theo is back at his desk.\n\nBut it is not Machiavelli he thinks of — it is Botticelli. The painter standing before his canvas with a knife, torn between faith and art, between the prophet's fire and the beauty he had given the world.\n\nTheo writes: *Savonarola and Machiavelli represent two ways of responding to a broken world. Savonarola said: purify it. Burn away the corruption and build a City of God. Machiavelli said: understand it. Study how power actually works and use that knowledge to build something that lasts.*\n\n*Both failed. Savonarola burned. Machiavelli's militia was crushed. But Machiavelli's failure left behind a book. Savonarola's failure left behind ashes.*\n\n*And Botticelli's paintings survived them both.*\n\nTheo closes the textbook. He does not know if he is a realist or an idealist. But he knows that some things — beauty, truth, the attempt to understand — are worth protecting from every bonfire.",
+      "choices": [],
+      "is_ending": true,
+      "ending_type": "good",
+      "era": "frame",
+      "vocabulary": [],
+      "figures": [],
+      "tags": [
+        "ending",
+        "good",
+        "art_survives"
+      ]
+    }
+  }
+};
