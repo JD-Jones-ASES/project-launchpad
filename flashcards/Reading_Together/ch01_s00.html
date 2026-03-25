@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let&#x27;s Read: Five Children and It &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Let&#x27;s Read: Five Children and It &mdash; Chapter 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Reading_Together">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the initial setting described as the children travel to their new home?", "back": "A house three miles from the station, reached after a journey in a hired 'fly,' located at the top of a hill, just past a chalk-quarry and before a gravel-pit."}, {"front": "What is a 'fly' in the context of this story, as explained by the author?", "back": "A one-horse carriage available for hire, similar to a taxi today."}, {"front": "Describe the children's first impression of the White House.", "back": "They found it 'rather decent' and, despite its ordinary and inconvenient interior, perceived it as a 'Fairy Palace set down in an Earthly Paradise' due to their release from London."}, {"front": "What specific exterior features of the White House made it appealing to the children?", "back": "Its white color, green garden, orchard, jasmine-covered back (in white flower), and a smooth lawn."}, {"front": "How does the author contrast London life with country life for children?", "back": "London is depicted as a 'prison' with invisible 'You mustn't touch' labels, lacking natural play spaces like trees, sand, woods, and waters. The country, however, offers freedom and diverse, natural shapes."}, {"front": "According to the narrator, why do many children in towns become 'naughty'?", "back": "They live in an environment of straight lines and flat streets, where everything is uniform and lacks the natural, varied shapes and play opportunities found in the country."}, {"front": "What was the children's main reason for not minding the White House's ordinary appearance or inconveniences?", "back": "They had been in London for two years without proper holidays or access to nature, making the country house feel like a paradise compared to their previous restricted life."}, {"front": "What did Father and Mother think of the White House compared to the children's view?", "back": "Mother found it inconvenient with no shelves or cupboards, and Father thought the ironwork on the roof ('coping') was like 'an architect's nightmare.'"}, {"front": "What particular freedom did the children enjoy at the White House that was absent in London?", "back": "There were 'no rules about not going to places and not doing things,' contrasting with London's invisible 'You mustn't touch' labels."}, {"front": "Describe the geographical setting of the White House relative to the surrounding landscape features.", "back": "It was on the edge of a hill, with a wood behind it, a chalk-quarry on one side, and a gravel-pit on the other. A valley with limekilns and oast-houses lay at the bottom of the hill."}, {"front": "What literary device does the author use when describing the valley at sunset with the limekilns and oast-houses?", "back": "A simile, comparing them to 'an enchanted city out of the Arabian Nights.'"}, {"front": "How does the author differentiate between what grown-ups and children believe regarding 'wonderful things'?", "back": "Grown-ups find it hard to believe wonderful things without 'proof,' while children 'will believe almost anything.'"}, {"front": "What do the children call the Baby, and why?", "back": "They call him 'The Lamb' because 'Baa' was the first thing he ever said."}, {"front": "What are Anthea's and Jane's respective nicknames in the story?", "back": "Anthea is called 'Panther,' and Jane is called 'Pussy.'"}, {"front": "Why did the children decide to go and dig in the gravel-pits?", "back": "Father had gone away on business, Mother to Granny's, leaving the house quiet and empty. Cyril suggested digging in the gravel-pits, pretending it was the seaside."}, {"front": "What safety precaution did the children follow when entering the gravel-pit?", "back": "They went the 'slow safe way round by the road' instead of trying to climb down the steep edges."}, {"front": "Describe the appearance of the gravel-pit as seen by the children.", "back": "It is very large and wide, with grassy edges, dry stringy wildflowers, mounds of gravel, and holes in the sides where sand-martins make their nests. It's compared to a 'giant's wash-hand basin.'"}, {"front": "What was the children's initial activity in the gravel-pit, and why did they find it unsatisfying?", "back": "They built a castle but found it 'poor fun' because there was no 'swishing tide' to fill the moat and wash it away, as at the actual seaside."}, {"front": "What alternative digging project did the children undertake after the castle?", "back": "They decided to dig a hole 'through the castle to Australia.'"}, {"front": "What was the children's belief about Australia and its inhabitants?", "back": "They believed the world was round and that Australian children walked 'wrong way up, like flies on the ceiling, with their heads hanging down into the air.'"}, {"front": "Why did Jane (Pussy) ask her siblings to stop digging the hole to Australia?", "back": "She worried the bottom might give way suddenly, causing all the sand to get in the eyes of the 'little Australians.'"}, {"front": "What detail in the sand at the bottom of the hole surprised Jane?", "back": "She found little shells, which made her imagine the area was once a 'wet sea' with fishes, conger-eels, coral, and mermaids."}, {"front": "Name two specific buildings/structures associated with industries mentioned in the valley below the White House.", "back": "Limekilns (for burning lime) and oast-houses (for drying hops, associated with a brewery)."}, {"front": "What London entertainment venue is mentioned as something the children didn't get to visit often due to their family's financial situation?", "back": "Maskelyne and Cook's magic show theatre."}, {"front": "What is a 'chalk-quarry'?", "back": "A large pit dug into the ground where chalk, a soft white rock, is extracted."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

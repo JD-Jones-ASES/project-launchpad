@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let&#x27;s Read: Five Children and It &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Let&#x27;s Read: Five Children and It &mdash; Chapter 9</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses.html#Reading_Together">&larr; Back to Courses</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What new wish arrangement did Cyril propose to the Psammead?", "back": "Cyril asked the Psammead to grant wishes instantly, 'just when we think of it, and just where we happen to be,' so they wouldn't have to disturb it again at the sand-pit."}, {"front": "How did the Psammead initially react to Cyril's request for on-the-spot wishing?", "back": "The Psammead was reluctant, warning that it would 'only end in your wishing for something you don't really want,' similar to the previous castle incident."}, {"front": "What was the Psammead's general attitude towards the children in this chapter?", "back": "The Psammead expressed weariness and annoyance with the children, saying, 'I'm getting tired of you - all of you. You have no more sense than so many oysters.'"}, {"front": "Describe the Lamb's initial mischievous acts that led to Cyril's frustration.", "back": "The Lamb first took Cyril's watch, used it as a garden spade and ruined it, and later broke the glass of Father's second-best Waterbury watch."}, {"front": "What specific wish did Cyril make in frustration about the Lamb?", "back": "Cyril bitterly wished, 'Grow up now!' after the Lamb broke their father's watch."}, {"front": "What was Anthea's immediate reaction to Cyril's frustrated wish for the Lamb?", "back": "Anthea cried out, 'OH, take care!' in 'an agony of apprehension,' but it was too late."}, {"front": "How did the Lamb's transformation into a grown-up begin and what was the initial effect?", "back": "The change was 'sudden and violently grew up,' starting with his face, which grew thinner, larger, and acquired lines, deep-set eyes, a longer, thinner mouth, and a dark moustache."}, {"front": "What was the appearance of the fully transformed grown-up Lamb?", "back": "He appeared as a 'very proper-looking young man in flannels and a straw hat,' complete with the dark moustache seen growing on the baby's lip, and seemed weary."}, {"front": "What was the central question the children debated immediately after the Lamb's transformation?", "back": "The children debated whether the Lamb's 'inside senses are grown up too' or if he was 'still a baby inside,' which would dictate how they could manage him."}, {"front": "What immediate concerns did the children express about the grown-up Lamb?", "back": "They worried about getting him home for dinner, especially since they hadn't gathered any nuts and didn't know how to control him."}, {"front": "How did Cyril react to the others' frustration and blame after the Lamb grew up?", "back": "Cyril took full responsibility, saying, 'Yes, I know it's my doing; don't rub it in! I know I'm a beast, and not fit to live.'"}, {"front": "What was Robert's hopeful suggestion for dealing with the grown-up Lamb?", "back": "Robert suggested waking him up and taking him to Rochester or Maidstone for food, or hoping 'HE'LL take us to Maidstone and stand Sam.'"}, {"front": "What was Cyril's prediction about the grown-up Lamb's character?", "back": "Cyril believed that the grown-up Lamb, who was always spoilt, would now be 'a demon - simply,' even more difficult to manage."}, {"front": "How was the grown-up Lamb awakened, and what was his first utterance?", "back": "Jane gently awakened him by tickling his nose with a twig of wild honeysuckle. He said 'Bother the flies!' twice and then, 'Hullo, kiddies! still here? What's the giddy hour?'"}, {"front": "What was the grown-up Lamb's immediate plan for lunch?", "back": "He announced he had 'a sort of notion that I'll run up to town and have some lunch at the club.'"}, {"front": "Why were the children so distressed by the grown-up Lamb's plan to go to town alone?", "back": "They feared that he was still a baby mentally and would become a 'helpless cross sleepy baby' wailing for 'Panty' in a club, alone and among 'unsympathetic waiters.'"}, {"front": "How did the grown-up Lamb react when Anthea called him 'Lamb ducky'?", "back": "He frowned and insisted that his name was Hilary, St Maur, or Devereux (his baptismal names), dismissing 'Lamb' as 'a relic of foolish and far-off childhood.'"}, {"front": "How did Anthea cleverly try to dissuade the grown-up Lamb from going to London?", "back": "She appealed to their father's supposed wishes, implying he wouldn't want the Lamb to go to London or leave them alone."}, {"front": "What proposal did Cyril make to the grown-up Lamb to try and keep him with them?", "back": "Cyril suggested that if he was their elder brother, he should 'behave as such' and take them to Maidstone for a 'jolly good blow-out' and a trip on the river."}, {"front": "What was the grown-up Lamb's response to Cyril's offer to go to Maidstone?", "back": "He courteously declined, stating, 'I should prefer solitude,' and suggested they go home for their own dinner, implying he might not return until after they were in bed."}, {"front": "What critical mistake did Jane make while trying to keep the grown-up Lamb with them?", "back": "Jane blurted out, 'We promised mother not to lose sight of you if we took you out.'"}, {"front": "How did the grown-up Lamb respond to Jane's comment about their promise to Mother?", "back": "He condescendingly told her, 'little girls should be seen and not heard,' advised them not to be a nuisance, and offered them a penny tomorrow if they were good."}, {"front": "What does the term 'Tin baths' refer to in the context of the story?", "back": "Before indoor plumbing, 'tin baths' were large metal tubs filled with water carried from the kitchen, used for bathing."}, {"front": "What is a 'Megatherium,' and why is its mention by the Psammead significant?", "back": "A Megatherium is a giant ground sloth from thousands of years ago, now extinct. The Psammead's mention signifies its ancient memory and magical capabilities."}, {"front": "What was a 'Waterbury watch' and why was it common for the children to possess one?", "back": "A Waterbury watch was a cheap, mass-produced pocket watch of the era, making it an affordable everyday item that someone like Cyril might borrow."}, {"front": "What does the British expression 'Stand Sam' mean, as used by Robert?", "back": "To 'Stand Sam' means to pay for everyone's food or drinks. Robert hoped the grown-up Lamb, with his 'extra-special bags,' would pay for their dinner."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
