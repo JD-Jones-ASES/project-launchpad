@@ -3,7 +3,7 @@ const STORY_DATA = {
   "nodes": {
     "start": {
       "title": "The Final Exam",
-      "text": "Lena is twenty, a philosophy major, and terrified. Her final exam is tomorrow: Plato's *Phaedo* -- Socrates' last day alive, his arguments for the immortality of the soul, and the Theory of Forms. She has read it three times and still doesn't understand why Socrates is so calm about dying.\n\nHer notes blur. The library lamp flickers.\n\nWhen she opens her eyes, she is standing in a stone cell. The air smells of damp and olive oil. A man sits on a low bed, rubbing his ankle where a chain has just been removed. He is old, ugly, barefoot, and radiantly at peace.\n\nA dozen people fill the cell. Some are weeping. The man on the bed is not.\n\n'*Ah,*' he says, noticing Lena. '*Another visitor on my last day. Good. I have been wanting to explain why death is nothing to fear. But first -- why are you crying? You are, you know.*'",
+      "text": "Theo is seventeen, a high school junior, and terrified. His philosophy class exam is tomorrow: Plato's *Phaedo* -- Socrates' last day alive, his arguments for the immortality of the soul, and the Theory of Forms. He has read it three times and still doesn't understand why Socrates is so calm about dying.\n\nHis notes blur. The desk lamp flickers.\n\nWhen he opens his eyes, he is standing in a stone cell. The air smells of damp and olive oil. A man sits on a low bed, rubbing his ankle where a chain has just been removed. He is old, ugly, barefoot, and radiantly at peace.\n\nA dozen people fill the cell. Some are weeping. The man on the bed is not.\n\n'*Ah,*' he says, noticing Theo. '*Another visitor on my last day. Good. I have been wanting to explain why death is nothing to fear. But first -- why are you crying? You are, you know.*'",
       "choices": [
         {
           "text": "Ask who he is (though you already know)",
@@ -71,6 +71,10 @@ const STORY_DATA = {
         {
           "term": "Elenchus",
           "definition": "The Socratic method of questioning: cross-examining a person's beliefs to expose contradictions and reveal hidden ignorance."
+        },
+        {
+          "term": "Asebeia",
+          "definition": "Impiety -- the formal charge brought against Socrates at his trial. He was accused of failing to honor the gods of Athens and of corrupting the youth with his philosophical questioning."
         }
       ],
       "figures": [
@@ -84,7 +88,7 @@ const STORY_DATA = {
     },
     "act1_calm": {
       "title": "Why the Philosopher Does Not Fear Death",
-      "text": "Socrates smiles. '*You want to know why I am calm. Very well. What is death?*'\n\nHe answers his own question: '*Death is the separation of the soul from the body. The body sees, hears, hungers, lusts, ages, decays. The soul thinks. And what does the philosopher spend his whole life doing? Separating his soul from his body -- turning away from bodily pleasures toward truth. Philosophy is the practice of dying.*'\n\nHe uses the Greek phrase: *melete thanatou*.\n\n'*If I have spent seventy years practicing death, why should I fear the performance? The body has always been an obstacle. Every time I tried to think clearly, the body intruded -- hunger, pain, desire. Death frees the soul from all that. It is not a punishment. It is a liberation.*'\n\nLena feels the argument land. But a voice in her head objects: this only works if the soul survives death. What if it doesn't?",
+      "text": "Socrates smiles. '*You want to know why I am calm. Very well. What is death?*'\n\nHe answers his own question: '*Death is the separation of the soul from the body. The body sees, hears, hungers, lusts, ages, decays. The soul thinks. And what does the philosopher spend his whole life doing? Separating his soul from his body -- turning away from bodily pleasures toward truth. Philosophy is the practice of dying.*'\n\nHe uses the Greek phrase: *melete thanatou*.\n\n'*If I have spent seventy years practicing death, why should I fear the performance? The body has always been an obstacle. Every time I tried to think clearly, the body intruded -- hunger, pain, desire. Death frees the soul from all that. It is not a punishment. It is a liberation.*'\n\nTheo feels the argument land. But a voice in his head objects: this only works if the soul survives death. What if it doesn't?",
       "choices": [
         {
           "text": "Ask: but how do you KNOW the soul survives?",
@@ -110,6 +114,10 @@ const STORY_DATA = {
         {
           "term": "Body-Soul Dichotomy",
           "definition": "Plato's fundamental distinction: the body belongs to the visible, changing world of senses; the soul belongs to the invisible, unchanging world of truth and Forms."
+        },
+        {
+          "term": "Dualism",
+          "definition": "The metaphysical view that reality consists of two fundamentally different kinds of substance: body (material, mortal, changing) and soul (immaterial, immortal, unchanging). The Phaedo is the foundational text of Platonic dualism."
         }
       ],
       "figures": [
@@ -167,7 +175,7 @@ const STORY_DATA = {
     },
     "act1_virtue": {
       "title": "True Virtue",
-      "text": "'*Most people are brave because they fear something worse than battle,*' Socrates says. '*They are temperate because they fear the consequences of excess. They trade pleasures for pleasures, fears for fears. That is not virtue. It is bookkeeping.*'\n\nHe leans forward. '*True virtue is katharsis -- purification. The soul freed from the body's influence. The truly brave person is brave not because she fears punishment but because her soul is clear enough to see what is right. The truly temperate person does not struggle against desire -- she has so thoroughly turned toward truth that desire has lost its grip.*'\n\n'*This is what philosophy does: it purifies. Every hour spent thinking clearly is an hour the soul practices being free of the body. And death is the final purification -- the moment the soul is entirely free.*'",
+      "text": "'*Most people are brave because they fear something worse than battle,*' Socrates says. '*They are temperate because they fear the consequences of excess. They trade pleasures for pleasures, fears for fears. That is not virtue. It is bookkeeping.*'\n\nHe leans forward. '*True virtue is katharsis -- purification. The soul freed from the body's influence. The truly brave person is brave not because he fears punishment but because his soul is clear enough to see what is right. The truly temperate person does not struggle against desire -- he has so thoroughly turned toward truth that desire has lost its grip.*'\n\n'*This is what philosophy does: it purifies. Every hour spent thinking clearly is an hour the soul practices being free of the body. And death is the final purification -- the moment the soul is entirely free.*'",
       "choices": [
         {
           "text": "But this requires the soul to survive! Prove it.",
@@ -185,6 +193,14 @@ const STORY_DATA = {
         {
           "term": "Katharsis",
           "definition": "Purification. In the Phaedo, the soul's gradual liberation from bodily influence through philosophical practice. True virtue is a form of katharsis."
+        },
+        {
+          "term": "Arete",
+          "definition": "Virtue or excellence -- the fullest expression of a thing's nature or function. For Socrates, human arete is the excellence of the soul: living and acting in accordance with wisdom and justice."
+        },
+        {
+          "term": "Sophrosyne",
+          "definition": "Self-control, temperance, or moderation -- one of the four cardinal virtues. In the Phaedo, Socrates argues true sophrosyne is not the struggle against desire but the soul's liberation from desire altogether."
         }
       ],
       "figures": [
@@ -197,7 +213,7 @@ const STORY_DATA = {
     },
     "act1_challenge": {
       "title": "The Honest Doubt",
-      "text": "Lena speaks before she can stop herself: '*But what if the soul doesn't survive? What if when the body dies, the soul disperses like smoke? Then your whole argument collapses. Philosophy isn't practicing dying -- it's just... ignoring living.*'\n\nThe room goes quiet. Simmias and Cebes exchange a look. They have the same worry.\n\nSocrates, far from being offended, is delighted.\n\n'*Excellent!*' he says. '*That is exactly the right question. You are practicing the elenchus without knowing it -- cross-examining my claim to find the contradiction. Very well. I will give you not one argument but four. Attack each one. If they all fail, you will have earned your doubt. But if even one holds --*'\n\nHe raises an eyebrow. '*Then we have something worth dying for.*'",
+      "text": "Theo speaks before he can stop himself: '*But what if the soul doesn't survive? What if when the body dies, the soul disperses like smoke? Then your whole argument collapses. Philosophy isn't practicing dying -- it's just... ignoring living.*'\n\nThe room goes quiet. Simmias and Cebes exchange a look. They have the same worry.\n\nSocrates, far from being offended, is delighted.\n\n'*Excellent!*' he says. '*That is exactly the right question. You are practicing the elenchus without knowing it -- cross-examining my claim to find the contradiction. Very well. I will give you not one argument but four. Attack each one. If they all fail, you will have earned your doubt. But if even one holds --*'\n\nHe raises an eyebrow. '*Then we have something worth dying for.*'",
       "choices": [
         {
           "text": "Give me the arguments. All of them.",
@@ -207,7 +223,12 @@ const STORY_DATA = {
       "is_ending": false,
       "ending_type": null,
       "era": "setting",
-      "vocabulary": [],
+      "vocabulary": [
+        {
+          "term": "Dialectic",
+          "definition": "Socrates' primary philosophical method: reaching truth through structured dialogue, question and answer, examining and refining positions until contradictions are resolved. Distinct from mere debate, dialectic aims at genuine knowledge rather than victory."
+        }
+      ],
       "figures": [
         "Socrates",
         "Simmias",
@@ -266,7 +287,7 @@ const STORY_DATA = {
     },
     "act2_opposites": {
       "title": "The Cycle of Opposites",
-      "text": "'*Watch,*' Socrates says. '*Hot comes from cold. Cold from hot. Sleeping from waking. Waking from sleeping. The larger comes from the smaller. There is always a process of generation between opposites.*'\n\nHe draws in the dust: life → death → life → death...\n\n'*If the living come from the dead, there must be a process: dying. And if the dead come from the living, there must be a reverse process: coming back to life. The soul goes somewhere when the body dies, and returns when a new body is born.*'\n\nCebes nods slowly. '*If the process only went one direction -- living to dead, but never dead to living -- eventually everything would be dead. The universe would run down. But it hasn't. Therefore the cycle must be real.*'\n\nLena sees a weakness: does this really prove the *same* soul returns, or just that *some* life follows death?",
+      "text": "'*Watch,*' Socrates says. '*Hot comes from cold. Cold from hot. Sleeping from waking. Waking from sleeping. The larger comes from the smaller. There is always a process of generation between opposites.*'\n\nHe draws in the dust: life → death → life → death...\n\n'*If the living come from the dead, there must be a process: dying. And if the dead come from the living, there must be a reverse process: coming back to life. The soul goes somewhere when the body dies, and returns when a new body is born.*'\n\nCebes nods slowly. '*If the process only went one direction -- living to dead, but never dead to living -- eventually everything would be dead. The universe would run down. But it hasn't. Therefore the cycle must be real.*'\n\nTheo sees a weakness: does this really prove the *same* soul returns, or just that *some* life follows death?",
       "choices": [
         {
           "text": "Move to Recollection -- that might answer the identity question",
@@ -292,7 +313,7 @@ const STORY_DATA = {
     },
     "act2_recollection": {
       "title": "Learning Is Remembering",
-      "text": "Socrates picks up two sticks from the floor.\n\n'*Are these equal?*' he asks.\n\nLena looks. '*More or less.*'\n\n'*More or less. Exactly. They are approximately equal. But you said 'more or less' because you compared them to something: perfect Equality. Auto to ison -- the Equal itself. Where did you get that standard?*'\n\nHe presses: '*Not from experience. You have never seen two perfectly equal things in the physical world. Every pair of sticks, every pair of stones falls short of perfect Equality. Yet you recognize the shortfall. How can you recognize that something falls short of a standard you have never encountered?*'\n\n'*Answer: you knew the standard before you were born. Your soul encountered the Forms -- perfect Equality, perfect Beauty, perfect Justice -- before it entered the body. Learning is not discovering something new. It is anamnesis -- recollection. You are remembering what you already knew.*'",
+      "text": "Socrates picks up two sticks from the floor.\n\n'*Are these equal?*' he asks.\n\nTheo looks. '*More or less.*'\n\n'*More or less. Exactly. They are approximately equal. But you said 'more or less' because you compared them to something: perfect Equality. Auto to ison -- the Equal itself. Where did you get that standard?*'\n\nHe presses: '*Not from experience. You have never seen two perfectly equal things in the physical world. Every pair of sticks, every pair of stones falls short of perfect Equality. Yet you recognize the shortfall. How can you recognize that something falls short of a standard you have never encountered?*'\n\n'*Answer: you knew the standard before you were born. Your soul encountered the Forms -- perfect Equality, perfect Beauty, perfect Justice -- before it entered the body. Learning is not discovering something new. It is anamnesis -- recollection. You are remembering what you already knew.*'",
       "choices": [
         {
           "text": "This is connected to the Theory of Forms -- explain the Forms",
@@ -576,7 +597,7 @@ const STORY_DATA = {
     },
     "act4_aristotle": {
       "title": "The Third Man",
-      "text": "Lena cannot help herself. '*But Aristotle will argue against this. The Third Man Argument: if a particular man is a man because he participates in the Form of Man, then the Form of Man and the particular man together need a third Man to explain their similarity. And that third needs a fourth. It's an infinite regress.*'\n\nSocrates raises an eyebrow. '*You know Aristotle?*'\n\n'*He was your friend's student. Plato's student.*'\n\n'*Ah. And does this Aristotle solve the problem?*'\n\n'*He says forms are not separate from things. The form of a horse is IN the horse, not in some other world.*'\n\nSocrates considers this. '*Interesting. But if the form is in the horse, and the horse dies, does the form die too? My Forms are eternal because they are separate. His forms are vulnerable because they are embedded. We are back to the same question: does the invisible survive the death of the visible?*'",
+      "text": "Theo cannot help himself. '*But Aristotle will argue against this. The Third Man Argument: if a particular man is a man because he participates in the Form of Man, then the Form of Man and the particular man together need a third Man to explain their similarity. And that third needs a fourth. It's an infinite regress.*'\n\nSocrates raises an eyebrow. '*You know Aristotle?*'\n\n'*He was your friend's student. Plato's student.*'\n\n'*Ah. And does this Aristotle solve the problem?*'\n\n'*He says forms are not separate from things. The form of a horse is IN the horse, not in some other world.*'\n\nSocrates considers this. '*Interesting. But if the form is in the horse, and the horse dies, does the form die too? My Forms are eternal because they are separate. His forms are vulnerable because they are embedded. We are back to the same question: does the invisible survive the death of the visible?*'",
       "choices": [
         {
           "text": "Give me the final argument. Answer Cebes' weaver.",
@@ -594,6 +615,18 @@ const STORY_DATA = {
         {
           "term": "Method of Hypothesis",
           "definition": "Socrates' philosophical approach: propose a hypothesis (the Forms), test it for consistency, and if it holds, use it as a foundation for further inquiry."
+        },
+        {
+          "term": "Eudaimonia",
+          "definition": "Happiness, flourishing, or well-being -- the highest human good. While Socrates ties it to purity of soul, Aristotle will argue eudaimonia is achieved through virtuous activity in ordinary life, not withdrawal from it."
+        },
+        {
+          "term": "Phronesis",
+          "definition": "Practical wisdom -- Aristotle's term for the capacity to discern the right course of action in particular situations. Where Socrates prizes abstract knowledge of the Forms, Aristotle emphasizes this grounded, situational judgment."
+        },
+        {
+          "term": "Golden Mean",
+          "definition": "Aristotle's ethical principle: virtue lies between two extremes of excess and deficiency (e.g., courage is the mean between cowardice and recklessness). This contrasts with Plato's view that virtue is absolute purity of soul."
         }
       ],
       "figures": [
@@ -607,7 +640,7 @@ const STORY_DATA = {
     },
     "act4_final": {
       "title": "The Final Argument",
-      "text": "Socrates speaks carefully. This is the argument that matters most.\n\n'*Fire always brings heat. It can never bring cold. Snow always brings cold. It can never bring heat. Three always brings oddness. It can never bring evenness. This is the principle: Forms exclude their opposites.*'\n\n'*Now: what does the soul bring to the body?*'\n\nCebes answers: '*Life.*'\n\n'*And what is the opposite of life?*'\n\n'*Death.*'\n\n'*Then the soul can never admit death. It is athanatos -- deathless. Just as fire cannot become cold and remain fire, the soul cannot become dead and remain a soul. When death approaches, the soul does not die. It withdraws -- departs -- to another realm. It is also anolethros -- indestructible.*'\n\nThe room is silent. The argument is elegant, almost mathematical. But Lena senses a gap: does 'deathless' necessarily mean 'indestructible'?",
+      "text": "Socrates speaks carefully. This is the argument that matters most.\n\n'*Fire always brings heat. It can never bring cold. Snow always brings cold. It can never bring heat. Three always brings oddness. It can never bring evenness. This is the principle: Forms exclude their opposites.*'\n\n'*Now: what does the soul bring to the body?*'\n\nCebes answers: '*Life.*'\n\n'*And what is the opposite of life?*'\n\n'*Death.*'\n\n'*Then the soul can never admit death. It is athanatos -- deathless. Just as fire cannot become cold and remain fire, the soul cannot become dead and remain a soul. When death approaches, the soul does not die. It withdraws -- departs -- to another realm. It is also anolethros -- indestructible.*'\n\nThe room is silent. The argument is elegant, almost mathematical. But Theo senses a gap: does 'deathless' necessarily mean 'indestructible'?",
       "choices": [
         {
           "text": "It's time. Watch Socrates drink the hemlock.",
@@ -681,7 +714,7 @@ const STORY_DATA = {
     },
     "act5_last_words": {
       "title": "The Debt to Asclepius",
-      "text": "Phaedo leans toward Lena. '*Asclepius is the god of healing. You sacrifice a rooster to him when you recover from an illness. Socrates is saying: death is a healing. The soul's release from the body is a recovery -- a cure for the disease of embodiment.*'\n\nHe pauses. '*Or perhaps he means something simpler. He made a vow and wants it honored. Even in death, he pays his debts. He keeps his word. The social contract holds to the last breath.*'\n\nPhaedo's voice is steady. '*Such was the end of our companion, Echecrates -- a man of whom we may say that of all those we knew in our time, he was the wisest, the most just, and the best.*'\n\nThe cell is empty now. The lamp gutters. And Lena understands something she could not learn from a textbook: Socrates did not prove immortality with arguments. He proved it with his death.",
+      "text": "Phaedo leans toward Theo. '*Asclepius is the god of healing. You sacrifice a rooster to him when you recover from an illness. Socrates is saying: death is a healing. The soul's release from the body is a recovery -- a cure for the disease of embodiment.*'\n\nHe pauses. '*Or perhaps he means something simpler. He made a vow and wants it honored. Even in death, he pays his debts. He keeps his word. The social contract holds to the last breath.*'\n\nPhaedo's voice is steady. '*Such was the end of our companion, Echecrates -- a man of whom we may say that of all those we knew in our time, he was the wisest, the most just, and the best.*'\n\nThe cell is empty now. The lamp gutters. And Theo understands something he could not learn from a textbook: Socrates did not prove immortality with arguments. He proved it with his death.",
       "choices": [
         {
           "text": "He proved it with his death. That is the answer.",
@@ -707,7 +740,7 @@ const STORY_DATA = {
     },
     "end_proof": {
       "title": "The Proof Was the Death",
-      "text": "Lena wakes at her desk. The textbook is open to the final pages of the Phaedo.\n\nShe understands now. The four arguments are brilliant but imperfect. Simmias and Cebes found real weaknesses. Aristotle will find more. Two thousand years of philosophers will debate whether any of them work.\n\nBut Socrates did not die because he had a proof. He died because he lived the proof. A man who truly believed the soul was mortal would not have drunk the hemlock with such peace. His calm was not performance. It was the natural expression of a soul that had practiced dying for seventy years.\n\nThe argument is the life. The proof is the death.\n\nLena picks up her pen and writes her exam answer. She is not afraid anymore.",
+      "text": "Theo wakes at his desk. The textbook is open to the final pages of the Phaedo.\n\nHe understands now. The four arguments are brilliant but imperfect. Simmias and Cebes found real weaknesses. Aristotle will find more. Two thousand years of philosophers will debate whether any of them work.\n\nBut Socrates did not die because he had a proof. He died because he lived the proof. A man who truly believed the soul was mortal would not have drunk the hemlock with such peace. His calm was not performance. It was the natural expression of a soul that had practiced dying for seventy years.\n\nThe argument is the life. The proof is the death.\n\nTheo picks up his pen and writes his exam answer. He is not afraid anymore.",
       "choices": [],
       "is_ending": true,
       "ending_type": "best",
@@ -721,7 +754,7 @@ const STORY_DATA = {
     },
     "end_silence": {
       "title": "Such Was the End",
-      "text": "Lena wakes at her desk. The library is dark and quiet.\n\nShe does not reach for her notes. She sits in the silence that follows a death -- the particular silence that Phaedo described, that Echecrates heard, that has echoed through twenty-four centuries of readers.\n\n*Such was the end of our companion -- a man of whom we may say that of all those we knew in our time, he was the wisest, the most just, and the best.*\n\nShe will pass the exam. But that is not what matters. What matters is that she sat in a prison cell with a man who was not afraid to die, and she learned something about what it means to live.\n\nThe silence holds. It is enough.",
+      "text": "Theo wakes at his desk. The room is dark and quiet.\n\nHe does not reach for his notes. He sits in the silence that follows a death -- the particular silence that Phaedo described, that Echecrates heard, that has echoed through twenty-four centuries of readers.\n\n*Such was the end of our companion -- a man of whom we may say that of all those we knew in our time, he was the wisest, the most just, and the best.*\n\nHe will pass the exam. But that is not what matters. What matters is that he sat in a prison cell with a man who was not afraid to die, and he learned something about what it means to live.\n\nThe silence holds. It is enough.",
       "choices": [],
       "is_ending": true,
       "ending_type": "best",
@@ -735,7 +768,7 @@ const STORY_DATA = {
     },
     "end_convinced": {
       "title": "The Soul Is Immortal",
-      "text": "Lena wakes at her desk. She believes it. Not with the tentative belief of someone who has read a convincing argument but with the settled conviction of someone who has witnessed a man die without fear.\n\nThe Forms are real. The soul is athanatos. Death is not an ending but a departure -- the soul shedding the body the way a prisoner sheds chains.\n\nShe knows this will not hold up to every philosophical objection. Hume will challenge it. Kant will reframe it. The materialists will deny it. But something in Socrates' calm has planted a seed that no argument can uproot.\n\nShe opens her exam booklet and writes: *The Phaedo is not about proving immortality. It is about showing what a person who believes in immortality looks like when tested.*",
+      "text": "Theo wakes at his desk. He believes it. Not with the tentative belief of someone who has read a convincing argument but with the settled conviction of someone who has witnessed a man die without fear.\n\nThe Forms are real. The soul is athanatos. Death is not an ending but a departure -- the soul shedding the body the way a prisoner sheds chains.\n\nHe knows this will not hold up to every philosophical objection. Hume will challenge it. Kant will reframe it. The materialists will deny it. But something in Socrates' calm has planted a seed that no argument can uproot.\n\nHe opens his exam booklet and writes: *The Phaedo is not about proving immortality. It is about showing what a person who believes in immortality looks like when tested.*",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -749,7 +782,7 @@ const STORY_DATA = {
     },
     "end_doubt": {
       "title": "The Honest Doubter",
-      "text": "Lena wakes at her desk, unconvinced but changed.\n\nThe arguments are beautiful. Each one captures something real about consciousness, about knowledge, about the mind's apparent independence from the body. But none of them is conclusive. The harmony objection shook her. The weaver objection shook her more.\n\nAnd yet -- Socrates would not be disappointed. He would say: '*Good. You have practiced the elenchus. You have examined the argument and found it wanting. That is philosophy. That is the examined life.*'\n\nLena is not sure the soul is immortal. But she is sure of this: the willingness to ask the question -- to sit with the uncertainty, to keep reasoning even when the answers are elusive -- that is what makes a life worth living.\n\nThe unexamined life is not worth living. The examined one might be.",
+      "text": "Theo wakes at his desk, unconvinced but changed.\n\nThe arguments are beautiful. Each one captures something real about consciousness, about knowledge, about the mind's apparent independence from the body. But none of them is conclusive. The harmony objection shook him. The weaver objection shook him more.\n\nAnd yet -- Socrates would not be disappointed. He would say: '*Good. You have practiced the elenchus. You have examined the argument and found it wanting. That is philosophy. That is the examined life.*'\n\nTheo is not sure the soul is immortal. But he is sure of this: the willingness to ask the question -- to sit with the uncertainty, to keep reasoning even when the answers are elusive -- that is what makes a life worth living.\n\nThe unexamined life is not worth living. The examined one might be.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -763,7 +796,7 @@ const STORY_DATA = {
     },
     "end_misology": {
       "title": "Never Hate the Argument",
-      "text": "Lena wakes at her desk with one word ringing: misology.\n\nShe has heard it everywhere without knowing its name. The student who says '*philosophy is pointless.*' The voter who says '*all politicians lie.*' The friend who says '*nothing matters anyway.*' They have been burned by a bad argument, a broken promise, a failed hope -- and they conclude that all arguments, all promises, all hopes are worthless.\n\nSocrates said: that is the real death. Not the hemlock. The hemlock only kills the body. Misology kills the soul.\n\nLena may not know whether the soul is immortal. But she knows this: she will never stop asking. She will never hate the logos. She will never let a failed argument convince her that argument itself is useless.\n\nThat is not a proof of immortality. It is something better: a reason to live.",
+      "text": "Theo wakes at his desk with one word ringing: misology.\n\nHe has heard it everywhere without knowing its name. The student who says '*philosophy is pointless.*' The voter who says '*all politicians lie.*' The friend who says '*nothing matters anyway.*' They have been burned by a bad argument, a broken promise, a failed hope -- and they conclude that all arguments, all promises, all hopes are worthless.\n\nSocrates said: that is the real death. Not the hemlock. The hemlock only kills the body. Misology kills the soul.\n\nTheo may not know whether the soul is immortal. But he knows this: he will never stop asking. He will never hate the logos. He will never let a failed argument convince him that argument itself is useless.\n\nThat is not a proof of immortality. It is something better: a reason to live.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -777,7 +810,7 @@ const STORY_DATA = {
     },
     "end_bookkeeping": {
       "title": "Beyond the Ledger",
-      "text": "Lena wakes with Socrates' critique lodged in her mind like a splinter.\n\n*Most people are brave because they fear something worse. They trade pleasures for pleasures, fears for fears. That is not virtue. It is bookkeeping.*\n\nShe looks at her own life: the grades pursued for approval, the kindness offered for reciprocity, the rules followed for reward. Bookkeeping. All of it.\n\nTrue virtue, Socrates said, is katharsis -- a soul so clear it sees the right thing and does it without calculation. Not because it fears punishment. Not because it expects reward. Because the purified soul cannot do otherwise.\n\nLena does not know if her soul is immortal. But she knows it is keeping a ledger, and she wants to stop.",
+      "text": "Theo wakes with Socrates' critique lodged in his mind like a splinter.\n\n*Most people are brave because they fear something worse. They trade pleasures for pleasures, fears for fears. That is not virtue. It is bookkeeping.*\n\nHe looks at his own life: the grades pursued for approval, the kindness offered for reciprocity, the rules followed for reward. Bookkeeping. All of it.\n\nTrue virtue, Socrates said, is katharsis -- a soul so clear it sees the right thing and does it without calculation. Not because it fears punishment. Not because it expects reward. Because the purified soul cannot do otherwise.\n\nTheo does not know if his soul is immortal. But he knows it is keeping a ledger, and he wants to stop.",
       "choices": [],
       "is_ending": true,
       "ending_type": "neutral",

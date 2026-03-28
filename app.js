@@ -196,7 +196,7 @@ function renderCoursePage(data) {
         var columnHeaders = {
             quiz: 'Quiz', guide: 'Guide', cards: 'Cards',
             slides: 'Slides', maps: 'Maps', info: 'Info',
-            sonnet_popup: 'Sonnet'
+            sonnet_popup: 'Sonnet', video: 'Video'
         };
 
         var html = '<table class="quiz-table">';
@@ -280,6 +280,13 @@ function renderColumnCell(col, section, pid) {
         }
         return '<td class="quiz-mindmap"><span class="guide-pending">--</span></td>';
     }
+    if (col === 'video') {
+        if (section.video_id) {
+            var vTitle = escapeHtml(section.name);
+            return '<td class="quiz-video"><button class="video-btn" onclick="showVideo(\'' + section.video_id + '\', \'' + vTitle.replace(/'/g, "\\'") + '\')">&#9654; Watch</button></td>';
+        }
+        return '<td class="quiz-video"><span class="guide-pending">--</span></td>';
+    }
     return '<td>--</td>';
 }
 
@@ -326,8 +333,31 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeSonnet();
         closeInfographic();
+        closeVideo();
     }
 });
+
+
+/* ═══════════════════════════════════════════════════════════
+   Video Popup (all course pages with uploaded videos)
+   ═══════════════════════════════════════════════════════════ */
+
+function showVideo(videoId, title) {
+    var overlay = document.getElementById('video-overlay');
+    if (!overlay) return;
+    document.getElementById('video-title').textContent = title;
+    document.getElementById('video-iframe').src =
+        'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+    overlay.classList.add('active');
+}
+
+function closeVideo() {
+    var overlay = document.getElementById('video-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    // Stop playback by clearing src
+    document.getElementById('video-iframe').src = '';
+}
 
 
 /* ═══════════════════════════════════════════════════════════

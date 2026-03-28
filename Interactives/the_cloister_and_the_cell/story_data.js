@@ -3,7 +3,7 @@ const STORY_DATA = {
   "nodes": {
     "start": {
       "title": "The Desert Beckons",
-      "text": "Silas is nineteen, restless, and studying for a final on medieval history. The textbook chapter is about monks -- an endless parade of silent men in hoods. He cannot imagine why anyone would choose that life. His eyes close.\n\nWhen he opens them, the lecture hall is gone. He stands on hot sand under a sky of hammered bronze. The Nile glitters in the distance. A city rises to the north -- Alexandria, he somehow knows -- but he is facing away from it, toward the deep desert.\n\nA lean, weathered man in a rough tunic approaches. He is old but moves with startling energy, his eyes bright and searching.\n\n'*You are standing at the edge,*' the man says. '*The city is behind you -- comfort, reputation, every pleasure Egypt offers. The desert is before you -- silence, hunger, God. I am Anthony. I chose the desert sixty years ago. What will you choose?*'",
+      "text": "Theo is seventeen, restless, and studying for a history test on medieval religion. The textbook chapter is about monks -- an endless parade of silent men in hoods. He cannot imagine why anyone would choose that life. His eyes close.\n\nWhen he opens them, the lecture hall is gone. He stands on hot sand under a sky of hammered bronze. The Nile glitters in the distance. A city rises to the north -- Alexandria, he somehow knows -- but he is facing away from it, toward the deep desert.\n\nA lean, weathered man in a rough tunic approaches. He is old but moves with startling energy, his eyes bright and searching.\n\n'*You are standing at the edge,*' the man says. '*The city is behind you -- comfort, reputation, every pleasure Egypt offers. The desert is before you -- silence, hunger, God. I am Anthony. I chose the desert sixty years ago. What will you choose?*'",
       "choices": [
         {
           "text": "Follow Anthony into the desert",
@@ -45,7 +45,7 @@ const STORY_DATA = {
     },
     "act1_desert": {
       "title": "Into the Wilderness",
-      "text": "Silas follows Anthony deeper into the desert. The sand gives way to rocky outcroppings, and soon they are climbing toward a cave mouth carved into the cliff face.\n\n'*This is how it began,*' Anthony says. '*After Emperor Diocletian's persecution, when the blood of martyrs watered every city, I came here. But when Constantine made Christianity legal, the cost of faith dropped to nothing. Comfortable Christians filled the churches. So the desert became the new arena -- white martyrdom instead of red.*'\n\nHe gestures to other caves along the cliff. Figures move in the distance -- dozens of hermits, each in their own cell.\n\n'*You can live alone, as I did -- the eremitic way. Or you can join Pachomius's community down the valley, where monks live together under a rule. Two paths. Both lead to God. Which speaks to your soul?*'",
+      "text": "Theo follows Anthony deeper into the desert. The sand gives way to rocky outcroppings, and soon they are climbing toward a cave mouth carved into the cliff face.\n\n'*This is how it began,*' Anthony says. '*After Emperor Diocletian's persecution, when the blood of martyrs watered every city, I came here. But when Constantine made Christianity legal, the cost of faith dropped to nothing. Comfortable Christians filled the churches. So the desert became the new arena -- white martyrdom instead of red.*'\n\nHe gestures to other caves along the cliff. Figures move in the distance -- dozens of hermits, each in their own cell.\n\n'*You can live alone, as I did -- the eremitic way. Or you can join Pachomius's community down the valley, where monks live together under a rule. Two paths. Both lead to God. Which speaks to your soul?*'",
       "choices": [
         {
           "text": "The hermit's cell -- solitude and God alone",
@@ -114,6 +114,10 @@ const STORY_DATA = {
         {
           "term": "Contemptus Mundi",
           "definition": "'Contempt of the world' -- the monastic ideal of turning away from worldly attachments. Not hatred of creation, but freedom from its grip."
+        },
+        {
+          "term": "Fuga Mundi",
+          "definition": "'Flight from the world' -- the Desert Fathers' practice of physically withdrawing from society to seek God. Not escapism, but a radical reordering of priorities away from wealth, status, and comfort."
         }
       ],
       "figures": [
@@ -127,7 +131,7 @@ const STORY_DATA = {
     },
     "act1_hesitate": {
       "title": "At the Edge",
-      "text": "Silas looks at the furnace-bright desert and shudders. Anthony reads his expression.\n\n'*You are not the first to hesitate. Even I was tempted back a thousand times. The demons of the desert are real -- not monsters with horns, but the voice in your own heart that says: go back, be comfortable, this is pointless.*'\n\nHe sits on a rock and looks at Silas steadily.\n\n'*But consider this: the age of the martyrs is ending. Diocletian's persecution killed thousands. Now Constantine has issued the Edict of Milan and Christianity is legal. What happens when faith costs nothing? It becomes shallow. The desert is the new arena -- the monk's daily dying to self is the white martyrdom that replaces the blood martyrdom of the persecuted Church.*'\n\nSomething in his voice is compelling. Silas looks at the desert again. It seems less terrifying now -- more like a challenge.",
+      "text": "Theo looks at the furnace-bright desert and shudders. Anthony reads his expression.\n\n'*You are not the first to hesitate. Even I was tempted back a thousand times. The demons of the desert are real -- not monsters with horns, but the voice in your own heart that says: go back, be comfortable, this is pointless.*'\n\nHe sits on a rock and looks at Theo steadily.\n\n'*But consider this: the age of the martyrs is ending. Diocletian's persecution killed thousands. Now Constantine has issued the Edict of Milan and Christianity is legal. What happens when faith costs nothing? It becomes shallow. The desert is the new arena -- the monk's daily dying to self is the white martyrdom that replaces the blood martyrdom of the persecuted Church.*'\n\nSomething in his voice is compelling. Theo looks at the desert again. It seems less terrifying now -- more like a challenge.",
       "choices": [
         {
           "text": "Follow Anthony deeper into the desert",
@@ -167,7 +171,7 @@ const STORY_DATA = {
     },
     "act1_martyrdom": {
       "title": "Three Colors of Dying",
-      "text": "'*The Irish monks will one day name three colors of martyrdom,*' Anthony says, as though glimpsing the future. '*Red martyrdom: to die for Christ, as so many did under Diocletian. White martyrdom: to leave everything you love -- homeland, family, comfort -- and wander as a pilgrim for God. Green martyrdom: to stay in one place but mortify the body through fasting, labor, and vigil until the old self dies and only Christ remains.*'\n\nHe fixes Silas with a look. '*Every monk chooses his color. The hermit in his cave practices green martyrdom. The missionary who leaves home for a foreign land practices white. But all of them face the same enemy: the eight deadly thoughts.*'\n\n'*Evagrius, one of our wisest brothers, mapped them: gluttony, lust, avarice, anger, sadness, acedia, vainglory, pride. These are the demons of the desert. They attack in sequence. Conquer one and the next appears.*'",
+      "text": "'*The Irish monks will one day name three colors of martyrdom,*' Anthony says, as though glimpsing the future. '*Red martyrdom: to die for Christ, as so many did under Diocletian. White martyrdom: to leave everything you love -- homeland, family, comfort -- and wander as a pilgrim for God. Green martyrdom: to stay in one place but mortify the body through fasting, labor, and vigil until the old self dies and only Christ remains.*'\n\nHe fixes Theo with a look. '*Every monk chooses his color. The hermit in his cave practices green martyrdom. The missionary who leaves home for a foreign land practices white. But all of them face the same enemy: the eight deadly thoughts.*'\n\n'*Evagrius, one of our wisest brothers, mapped them: gluttony, lust, avarice, anger, sadness, acedia, vainglory, pride. These are the demons of the desert. They attack in sequence. Conquer one and the next appears.*'",
       "choices": [
         {
           "text": "Ask about acedia -- you don't know that word",
@@ -201,6 +205,14 @@ const STORY_DATA = {
         {
           "term": "Eight Deadly Thoughts",
           "definition": "Evagrius's list: gluttony, lust, avarice, anger, sadness, acedia, vainglory, pride. Later condensed by Pope Gregory I into the seven deadly sins."
+        },
+        {
+          "term": "Logismoi",
+          "definition": "The Greek term Evagrius used for the eight destructive thought-patterns that assault the monk: gluttony, lust, avarice, anger, sadness, acedia, vainglory, and pride. Each logismos is a temptation that must be recognized and resisted before it takes root."
+        },
+        {
+          "term": "Apatheia",
+          "definition": "The Desert Fathers' central psychological ideal: a state of interior freedom from disordered passions, achieved through ascetic practice. Not emotionlessness, but a calm, undivided heart capable of pure prayer and selfless love."
         }
       ],
       "figures": [
@@ -214,7 +226,7 @@ const STORY_DATA = {
     },
     "act1_sayings": {
       "title": "Words from the Desert",
-      "text": "An old monk named Poemen sits in the shade of a palm tree, surrounded by listeners. He speaks in short, paradoxical phrases.\n\n'*A brother asked Abba Poemen: what should I do about my sins? And the old man said: The one who weeps over his sins is greater than the one who raises the dead. Because the one who weeps has understood himself.*'\n\nAnother monk, dark-skinned and powerfully built -- Abba Moses -- adds his own saying: '*Sit in your cell and your cell will teach you everything.*'\n\nSilas listens, fascinated. These aren't sermons or lectures. They're something else -- compressed wisdom, like seeds that unfold slowly.\n\n'*These sayings will be gathered one day,*' Anthony tells him. '*The Apophthegmata Patrum -- the Sayings of the Fathers. But there are also Mothers here whose wisdom is just as sharp.*'",
+      "text": "An old monk named Poemen sits in the shade of a palm tree, surrounded by listeners. He speaks in short, paradoxical phrases.\n\n'*A brother asked Abba Poemen: what should I do about my sins? And the old man said: The one who weeps over his sins is greater than the one who raises the dead. Because the one who weeps has understood himself.*'\n\nAnother monk, dark-skinned and powerfully built -- Abba Moses -- adds his own saying: '*Sit in your cell and your cell will teach you everything.*'\n\nTheo listens, fascinated. These aren't sermons or lectures. They're something else -- compressed wisdom, like seeds that unfold slowly.\n\n'*These sayings will be gathered one day,*' Anthony tells him. '*The Apophthegmata Patrum -- the Sayings of the Fathers. But there are also Mothers here whose wisdom is just as sharp.*'",
       "choices": [
         {
           "text": "Ask to meet the Desert Mothers",
@@ -257,7 +269,7 @@ const STORY_DATA = {
     },
     "act1_mothers": {
       "title": "Amma Syncletica",
-      "text": "In a former tomb cut into the hillside, Silas meets Amma Syncletica. She is old, serene, and formidable. She chose this life after her wealthy parents died, giving away everything and retreating here with her blind sister.\n\n'*People think the desert is for men,*' she says. '*But the soul has no sex. The same demons tempt us all. The same silence heals us all.*'\n\nShe offers him bread and water. '*There are many women here, though the world does not always notice us. We fast, we pray, we counsel those who come seeking. I tell them: the beginning of the spiritual life is hard, like gathering wood for a fire. There is smoke and tears. But once the fire catches -- ah, then there is only light.*'\n\nHer words lodge in Silas like a thorn. He feels he is standing at the beginning of something. But the desert is only the first chapter.",
+      "text": "In a former tomb cut into the hillside, Theo meets Amma Syncletica. She is old, serene, and formidable. She chose this life after her wealthy parents died, giving away everything and retreating here with her blind sister.\n\n'*People think the desert is for men,*' she says. '*But the soul has no sex. The same demons tempt us all. The same silence heals us all.*'\n\nShe offers him bread and water. '*There are many women here, though the world does not always notice us. We fast, we pray, we counsel those who come seeking. I tell them: the beginning of the spiritual life is hard, like gathering wood for a fire. There is smoke and tears. But once the fire catches -- ah, then there is only light.*'\n\nHer words lodge in Theo like a thorn. He feels he is standing at the beginning of something. But the desert is only the first chapter.",
       "choices": [
         {
           "text": "Stay and learn the hermit's way from the Desert Fathers and Mothers",
@@ -295,7 +307,7 @@ const STORY_DATA = {
     },
     "act1_acedia": {
       "title": "The Noonday Demon",
-      "text": "'*Acedia,*' Anthony repeats, sitting down in the shade. '*The noonday demon. It is not laziness -- it is something worse. It is the voice that says: this is pointless. God is not listening. You have wasted your life. You should be somewhere else, doing something else, being someone else.*'\n\nHe looks at Silas. '*It strikes hardest in the middle of the day, in the middle of the journey, in the middle of life. Evagrius says it is the most dangerous of all the thoughts because it makes you abandon your cell -- and once you abandon your cell, every other vice finds you.*'\n\n'*The cure? Stay. Sit in your cell. Do the next small thing: pray, weave a basket, read a psalm. The demon passes. It always passes. But you must outlast it.*'\n\nSilas thinks of all the times he has scrolled through his phone at 2 AM, restless and empty, unable to sleep. Acedia. He knows this demon.",
+      "text": "'*Acedia,*' Anthony repeats, sitting down in the shade. '*The noonday demon. It is not laziness -- it is something worse. It is the voice that says: this is pointless. God is not listening. You have wasted your life. You should be somewhere else, doing something else, being someone else.*'\n\nHe looks at Theo. '*It strikes hardest in the middle of the day, in the middle of the journey, in the middle of life. Evagrius says it is the most dangerous of all the thoughts because it makes you abandon your cell -- and once you abandon your cell, every other vice finds you.*'\n\n'*The cure? Stay. Sit in your cell. Do the next small thing: pray, weave a basket, read a psalm. The demon passes. It always passes. But you must outlast it.*'\n\nTheo thinks of all the times he has scrolled through his phone at 2 AM, restless and empty, unable to sleep. Acedia. He knows this demon.",
       "choices": [
         {
           "text": "Learn to fight acedia -- stay in the desert with the hermits",
@@ -326,7 +338,7 @@ const STORY_DATA = {
     },
     "act1_hermit": {
       "title": "The Hermit's Cell",
-      "text": "Silas spends days in a small cave. He learns the rhythm: rise before dawn for prayer, weave palm-leaf baskets for trade, eat one meal of bread and salt, read Scripture by lamplight, sleep on the stone floor.\n\nIt is brutal and beautiful. In the silence, his mind roars -- memories, regrets, fantasies, boredom. Then, slowly, the noise settles. He begins to understand what Moses meant: the cell teaches everything because there is nowhere to hide from yourself.\n\nBut a question grows: can this wisdom survive outside the desert? Rome is falling. Barbarians press at every frontier. Who will carry these teachings west?\n\nAs if in answer, a young man arrives from the north -- a traveler named John Cassian, hungry-eyed and full of questions.",
+      "text": "Theo spends days in a small cave. He learns the rhythm: rise before dawn for prayer, weave palm-leaf baskets for trade, eat one meal of bread and salt, read Scripture by lamplight, sleep on the stone floor.\n\nIt is brutal and beautiful. In the silence, his mind roars -- memories, regrets, fantasies, boredom. Then, slowly, the noise settles. He begins to understand what Moses meant: the cell teaches everything because there is nowhere to hide from yourself.\n\nBut a question grows: can this wisdom survive outside the desert? Rome is falling. Barbarians press at every frontier. Who will carry these teachings west?\n\nAs if in answer, a young man arrives from the north -- a traveler named John Cassian, hungry-eyed and full of questions.",
       "choices": [
         {
           "text": "Speak with Cassian -- how will he carry this west?",
@@ -357,7 +369,7 @@ const STORY_DATA = {
     },
     "act1_cenobite": {
       "title": "The Community of Pachomius",
-      "text": "Silas follows the valley path to a walled compound where hundreds of monks live together. This is Tabennisi, the first cenobium. At its center stands Pachomius -- a former Roman soldier, broad-shouldered and commanding.\n\n'*Solitude is a gift,*' Pachomius says, '*but not everyone can bear it alone. Anthony is a saint. Most of us are not. We need brothers to pray with, an abbot to guide us, a rule to steady us. Left alone, we make a god of our own will.*'\n\nHe shows Silas the community: monks organized by trade, eating together, praying at set hours, wearing identical tunics. There is order here -- and warmth.\n\n'*This is the cenobitic way. The Latin word for monastery, coenobium, means common life. We learn to love God by learning to live with each other -- which is sometimes harder than any desert fast.*'",
+      "text": "Theo follows the valley path to a walled compound where hundreds of monks live together. This is Tabennisi, the first cenobium. At its center stands Pachomius -- a former Roman soldier, broad-shouldered and commanding.\n\n'*Solitude is a gift,*' Pachomius says, '*but not everyone can bear it alone. Anthony is a saint. Most of us are not. We need brothers to pray with, an abbot to guide us, a rule to steady us. Left alone, we make a god of our own will.*'\n\nHe shows Theo the community: monks organized by trade, eating together, praying at set hours, wearing identical tunics. There is order here -- and warmth.\n\n'*This is the cenobitic way. The Latin word for monastery, coenobium, means common life. We learn to love God by learning to live with each other -- which is sometimes harder than any desert fast.*'",
       "choices": [
         {
           "text": "This structure makes sense. How does it reach the West?",
@@ -395,7 +407,7 @@ const STORY_DATA = {
     },
     "act2_cassian": {
       "title": "The Bridge to the West",
-      "text": "The world lurches. Silas stands in a Mediterranean port, the year 415 AD. Rome has already been sacked once. Visigoths, Vandals, and Ostrogoths tear at the empire's corpse.\n\nJohn Cassian -- older now, weather-beaten -- is building a monastery in Marseilles. He calls it Saint-Victor.\n\n'*I spent years in Egypt learning from the desert fathers,*' he says. '*Now I must translate their wisdom for Latin speakers who have never seen the desert. I am writing two books.*'\n\nHe holds up a manuscript. '*The Institutes -- a practical handbook. How to organize a monastery, what to wear, when to pray, how to fight the eight principal faults: gluttony, lust, avarice, anger, dejection, acedia, vainglory, pride.*'\n\nHe holds up another. '*The Conferences -- twenty-four dialogues with the desert fathers. The deep theology. Purity of heart. Prayer without ceasing. Discretion as the mother of all virtues.*'",
+      "text": "The world lurches. Theo stands in a Mediterranean port, the year 415 AD. Rome has already been sacked once. Visigoths, Vandals, and Ostrogoths tear at the empire's corpse.\n\nJohn Cassian -- older now, weather-beaten -- is building a monastery in Marseilles. He calls it Saint-Victor.\n\n'*I spent years in Egypt learning from the desert fathers,*' he says. '*Now I must translate their wisdom for Latin speakers who have never seen the desert. I am writing two books.*'\n\nHe holds up a manuscript. '*The Institutes -- a practical handbook. How to organize a monastery, what to wear, when to pray, how to fight the eight principal faults: gluttony, lust, avarice, anger, dejection, acedia, vainglory, pride.*'\n\nHe holds up another. '*The Conferences -- twenty-four dialogues with the desert fathers. The deep theology. Purity of heart. Prayer without ceasing. Discretion as the mother of all virtues.*'",
       "choices": [
         {
           "text": "Ask about the Conferences -- what is 'purity of heart'?",
@@ -459,6 +471,10 @@ const STORY_DATA = {
         {
           "term": "Discretion",
           "definition": "The 'mother of all virtues' in Cassian's teaching: the ability to discern the right measure in all things, avoiding both excess and deficiency."
+        },
+        {
+          "term": "Theosis",
+          "definition": "The Eastern Christian concept of deification: the soul's gradual transformation into the likeness of God through prayer, ascetic practice, and divine grace. Central to Eastern monasticism, it holds that humans can truly 'participate in the divine nature' (2 Peter 1:4)."
         }
       ],
       "figures": [
@@ -502,7 +518,7 @@ const STORY_DATA = {
     },
     "act2_lectio": {
       "title": "Sacred Reading",
-      "text": "'*Lectio divina,*' Cassian explains. '*Sacred reading. It is not study -- not the way scholars dissect a text. It is prayer with the mouth of the mind open.*'\n\nHe describes four stages: '*First, lectio -- you read a passage of Scripture slowly, listening for the word that catches. Second, meditatio -- you turn that word over and over, like a stone in the mouth, tasting it. Third, oratio -- the word kindles prayer, a response from the heart. Fourth, contemplatio -- you fall silent, and God speaks.*'\n\n'*A monk named Guigo will one day call these four stages a ladder. Each rung lifts you higher. Reading seeks, meditation finds, prayer asks, contemplation receives.*'\n\nSilas tries it. A single line of Scripture. He reads it again. And again. Something begins to open, like a door he didn't know was there.",
+      "text": "'*Lectio divina,*' Cassian explains. '*Sacred reading. It is not study -- not the way scholars dissect a text. It is prayer with the mouth of the mind open.*'\n\nHe describes four stages: '*First, lectio -- you read a passage of Scripture slowly, listening for the word that catches. Second, meditatio -- you turn that word over and over, like a stone in the mouth, tasting it. Third, oratio -- the word kindles prayer, a response from the heart. Fourth, contemplatio -- you fall silent, and God speaks.*'\n\n'*A monk named Guigo will one day call these four stages a ladder. Each rung lifts you higher. Reading seeks, meditation finds, prayer asks, contemplation receives.*'\n\nTheo tries it. A single line of Scripture. He reads it again. And again. Something begins to open, like a door he didn't know was there.",
       "choices": [
         {
           "text": "Follow the thread forward to Benedict's Rule",
@@ -537,7 +553,7 @@ const STORY_DATA = {
     },
     "act3_benedict": {
       "title": "The Rule",
-      "text": "The world lurches again. Italy, around 529 AD. The Roman Empire in the West is gone. Barbarian kingdoms rise and fall. Chaos reigns.\n\nSilas stands at the foot of a mountain -- Monte Cassino. At its summit, a young man named Benedict of Nursia has just destroyed a pagan temple and begun building a monastery on its ruins.\n\n'*I tried the hermit's life first,*' Benedict tells Silas. '*Three years in a cave at Subiaco. But God called me to something else: a community where ordinary people -- not heroes, not saints -- can seek Him together.*'\n\nHe holds a small manuscript. '*This is my Rule. It draws on Cassian, on Pachomius, on Basil. But it adds something they lacked: moderation. Nothing harsh, nothing burdensome. Ora et labora -- pray and work. A monk's day is divided into three parts: the Opus Dei, manual labor, and lectio divina.*'",
+      "text": "The world lurches again. Italy, around 529 AD. The Roman Empire in the West is gone. Barbarian kingdoms rise and fall. Chaos reigns.\n\nTheo stands at the foot of a mountain -- Monte Cassino. At its summit, a young man named Benedict of Nursia has just destroyed a pagan temple and begun building a monastery on its ruins.\n\n'*I tried the hermit's life first,*' Benedict tells Theo. '*Three years in a cave at Subiaco. But God called me to something else: a community where ordinary people -- not heroes, not saints -- can seek Him together.*'\n\nHe holds a small manuscript. '*This is my Rule. It draws on Cassian, on Pachomius, on Basil. But it adds something they lacked: moderation. Nothing harsh, nothing burdensome. Ora et labora -- pray and work. A monk's day is divided into three parts: the Opus Dei, manual labor, and lectio divina.*'",
       "choices": [
         {
           "text": "Ask about Ora et Labora -- how does the daily rhythm work?",
@@ -609,6 +625,10 @@ const STORY_DATA = {
         {
           "term": "Divine Office",
           "definition": "The Liturgy of the Hours: eight daily prayer services (Matins, Lauds, Prime, Terce, Sext, None, Vespers, Compline) centered on chanting the Psalms."
+        },
+        {
+          "term": "Scriptorium",
+          "definition": "The writing room in a Benedictine monastery where monks copied manuscripts, preserving classical and Christian texts through the chaos of the early medieval period. Monastic scriptoria were among the chief guardians of Western literacy and learning."
         }
       ],
       "figures": [
@@ -621,7 +641,7 @@ const STORY_DATA = {
     },
     "act3_abbot": {
       "title": "The Father of the Community",
-      "text": "'*The abbot holds the place of Christ in the monastery,*' Benedict says -- and then, seeing Silas's startled look, adds: '*Which means he must serve, not rule. He must know every monk's weakness and strength. He must be tough with the proud and gentle with the timid. He adapts the Rule the way a shepherd adapts to the terrain.*'\n\n'*And he listens. Before any decision, the abbot must call the whole community together and hear every voice -- even the youngest, because God often reveals His will through the least expected mouth.*'\n\nHe pauses. '*But once the abbot decides, the monk obeys. Not because the abbot is always right, but because obedience kills the deadliest thing in us: the illusion that we know best. The evangelical counsel of obedience is harder than poverty. Harder than chastity. It is the knife that cuts deepest.*'",
+      "text": "'*The abbot holds the place of Christ in the monastery,*' Benedict says -- and then, seeing Theo's startled look, adds: '*Which means he must serve, not rule. He must know every monk's weakness and strength. He must be tough with the proud and gentle with the timid. He adapts the Rule the way a shepherd adapts to the terrain.*'\n\n'*And he listens. Before any decision, the abbot must call the whole community together and hear every voice -- even the youngest, because God often reveals His will through the least expected mouth.*'\n\nHe pauses. '*But once the abbot decides, the monk obeys. Not because the abbot is always right, but because obedience kills the deadliest thing in us: the illusion that we know best. The evangelical counsel of obedience is harder than poverty. Harder than chastity. It is the knife that cuts deepest.*'",
       "choices": [
         {
           "text": "See how the Rule spreads across the crumbling empire",
@@ -643,6 +663,14 @@ const STORY_DATA = {
         {
           "term": "Stability",
           "definition": "A vow unique to Benedictine monasticism: the commitment to remain in one community for life, rather than wandering between monasteries."
+        },
+        {
+          "term": "Stabilitas",
+          "definition": "The Benedictine vow of stability: the monk promises to remain in one community for life, resisting the restless wandering that Cassian identified as acedia's most visible symptom. Stabilitas transforms a monastery from a waystation into a permanent home."
+        },
+        {
+          "term": "Conversatio Morum",
+          "definition": "The third distinctly Benedictine vow, often translated as 'conversion of life' or 'conversion of manners.' It commits the monk to ongoing transformation -- a lifelong turning away from self-will and toward God's will, embodied in the daily rhythms of the Rule."
         }
       ],
       "figures": [
@@ -655,7 +683,7 @@ const STORY_DATA = {
     },
     "act3_scholastica": {
       "title": "The Twin Sister",
-      "text": "At the foot of Monte Cassino, Silas meets Scholastica -- Benedict's twin sister, abbess of a nearby community of women.\n\n'*My brother writes the Rule,*' she says, smiling. '*I live it. We women have been part of this from the beginning -- in Egypt with Syncletica, in Ireland with Brigid, here with me. The desert does not care whether you are man or woman. God does not care. Only the world cares, and we have left the world behind.*'\n\nGregory the Great will later tell a famous story about the twins. On their last meeting, Benedict tried to leave at nightfall. Scholastica prayed for a storm to keep him -- and such a tempest burst that he could not leave until dawn. Three days later she died.\n\n'*My brother had the rule,*' she is supposed to have said. '*But I had the love. And the love was stronger.*'",
+      "text": "At the foot of Monte Cassino, Theo meets Scholastica -- Benedict's twin sister, abbess of a nearby community of women.\n\n'*My brother writes the Rule,*' she says, smiling. '*I live it. We women have been part of this from the beginning -- in Egypt with Syncletica, in Ireland with Brigid, here with me. The desert does not care whether you are man or woman. God does not care. Only the world cares, and we have left the world behind.*'\n\nGregory the Great will later tell a famous story about the twins. On their last meeting, Benedict tried to leave at nightfall. Scholastica prayed for a storm to keep him -- and such a tempest burst that he could not leave until dawn. Three days later she died.\n\n'*My brother had the rule,*' she is supposed to have said. '*But I had the love. And the love was stronger.*'",
       "choices": [
         {
           "text": "Follow the Rule's spread across Europe",
@@ -690,7 +718,7 @@ const STORY_DATA = {
     },
     "act4_celtic": {
       "title": "The Island at the Edge of the World",
-      "text": "Green hills. Rain. Stone beehive huts perched on a windswept cliff. Silas is in Ireland -- an island Rome never conquered -- and Christianity here has taken a form unlike anything on the continent.\n\nA broad-faced monk named Columba greets him. He is of royal Irish blood but has given up kingdoms for God.\n\n'*In Ireland, there are no cities,*' Columba explains. '*So the Church organized not around bishops and cathedrals but around monasteries. The abbot is more powerful than the bishop here. Our monasteries are the schools, the hospitals, the libraries, the hearts of civilization.*'\n\nHe gestures toward the sea. '*And we are wanderers. We practice peregrinatio pro Christo -- pilgrimage for Christ. We leave our homeland forever, casting ourselves on God's mercy, and carry the Gospel wherever the wind takes us. That is white martyrdom: permanent exile for love.*'\n\nBehind him, monks are loading a leather-hulled boat.",
+      "text": "Green hills. Rain. Stone beehive huts perched on a windswept cliff. Theo is in Ireland -- an island Rome never conquered -- and Christianity here has taken a form unlike anything on the continent.\n\nA broad-faced monk named Columba greets him. He is of royal Irish blood but has given up kingdoms for God.\n\n'*In Ireland, there are no cities,*' Columba explains. '*So the Church organized not around bishops and cathedrals but around monasteries. The abbot is more powerful than the bishop here. Our monasteries are the schools, the hospitals, the libraries, the hearts of civilization.*'\n\nHe gestures toward the sea. '*And we are wanderers. We practice peregrinatio pro Christo -- pilgrimage for Christ. We leave our homeland forever, casting ourselves on God's mercy, and carry the Gospel wherever the wind takes us. That is white martyrdom: permanent exile for love.*'\n\nBehind him, monks are loading a leather-hulled boat.",
       "choices": [
         {
           "text": "Sail with Columba to Iona and the mission to Scotland",
@@ -763,7 +791,7 @@ const STORY_DATA = {
     },
     "act4_iona": {
       "title": "The Lighthouse of the North",
-      "text": "The boat pitches in heavy seas. Silas grips the gunwale as Columba stands at the prow, spray-soaked and grinning. They land on a tiny island off Scotland's west coast: Iona.\n\n'*From this rock,*' Columba says, '*we will light the north. Monks will go from here to Lindisfarne, to Northumbria, to the Franks. We will carry manuscripts, medicine, and the Gospel into the darkness.*'\n\nThe monks build their beehive cells in a ring around a small stone church. Everything is simple, fierce, and beautiful.\n\nBut tensions are coming. At the Synod of Whitby in 664, the Celtic and Roman traditions will clash over the date of Easter, the shape of the tonsure, and the authority of the Pope. Rome will win. Celtic monasticism will be absorbed -- but its fire will burn inside the Benedictine tradition forever.",
+      "text": "The boat pitches in heavy seas. Theo grips the gunwale as Columba stands at the prow, spray-soaked and grinning. They land on a tiny island off Scotland's west coast: Iona.\n\n'*From this rock,*' Columba says, '*we will light the north. Monks will go from here to Lindisfarne, to Northumbria, to the Franks. We will carry manuscripts, medicine, and the Gospel into the darkness.*'\n\nThe monks build their beehive cells in a ring around a small stone church. Everything is simple, fierce, and beautiful.\n\nBut tensions are coming. At the Synod of Whitby in 664, the Celtic and Roman traditions will clash over the date of Easter, the shape of the tonsure, and the authority of the Pope. Rome will win. Celtic monasticism will be absorbed -- but its fire will burn inside the Benedictine tradition forever.",
       "choices": [
         {
           "text": "Follow Celtic missionaries to Europe -- meet Columbanus",
@@ -801,7 +829,7 @@ const STORY_DATA = {
     },
     "act4_columbanus": {
       "title": "The Wanderer",
-      "text": "Silas meets Columbanus -- a fierce, red-haired Irish monk with the energy of a storm. He has left Ireland with twelve companions and is cutting a path across Gaul, founding monasteries in the ruins of Roman civilization.\n\n'*I left Bangor for the love of Christ,*' Columbanus says. '*Not to find a better place, but to find no place -- to have nothing but God. That is peregrinatio. We are strangers everywhere, and that is freedom.*'\n\nHe founds Luxeuil in the Burgundian wilderness, then -- expelled for angering the local queen -- pushes on across the Alps to found Bobbio in Italy.\n\n'*St. Brigid did the same in Ireland,*' he adds. '*She founded Kildare as a double monastery -- men and women under one roof, an abbess over both. The world was not ready for her. Perhaps it never will be.*'\n\nThe Irish missionaries are scattering seeds across a devastated continent. But the future belongs to a different model: Charlemagne's dream of one Rule for one empire.",
+      "text": "Theo meets Columbanus -- a fierce, red-haired Irish monk with the energy of a storm. He has left Ireland with twelve companions and is cutting a path across Gaul, founding monasteries in the ruins of Roman civilization.\n\n'*I left Bangor for the love of Christ,*' Columbanus says. '*Not to find a better place, but to find no place -- to have nothing but God. That is peregrinatio. We are strangers everywhere, and that is freedom.*'\n\nHe founds Luxeuil in the Burgundian wilderness, then -- expelled for angering the local queen -- pushes on across the Alps to found Bobbio in Italy.\n\n'*St. Brigid did the same in Ireland,*' he adds. '*She founded Kildare as a double monastery -- men and women under one roof, an abbess over both. The world was not ready for her. Perhaps it never will be.*'\n\nThe Irish missionaries are scattering seeds across a devastated continent. But the future belongs to a different model: Charlemagne's dream of one Rule for one empire.",
       "choices": [
         {
           "text": "Move forward to the age of Charlemagne and Cluny",
@@ -840,7 +868,7 @@ const STORY_DATA = {
     },
     "act4_brigid": {
       "title": "The Flame of Kildare",
-      "text": "Columba takes Silas to hear about Brigid. '*She was a force of nature,*' he says. '*The daughter of a chieftain, she gave away everything her father owned -- food, weapons, even his ceremonial sword -- to anyone who asked. Her father was furious. But you cannot stop a river.*'\n\n'*At Kildare -- the Church of the Oak -- she built a double monastery. Men and women, monks and nuns, scholars and farmers, all under her authority as abbess. She was practically a bishop. Some say she was ordained as one by accident -- the old bishop's hand was guided by God.*'\n\nHe smiles. '*Whether that story is true matters less than what it tells us: in Celtic Christianity, women wielded authority that Rome would never have permitted. The Spirit blows where it will.*'",
+      "text": "Columba takes Theo to hear about Brigid. '*She was a force of nature,*' he says. '*The daughter of a chieftain, she gave away everything her father owned -- food, weapons, even his ceremonial sword -- to anyone who asked. Her father was furious. But you cannot stop a river.*'\n\n'*At Kildare -- the Church of the Oak -- she built a double monastery. Men and women, monks and nuns, scholars and farmers, all under her authority as abbess. She was practically a bishop. Some say she was ordained as one by accident -- the old bishop's hand was guided by God.*'\n\nHe smiles. '*Whether that story is true matters less than what it tells us: in Celtic Christianity, women wielded authority that Rome would never have permitted. The Spirit blows where it will.*'",
       "choices": [
         {
           "text": "Sail with the missionaries -- see Celtic monks transform Europe",
@@ -871,7 +899,7 @@ const STORY_DATA = {
     },
     "act5_cluny": {
       "title": "The Age of Splendor",
-      "text": "Centuries pass. Charlemagne has come and gone, making Benedict's Rule the standard for all monasteries in his empire. But then the empire fractures, and the Age of Invasions begins: Vikings from the north, Magyars from the east, Saracens from the south. Monasteries burn.\n\nWorse, local nobles seize monasteries as personal estates, installing themselves as lay abbots who pocket the revenues without living the Rule.\n\nIn 910, Duke William of Aquitaine does something revolutionary: he founds a new monastery at Cluny and makes it exempt -- free from all interference by local lords or bishops, answerable only to the Pope.\n\nSilas stands in the cloister of Cluny. The church is the largest in Christendom. The chant echoes for what seems like hours. Everything is magnificent.\n\nBut a question nags: is this what Benedict intended?",
+      "text": "Centuries pass. Charlemagne has come and gone, making Benedict's Rule the standard for all monasteries in his empire. But then the empire fractures, and the Age of Invasions begins: Vikings from the north, Magyars from the east, Saracens from the south. Monasteries burn.\n\nWorse, local nobles seize monasteries as personal estates, installing themselves as lay abbots who pocket the revenues without living the Rule.\n\nIn 910, Duke William of Aquitaine does something revolutionary: he founds a new monastery at Cluny and makes it exempt -- free from all interference by local lords or bishops, answerable only to the Pope.\n\nTheo stands in the cloister of Cluny. The church is the largest in Christendom. The chant echoes for what seems like hours. Everything is magnificent.\n\nBut a question nags: is this what Benedict intended?",
       "choices": [
         {
           "text": "Marvel at Cluny's achievement -- this is monasticism's golden age",
@@ -914,7 +942,7 @@ const STORY_DATA = {
     },
     "act5_golden": {
       "title": "The Magnificence of Cluny",
-      "text": "The abbot of Cluny -- Hugh, who will serve for an astonishing sixty years -- shows Silas the network. Over 1,000 priories across Europe, all answering to Cluny. The liturgy runs nearly around the clock -- the Opus Dei taken to its most magnificent extreme.\n\n'*We preserve manuscripts,*' Hugh says. '*We feed the poor. We pray for the dead -- Abbot Odilo established All Souls' Day, and now the whole Church observes it. Our monks are the diplomats, scholars, and peacemakers of Christendom.*'\n\nHe shows Silas the great basilica of Cluny III -- 187 meters long, the largest church in the world until St. Peter's in Rome.\n\n'*Some say we have strayed from Benedict's simplicity,*' Hugh admits. '*They say we spend too much time in choir and not enough at manual labor. That our churches are too grand, our meals too fine. Perhaps they have a point. But the beauty of our worship lifts souls to God. Is that not worth something?*'",
+      "text": "The abbot of Cluny -- Hugh, who will serve for an astonishing sixty years -- shows Theo the network. Over 1,000 priories across Europe, all answering to Cluny. The liturgy runs nearly around the clock -- the Opus Dei taken to its most magnificent extreme.\n\n'*We preserve manuscripts,*' Hugh says. '*We feed the poor. We pray for the dead -- Abbot Odilo established All Souls' Day, and now the whole Church observes it. Our monks are the diplomats, scholars, and peacemakers of Christendom.*'\n\nHe shows Theo the great basilica of Cluny III -- 187 meters long, the largest church in the world until St. Peter's in Rome.\n\n'*Some say we have strayed from Benedict's simplicity,*' Hugh admits. '*They say we spend too much time in choir and not enough at manual labor. That our churches are too grand, our meals too fine. Perhaps they have a point. But the beauty of our worship lifts souls to God. Is that not worth something?*'",
       "choices": [
         {
           "text": "It is worth something -- beauty glorifies God",
@@ -953,7 +981,7 @@ const STORY_DATA = {
     },
     "act5_doubt": {
       "title": "The Question of Simplicity",
-      "text": "Silas watches the monks process into the great church. Their vestments are rich. The capitals are carved with intricate scenes. Gold glints on the altar. The chant is unearthly -- magnificent -- but it goes on for hours.\n\nHe thinks of Anthony's cave. He thinks of Benedict saying 'nothing harsh, nothing burdensome.' He thinks of Cassian writing about discretion.\n\nIs Cluny the fulfillment of the monastic dream, or its distortion?\n\nTwo new movements are stirring, born from exactly this question. In the Alps, a disillusioned scholar named Bruno is founding the Carthusians -- hermits in a community, silent and severe. In a swamp in Burgundy, monks are founding Cîteaux -- 'the new monastery' -- determined to live Benedict's Rule to the letter, stripped of all Cluniac additions.",
+      "text": "Theo watches the monks process into the great church. Their vestments are rich. The capitals are carved with intricate scenes. Gold glints on the altar. The chant is unearthly -- magnificent -- but it goes on for hours.\n\nHe thinks of Anthony's cave. He thinks of Benedict saying 'nothing harsh, nothing burdensome.' He thinks of Cassian writing about discretion.\n\nIs Cluny the fulfillment of the monastic dream, or its distortion?\n\nTwo new movements are stirring, born from exactly this question. In the Alps, a disillusioned scholar named Bruno is founding the Carthusians -- hermits in a community, silent and severe. In a swamp in Burgundy, monks are founding Cîteaux -- 'the new monastery' -- determined to live Benedict's Rule to the letter, stripped of all Cluniac additions.",
       "choices": [
         {
           "text": "Follow Bruno to the Carthusians -- the way of silence",
@@ -985,7 +1013,7 @@ const STORY_DATA = {
     },
     "act6_carthusian": {
       "title": "The Silence of the Chartreuse",
-      "text": "Snow-capped peaks. A valley so remote that no road reaches it. This is the Grande Chartreuse, high in the French Alps. Bruno of Cologne has brought a handful of companions here to build something new.\n\n'*I was a cathedral scholar,*' Bruno tells Silas. '*I watched the Archbishop of Reims buy his office with gold -- simony at the highest level. The Church was sick. I could not cure it. So I left.*'\n\nEach monk lives in his own cell -- a small house with a workroom, bedroom, garden, and covered walkway. They eat alone. They work alone. They pray the Office together at 2 AM, standing in the dark church, but otherwise: silence.\n\n'*We speak on Sundays, during the spatiamentum -- the communal walk. That is all. For the rest: God and the cell. The world thinks this is imprisonment. We know it is the widest freedom there is.*'\n\nThe Carthusians will never be reformed because they will never need reforming. Their motto: Stat crux dum volvitur orbis -- the cross stands while the world turns.",
+      "text": "Snow-capped peaks. A valley so remote that no road reaches it. This is the Grande Chartreuse, high in the French Alps. Bruno of Cologne has brought a handful of companions here to build something new.\n\n'*I was a cathedral scholar,*' Bruno tells Theo. '*I watched the Archbishop of Reims buy his office with gold -- simony at the highest level. The Church was sick. I could not cure it. So I left.*'\n\nEach monk lives in his own cell -- a small house with a workroom, bedroom, garden, and covered walkway. They eat alone. They work alone. They pray the Office together at 2 AM, standing in the dark church, but otherwise: silence.\n\n'*We speak on Sundays, during the spatiamentum -- the communal walk. That is all. For the rest: God and the cell. The world thinks this is imprisonment. We know it is the widest freedom there is.*'\n\nThe Carthusians will never be reformed because they will never need reforming. Their motto: Stat crux dum volvitur orbis -- the cross stands while the world turns.",
       "choices": [
         {
           "text": "The Carthusian way speaks to you -- radical silence, radical freedom",
@@ -1031,7 +1059,7 @@ const STORY_DATA = {
     },
     "act6_ladder": {
       "title": "The Ladder of Monks",
-      "text": "In the Chartreuse library, Silas reads a slim manuscript by Guigo II, a later Carthusian prior. It is called Scala Claustralium -- the Ladder of Monks.\n\n'*Four rungs,*' Guigo writes. '*Reading seeks. Meditation finds. Prayer asks. Contemplation receives. Reading puts food in the mouth. Meditation chews it. Prayer extracts the flavor. Contemplation is the sweetness itself.*'\n\nThese are the four stages of lectio divina that Cassian first described. Guigo has given them a perfect image -- a ladder reaching from earth to heaven.\n\nSilas climbs the ladder. He reads a psalm slowly. Turns a phrase over and over. The phrase becomes a prayer. The prayer becomes silence. In the silence, something opens.\n\nHe understands, suddenly, why anyone would choose this life.",
+      "text": "In the Chartreuse library, Theo reads a slim manuscript by Guigo II, a later Carthusian prior. It is called Scala Claustralium -- the Ladder of Monks.\n\n'*Four rungs,*' Guigo writes. '*Reading seeks. Meditation finds. Prayer asks. Contemplation receives. Reading puts food in the mouth. Meditation chews it. Prayer extracts the flavor. Contemplation is the sweetness itself.*'\n\nThese are the four stages of lectio divina that Cassian first described. Guigo has given them a perfect image -- a ladder reaching from earth to heaven.\n\nTheo climbs the ladder. He reads a psalm slowly. Turns a phrase over and over. The phrase becomes a prayer. The prayer becomes silence. In the silence, something opens.\n\nHe understands, suddenly, why anyone would choose this life.",
       "choices": [
         {
           "text": "Stay in the silence -- this is where you belong",
@@ -1065,7 +1093,7 @@ const STORY_DATA = {
     },
     "act6_cistercian": {
       "title": "The White Monks",
-      "text": "In a marshy clearing in Burgundy, monks in undyed white habits are draining swampland and building a simple stone church. No carvings. No gold. No colored glass. Just stone, light, and silence.\n\nA young man with blazing eyes approaches. He arrived at Cîteaux with thirty companions and the energy of a bonfire. His name is Bernard.\n\n'*Cluny gave God beauty,*' Bernard says. '*We give God poverty. Benedict's Rule says monks should work with their hands. When did the Black Monks last plow a field? They have serfs for that. We have only ourselves.*'\n\nHe shows Silas the Charter of Charity -- Stephen Harding's masterpiece of governance. Every Cistercian abbey is self-governing but mutually accountable. Annual visitations. A General Chapter where all abbots meet as equals.\n\n'*This is not one man's empire, like Cluny. This is a family. Each house stands on its own. Each abbot answers to his brothers. If I fail at Clairvaux, the abbot of Cîteaux corrects me. If he fails, the General Chapter corrects him.*'",
+      "text": "In a marshy clearing in Burgundy, monks in undyed white habits are draining swampland and building a simple stone church. No carvings. No gold. No colored glass. Just stone, light, and silence.\n\nA young man with blazing eyes approaches. He arrived at Cîteaux with thirty companions and the energy of a bonfire. His name is Bernard.\n\n'*Cluny gave God beauty,*' Bernard says. '*We give God poverty. Benedict's Rule says monks should work with their hands. When did the Black Monks last plow a field? They have serfs for that. We have only ourselves.*'\n\nHe shows Theo the Charter of Charity -- Stephen Harding's masterpiece of governance. Every Cistercian abbey is self-governing but mutually accountable. Annual visitations. A General Chapter where all abbots meet as equals.\n\n'*This is not one man's empire, like Cluny. This is a family. Each house stands on its own. Each abbot answers to his brothers. If I fail at Clairvaux, the abbot of Cîteaux corrects me. If he fails, the General Chapter corrects him.*'",
       "choices": [
         {
           "text": "Ask about Bernard's theology -- what drives this fire?",
@@ -1112,7 +1140,7 @@ const STORY_DATA = {
     },
     "act6_bernard": {
       "title": "On Loving God",
-      "text": "Bernard walks with Silas through the fields where monks labor in silence. The valley is called Clairvaux -- Bright Valley -- and it lives up to its name.\n\n'*There are four degrees of love,*' Bernard says. '*First, we love ourselves for our own sake -- that is where everyone begins. Second, we love God for what He gives us -- blessings, protection. Third, we love God for His own sake, not ours. And fourth -- rarest of all -- we love ourselves only in God, and God in all things. Then even self-love becomes divine.*'\n\nHe stops walking. '*The monastery is a school of love. That is all it is. The silence, the labor, the poverty -- these are not the point. They are the soil. Love is the fruit.*'\n\nSilas remembers Scholastica's words: *My brother had the rule. I had the love. And the love was stronger.* Bernard would agree.",
+      "text": "Bernard walks with Theo through the fields where monks labor in silence. The valley is called Clairvaux -- Bright Valley -- and it lives up to its name.\n\n'*There are four degrees of love,*' Bernard says. '*First, we love ourselves for our own sake -- that is where everyone begins. Second, we love God for what He gives us -- blessings, protection. Third, we love God for His own sake, not ours. And fourth -- rarest of all -- we love ourselves only in God, and God in all things. Then even self-love becomes divine.*'\n\nHe stops walking. '*The monastery is a school of love. That is all it is. The silence, the labor, the poverty -- these are not the point. They are the soil. Love is the fruit.*'\n\nTheo remembers Scholastica's words: *My brother had the rule. I had the love. And the love was stronger.* Bernard would agree.",
       "choices": [
         {
           "text": "How does this tradition survive revolution and reformation?",
@@ -1146,7 +1174,7 @@ const STORY_DATA = {
     },
     "act7_modern": {
       "title": "Through Fire",
-      "text": "The centuries compress. Silas watches in fast-forward as monasticism is tested by fire after fire.\n\nLuther, himself an Augustinian friar, rejects monastic vows in 1521. He argues that salvation comes by faith alone -- the evangelical counsels are unnecessary, even dangerous. Half of Europe's monasteries close.\n\nHenry VIII dissolves over 800 English religious houses, seizing their wealth. Monks are scattered. Libraries burn.\n\nThe French Revolution goes further. The Civil Constitution of the Clergy suppresses every religious order in France. Cluny -- the greatest abbey in Christendom -- is demolished for building stone.\n\nAnd yet. Monasticism survives. The Council of Trent reaffirms consecrated life. In the 19th century, Dom Prosper Guéranger refounds Solesmes and revives Gregorian chant. Monte Cassino is rebuilt. In the 20th century, a young convert named Thomas Merton enters a Trappist monastery and writes about it so beautifully that millions rediscover the monastic call.",
+      "text": "The centuries compress. Theo watches in fast-forward as monasticism is tested by fire after fire.\n\nLuther, himself an Augustinian friar, rejects monastic vows in 1521. He argues that salvation comes by faith alone -- the evangelical counsels are unnecessary, even dangerous. Half of Europe's monasteries close.\n\nHenry VIII dissolves over 800 English religious houses, seizing their wealth. Monks are scattered. Libraries burn.\n\nThe French Revolution goes further. The Civil Constitution of the Clergy suppresses every religious order in France. Cluny -- the greatest abbey in Christendom -- is demolished for building stone.\n\nAnd yet. Monasticism survives. The Council of Trent reaffirms consecrated life. In the 19th century, Dom Prosper Guéranger refounds Solesmes and revives Gregorian chant. Monte Cassino is rebuilt. In the 20th century, a young convert named Thomas Merton enters a Trappist monastery and writes about it so beautifully that millions rediscover the monastic call.",
       "choices": [
         {
           "text": "Why does it survive? What makes it indestructible?",
@@ -1187,7 +1215,7 @@ const STORY_DATA = {
     },
     "act7_why": {
       "title": "The Indestructible Seed",
-      "text": "Silas stands in a modern monastery. It is simple, clean, quiet. Monks in black habits chant the Office. The rhythm is ancient -- Matins, Lauds, Vespers, Compline -- the same hours Benedict codified 1,500 years ago.\n\nAn old monk speaks to him. '*Empires fall. Revolutions rage. But the seed cannot be destroyed because it is planted in something deeper than politics or culture. It is planted in the human hunger for God.*'\n\n'*Every generation produces people who hear the call: leave everything and follow me. It is the same call Anthony heard in the Egyptian church. The same call that drew Patrick back to Ireland, and Bruno to the Alps, and Bernard to the swamp. The forms change. The call does not.*'\n\nHe quotes Benedict's Rule: '*Nihil amori Christi praeponere -- prefer nothing to the love of Christ. That is the entire Rule in seven words.*'\n\nSilas feels the words settling into him like a foundation stone.",
+      "text": "Theo stands in a modern monastery. It is simple, clean, quiet. Monks in black habits chant the Office. The rhythm is ancient -- Matins, Lauds, Vespers, Compline -- the same hours Benedict codified 1,500 years ago.\n\nAn old monk speaks to him. '*Empires fall. Revolutions rage. But the seed cannot be destroyed because it is planted in something deeper than politics or culture. It is planted in the human hunger for God.*'\n\n'*Every generation produces people who hear the call: leave everything and follow me. It is the same call Anthony heard in the Egyptian church. The same call that drew Patrick back to Ireland, and Bruno to the Alps, and Bernard to the swamp. The forms change. The call does not.*'\n\nHe quotes Benedict's Rule: '*Nihil amori Christi praeponere -- prefer nothing to the love of Christ. That is the entire Rule in seven words.*'\n\nTheo feels the words settling into him like a foundation stone.",
       "choices": [
         {
           "text": "This journey has changed you. What does it mean for ordinary life?",
@@ -1215,7 +1243,7 @@ const STORY_DATA = {
     },
     "act7_vatican2": {
       "title": "Renewal and Return",
-      "text": "The Second Vatican Council (1962-1965) issues Perfectae Caritatis -- a decree calling religious communities to a twofold renewal: return to the original inspiration of their founders, and adapt to the conditions of the modern world.\n\nSome monasteries adopt vernacular liturgy. Others keep the Latin chant. Some open their doors to retreatants and oblates. Others deepen their enclosure.\n\n'*The question,*' a modern abbot tells Silas, '*is not whether monasticism will survive. It always survives. The question is whether we will have the courage to be what we were called to be: signs of contradiction in a world that worships noise, speed, and accumulation.*'\n\nHe pauses. '*Benedictine oblates -- laypeople who live the spirit of the Rule in their daily lives -- may be the future. Not everyone is called to the cloister. But everyone is called to silence, to prayer, to simplicity, to community. The monastery's gift to the world is to show that such a life is possible.*'",
+      "text": "The Second Vatican Council (1962-1965) issues Perfectae Caritatis -- a decree calling religious communities to a twofold renewal: return to the original inspiration of their founders, and adapt to the conditions of the modern world.\n\nSome monasteries adopt vernacular liturgy. Others keep the Latin chant. Some open their doors to retreatants and oblates. Others deepen their enclosure.\n\n'*The question,*' a modern abbot tells Theo, '*is not whether monasticism will survive. It always survives. The question is whether we will have the courage to be what we were called to be: signs of contradiction in a world that worships noise, speed, and accumulation.*'\n\nHe pauses. '*Benedictine oblates -- laypeople who live the spirit of the Rule in their daily lives -- may be the future. Not everyone is called to the cloister. But everyone is called to silence, to prayer, to simplicity, to community. The monastery's gift to the world is to show that such a life is possible.*'",
       "choices": [
         {
           "text": "Become a Benedictine oblate -- carry the Rule into ordinary life",
@@ -1255,7 +1283,7 @@ const STORY_DATA = {
     },
     "end_cloister": {
       "title": "Behind the Wall",
-      "text": "Silas wakes at his desk. The textbook is still open to the chapter on monks. But everything has changed.\n\nHe closes the book and sits in the silence of his room. For the first time, the silence is not empty. It is full -- full of everything he heard in the desert, at Monte Cassino, in the Chartreuse, at Clairvaux.\n\nHe knows what he will do. Not today, perhaps. Not this year. But one day he will knock on a monastery door and ask to enter. Not to escape the world but to find what the world cannot give: the freedom that comes from giving everything away.\n\n*Nihil amori Christi praeponere.*\n\nPrefer nothing to the love of Christ.\n\nThe door will open.",
+      "text": "Theo wakes at his desk. The textbook is still open to the chapter on monks. But everything has changed.\n\nHe closes the book and sits in the silence of his room. For the first time, the silence is not empty. It is full -- full of everything he heard in the desert, at Monte Cassino, in the Chartreuse, at Clairvaux.\n\nHe knows what he will do. Not today, perhaps. Not this year. But one day he will knock on a monastery door and ask to enter. Not to escape the world but to find what the world cannot give: the freedom that comes from giving everything away.\n\n*Nihil amori Christi praeponere.*\n\nPrefer nothing to the love of Christ.\n\nThe door will open.",
       "choices": [],
       "is_ending": true,
       "ending_type": "best",
@@ -1269,7 +1297,7 @@ const STORY_DATA = {
     },
     "end_oblate": {
       "title": "A Rule for the World",
-      "text": "Silas wakes at his desk. The textbook is still open. But the monks are not behind him -- they are ahead of him.\n\nHe will not enter a monastery. But he will live as though he has. He will rise early and pray. He will work with his hands. He will practice lectio divina with whatever text is before him. He will simplify. He will stay -- stabilitas -- in his place and his relationships, going deeper instead of running.\n\nHe will become a Benedictine oblate: a person in the world who carries the Rule in his heart.\n\n'*The monastery's gift to the world,*' the abbot said, '*is to show that such a life is possible.*'\n\nSilas picks up his pen and begins to write.",
+      "text": "Theo wakes at his desk. The textbook is still open. But the monks are not behind him -- they are ahead of him.\n\nHe will not enter a monastery. But he will live as though he has. He will rise early and pray. He will work with his hands. He will practice lectio divina with whatever text is before him. He will simplify. He will stay -- stabilitas -- in his place and his relationships, going deeper instead of running.\n\nHe understands now that the Rule is not only for monks. It is a map for any life -- a 17-year-old's life included. Silence, prayer, simplicity, community: these are not luxuries for the cloister. They are the shape of a life well lived.\n\n'*The monastery's gift to the world,*' the abbot said, '*is to show that such a life is possible.*'\n\nTheo picks up his pen and begins to write.",
       "choices": [],
       "is_ending": true,
       "ending_type": "best",
@@ -1283,7 +1311,7 @@ const STORY_DATA = {
     },
     "end_silence": {
       "title": "The Cell Teaches Everything",
-      "text": "Silas wakes in his room. But the silence follows him.\n\nHe turns off his phone. He closes the laptop. He sits. He does nothing for a very long time, and in that nothing, something opens.\n\nAbba Moses said: *Sit in your cell and your cell will teach you everything.* Bruno said: *The world thinks this is imprisonment. We know it is the widest freedom there is.*\n\nSilas does not know if he will become a monk. But he knows that he has found the door to his own cell -- the inner room where noise cannot reach and God waits in the silence.\n\nHe breathes. He listens. The cross stands while the world turns.",
+      "text": "Theo wakes in his room. But the silence follows him.\n\nHe turns off his phone. He closes the laptop. He sits. He does nothing for a very long time, and in that nothing, something opens.\n\nAbba Moses said: *Sit in your cell and your cell will teach you everything.* Bruno said: *The world thinks this is imprisonment. We know it is the widest freedom there is.*\n\nTheo does not know if he will become a monk. But he knows that he has found the door to his own cell -- the inner room where noise cannot reach and God waits in the silence.\n\nHe breathes. He listens. The cross stands while the world turns.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -1297,7 +1325,7 @@ const STORY_DATA = {
     },
     "end_love": {
       "title": "The Fourth Degree",
-      "text": "Silas wakes at his desk with Bernard's words echoing:\n\n*The fourth degree of love is when we love ourselves only in God.*\n\nHe does not fully understand it. But he has tasted it -- a moment in the story when the boundary between self and other dissolved, when the monks' chant became a single voice, when the silence of the Chartreuse was not absence but presence.\n\nLove. That is what Scholastica knew. That is what the Desert Mothers taught. That is what drove Columbanus across the sea and Bernard into the swamp. Not rules, not austerity, not even prayer -- but the love that these things make possible.\n\nSilas closes the textbook. He does not need it anymore. The lesson is alive.",
+      "text": "Theo wakes at his desk with Bernard's words echoing:\n\n*The fourth degree of love is when we love ourselves only in God.*\n\nHe does not fully understand it. But he has tasted it -- a moment in the story when the boundary between self and other dissolved, when the monks' chant became a single voice, when the silence of the Chartreuse was not absence but presence.\n\nLove. That is what Scholastica knew. That is what the Desert Mothers taught. That is what drove Columbanus across the sea and Bernard into the swamp. Not rules, not austerity, not even prayer -- but the love that these things make possible.\n\nTheo closes the textbook. He does not need it anymore. The lesson is alive.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -1311,7 +1339,7 @@ const STORY_DATA = {
     },
     "end_wanderer": {
       "title": "Peregrinatio",
-      "text": "Silas wakes at his desk with salt on his lips, as though he has been at sea.\n\nHe thinks of Columbanus: *We are strangers everywhere, and that is freedom.* He thinks of Patrick returning to the land that enslaved him. He thinks of Brendan sailing into the unknown.\n\nSomething in the Irish way calls to him -- not the cloister but the road. Not stability but pilgrimage. White martyrdom: leaving everything behind for love.\n\nHe does not know where he will go. But he knows he cannot stay where he is. The world is wide and the Gospel must be carried. Some monks sit in their cells. Others sail.\n\nSilas is a sailor.",
+      "text": "Theo wakes at his desk with salt on his lips, as though he has been at sea.\n\nHe thinks of Columbanus: *We are strangers everywhere, and that is freedom.* He thinks of Patrick returning to the land that enslaved him. He thinks of Brendan sailing into the unknown.\n\nSomething in the Irish way calls to him -- not the cloister but the road. Not stability but pilgrimage. White martyrdom: leaving everything behind for love.\n\nHe does not know where he will go. But he knows he cannot stay where he is. The world is wide and the Gospel must be carried. Some monks sit in their cells. Others sail.\n\nTheo is a sailor.",
       "choices": [],
       "is_ending": true,
       "ending_type": "neutral",
@@ -1325,7 +1353,7 @@ const STORY_DATA = {
     },
     "end_contemplation": {
       "title": "The Sweetness Itself",
-      "text": "Silas does not move forward. He stays in Cassian's monastery, reading one psalm over and over. The four stages of lectio divina unfold like a flower: reading, meditation, prayer, contemplation.\n\nHe reaches the fourth rung. He falls silent. And in the silence, something opens -- wider than the desert, deeper than any well, older than any rule.\n\nWhen Silas wakes at his desk, there are tears on his face. He cannot explain them. He does not try. He only knows that for a moment he tasted what Guigo called 'the sweetness itself' -- the thing that all the fasting, silence, prayer, and poverty are pointing toward.\n\nHe does not understand it. He does not need to. Understanding is the second rung. He has gone higher.",
+      "text": "Theo does not move forward. He stays in Cassian's monastery, reading one psalm over and over. The four stages of lectio divina unfold like a flower: reading, meditation, prayer, contemplation.\n\nHe reaches the fourth rung. He falls silent. And in the silence, something opens -- wider than the desert, deeper than any well, older than any rule.\n\nWhen Theo wakes at his desk, there are tears on his face. He cannot explain them. He does not try. He only knows that for a moment he tasted what Guigo called 'the sweetness itself' -- the thing that all the fasting, silence, prayer, and poverty are pointing toward.\n\nHe does not understand it. He does not need to. Understanding is the second rung. He has gone higher.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -1339,7 +1367,7 @@ const STORY_DATA = {
     },
     "end_surface": {
       "title": "A Passing Interest",
-      "text": "Silas wakes at his desk and stretches. The textbook is still open. He's had a strange dream -- monks, deserts, chanting. Interesting enough. He'll probably remember a few facts for the exam.\n\nHe picks up his phone. Thirty-seven notifications. He scrolls. The afternoon light fades.\n\nSomewhere, in a monastery he will never visit, a bell rings for Vespers. Monks rise and walk in silence toward a stone church. They will chant the same psalms tonight that were chanted a thousand years ago. They will do the same tomorrow. And the day after.\n\nThe cross stands while the world turns.\n\nSilas does not hear the bell.",
+      "text": "Theo wakes at his desk and stretches. The textbook is still open. He's had a strange dream -- monks, deserts, chanting. Interesting enough. He'll probably remember a few facts for the test.\n\nHe picks up his phone. Thirty-seven notifications. He scrolls. The afternoon light fades.\n\nSomewhere, in a monastery he will never visit, a bell rings for Vespers. Monks rise and walk in silence toward a stone church. They will chant the same psalms tonight that were chanted a thousand years ago. They will do the same tomorrow. And the day after.\n\nThe cross stands while the world turns.\n\nTheo does not hear the bell.",
       "choices": [],
       "is_ending": true,
       "ending_type": "neutral",
@@ -1353,7 +1381,7 @@ const STORY_DATA = {
     },
     "end_labor": {
       "title": "Work Is Prayer",
-      "text": "Silas wakes at his desk with dirt under his fingernails. He looks at his hands and thinks of the Cistercian monks draining the swamp at Cîteaux -- turning wasteland into farmland with nothing but their hands and their faith.\n\nOra et labora. Pray and work. Work is prayer. The hands that turn the soil are the same hands that turn the pages of Scripture.\n\nSilas will never be a monk. But he will work. He will work with intention, with care, with the Cistercian conviction that honest labor sanctifies the laborer and the land.\n\nHe closes the textbook, rolls up his sleeves, and gets to work.",
+      "text": "Theo wakes at his desk with dirt under his fingernails. He looks at his hands and thinks of the Cistercian monks draining the swamp at Cîteaux -- turning wasteland into farmland with nothing but their hands and their faith.\n\nOra et labora. Pray and work. Work is prayer. The hands that turn the soil are the same hands that turn the pages of Scripture.\n\nTheo will never be a monk. But he will work. He will work with intention, with care, with the Cistercian conviction that honest labor sanctifies the laborer and the land.\n\nHe closes the textbook, rolls up his sleeves, and gets to work.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -1367,7 +1395,7 @@ const STORY_DATA = {
     },
     "end_visitor": {
       "title": "The Guest",
-      "text": "Silas wakes at his desk. The dream fades quickly. He enjoyed the visit -- the quiet, the chanting, the stories. But this life is not for him.\n\n'*Let all guests who arrive be received as Christ,*' Benedict's Rule says. And Silas was received well. He saw the desert and the cloister, the hermit's cell and the great abbey. He watched monks reform and be reformed, fall and rise, burn and be rebuilt.\n\nBut he remains a guest. He appreciates monasticism the way one appreciates a cathedral: from the outside, looking up.\n\nPerhaps that is enough. Perhaps one day he will go back. The door is always open.\n\nBenedict's Rule begins: '*Listen.*'\n\nSilas is not yet ready to listen. But he knows the invitation stands.",
+      "text": "Theo wakes at his desk. The dream fades quickly. He enjoyed the visit -- the quiet, the chanting, the stories. But this life is not for him.\n\n'*Let all guests who arrive be received as Christ,*' Benedict's Rule says. And Theo was received well. He saw the desert and the cloister, the hermit's cell and the great abbey. He watched monks reform and be reformed, fall and rise, burn and be rebuilt.\n\nBut he remains a guest. He appreciates monasticism the way one appreciates a cathedral: from the outside, looking up.\n\nPerhaps that is enough. Perhaps one day he will go back. The door is always open.\n\nBenedict's Rule begins: '*Listen.*'\n\nTheo is not yet ready to listen. But he knows the invitation stands.",
       "choices": [],
       "is_ending": true,
       "ending_type": "neutral",
