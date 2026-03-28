@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities I &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities I &mdash; Chapter 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_I.html">&larr; Back to History &amp; Humanities I</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What does 'res publica' mean, and what political system did it describe?", "back": "Literally 'the public thing' or 'the public affair.' It described Rome's system of shared government designed to prevent any single person from seizing permanent power. Two consuls each held the right of intercessio (veto) over the other. It is the direct ancestor of the English word 'republic.'"}, {"front": "What were the two founding legends of Rome, and what values did each embody?", "back": "1) Romulus and Remus: twins nursed by a she-wolf, raised by a shepherd; Romulus founded Rome in 753 BC. 2) Aeneas: Trojan prince who escaped burning Troy carrying his father and household gods — an image of pietas. Both legends revealed what Rome stood for before Rome had written history."}, {"front": "What was pietas in Roman culture?", "back": "Dutiful devotion to the gods, to family, and to the state. Virgil's Aeneas is called 'pius Aeneas' because he always subordinates his personal desires to his obligations to his father, household gods, and Rome's destiny. Pietas is close to the Christian virtue of honor to parents and obedience."}, {"front": "What was virtus in Roman culture?", "back": "From the Latin vir (man), virtus means courage, self-discipline, and excellence in the service of the community. Unlike the Greek hero Achilles whose bravery served his own pride, the Roman hero's courage was directed toward the res publica, the common good. Active, public, tested in difficulty."}, {"front": "What was gravitas in Roman culture?", "back": "The quality of seriousness, weight, and dignity appropriate to a man of public responsibility. A Roman statesman was expected to speak deliberately, honor tradition, and take his duties seriously. The opposite was levitas (frivolity), which Romans considered deeply un-Roman."}, {"front": "Who was Tarquinius Superbus, and why did his downfall matter?", "back": "The last Roman king ('Tarquin the Proud'), he ruled by intimidation, ignored the Senate, and executed citizens without trial. His downfall came when his son violated the noblewoman Lucretia, leading Brutus to rally Romans against the king. In 509 BC the Romans expelled the Tarquins and swore never again to be ruled by a king."}, {"front": "What was the role of consuls in the Roman Republic?", "back": "Two annually elected chief magistrates who commanded the army and presided over the Senate. Both held full imperium (right to command) but each could block the other's decisions via intercessio (veto). In military emergencies, the Senate could appoint a dictator for a maximum of six months."}, {"front": "What was the role of tribunes of the plebs?", "back": "Ten annually elected officials whose persons were legally sacrosanct (inviolable — harming them was a capital crime). They could veto any magistrate's action affecting a plebeian citizen. The tribune was the common citizen's shield against the abuse of power by patrician magistrates."}, {"front": "What was the role of the Senate in the Roman Republic?", "back": "The advisory body of experienced former magistrates, originally patrician only. It controlled state finances, foreign policy, and military command assignments. Its decrees (senatus consulta) were not formally laws but carried such overwhelming moral weight they were almost always obeyed. Senators served for life."}, {"front": "What was the cursus honorum?", "back": "The 'path of honors' — the required sequence of offices a Roman noble held: quaestor (treasurer) → aedile (public works) → praetor (judge/commander) → consul → censor. Each required a minimum age and waiting period. This system ensured leaders were tested and experienced before reaching the highest office."}, {"front": "Who were the patricians and who were the plebeians?", "back": "Patricians were hereditary noble families who dominated the Senate and all major priesthoods. Plebeians were the ordinary free citizens who made up the vast majority of Rome's population. Early Rome excluded plebeians from the consulship, priesthoods, and marriage to patricians."}, {"front": "What was the Conflict of the Orders?", "back": "The long struggle (roughly 494–287 BC) of plebeians to gain political rights equal to the patricians. Key milestones: creation of the tribune (494 BC), the Twelve Tables (451–450 BC), the Licinian-Sextian Laws opening the consulship to plebeians (367 BC), and the Lex Hortensia making plebeian assembly resolutions binding on all (287 BC)."}, {"front": "What were the Twelve Tables, and why were they important?", "back": "Rome's first written law code, produced in 451–450 BC under sustained plebeian pressure, inscribed on twelve bronze tablets displayed publicly in the Forum. Before them, patrician judges applied unwritten law however they wished. Written, public law was a demand for accountability — making law knowable, consistent, and binding on rich and poor alike."}, {"front": "What is the principle of written law as a foundation of liberty?", "back": "If law is written, public, and the same for everyone, it cannot be applied selectively by those in power. This principle — that law must be knowable, consistent, and public — is foundational to Western legal tradition, reappearing in Magna Carta (1215), the US Constitution, and the Universal Declaration of Human Rights."}, {"front": "Who was Livy, and what was his historical purpose?", "back": "Titus Livius (c. 64 BC – AD 17) wrote one of the longest histories of the ancient world: 142 books from Rome's founding to his day (only 35 survive). He was a moral historian, not primarily a researcher. His heroes are moral exemplars; his villains are warnings. His preface says he cares about 'their life and their manners' — not just battles."}, {"front": "Who was Plutarch, and what were the Parallel Lives?", "back": "Plutarch (c. AD 46–120) was a Greek philosopher and biographer under the Roman Empire. His Parallel Lives pairs 23 famous Greeks with 23 famous Romans, comparing them in terms of character. He sought virtue in history, not just events. He is also one of Shakespeare's most important sources."}, {"front": "Who was Horatius Cocles, and what Roman virtue did he embody?", "back": "Horatius held the Sublician Bridge alone against an Etruscan army while his comrades demolished it behind him, expecting to die. He embodies Roman virtus: courage in the service of the community, indifferent to personal reward. Unlike Achilles (who fought for his own glory), Horatius offered himself as a delaying action so others could survive."}, {"front": "Who was Cincinnatus, and what made him Rome's supreme example of republican virtue?", "back": "Lucius Quinctius Cincinnatus was called from his four-acre farm to serve as dictator during a crisis. He rescued a surrounded Roman army, forced the enemy to surrender, and then resigned the dictatorship after only fifteen days — returning to his farm. The message: power is a burden to be borne when needed, not a prize to be seized and kept."}, {"front": "Who was Regulus, and what was fides?", "back": "Marcus Atilius Regulus was a Roman consul captured by Carthage in the First Punic War. Sent to Rome to negotiate a prisoner exchange, he argued against the Carthaginian terms before the Senate, then kept his oath to return — sailing back to Carthage where he knew he would be tortured to death. He embodies fides: faithfulness, the keeping of one's word regardless of cost."}, {"front": "What is fides, and why did Romans consider it the foundation of social life?", "back": "Fides means faithfulness, trustworthiness, the keeping of one's word regardless of cost. Romans understood it as the foundation of all social life: if oaths cannot be trusted, no agreement is secure, no alliance holds, no court can function. Without fides, civilization itself unravels."}, {"front": "How did Rome's expansion differ from conquest by enslavement?", "back": "Rome offered defeated Italian peoples either full citizenship or Latin rights (partial citizenship), giving them a stake in Roman success. They contributed soldiers and taxes and gained the protection of Roman law. This 'policy of incorporation rather than enslavement' created loyal partners, not permanent enemies — a key to Rome's expansion."}, {"front": "What were the Samnite Wars (343–290 BC)?", "back": "Three brutal conflicts against the mountain peoples of central Italy. The Samnites were formidable warriors and in 321 BC humiliated a Roman army at the Caudine Forks, forcing soldiers to walk under a yoke of spears. Rome recovered, ultimately defeated the Samnites, and learned lessons about mountain warfare. By 264 BC, Rome controlled most of Italy south of the Po River."}, {"front": "What was the Gallic sack of Rome (390 BC), and what was its effect?", "back": "A Gallic tribe defeated a Roman army at the Allia River and sacked most of Rome. The Gauls could not take the fortified Capitoline Hill (geese sacred to Juno allegedly warned the garrison). Rome rebuilt and remembered: the humiliation drove Romans to build stronger walls and stronger armies."}, {"front": "Why does the text say George Washington was called 'the American Cincinnatus'?", "back": "Washington resigned his military commission after the Revolutionary War and returned to Mount Vernon — just as Cincinnatus had resigned the dictatorship and returned to his farm. The American Founders drew directly on Plutarch and Livy's stories of republican virtue as their vocabulary for understanding and praising self-limiting leadership. The Society of the Cincinnati takes its name from the Roman hero."}, {"front": "What is the difference between Roman virtue and Christian virtue, according to the text?", "back": "Roman virtue (virtus, pietas, fides) is genuinely admirable but ultimately aims at the earthly city — Rome's honor, survival, and glory. Christian virtue aims at a different city entirely, 'whose architect and builder is God' (Heb. 11:10). The virtues overlap; the destinations differ. Augustine will later argue Romans received their reward — earthly glory — but sought nothing more."}, {"front": "How did Rome's mixed constitution balance different interests?", "back": "The Senate provided stability and experience; the consuls provided executive energy; the tribunes protected ordinary citizens. Polybius and Cicero argued this balance of powers explained why Rome lasted while other city-states collapsed. By 287 BC, Rome had achieved a genuinely mixed constitution that drew strength from all three elements."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

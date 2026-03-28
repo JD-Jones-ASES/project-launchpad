@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities I &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities I &mdash; Chapter 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_I.html">&larr; Back to History &amp; Humanities I</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the term 'Dark Ages,' and how does the text evaluate it?", "back": "Coined by Renaissance scholars for the period roughly AD 476–1000 in Western Europe. The text calls it 'illuminating and misleading': it captures real losses in population, literacy, urban life, and trade — but the period was not intellectually dark, since monasteries preserved classical learning throughout. Modern historians largely avoid it as pejorative."}, {"front": "What material evidence demonstrates the genuine decline of the 'Dark Ages' in Western Europe?", "back": "Rome's population fell from ~1 million at its height to ~50,000 by AD 600. A Roman-era British site yields pottery from North Africa, wine from Spain, olive oil from Syria; a 7th-century site yields only local goods. Roads fell into disrepair. The carefully maintained infrastructure of empire simply stopped being maintained."}, {"front": "Why was the 'Dark Ages' specifically a Western European phenomenon?", "back": "The Eastern Roman (Byzantine) Empire did not experience this collapse. Constantinople remained a city of perhaps 400,000 throughout the early medieval period. The Dark Ages were specifically the result of the Western Empire's collapse — the East continued to flourish."}, {"front": "Why were Irish monasteries uniquely important for preserving civilization?", "back": "Ireland had never been part of the Roman Empire and did not share in Rome's collapse. Irish monasteries became extraordinary centers of learning, preserving Scripture, Church Fathers, Latin grammar, classical authors, and the art of illuminated manuscript. Monks like Columba (c. AD 521–597) and Columbanus (AD 543–615) carried this learning back to Scotland, England, and the continent."}, {"front": "What was the Rule of Saint Benedict?", "back": "A practical guide for monastic life written by Benedict of Nursia (c. AD 480–547), organizing the monk's day around the Divine Office (seven periods of communal prayer), manual labor (ora et labora — 'pray and work'), and sacred reading (lectio divina). It defined Western monasticism for a millennium."}, {"front": "What five functions did the medieval monastery serve?", "back": "1) Library and scriptorium: monks copied manuscripts by hand. 2) Self-sufficient farm: survived trade collapse. 3) School: only formal education in much of Western Europe. 4) Hospital: medical care to surrounding communities. 5) Inn: the Rule required hospitality to travelers. This combination made the monastery uniquely capable of surviving civilizational collapse."}, {"front": "Who was the Venerable Bede (c. AD 673–735)?", "back": "An English monk who spent virtually his entire life in the monastery of Wearmouth-Jarrow in Northumbria. His Ecclesiastical History of the English People (AD 731) is the primary source for early English Christianity. He distinguished between eyewitness testimony and hearsay, acknowledged uncertainty, and introduced the AD/BC dating system still used today."}, {"front": "How does Bede's historical method compare to Thucydides'?", "back": "Both identified sources, distinguished eyewitness testimony from hearsay, and acknowledged the limits of their knowledge. The crucial difference: Thucydides saw history driven by human nature (power, fear, self-interest); Bede saw history as providential — God guiding events toward his purposes, with the conversion of the English as a chapter in salvation history."}, {"front": "What is the 'sparrow in the mead-hall' passage from Bede's Ecclesiastical History?", "back": "A speech by a pagan counsellor of King Edwin of Northumbria (c. AD 627) during a council debating whether to adopt Christianity: 'The present life of man upon earth seems to me like the swift flight of a sparrow through the mead-hall... So this life of man appears for a short space; but of what went before, or what is to follow, we are ignorant.' It expresses universal longing for meaning and permanence, framing the Gospel as an answer."}, {"front": "Who was Caedmon, and why is his story significant?", "back": "The first named English poet, whose story Bede preserves in the Ecclesiastical History. Caedmon could not sing at feasts; one night in a dream a divine visitor commanded him to sing, and he composed a hymn praising God the Creator — the oldest surviving poem in Old English. Bede frames the gift of poetry as divine inspiration, a Christianized version of the Greek Muse tradition."}, {"front": "Who was Gregory the Great (c. AD 540–604), and why is he called 'the last Roman and the first medieval pope'?", "back": "Gregory I was the first monk to become pope (elected AD 590). He organized the Church's charitable activities during plague, flood, and Lombard invasion; sent Augustine of Canterbury to convert the Anglo-Saxons (596); and wrote the Pastoral Care (standard manual for bishops). He essentially became the civil as well as spiritual governor of Rome — negotiating with Lombard invaders, organizing food distribution. His life bridged the classical Roman world and the medieval Church."}, {"front": "What did Alcuin of York contribute to the Carolingian Renaissance?", "back": "Alcuin (c. AD 735–804) was an English scholar from York whom Charlemagne summoned to his court at Aachen. He became the leading educator of the Carolingian Renaissance, directing the palace school (schola palatina), standardizing the curriculum, and overseeing manuscript copying. Along with scholars like Paul the Deacon (Italy) and Theodulf (Spain), he helped create the intellectual revival Charlemagne sought."}, {"front": "Who was Charles Martel, and what was the Battle of Tours (AD 732)?", "back": "Charles Martel ('the Hammer,' c. AD 688–741) was Mayor of the Palace in the Frankish kingdom — effectively its ruler. At Tours (AD 732), his forces defeated an Umayyad army advancing northward from Muslim-controlled Spain, ending the northward expansion of Islamic rule into Western Europe. He established the Carolingians as the most powerful dynasty in the West — the political foundation from which his grandson Charlemagne would build an empire."}, {"front": "What does the text caution about the historical significance of the Battle of Tours?", "back": "The text warns against calling Tours 'the battle that saved Western civilization' — an exaggeration. The Muslim forces at Tours were a raiding party, not a full invasion army; the main Umayyad presence was in Spain, which remained under Islamic rule for another 700 years (until 1492). Tours was a real turning point but not the civilization-saving climax of legend."}, {"front": "Who was Pepin the Short, and what precedent did he set?", "back": "Charles Martel's son Pepin the Short (r. AD 751–768) deposed the last Merovingian king with papal approval, establishing the precedent that popes could crown and legitimate kings. This reciprocal relationship — the Church legitimizes secular power; secular power protects the Church — would define medieval politics."}, {"front": "Who was Charlemagne, and what were his major achievements?", "back": "Charlemagne ('Charles the Great,' AD 742–814), son of Pepin, became king of the Franks in AD 768. Major achievements: 1) Military expansion: conquered Saxons (30-year brutal campaign), Lombards, Bavarians, Avars, pushed into Spain. 2) Carolingian Renaissance: palace school at Aachen, cathedral schools throughout the kingdom, Carolingian minuscule script. 3) Imperial coronation: crowned 'Emperor of the Romans' by Pope Leo III on Christmas Day, AD 800."}, {"front": "What was the Carolingian Renaissance?", "back": "The cultural and intellectual revival under Charlemagne centered on his court at Aachen. Features: systematic manuscript copying, reform of education, development of Carolingian minuscule script (ancestor of modern lowercase letters), recovery of classical Latin texts. Charlemagne summoned scholars: Alcuin of York (England), Paul the Deacon (Italy), Theodulf (Spain). Many classical works survive today only in Carolingian-era copies."}, {"front": "What was the Carolingian minuscule, and why does the text say it is relevant today?", "back": "A reformed script developed at Charlemagne's court that became the standard for manuscript copying throughout the Empire. Its letter shapes are the direct ancestor of modern lowercase letters. As the text notes: 'The Carolingian minuscule script he sponsored is the direct ancestor of the lowercase letters you are reading right now.'"}, {"front": "What was Charlemagne's coronation, and what precedent did it set?", "back": "On Christmas Day, AD 800, Pope Leo III crowned Charlemagne 'Emperor of the Romans' during Mass in St. Peter's Basilica in Rome. It reasserted the idea of a Christian Roman Empire in the West and set a precedent for the complex relationship between pope and emperor that would define medieval politics for five centuries. The Carolingian Empire's idea survived until Napoleon abolished the Holy Roman Empire in 1806."}, {"front": "What was the Admonitio Generalis (AD 789)?", "back": "Charlemagne's most important educational capitulary: it ordered every monastery and cathedral to establish a school teaching reading, writing, singing, arithmetic, and grammar. The practical goal was to produce literate administrators; the effect was a genuine cultural revival. The text compares this to Plato's philosopher-king ideal (governance requires educated leaders) and the Roman cursus honorum (competence required at each level)."}, {"front": "What was the manor, and why did it develop after Rome's fall?", "back": "The basic unit of the feudal economy: a landed estate owned by a lord, farmed by dependent peasants (serfs or villeins) who owed the lord labor, produce, and fees in exchange for protection and the right to farm. The manor was largely self-sufficient. It developed when long-distance trade collapsed and the Roman system of large slave-worked estates (latifundia) became unsustainable."}, {"front": "What was the three-field system, and why was it significant?", "back": "The three-field system replaced the Roman two-field system by dividing arable land into three sections: one with winter grain (wheat or rye), one with spring crop (oats, barley, legumes), one fallow (resting). The fields rotated each year. This increased production by one-third, improved soil fertility (legumes replenish nitrogen), spread risk, and provided more protein. One key factor in the population recovery of the 9th and 10th centuries."}, {"front": "What was the capitulary, and how did Charlemagne use capitularies?", "back": "A written royal decree issued by Charlemagne, organized into chapters (capitula). Charlemagne issued dozens of capitularies covering military organization, church reform, agricultural management, education, weights and measures, and legal procedure — the most systematic attempt at governance in Western Europe since the Romans. The Admonitio Generalis (789) ordered schools to be established throughout the Empire."}, {"front": "How did Benedictine monasteries function as economic hubs?", "back": "Monasteries pioneered crop rotation, drainage, and viticulture (wine production). Their scriptoria produced manuscripts and illuminated books. They provided hospitality to travelers and pilgrims. Some lent money and kept accounts for surrounding communities. Monastic schools provided the only formal literacy in many regions. This combination of functions made the monastery the economic backbone of many early medieval regions."}, {"front": "How does the text describe the relationship between Charlemagne's coronation and the rest of the curriculum?", "back": "The text's conclusion: 'We began this curriculum on the shores of the Aegean, watching small city-states ask what justice means. We traced that question through Athens and Sparta, through the Roman Republic and its fall, through the life of Christ and the early Church, through civilizational collapse and monastic preservation. Charlemagne's coronation on Christmas Day, AD 800, did not answer the question — but it ensured that the next thousand years of Western history would continue to ask it, now with both Greek reason and Christian faith as guides.'"}, {"front": "How does Gregory the Great's Pastoral Care illustrate a distinctly Christian vision of leadership?", "back": "Gregory's Pastoral Care (c. AD 591) was a handbook for bishops instructing them on guiding diverse people in their care. Its vision: authority exercised as service. He wrote: 'For no one does more harm in the Church than he who, having the title or rank of holiness, acts evilly.' King Alfred the Great translated it into Old English and sent a copy to every bishop in his kingdom."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

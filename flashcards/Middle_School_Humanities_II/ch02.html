@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities II &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities II &mdash; Chapter 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_II.html">&larr; Back to History &amp; Humanities II</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who were the Normans, and where did they come from?", "back": "Descendants of Viking settlers who received the duchy of Normandy in northern France from the Frankish king in 911 under the leader Rollo. By 1066 they were thoroughly Christianized and French-speaking, but retained Viking energy for conquest."}, {"front": "What was William's claim to the English throne?", "back": "He claimed Edward the Confessor had promised him the throne, and that Harold Godwinson had sworn on holy relics to support his claim. Pope Alexander II blessed the invasion."}, {"front": "What were housecarls?", "back": "Professional warriors in the personal household of an Anglo-Saxon king or great lord. Full-time soldiers, well-armed and well-paid; the backbone of Harold's army at Hastings. The institution disappeared after the Norman Conquest."}, {"front": "What was the tactical turning point at Hastings?", "back": "Norman cavalry feigned a retreat, luring some of Harold's men off the ridge in pursuit. This broke the English shield wall, and Harold was killed — likely by Norman knights."}, {"front": "What happened on Christmas Day, 1066?", "back": "William was crowned King of England in Westminster Abbey. The shouts of acclamation from Norman soldiers outside were so loud that the English clergy inside panicked, thinking the building was on fire."}, {"front": "What was the Harrying of the North (1069–1070)?", "back": "William's systematic destruction of villages, farms, livestock, and food stores in Yorkshire to suppress a Danish-English uprising. Orderic Vitalis recorded that over 100,000 people died of the resulting famine. The Domesday Book later recorded many Yorkshire estates simply as 'Wasta est' — 'It is waste.'"}, {"front": "What was the Domesday Book?", "back": "The great survey of England commissioned by William in 1086, recording the ownership and value of virtually every estate. Royal commissioners questioned local witnesses under oath. The name derives from 'Doomsday' — its decisions were final and without appeal, like the Last Judgment."}, {"front": "What is feudalism?", "back": "The system of political and social organization dominant in medieval Europe: a lord granted land (a fief) to a vassal, who swore an oath of fealty and owed military service. The same man could be a lord to those below him and a vassal to those above."}, {"front": "How did William apply feudalism to England?", "back": "He treated all English land as his personal property conquered by right of war. He granted it to Norman followers in exchange for military service quotas (a specific number of armed knights). This gave him firmer control over his nobility than almost any other European ruler."}, {"front": "What was the Investiture Controversy?", "back": "The dispute (c. 1076–1122) between popes and Holy Roman Emperors over who had the right to appoint (invest) bishops and abbots. Its most dramatic moment: Pope Gregory VII excommunicated Henry IV, who stood barefoot in the snow at Canossa for three days to be reconciled. Resolved by the Concordat of Worms (1122)."}, {"front": "Who was Anselm of Canterbury?", "back": "Archbishop of Canterbury from 1093 and one of the great medieval theologians. His motto was fides quaerens intellectum — 'faith seeking understanding.' He believed faith and reason were partners. He is often called the father of scholasticism."}, {"front": "What is scholasticism?", "back": "The medieval intellectual method of using philosophical reasoning — especially Aristotelian logic — to explore and defend theological questions. Anselm is its founder; Thomas Aquinas (1225–1274) is its greatest practitioner."}, {"front": "What was 'the Anarchy' (1135–1154)?", "back": "The civil war between King Stephen and the Empress Matilda for the English throne after Henry I died. It ended when Henry II came to power in 1154, founding the Plantagenet dynasty."}, {"front": "What was the Plantagenet dynasty?", "back": "The royal dynasty founded by Henry II in 1154 and ruling England until 1485. Named for planta genista (broom plant), a heraldic symbol. Plantagenet kings include Henry II, Richard I, King John, and later Edward I through Richard II."}, {"front": "What was the Angevin Empire?", "back": "The territories controlled by Henry II, stretching from Scotland to the Pyrenees — more than the King of France himself controlled. It included England and much of western France."}, {"front": "What is English common law?", "back": "The body of English law built from judicial decisions rather than statutes alone. Henry II created it by sending royal judges (justices in eyre) on regular circuits, applying consistent principles across all of England. It became the foundation of legal systems in the US, Canada, and Australia."}, {"front": "What were Henry II's Constitutions of Clarendon (1164)?", "back": "Henry's assertion that clergy accused of crimes should be tried in royal courts rather than church courts. Thomas Becket refused to accept them, sparking the conflict that ended in Becket's murder."}, {"front": "What happened to Thomas Becket on December 29, 1170?", "back": "Four of Henry II's knights entered Canterbury Cathedral and murdered Becket at the altar. Henry had reportedly said 'Will no one rid me of this turbulent priest?' — words that the knights took as a command."}, {"front": "What were the consequences of Becket's murder?", "back": "Becket was proclaimed a martyr almost immediately; Pope Alexander III canonized him in 1173. Canterbury became a major pilgrimage site. Henry did public penance, walking barefoot to Canterbury and submitting to a ritual flogging by monks."}, {"front": "Why is Richard I called 'the Lionheart'?", "back": "He was famous throughout Europe as a warrior-king. He led the Third Crusade and proved one of the greatest military commanders of the age. He spent most of his reign on crusade or fighting in France, visiting England only twice."}, {"front": "Why was King John's reign disastrous?", "back": "He lost Normandy and most English lands in France to Philip II by 1204; imposed heavy arbitrary taxation; clashed with Pope Innocent III, leading to a five-year interdict on England; and his abuse of baronial rights provoked the Magna Carta rebellion."}, {"front": "What happened at Runnymede on June 15, 1215?", "back": "King John agreed to the Magna Carta ('Great Charter') under duress from rebel barons who had taken London. It limited royal power and asserted that no free man could be imprisoned or harmed except by the lawful judgment of his peers."}, {"front": "What is the Magna Carta?", "back": "Latin for 'Great Charter.' Agreed to by King John at Runnymede, June 15, 1215. It established that even the king is subject to the law. Though John immediately repudiated it, it became the cornerstone of English constitutional thought and the ancestor of habeas corpus and due process."}, {"front": "What do Magna Carta clauses 39–40 establish?", "back": "Clause 39: No free man shall be seized, imprisoned, outlawed, or exiled except by the lawful judgment of his peers and the law of the land. Clause 40: To no one will we sell, deny, or delay right or justice. Together they establish the rule of law."}, {"front": "What is the Song of Roland, and when was it written?", "back": "The oldest surviving major work of French literature, composed around 1100 AD. It transforms the historical ambush of Charlemagne's rearguard at Roncevaux (778 AD) into a tale of Christian knighthood, self-sacrifice, and divine justice."}, {"front": "What is chivalry?", "back": "The code of conduct expected of medieval knights: loyalty to one's lord, courage in battle, protection of the weak, and devotion to the Christian faith. From French chevalier (horseman, knight). Celebrated in the Song of Roland and Arthurian romances."}, {"front": "Who was William of Malmesbury, and what makes his perspective on the Conquest unique?", "back": "A medieval historian (c. 1095–1143) who was himself half Norman and half English. He tried to understand both sides fairly; his Chronicle of the Kings of England is one of our most important near-contemporary sources for the Conquest."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

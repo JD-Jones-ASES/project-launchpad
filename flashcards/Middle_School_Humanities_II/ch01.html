@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities II &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities II &mdash; Chapter 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_II.html">&larr; Back to History &amp; Humanities II</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "When was the first Viking raid on the British Isles, and where did it strike?", "back": "June 8, 793, at the island monastery of Lindisfarne off the northeast coast of England."}, {"front": "What does the word 'Viking' mean, and who were the Vikings?", "back": "From Old Norse vikingr, likely meaning 'one who comes from the fjords' or 'sea raider.' The Vikings were Scandinavian peoples — Norse, Danes, and Swedes — who raided, traded, and settled across Europe from the late eighth century onward."}, {"front": "Who was Alcuin, and how did he interpret the Lindisfarne raid?", "back": "Alcuin was a monk writing from Charlemagne's court. He interpreted the raid as divine judgment — God permitting heathens to punish England for its sins."}, {"front": "Why were Viking longships revolutionary in medieval warfare?", "back": "They combined ocean-going capacity with extreme shallowness of draft, able to cross the Atlantic and navigate shallow rivers — giving Vikings access to inland monasteries and towns no sea power had reached before."}, {"front": "What was the Great Heathen Army?", "back": "The large Danish force that invaded England in 865 and spent the next fourteen years conquering the Anglo-Saxon kingdoms of Northumbria, East Anglia, and Mercia."}, {"front": "When was Alfred born, and why was he not expected to be king?", "back": "Alfred was born in 849, the fifth and youngest son of King Aethelwulf of Wessex. He was far down the line of succession."}, {"front": "What happened to Alfred at Athelney in the winter of 878?", "back": "After the Danish king Guthrum invaded Wessex, Alfred was driven from his kingdom and hid in the Somerset marshes, reduced to the life of a fugitive."}, {"front": "What is the legend of Alfred and the cakes?", "back": "While hiding in a peasant woman's hut, Alfred allegedly let cakes burn on the fire. The story (likely legendary) captures Alfred's lowest point before his greatest victory. It first appears in a later medieval source and cannot be verified."}, {"front": "What was the fyrd?", "back": "The Anglo-Saxon militia made up of free men obligated to serve when summoned by the king. Unlike professional warriors (thegns), the fyrd represented ordinary freemen defending their land."}, {"front": "What was the Battle of Edington (878)?", "back": "After calling the fyrd from Athelney, Alfred led his forces north and decisively defeated the Danish king Guthrum at Edington, reversing the Viking conquest of Wessex."}, {"front": "What were the main terms of the Treaty of Wedmore (878)?", "back": "Guthrum agreed to convert to Christianity (Alfred stood as his godfather) and to withdraw north and east of a line roughly from London to Chester, creating the Danelaw."}, {"front": "What was the Danelaw?", "back": "The area of northern and eastern England under Danish law and custom after the Treaty of Wedmore, divided from Anglo-Saxon south and west by a boundary from London to Chester. Danish place names ending in -by, -thorpe, and -thwaite still mark the region today."}, {"front": "Who was Asser?", "back": "A Welsh monk (died c. 909) who served at Alfred's court and wrote the Life of King Alfred — the most important biographical source for Alfred's life. Asser was Bishop of Sherborne."}, {"front": "What was Alfred's educational programme, and why did he launch it?", "back": "Alfred gathered scholars to translate key Latin texts into Old English because Viking raids had destroyed monasteries, burned manuscripts, and collapsed Latin literacy so completely that many clergy could not understand their own services."}, {"front": "What texts did Alfred translate or commission?", "back": "Boethius's Consolation of Philosophy, Gregory the Great's Pastoral Care, and Bede's Ecclesiastical History of the English People, among others."}, {"front": "What was the Anglo-Saxon Chronicle?", "back": "A year-by-year record of English history, written in Old English (not Latin), begun during Alfred's reign and continued by monks at various monasteries until the mid-twelfth century."}, {"front": "What was a burh?", "back": "A fortified settlement built or strengthened by Alfred as part of a defensive network against Viking raids. Burhs were placed no more than a day's march apart. Many English towns ending in -bury or -borough were originally burhs."}, {"front": "How did Alfred reform the fyrd?", "back": "He divided it into rotating shifts so that Wessex always had a defensive force ready — solving the problem that farmers could not remain on campaign indefinitely without their farms falling apart."}, {"front": "Who was Aethelstan, and what was his achievement?", "back": "Alfred's grandson, who in 927 defeated the last Scandinavian king of York and became the first ruler to control all of England, taking the title 'King of all Britain.'"}, {"front": "Who was Cnut, and why is he notable?", "back": "Sweyn Forkbeard's son who became king of England by 1016, and also king of Denmark and Norway. Despite being a conqueror, he maintained Alfred's laws, supported the Church, and ruled England well for nineteen years."}, {"front": "What happened at the Battle of Stamford Bridge (1066)?", "back": "King Harold Godwinson defeated and killed Harald Hardrada, King of Norway, who had invaded northern England. Days later, Harold received news of William of Normandy's landing in the south."}, {"front": "What was the result of the Battle of Hastings (October 14, 1066)?", "back": "Harold Godwinson died and the Anglo-Saxon resistance collapsed. On Christmas Day 1066, William of Normandy was crowned King of England in Westminster Abbey."}, {"front": "What is Beowulf?", "back": "The longest surviving Old English poem (3,000+ lines), written down by a Christian monk from older oral traditions. It is set in Scandinavia and follows the hero Beowulf, who kills the monster Grendel, Grendel's mother, and finally a dragon."}, {"front": "How does the Beowulf poet blend Christian and pagan values?", "back": "The Christian monk writing the poem describes Grendel as a descendant of Cain and references God as creator, while celebrating the older Germanic virtues of courage, loyalty, and generosity to one's people."}, {"front": "What does Beowulf's death scene reveal about Anglo-Saxon values?", "back": "The aged king fights a dragon to protect his people, dies of his wounds, and is mourned with a funeral pyre. The poem meditates on loyalty, the passing of great men, and the uncertainty of the future — values at the heart of Anglo-Saxon culture."}, {"front": "What was the Norman Conquest's long-term impact on the English language?", "back": "The Normans brought French as the language of the ruling class, enriching English with French vocabulary while the underlying grammar remained Anglo-Saxon. The English language today reflects this fusion."}, {"front": "Why was Alfred's preface to the Pastoral Care historically significant?", "back": "It describes an educational crisis — the near-total collapse of Latin literacy among the English clergy — and argues for vernacular translation of essential Christian texts, anticipating the Reformers' arguments six centuries later."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

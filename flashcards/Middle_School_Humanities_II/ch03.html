@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities II &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities II &mdash; Chapter 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_II.html">&larr; Back to History &amp; Humanities II</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Why was Jerusalem uniquely important to medieval Christians?", "back": "It was the holiest place on earth — the site of Jesus's crucifixion, burial, and resurrection. Pilgrims had traveled there for centuries to pray at the Church of the Holy Sepulchre and walk the streets where Christ had walked."}, {"front": "What was a pilgrimage?", "back": "A journey made to a holy place as an act of religious devotion. The most prized destinations were Rome (Peter and Paul), Santiago de Compostela (James), and above all Jerusalem (Christ's death and resurrection)."}, {"front": "Who were the Seljuk Turks?", "back": "A Central Asian Turkic people who converted to Sunni Islam and built an empire across Persia, Iraq, Syria, and Anatolia. Their defeat of the Byzantine army at Manzikert (1071) and raids on Christian pilgrims were immediate causes of the First Crusade."}, {"front": "What happened at the Battle of Manzikert (1071)?", "back": "The Seljuk Turks shattered the Byzantine army and began overrunning the Byzantine heartland. By the 1090s, the Seljuks had pushed to within a hundred miles of Constantinople, prompting Emperor Alexios I's appeal to Pope Urban II."}, {"front": "What did Pope Urban II say at Clermont in November 1095?", "back": "He called on the knights of Europe to march to Jerusalem, free the holy city from Muslim rule, and aid Eastern Christians. He promised remission of sins to those who died on the Crusade. The crowd's response: 'Deus lo volt!' — God wills it!"}, {"front": "What is a Crusade?", "back": "From Spanish cruzada, 'marked with the cross.' A holy war called by the Pope; participants wore a red cross. Crusaders believed they were on a pilgrimage as well as a military campaign; those who died were promised remission of sins."}, {"front": "What was the People's Crusade?", "back": "An unofficial crusade led by Peter the Hermit before the organized First Crusade departed. It was composed of peasants, minor knights, and the poor. It reached Anatolia and was almost entirely destroyed by the Seljuk Turks."}, {"front": "Who led the organized First Crusade?", "back": "A coalition of great lords: Godfrey of Bouillon (Lorraine), Raymond of Toulouse (France), and Bohemond of Taranto (southern Italy), among others. Not a unified army under single command."}, {"front": "What happened at the capture of Jerusalem in July 1099?", "back": "After a five-week siege, the Crusaders breached the walls and killed the Muslim and Jewish inhabitants in a massacre. The Crusaders wept with joy and prayed at the Church of the Holy Sepulchre — prayers mixed with the blood of those they had just killed."}, {"front": "What were the four Crusader states?", "back": "Four Christian principalities carved out after 1099: the County of Edessa (first to fall, in 1144), the Principality of Antioch, the County of Tripoli, and the Kingdom of Jerusalem. Together called the Crusader states."}, {"front": "What were the military orders?", "back": "Religious-military organizations whose members took monastic vows (poverty, chastity, obedience) and also vowed to fight for the faith. They were created to permanently defend the Crusader states. The most famous were the Knights Templar and Knights Hospitaller."}, {"front": "Who were the Knights Templar?", "back": "The Poor Fellow-Soldiers of Christ and of the Temple of Solomon, founded c. 1119. Warrior-monks defending pilgrims and Christian territories. Their white mantles with red crosses were feared in battle. They also became wealthy bankers, which led to their destruction by the French king in 1307."}, {"front": "Who were the Knights Hospitaller?", "back": "A military order that began as a hospital order caring for sick pilgrims in Jerusalem before taking up arms. They built great stone castles including Krak des Chevaliers in modern Syria."}, {"front": "Who was Bernard of Clairvaux?", "back": "A Cistercian monk of immense personal holiness and rhetorical power who preached the Second Crusade (1147–1149) after the fall of Edessa. The Second Crusade was a disaster; Bernard could only explain it as God's judgment on the Crusaders' own sins."}, {"front": "Who was Saladin?", "back": "Salah ad-Din Yusuf ibn Ayyub (1137–1193), Kurdish general and Sultan of Egypt and Syria. He unified Muslim opposition to the Crusaders, defeated the Crusader army at Hattin (1187), and recaptured Jerusalem. His relative mercy toward defeated enemies made him respected even by Christian opponents."}, {"front": "What was the Battle of Hattin (1187)?", "back": "Saladin's decisive defeat of the combined Crusader army — a catastrophic ambush where the Crusaders were surrounded, cut off from water, and destroyed. Within months, Saladin reconquered nearly the entire Kingdom of Jerusalem."}, {"front": "What was the result of the Third Crusade?", "back": "Richard I won at Acre and Arsuf but could not take Jerusalem. The Treaty of Jaffa (1192): Crusaders kept the coastal strip; Jerusalem remained in Muslim hands; Christian pilgrims could visit freely. Not what Richard came for, but the best he could achieve."}, {"front": "How did Richard I and Saladin show mutual respect during the Third Crusade?", "back": "Though they never met face to face, Saladin sent Richard fresh fruit and ice when he was ill, and a replacement horse when Richard's was killed. These were chivalric gestures — a shared code about how an honorable enemy deserves to be treated."}, {"front": "What was the Fourth Crusade (1202–1204)?", "back": "It began as a crusade to Egypt but was diverted first to Zara (Christian city in Dalmatia) to pay Venice for ships, then to Constantinople, which the Crusaders sacked in April 1204 — looting the greatest Christian city in the world, including Hagia Sophia."}, {"front": "Why did the Crusaders sack Constantinople in 1204?", "back": "A series of events: debt to Venice for ships, diversion to attack Zara, then a Byzantine prince's promise of rewards for helping him reclaim his throne. When the scheme went wrong, the Crusaders attacked Constantinople itself — step-by-step moral compromise, not a single decision."}, {"front": "What were the long-term consequences of the Fourth Crusade for Eastern and Western Christianity?", "back": "The sack created a wound between the Eastern (Orthodox) and Western (Catholic) churches that has never fully healed. The Byzantine Empire never recovered its strength; when it fell to the Ottoman Turks in 1453, the Fourth Crusade's damage was part of the reason."}, {"front": "What was an indulgence?", "back": "In medieval Catholic theology, a remission of the temporal punishment due for sins already forgiven in confession. Urban II offered Crusaders a plenary (full) indulgence. The sale and abuse of indulgences would later become a central issue in the Protestant Reformation."}, {"front": "What was the Children's Crusade of 1212?", "back": "Actually led by young men (not small children) from France and Germany. Those who reached the Mediterranean found no miraculous parting of the waters; most were sold into slavery or died of disease. A symbol of the Crusade movement's decline into futility."}, {"front": "When did the Crusader presence in the Holy Land finally end?", "back": "In 1291, when Acre — the last major Crusader stronghold — fell to the Mamluk Sultan al-Ashraf Khalil. The surviving Crusaders were evacuated by ship, ending nearly two centuries of Crusader states."}, {"front": "Who was Geoffrey of Villehardouin?", "back": "A French nobleman (c. 1150–1213) who participated in the Fourth Crusade from its beginning and wrote La Conquête de Constantinople. He describes the sack of Constantinople with the satisfaction of a man cataloguing treasure, not the horror of someone who grasps what he has destroyed."}, {"front": "Who was Anna Komnene?", "back": "The daughter of Byzantine Emperor Alexios I Komnenos. She watched the First Crusade arrive from the Byzantine side — seeing the Crusaders very differently from how they saw themselves, as potentially dangerous foreign armies as much as welcome helpers."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

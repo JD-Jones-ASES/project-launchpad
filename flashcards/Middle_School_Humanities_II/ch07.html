@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities II &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities II &mdash; Chapter 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_II.html">&larr; Back to History &amp; Humanities II</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is simony?", "back": "The buying or selling of church offices, appointments, or sacraments. Named for Simon Magus (Acts 8), who tried to buy the power of the Holy Spirit. Widely condemned but widely practiced: wealthy families paid to have relatives appointed as bishops or abbots."}, {"front": "What was an indulgence in the context of the Reformation?", "back": "A certificate issued by the Catholic Church claiming to reduce the punishment in purgatory for sins already forgiven. Originally granted for acts of penance or pilgrimage; by the early 16th century, sold for money. The 1517 campaign was split between the Archbishop of Mainz and building St. Peter's Basilica in Rome."}, {"front": "What is purgatory?", "back": "In Catholic teaching, a state of purification after death for souls who have died in God's grace but still need to be cleansed before entering heaven. The Church taught that indulgences, prayers, and masses could reduce time in purgatory. Protestant Reformers denied purgatory existed."}, {"front": "Who was Johann Tetzel?", "back": "A Dominican friar who was selling indulgences near Wittenberg in 1517 to fund construction of St. Peter's Basilica. His sales pitch was reportedly summarized: 'As soon as the coin in the coffer rings, the soul from purgatory springs.' This crude commercialism enraged Luther."}, {"front": "Who was Martin Luther, and how did he come to be a monk?", "back": "Born 1483 in Eisleben; son of a copper miner turned to prosperity. His father wanted him to be a lawyer. In 1505, a thunderstorm led him to vow to become a monk if he survived a lightning strike. He kept the vow; his father was furious."}, {"front": "What breakthrough did Luther have while studying Romans 1:17?", "back": "The Apostle Paul wrote 'the righteous shall live by faith.' Luther came to believe that salvation was not earned by human effort at all — it was a free gift from God received through faith alone. This resolved his agonized question about how a sinful human being could stand before a holy God."}, {"front": "What were Luther's 95 Theses?", "back": "A formal list of arguments, written in Latin in October 1517, challenging the theological basis of indulgences. Luther sent them to the Archbishop of Mainz and apparently posted them. He intended to start an academic debate. The printing press made them revolutionary — circulating across Germany within weeks."}, {"front": "What is sola fide?", "back": "Latin for 'by faith alone.' Luther's foundational doctrine: a person is justified (made right with God) not by good works, penances, or indulgences, but solely by faith in Jesus Christ. Luther believed this came from Paul (Romans 1:17, 3:28; Galatians 2:16) and had been obscured by centuries of tradition."}, {"front": "What happened in 1520 when the Pope ordered Luther to recant?", "back": "Pope Leo X issued a papal bull (Exsurge Domine) threatening Luther with excommunication unless he withdrew his writings. Luther publicly burned the papal bull in the town square of Wittenberg."}, {"front": "What is the Diet of Worms?", "back": "A formal assembly (Diet) of the Holy Roman Empire held at the city of Worms in 1521, presided over by Emperor Charles V. Luther was summoned to recant his writings. His refusal — 'My conscience is captive to the Word of God. Here I stand. I cannot do otherwise.' — is one of the defining moments of the Reformation."}, {"front": "What happened to Luther after the Diet of Worms?", "back": "The Emperor declared Luther an outlaw. Frederick the Wise, Elector of Saxony, arranged to have Luther 'kidnapped' by friendly knights and hidden in Wartburg Castle. There Luther translated the entire New Testament into German in just eleven weeks."}, {"front": "What are the three 'solas' of the Reformation?", "back": "Sola fide — by faith alone (salvation through faith, not works). Sola scriptura — by Scripture alone (the Bible, not popes or councils, is the final authority). Sola gratia — by grace alone (salvation is entirely God's free gift)."}, {"front": "What is sola scriptura?", "back": "Latin for 'by Scripture alone.' The Reformation doctrine that the Bible is the sole, supreme, and final authority for Christian faith and practice — above popes, church councils, and tradition. If Scripture is the highest authority, every Christian who can read should read it — driving demand for vernacular Bible translations."}, {"front": "What is sola gratia?", "back": "Latin for 'by grace alone.' The Reformation doctrine that salvation is entirely God's free and undeserved gift — not the result of human merit, penance, pilgrimage, or any other human effort. Luther believed the entire medieval penitential system was built on the false assumption that works contribute to salvation."}, {"front": "Who was Ulrich Zwingli?", "back": "A Swiss Reformer (1484–1531) based in Zurich who began reforming the church independently of Luther around 1519. He was killed in 1531 at the Battle of Kappel, fighting alongside Protestant troops against Catholic Swiss cantons."}, {"front": "Who was John Calvin?", "back": "French-born lawyer (1509–1564) who converted to the Reformation and settled in Geneva, where he built a 'godly city' — a Reformed Christian community governed by biblical principles. His Institutes of the Christian Religion became the systematic theology of the Reformed churches."}, {"front": "What is predestination?", "back": "Calvin's doctrine that God from eternity has chosen ('elected') those who will be saved — not on the basis of any foreseen faith or merit on their part, but solely according to His own will and purpose. It exalted God's grace and humbled human pride. One of the most debated doctrines of the Reformation era."}, {"front": "Who was John Knox?", "back": "Scottish Reformer (c. 1514–1572) who brought the Calvinist Reformation to Scotland, establishing the Presbyterian church — a form of church government ruled by elders (presbyteroi in Greek) rather than bishops."}, {"front": "What is the Act of Supremacy (1534)?", "back": "The act of the English Parliament that declared the King of England to be 'the only supreme head in earth of the Church of England.' This formally ended papal authority in England. Those who refused to acknowledge Henry as head — including Thomas More and Bishop John Fisher — were executed for treason."}, {"front": "Why did Henry VIII break with Rome?", "back": "Henry wanted Pope Clement VII to annul his marriage to Catherine of Aragon (who had not produced a surviving male heir). The Pope refused in part because Catherine's nephew, Emperor Charles V, had recently sacked Rome and was in a position to make the Pope's life difficult."}, {"front": "What was the Book of Common Prayer?", "back": "Produced by Archbishop Thomas Cranmer in 1549 under Edward VI. A liturgy for English worship, in English rather than Latin, that combined Reformed theology with the beauty of the medieval liturgical tradition. It shaped the worship of the Church of England for centuries."}, {"front": "Who was 'Bloody Mary'?", "back": "Henry VIII's Catholic daughter Mary I, who came to the throne in 1553, reversed the Reformation, reconciled England with Rome, and burned nearly 300 Protestants at the stake — including Archbishop Cranmer (1556). She died in 1558 and was succeeded by her Protestant half-sister Elizabeth I."}, {"front": "Who was William Tyndale?", "back": "Oxford- and Cambridge-educated English priest (c. 1494–1536) who translated the New Testament into English in exile (1525). Copies were smuggled into England in bales of cloth. Betrayed, arrested, strangled, and burned in 1536. His dying prayer: 'Lord, open the King of England's eyes.' Within three years an English Bible was in every church."}, {"front": "What was the Counter-Reformation?", "back": "The Catholic Church's vigorous response to the Protestant Reformation, beginning in the 1540s. It reformed genuine abuses, clarified Catholic doctrine, and sent out new missionaries. Its centerpiece was the Council of Trent (1545–1563)."}, {"front": "What is the Council of Trent?", "back": "The general council of the Catholic Church meeting in three sessions 1545–1563 in northern Italy. It responded to the Reformation by both reforming abuses (requiring bishops to live in their dioceses, establishing seminaries) and defining Catholic doctrine against Protestant challenges."}, {"front": "Who was Ignatius of Loyola?", "back": "A Spanish soldier (1491–1556) who underwent a spiritual conversion after being wounded in battle and founded the Society of Jesus (Jesuits) in 1540. The Jesuits were trained scholars, educators, and missionaries — the elite intellectual and missionary force of the Counter-Reformation."}, {"front": "What is the Peace of Augsburg (1555)?", "back": "A treaty between Catholic Emperor Charles V and Protestant princes of the Holy Roman Empire that recognized permanent religious division. It established cuius regio, eius religio — each prince determined his territory's religion (Catholic or Lutheran). Calvinist territories were not recognized."}, {"front": "What does cuius regio, eius religio mean?", "back": "Latin for 'whose realm, his religion.' The principle of the Peace of Augsburg (1555): each prince of the Holy Roman Empire had the right to determine whether his territory would be Catholic or Lutheran. Subjects who disagreed had the right to emigrate."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

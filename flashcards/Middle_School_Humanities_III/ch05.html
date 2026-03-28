@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities III &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities III &mdash; Chapter 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_III.html">&larr; Back to History &amp; Humanities III</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What was the Atlantic slave trade and what were its scale and duration?", "back": "Over roughly three and a half centuries (c. 1500-1867), European traders and their African partners captured or purchased approximately 12 million African men, women, and children and transported them across the Atlantic. About 1.8 million died during the ocean crossing alone."}, {"front": "What was the Middle Passage?", "back": "The sea journey enslaved Africans were forced to make from West Africa across the Atlantic to the Americas. The 'middle' leg of the triangle trade. Captives were packed into horrifying overcrowding; the crossing took 4-8 weeks. About 1.8 million enslaved people died on this journey."}, {"front": "What was the triangle trade?", "back": "The three-leg commercial circuit: European ships carried goods to Africa, then enslaved people to the Americas (the Middle Passage), then American products back to Europe. This circuit made the slave trade extremely profitable for European merchants."}, {"front": "What was the plantation economy?", "back": "An agricultural system built around large estates (plantations) producing a single cash crop (sugar, tobacco, cotton, or rice) for export. Plantations in the Americas depended almost entirely on enslaved African labor and made a small number of landowners very wealthy while reducing millions to property."}, {"front": "What crops drove the demand for enslaved labor in the Americas?", "back": "Sugar, tobacco, cotton, and rice - crops Europeans craved that grew profitably in the Caribbean and American South, requiring enormous amounts of hard physical labor in brutal heat. European colonists determined enslaved African labor was the cheapest source."}, {"front": "What role did African rulers and merchants play in the slave trade?", "back": "African kings and merchants participated in capturing and selling enslaved people to European traders. This does not distribute guilt evenly - European demand created and sustained the market - but it means the history is not a simple story of one people preying on another."}, {"front": "What was the East India Company?", "back": "A private English trading corporation founded in 1600 and chartered by Queen Elizabeth I, holding a monopoly on English trade with Asia. By the 18th century it had raised its own army, fought wars, collected taxes, and governed vast territories in India. A striking example of commercial interests expanding into military and political power."}, {"front": "How did the East India Company expand from trade to conquest?", "back": "A gradual pattern: the Company would offer protection to a local ruler in exchange for trading privileges; the ruler would become dependent; and eventually the Company would absorb the territory. By 1858 (when the British crown took direct control after the Sepoy Mutiny) it had governed most of India for nearly a century."}, {"front": "What was the Sepoy Mutiny?", "back": "A major Indian uprising in 1857-1858 against the rule of the British East India Company. After its suppression, the British crown took direct control of India from the Company, beginning direct British imperial rule of the subcontinent."}, {"front": "What was the contradiction in the American Declaration of Independence regarding slavery?", "back": "Jefferson proclaimed 'all men are created equal' and endowed with unalienable rights of life, liberty, and happiness, yet he and other founders (Washington, Madison) enslaved hundreds of people. Abigail Adams noted it; Samuel Johnson mocked it. It took nearly a century and a civil war to begin resolving."}, {"front": "What was the Haitian Revolution (1791-1804)?", "back": "The uprising of enslaved people in the French colony of Saint-Domingue that resulted in abolition of slavery and the founding of the independent nation of Haiti. The only successful slave revolt in history to create a lasting independent state. Led by Toussaint Louverture."}, {"front": "Who was Toussaint Louverture?", "back": "A formerly enslaved man who became a brilliant military commander, leading the Haitian Revolution against French colonial forces, a British invasion, and Napoleon's army. Haiti declared independence January 1, 1804 - the first Black republic in the world. Louverture became a hero to abolitionists worldwide."}, {"front": "What effect did the Haitian Revolution have on Napoleon and the United States?", "back": "Napoleon's attempt to crush the revolution and restore slavery failed catastrophically. Unable to defend his American empire, France sold the Louisiana Territory to the United States in 1803 - partly a consequence of the Haitian Revolution's success."}, {"front": "What was abolitionism?", "back": "The movement to abolish the slave trade and slavery itself. In Britain, abolitionists organized public campaigns, petitions, published testimonies (like Equiano's Narrative), and lobbied Parliament. Arguments rested on Christian moral principle (imago Dei: no person can be treated as property) and Enlightenment natural rights (all people are born free)."}, {"front": "What role did the Quakers play in abolitionism?", "back": "The Quakers were among the first organized religious groups to condemn slavery as incompatible with Christian faith. By the 1780s they had helped form a broad abolitionist coalition of Protestant Christians, Enlightenment rationalists, and formerly enslaved people."}, {"front": "Who was William Wilberforce?", "back": "A Member of Parliament and evangelical Christian who led the Parliamentary campaign against the slave trade for nearly twenty years. Parliament abolished the British slave trade in 1807. The Emancipation Act (1833) freed all enslaved people in British colonies. Wilberforce died three days after hearing the bill had passed."}, {"front": "What was emancipation?", "back": "Being set free from slavery or legal bondage. The British Emancipation Act of 1833 freed approximately 800,000 enslaved people in British colonies. The British government paid compensation - to the slaveholders, not the enslaved people."}, {"front": "Who was Olaudah Equiano?", "back": "Born c. 1745 in what is now Nigeria; kidnapped as a child, survived the Middle Passage, sold multiple times, eventually purchased his own freedom from a Quaker merchant in 1766, converted to Christianity, became active in the British abolitionist movement, and published The Interesting Narrative (1789). It went through nine editions in his lifetime."}, {"front": "What made Equiano's Narrative so powerful as an abolitionist tool?", "back": "It sold widely and was read by Members of Parliament, abolitionists, and ordinary readers who had never imagined what the slave trade looked like from the inside. It put a human face on the statistics and moral arguments, using precise, controlled, devastating language."}, {"front": "How did Equiano use Enlightenment natural rights against slavery?", "back": "He used the same natural rights language as Locke and Jefferson: if you accept that all humans have natural rights to life, liberty, and property, then the slave trade is philosophically incoherent. It contradicts the very principles its defenders claimed to believe. This was a powerful rhetorical strategy for a British audience."}, {"front": "What were the Opium Wars and why does the text call them morally troubling?", "back": "The First Opium War (1839-42): Britain went to war after China destroyed British opium shipments, forcing China to open five ports, pay reparations, and cede Hong Kong. The text calls it honestly 'a war fought to protect drug trafficking' - the British genuinely believed in free trade, but 'free trade' here meant selling a destructive drug to an unwilling population."}, {"front": "What were the Latin American independence movements?", "back": "Beginning around 1810, a series of independence movements swept through Spain's American colonies inspired by Enlightenment ideas and the examples of the American and Haitian Revolutions. Simon Bolivar led in South America; Miguel Hidalgo in Mexico. By 1826 nearly all of Spanish America was independent."}, {"front": "What was Brazil's path to independence?", "back": "Different from Spanish America: the Portuguese royal family had fled to Brazil during the Napoleonic Wars, and in 1822 the king's son declared Brazilian independence and became Emperor Pedro I. Brazil did not abolish slavery until 1888 - the last country in the Western Hemisphere to do so."}, {"front": "What is the text's 'balance sheet' of European expansion?", "back": "Positive: spread of Christianity, literacy, eventually Western medicine; abolitionism was itself a product of Christian conscience; genuine trade and cultural exchange. Negative: Atlantic slave trade was 'a crime of staggering proportions'; indigenous civilizations shattered; plantation economy built on human suffering; legacy of racism persists."}, {"front": "What does the text mean by saying the Christian conscience 'both enabled colonialism and produced its most effective critics'?", "back": "The same Christian faith was used to justify slavery (grotesque distortions of the faith) and to condemn it (Las Casas, Equiano, Wilberforce). The difference lay in whether people allowed their faith to challenge their comfort. This is not a paradox that can be resolved by choosing one side - it is the truth about human beings."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities III &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities III &mdash; Chapter 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_III.html">&larr; Back to History &amp; Humanities III</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What was the Elizabethan Settlement?", "back": "The religious compromise established by Elizabeth I in 1559-1563. It made England officially Protestant (Church of England) while keeping many Catholic forms of worship, aiming to create a church broad enough for most English people without violence."}, {"front": "What had happened to England's official religion in the 25 years before Elizabeth's accession?", "back": "It changed four times: Henry VIII broke from Rome; Edward VI pushed toward radical Protestantism; Mary I restored Catholicism (burning nearly 300 Protestants); then Elizabeth restored Protestant rule."}, {"front": "What does 'opening windows into men's souls' mean in the context of Elizabeth's religious policy?", "back": "Elizabeth's phrase for not investigating private religious beliefs. She cared about outward conformity to the Church of England but did not punish subjects for what they believed privately."}, {"front": "Who was Mary Queen of Scots and why was she a threat to Elizabeth?", "back": "Elizabeth's Catholic cousin with a plausible claim to the English throne. After fleeing Scotland in 1568, she spent 19 years as Elizabeth's prisoner and was a focal point for Catholic plots against Elizabeth."}, {"front": "Why did Elizabeth execute Mary Queen of Scots in 1587?", "back": "Evidence emerged that Mary had endorsed a plot to assassinate Elizabeth. After long hesitation, Elizabeth signed the death warrant and Mary was executed at Fotheringhay Castle."}, {"front": "What was the Spanish Armada (1588)?", "back": "A fleet of 130 Spanish ships sent by Philip II to invade England and return it to Catholicism. It was defeated by English naval tactics, commanders like Francis Drake, and catastrophic Atlantic storms."}, {"front": "What was the significance of the Armada's defeat?", "back": "It crystallized English national identity around the Protestant queen, English liberty, and sea power. Roughly half the fleet was destroyed, and England was not invaded."}, {"front": "Who was James I and what did he believe about royal authority?", "back": "James VI of Scotland became James I of England in 1603, uniting both kingdoms. He believed passionately in the divine right of kings - that monarchs answer only to God, not to Parliament."}, {"front": "What was the King James Bible?", "back": "A Bible translation completed in 1611 by a team of 54 scholars. It combined theological precision with literary beauty and has shaped English prose and worship for over 400 years."}, {"front": "What was 'ship money' and why did it cause a constitutional crisis?", "back": "A tax traditionally collected only in coastal counties to fund the navy, which Charles I extended to the entire country without Parliamentary consent. It violated the principle that taxes required Parliamentary approval."}, {"front": "What was the Petition of Right (1628)?", "back": "A declaration passed by Parliament demanding Charles I acknowledge he could not imprison subjects without cause, levy taxes without Parliamentary consent, or billet soldiers in private homes. Charles signed it but later ignored it."}, {"front": "What was the 'Personal Rule' of Charles I?", "back": "The eleven-year period (1629-1640) when Charles dismissed Parliament and governed without it. It ended when the Scots rebelled against his new prayer book and he needed Parliamentary funds to respond."}, {"front": "Who were the Cavaliers and Roundheads in the English Civil War?", "back": "Cavaliers supported the king; Roundheads supported Parliament. The Roundhead nickname came from their short-cropped hair. The war lasted from 1642 to 1651."}, {"front": "What was the New Model Army?", "back": "Parliament's reorganized and disciplined army, led by Sir Thomas Fairfax and Oliver Cromwell. It proved decisive in defeating Charles I during the English Civil War."}, {"front": "What was the Commonwealth of England (1649-1653)?", "back": "The republican government established after Charles I's execution. England was declared a Commonwealth - a state without a king - governed by Parliament and a Council of State."}, {"front": "What was the Protectorate (1653-1659)?", "back": "The government headed by Oliver Cromwell as 'Lord Protector.' Cromwell held near-kingly powers but refused the crown. He was a Puritan who believed he was doing God's work but became increasingly authoritarian."}, {"front": "What was the Restoration (1660)?", "back": "Parliament's invitation to Charles II - the executed king's son - to return from exile in France. It restored the monarchy, the Church of England, and the theaters (which Puritans had closed)."}, {"front": "Why did James II lose the support of English Protestants?", "back": "He was Catholic, appointed Catholics to military and civil offices, suspended laws keeping Catholics out of public life, and seemed to be steering England back toward Rome."}, {"front": "What was the Glorious Revolution (1688)?", "back": "The nearly bloodless transfer of the English crown from James II to William of Orange and Mary II. Called 'glorious' because it was accomplished without battle on English soil and permanently established Parliamentary supremacy."}, {"front": "Who was William of Orange and why was he invited to take the English throne?", "back": "The Dutch Protestant ruler who had married James II's daughter Mary. Leading Protestants invited him after James's second wife gave birth to a son, guaranteeing a Catholic succession."}, {"front": "What did the English Bill of Rights (1689) prohibit?", "back": "The monarch suspending laws, levying taxes, or keeping a standing army without Parliamentary consent; interference with free elections; excessive bail, excessive fines, and cruel and unusual punishments."}, {"front": "What is parliamentary supremacy?", "back": "The constitutional principle that Parliament is the supreme law-making authority in England. Firmly established by the Glorious Revolution and the Bill of Rights (1689): no monarch may override or ignore Acts of Parliament."}, {"front": "What is habeas corpus?", "back": "A legal protection preventing the government from imprisoning a person without charging them with a crime and bringing them before a court. Latin for 'you shall have the body.' Strengthened by the Habeas Corpus Act (1679)."}, {"front": "What was Milton's Areopagitica (1644) and what did it argue?", "back": "A pamphlet by John Milton addressed to Parliament, arguing against pre-publication censorship. Its central claim: truth will defeat falsehood in open debate without needing government protection. It is the first great English argument for freedom of the press."}, {"front": "What is the connection between the English Bill of Rights (1689) and the American Bill of Rights (1791)?", "back": "The English Bill of Rights directly influenced the American version, especially the prohibition on 'cruel and unusual punishments' - language borrowed almost verbatim into the Eighth Amendment."}, {"front": "How does John Locke's Two Treatises of Government (1689) connect to the Glorious Revolution?", "back": "Published in the same year as the Bill of Rights, Locke argued government exists by consent of the governed and may be overthrown when it breaks the social contract - a direct philosophical response to the Glorious Revolution."}, {"front": "What was the 'divine right of kings'?", "back": "The belief that a monarch's authority comes directly from God and cannot be limited by any human institution, including Parliament. James I and Charles I used this doctrine to justify ruling without Parliamentary consent."}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History &amp; Humanities III &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">History &amp; Humanities III &mdash; Chapter 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Middle_School_Humanities_III.html">&larr; Back to History &amp; Humanities III</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What triggered World War I on June 28, 1914?", "back": "Gavrilo Princip, a 19-year-old Bosnian nationalist, shot and killed Archduke Franz Ferdinand (heir to the Austro-Hungarian throne) and his wife Sophie in Sarajevo. In the six weeks that followed, the European alliance system converted a regional crisis into a world war."}, {"front": "What was the alliance system in 1914?", "back": "A network of military defense treaties dividing Europe into two blocs: the Triple Alliance (Germany, Austria-Hungary, Italy) and the Triple Entente (France, Russia, Britain). Designed to deter war by making aggression too costly; instead it converted a Balkan quarrel into a world war within six weeks."}, {"front": "Why did the alliance system fail to prevent war in 1914?", "back": "Military timetables moved faster than diplomats could negotiate; mobilization orders, once given, could not easily be cancelled; and national leaders underestimated how destructive a modern industrial war would be. Most soldiers in August 1914 expected the war to be over by Christmas. It lasted four years and three months."}, {"front": "What chain of events turned the assassination into a world war?", "back": "Austria-Hungary issued an impossible ultimatum to Serbia; Serbia refused one clause; Austria-Hungary declared war; Russia mobilized to protect Serbia; Germany declared war on Russia and France; Germany invaded neutral Belgium; Britain declared war on Germany. All within six weeks."}, {"front": "What was the Schlieffen Plan?", "back": "Germany's pre-war strategy for a two-front war: a massive wheeling movement through Belgium to encircle and destroy France in six weeks, then transfer forces east to face Russia. When it failed at the First Battle of the Marne (September 1914), Germany was stuck in the long war of attrition it had hoped to avoid."}, {"front": "What happened at the First Battle of the Marne (September 1914)?", "back": "French and British forces halted the German advance just 30 miles from Paris. Both sides tried to outflank each other to the north. By November, a line of trenches stretched from the English Channel to the Swiss border - almost 700 kilometers. The four-year Western Front stalemate had begun."}, {"front": "What was trench warfare?", "back": "A style of warfare in which opposing armies dig parallel systems of trenches and defend them. The Western Front had multiple lines connected by communication trenches; between opposing lines lay No Man's Land. Machine guns, barbed wire, and artillery made attacking infantry almost impossible - defense was impregnable, offense almost impossible."}, {"front": "What was No Man's Land?", "back": "The strip of cratered, barbed-wire-tangled ground between opposing trench lines on the Western Front. Soldiers crossed it during attacks. Trench warfare strongly favored defense: attacking infantry could not cross No Man's Land faster than defenders could kill them with machine guns."}, {"front": "What happened on the first day of the Battle of the Somme (July 1, 1916)?", "back": "The British Army suffered approximately 57,000 casualties, including nearly 20,000 dead - the bloodiest single day in British military history. By the battle's end (November 1916), over a million men on both sides had been killed or wounded. The Allied advance measured a few miles."}, {"front": "What was the strategic purpose of the Battle of Verdun (1916)?", "back": "German commander Falkenhayn deliberately chose Verdun - a French fortress of great symbolic importance - and attacked with the intention of 'bleeding France white.' France refused to let it fall. The battle lasted ten months. Approximately 700,000 men died (300,000 French, 400,000 German). Verdun became the symbol of the war's senseless consumption of human life."}, {"front": "What was the Gallipoli campaign (1915-1916)?", "back": "An Allied attempt to knock the Ottoman Empire out of the war by forcing the Dardanelles strait and capturing Constantinople. Championed by Winston Churchill. Allied forces were pinned on the beaches for eight months. Nearly half a million casualties on both sides before the Allies withdrew. One of the most complete Allied failures of the war."}, {"front": "What were the two decisive changes in 1917?", "back": "The United States entered the war (April 1917) after German submarine warfare sinking merchant ships including the Lusitania and the Zimmermann Telegram. Russia collapsed: the February revolution overthrew the Tsar; the October revolution brought the Bolsheviks to power; Russia left the war in March 1918."}, {"front": "Why did the United States enter World War I?", "back": "German submarine warfare sank merchant ships without warning, including the British liner Lusitania (1915, 1,198 lives including 128 Americans). The Zimmermann Telegram (Germany tried to encourage Mexico to attack the US) finally pushed President Wilson to ask Congress for a declaration of war in April 1917."}, {"front": "What was the Zimmermann Telegram?", "back": "A secret German diplomatic message (intercepted by Britain) proposing that Mexico attack the United States in exchange for help recovering Texas, New Mexico, and Arizona. When revealed publicly, it helped push American public opinion and Wilson toward entering the war."}, {"front": "What happened to Russia in 1917?", "back": "The strains of war exhausted the Tsarist government. February 1917: revolution overthrew Tsar Nicholas II. October 1917: the Bolsheviks (Russian Communists led by Lenin) seized power and began negotiating peace with Germany. Russia left the war in March 1918, freeing German forces to reinforce the Western Front."}, {"front": "When did World War I end and what was the cost?", "back": "At 11:00 AM on November 11, 1918, the guns on the Western Front fell silent. Germany's Kaiser Wilhelm II abdicated November 9. Cost: approximately 17 million dead, 20 million wounded. Whole generations of young men consumed. The date is still commemorated as Remembrance Day (Britain, Canada) and Veterans Day (US)."}, {"front": "What were Wilson's Fourteen Points?", "back": "President Woodrow Wilson's proposal for the peace settlement (January 1918): open diplomacy (no secret treaties), freedom of the seas, arms reduction, national self-determination, and - most importantly to Wilson - a League of Nations to maintain peace. Many points were rejected or weakened in actual negotiations."}, {"front": "What was the Treaty of Versailles (June 1919)?", "back": "The peace treaty ending World War I, signed exactly five years after Franz Ferdinand's assassination. Key provisions: the war guilt clause (Article 231) forcing Germany to accept full responsibility; massive reparations (132 billion gold marks); loss of German territory; severe limits on the German military. Germany was not invited to negotiate - it was a diktat (dictated peace)."}, {"front": "What was the war guilt clause?", "back": "Article 231 of the Treaty of Versailles stating that Germany and its allies accepted responsibility for causing all the loss and damage of the war. Used to justify reparations. Most Germans considered it a lie - the war had many causes, responsibility was shared. It became a source of lasting bitterness and a rallying cry for German nationalists."}, {"front": "What were reparations and how large were they?", "back": "Financial payments demanded from Germany to compensate for war damages. Set at 132 billion gold marks - an amount economists then and now considered impossible to pay without destroying the German economy. Contributed to German economic instability throughout the 1920s and early 1930s."}, {"front": "What was the League of Nations and why did it fail?", "back": "An international organization established by the Treaty of Versailles to maintain peace through collective security. It had no army; its only tools were economic sanctions and moral pressure. The United States Senate refused to join. When aggressive nations tested the League in the 1930s, it proved unable to stop them."}, {"front": "What is self-determination?", "back": "The principle, championed by Wilson, that peoples of a common nationality have the right to govern themselves. Wilson hoped peace boundaries would match ethnic and cultural lines. In practice, Europe's populations were too intermixed for clean boundaries, and new states created at Versailles contained large dissatisfied minorities."}, {"front": "Who were Ernst Junger and Erich Maria Remarque?", "back": "Two German veterans who both served on the Western Front and both published books about it in 1929. Junger (Storm of Steel) described combat with clinical precision and found in it exhilaration, pride, and intense aliveness. Remarque (All Quiet on the Western Front) portrayed the war as meaningless slaughter. Both were honest witnesses who drew opposite conclusions."}, {"front": "Who was Wilfred Owen and what is his significance?", "back": "A young British officer-poet who wrote the most famous poem of the war in 1917 ('Dulce et Decorum Est'). He died one week before the Armistice. One of three literary voices in this chapter alongside Junger and Remarque - giving the British perspective on the same Western Front."}, {"front": "What unstable tensions did the Treaty of Versailles leave unresolved?", "back": "A humiliated Germany burning with grievance over the war guilt clause and reparations; ethnic minorities trapped in new states that did not want them; a League of Nations without teeth (no US, no army); a continent exhausted and grieving. As historian John Maynard Keynes wrote, the treaty 'sow[ed] the decay of the whole civilised life of Europe.'"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    render();
+    </script>
+</body>
+</html>
