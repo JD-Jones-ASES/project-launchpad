@@ -3,19 +3,11 @@ const STORY_DATA = {
   "nodes": {
     "start": {
       "title": "A Peculiar Afternoon",
-      "text": "Theodore Ernest O'Hare -- Theo to everyone who knows him -- is seventeen, restless, and supposed to be studying philosophy. The textbook on his desk is open to a chapter called '*Meditation I: Of Doubt*.' The words blur. His eyelids are heavy. The afternoon light flickers like a candle...\n\nWhen Theo opens his eyes, the desk is different. It's heavy oak, scarred with ink stains. A candle gutters beside a stack of handwritten pages. The room is cold stone -- a Dutch study, maybe 1640. A fire crackles in the grate. Outside the window: a gray canal, bare trees, church spires.\n\nA man sits across the room in a dressing gown, writing furiously. He has dark hair, a sharp nose, and eyes that seem to be looking at something very far away. Without turning, he speaks:\n\n'*I have been deceived before. The senses have lied to me. And if they have lied once, how can I trust them at all?*'\n\nHe turns. '*You. Boy. Tell me: how do you know you are not dreaming right now?*'",
+      "text": "Theodore Ernest O'Hare -- Theo to everyone who knows him -- is seventeen, restless, and supposed to be studying philosophy. The textbook on his desk is open to a chapter called '*Meditation I: Of Doubt*.' The words blur. His eyelids are heavy. The afternoon light flickers like a candle...\n\nWhen Theo opens his eyes, the desk is different. It's heavy oak, scarred with ink stains. A candle gutters beside a stack of handwritten pages. The room is cold stone -- a Dutch study, maybe 1640. A fire crackles in the grate. Outside the window: a gray canal, bare trees, church spires.\n\nA man sits across the room in a dressing gown, writing furiously. He has dark hair, a sharp nose, and eyes that seem to be looking at something very far away. Without turning, he speaks:\n\n'*I have been deceived before. The senses have lied to me. And if they have lied once, how can I trust them at all?*'\n\nHe turns. '*You. Boy. Tell me: how do you know you are not dreaming right now?*'\n\nThe man sighs, as though being interrupted by reality is the most tedious thing imaginable. '*I am Rene Descartes. This is my study in the Netherlands. The year is 1641, or so they tell me -- though I am no longer certain of anything they tell me.*' He gestures at the pages on his desk. '*I am writing the **Meditations on First Philosophy**. Six meditations. Six days of thinking. I intend to tear down everything I believe and see what, if anything, can be rebuilt.*'\n\nHe fixes Theo with those far-seeing eyes. '*I was educated by the Jesuits at La Fleche -- the finest school in Europe. I learned mathematics, physics, philosophy. And at the end of it all, I realized: almost everything I had been taught might be wrong. Not because my teachers were fools, but because the **foundations** of knowledge itself had never been properly examined.*'\n\n'*So I am starting over. From nothing. You will join me.*'",
       "choices": [
         {
-          "text": "'I know I'm awake because I can feel things -- this chair, this cold.'",
-          "target": "act1_senses"
-        },
-        {
-          "text": "'Maybe I am dreaming. How would I know the difference?'",
-          "target": "act1_dream"
-        },
-        {
-          "text": "'Who are you? Where am I?'",
-          "target": "act1_descartes"
+          "text": "Follow Descartes into the doubt",
+          "target": "spine_senses"
         }
       ],
       "is_ending": false,
@@ -29,103 +21,7 @@ const STORY_DATA = {
         {
           "term": "Rene Descartes",
           "definition": "French philosopher (1596-1650), called 'the father of modern philosophy,' who sought to find absolutely certain foundations for knowledge."
-        }
-      ],
-      "figures": [
-        "Rene Descartes"
-      ],
-      "tags": [
-        "entry",
-        "frame_story"
-      ]
-    },
-    "act1_senses": {
-      "title": "The Treachery of the Senses",
-      "text": "Descartes smiles -- not unkindly, but the way a surgeon smiles before making the first cut.\n\n'*You trust your senses? Consider: a straight stick looks bent in water. A square tower looks round from a distance. In dreams, you feel the sheets, you hear voices, you are certain you are awake -- and yet you are asleep.*'\n\nHe holds up his hand. '*I see five fingers. But I have dreamed of seeing five fingers. The experience is identical. So this --*' he gestures at the room, the fire, the candle -- '*could all be a dream. My **senses** cannot tell me otherwise.*'\n\nTheo feels the chair beneath him. It feels real. But he remembers his own dreams -- how real they felt, how certain he was, how foolish he felt upon waking. Descartes is right: the senses alone cannot distinguish waking from dreaming.\n\n'*So,*' Descartes says, '*if we cannot trust our senses, what can we trust? Perhaps we must doubt everything.*'",
-      "choices": [
-        {
-          "text": "'But even in dreams, basic things are true -- 2+2=4, triangles have three sides.'",
-          "target": "act1_math"
         },
-        {
-          "text": "'If we can't trust anything, isn't that terrifying?'",
-          "target": "act1_vertigo"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "doubt",
-      "vocabulary": [
-        {
-          "term": "sense deception",
-          "definition": "Descartes' first level of doubt: our senses sometimes deceive us (optical illusions, mirages), so they cannot be fully trusted."
-        },
-        {
-          "term": "dream argument",
-          "definition": "Descartes' second level of doubt: since dreams feel real while we're in them, we can never be certain we're not dreaming right now."
-        }
-      ],
-      "figures": [
-        "Rene Descartes"
-      ],
-      "tags": [
-        "senses",
-        "dream",
-        "doubt"
-      ]
-    },
-    "act1_dream": {
-      "title": "The Dream Within a Dream",
-      "text": "Descartes nods approvingly. '*Good. You have the instinct for doubt. Most people resist it -- they cling to their certainties like children clutching blankets. But you... you are willing to consider the possibility.*'\n\nHe stands and paces. '*I have spent years constructing this thought experiment. If I am dreaming, then everything I perceive -- this room, this fire, even my own body -- might be **illusion**. But notice something: even in dreams, certain things seem true. The dreamer still dreams in three dimensions. Shapes still have properties. Numbers still add up.*'\n\nHe picks up a piece of wax from beside the fire. '*Even if everything I see is a dream, the wax has extension, flexibility, and mutability. These concepts exist even in dreams. So perhaps **mathematics** and **geometry** survive the dream argument.*'\n\n'*But can we push the doubt even further?*'",
-      "choices": [
-        {
-          "text": "'Math seems safe. 2+2=4 even in dreams.'",
-          "target": "act1_math"
-        },
-        {
-          "text": "'Push further? How much further can doubt go?'",
-          "target": "act1_evil_genius"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "doubt",
-      "vocabulary": [
-        {
-          "term": "methodical doubt",
-          "definition": "Descartes' systematic strategy: doubt everything that can possibly be doubted, to find what (if anything) survives and is truly certain."
-        },
-        {
-          "term": "hyperbolic doubt",
-          "definition": "Doubt pushed to its most extreme: not just doubting what seems false, but doubting even what seems obviously true."
-        }
-      ],
-      "figures": [
-        "Rene Descartes"
-      ],
-      "tags": [
-        "dream",
-        "doubt",
-        "method"
-      ]
-    },
-    "act1_descartes": {
-      "title": "The Man in the Dressing Gown",
-      "text": "The man sighs, as though being interrupted by reality is the most tedious thing imaginable.\n\n'*I am Rene Descartes. This is my study in the Netherlands. The year is 1641, or so they tell me -- though I am no longer certain of anything they tell me.*' He gestures at the pages on his desk. '*I am writing the **Meditations on First Philosophy**. Six meditations. Six days of thinking. I intend to tear down everything I believe and see what, if anything, can be rebuilt.*'\n\nHe fixes Theo with those far-seeing eyes. '*I was educated by the Jesuits at La Fleche -- the finest school in Europe. I learned mathematics, physics, philosophy. And at the end of it all, I realized: almost everything I had been taught might be wrong. Not because my teachers were fools, but because the **foundations** of knowledge itself had never been properly examined.*'\n\n'*So I am starting over. From nothing. Would you like to join me?*'",
-      "choices": [
-        {
-          "text": "'Yes. Where do we begin?'",
-          "target": "act1_senses"
-        },
-        {
-          "text": "'Start over from nothing? That sounds impossible.'",
-          "target": "act1_vertigo"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "doubt",
-      "vocabulary": [
         {
           "term": "first philosophy",
           "definition": "The most fundamental branch of philosophy, dealing with the basic nature of reality and knowledge -- what Aristotle called 'metaphysics.'"
@@ -139,22 +35,58 @@ const STORY_DATA = {
         "Rene Descartes"
       ],
       "tags": [
-        "descartes",
-        "biography",
-        "project"
+        "entry",
+        "frame_story",
+        "spine"
       ]
     },
-    "act1_math": {
-      "title": "Even Mathematics?",
-      "text": "'*Ah,*' says Descartes, and his eyes glitter. '*You think mathematics is safe. That even a dreamer knows 2+2=4. I thought so too.*'\n\nHe leans forward. '*But consider this: what if there is a being -- a supremely powerful, supremely malicious being -- who has devoted all his energies to deceiving me? Not just about what I see and hear, but about everything. What if this being makes me believe 2+2=4 when really it equals 5? What if he has arranged the entire structure of my mind so that I am systematically wrong about everything, even logic itself?*'\n\nTheo feels dizzy. '*You're describing an evil god.*'\n\n'*Not God,*' Descartes says carefully. '*I will suppose not a God, who is supremely good and the source of truth, but rather some **malicious demon** of the utmost power and cunning who has employed all his energies to deceive me.*'\n\nThe candle flickers. The shadows deepen. Descartes has just invented the most powerful skeptical hypothesis in the history of philosophy.",
+    "spine_senses": {
+      "title": "The Treachery of the Senses",
+      "text": "Descartes smiles -- not unkindly, but the way a surgeon smiles before making the first cut.\n\n'*You trust your senses? Consider: a straight stick looks bent in water. A square tower looks round from a distance. In dreams, you feel the sheets, you hear voices, you are certain you are awake -- and yet you are asleep.*'\n\nHe holds up his hand. '*I see five fingers. But I have dreamed of seeing five fingers. The experience is identical. So this --*' he gestures at the room, the fire, the candle -- '*could all be a dream. My **senses** cannot tell me otherwise.*'\n\nTheo feels the chair beneath him. It feels real. But he remembers his own dreams -- how real they felt, how certain he was, how foolish he felt upon waking. Descartes is right: the senses alone cannot distinguish waking from dreaming.\n\nDescartes nods approvingly. '*Good. You have the instinct for doubt. Most people resist it -- they cling to their certainties like children clutching blankets.*' He picks up a piece of wax from beside the fire. '*Even if everything I see is a dream, certain things seem true. The dreamer still dreams in three dimensions. Shapes still have properties. Numbers still add up.*'\n\nA chill runs through Theo. The room seems thinner, less real. The dream argument has bitten deep. But surely *something* survives...",
       "choices": [
         {
-          "text": "Accept the evil genius hypothesis -- how deep does the doubt go?",
-          "target": "act1_evil_genius"
+          "text": "Continue -- what survives the dream argument?",
+          "target": "spine_math"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "doubt",
+      "vocabulary": [
+        {
+          "term": "sense deception",
+          "definition": "Descartes' first level of doubt: our senses sometimes deceive us (optical illusions, mirages), so they cannot be fully trusted."
         },
         {
-          "text": "'This is too much. Some things MUST be certain.'",
-          "target": "act1_resist"
+          "term": "dream argument",
+          "definition": "Descartes' second level of doubt: since dreams feel real while we're in them, we can never be certain we're not dreaming right now."
+        },
+        {
+          "term": "methodical doubt",
+          "definition": "Descartes' systematic strategy: doubt everything that can possibly be doubted, to find what (if anything) survives and is truly certain."
+        },
+        {
+          "term": "hyperbolic doubt",
+          "definition": "Doubt pushed to its most extreme: not just doubting what seems false, but doubting even what seems obviously true."
+        }
+      ],
+      "figures": [
+        "Rene Descartes"
+      ],
+      "tags": [
+        "senses",
+        "dream",
+        "doubt",
+        "spine"
+      ]
+    },
+    "spine_math": {
+      "title": "Even Mathematics?",
+      "text": "'*Ah,*' says Descartes, and his eyes glitter. '*You think mathematics is safe. That even a dreamer knows 2+2=4. I thought so too.*'\n\nHe leans forward. '*But consider this: what if there is a being -- a supremely powerful, supremely malicious being -- who has devoted all his energies to deceiving me? Not just about what I see and hear, but about everything. What if this being makes me believe 2+2=4 when really it equals 5? What if he has arranged the entire structure of my mind so that I am systematically wrong about everything, even logic itself?*'\n\nTheo feels dizzy. '*You're describing an evil god.*'\n\n'*Not God,*' Descartes says carefully. '*I will suppose not a God, who is supremely good and the source of truth, but rather some **malicious demon** of the utmost power and cunning who has employed all his energies to deceive me.*'\n\nThe candle flickers. The shadows deepen. Descartes has just invented the most powerful **skeptical hypothesis** in the history of philosophy.\n\nEven mathematics -- the last refuge of certainty -- is under siege.",
+      "choices": [
+        {
+          "text": "Continue -- face the evil genius",
+          "target": "spine_evil_genius"
         }
       ],
       "is_ending": false,
@@ -176,59 +108,17 @@ const STORY_DATA = {
       "tags": [
         "evil_genius",
         "mathematics",
-        "doubt"
-      ]
-    },
-    "act1_vertigo": {
-      "title": "The Vertigo of Doubt",
-      "text": "Theo feels the ground shifting beneath him. If nothing can be trusted -- not senses, not memory, not even reason -- then what is left? The world feels thin, like paper stretched over a void.\n\n'*Yes,*' Descartes says, watching Theo carefully. '*This is the moment most people turn back. The doubt becomes vertiginous. You feel as though you've been thrown into deep water and can neither touch the bottom nor swim to the surface.*'\n\nHe pauses. '*But I ask you to stay in the water a little longer. The **method** requires it. I am not doubting for the pleasure of destruction. I am doubting because I want to find something -- even one thing -- that cannot be doubted. Something so certain that even the most extreme skeptic must accept it.*'\n\n'*Think of it as demolishing a building. Not to leave rubble, but to lay a new foundation. The old building was rotten. We need bedrock.*'",
-      "choices": [
-        {
-          "text": "'Fine. Push the doubt to its limit. What's the worst case?'",
-          "target": "act1_evil_genius"
-        },
-        {
-          "text": "'I don't want to demolish everything. Some beliefs are worth keeping.'",
-          "target": "act1_resist"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "doubt",
-      "vocabulary": [
-        {
-          "term": "Cartesian doubt",
-          "definition": "Named after Descartes (Latin: Cartesius), the systematic practice of doubting all beliefs to find those that are absolutely certain."
-        },
-        {
-          "term": "Archimedean point",
-          "definition": "One fixed, immovable point from which everything else can be moved. Descartes seeks the intellectual equivalent: one certainty from which all knowledge can be rebuilt."
-        }
-      ],
-      "figures": [
-        "Rene Descartes"
-      ],
-      "tags": [
         "doubt",
-        "method",
-        "vertigo"
+        "spine"
       ]
     },
-    "act1_evil_genius": {
+    "spine_evil_genius": {
       "title": "The Malicious Demon",
-      "text": "Descartes closes his eyes. The fire seems to dim. The room grows cold.\n\n'*I shall suppose, then, that there is not a true God -- who is the supreme source of truth -- but rather some **evil genius**, supremely powerful and cunning, who directs his entire effort to deceiving me. I shall consider the heavens, the earth, colors, shapes, sounds, and all external things to be nothing but the deceptive games of dreams.*'\n\nTheo looks at his own hands. Are they real? If an evil genius controls everything -- every perception, every thought, every seeming certainty -- then Theo cannot even trust that he has hands.\n\nThis is the bottom. **Total skepticism**. Everything Theo has ever believed might be a lie orchestrated by an infinitely powerful deceiver.\n\nDescartes opens his eyes. '*Now. From this pit of absolute doubt, we must find something certain. Something even the evil genius cannot fake.*'\n\nThe question hangs in the cold air: is there anything left?",
+      "text": "Descartes closes his eyes. The fire seems to dim. The room grows cold.\n\n'*I shall suppose, then, that there is not a true God -- who is the supreme source of truth -- but rather some **evil genius**, supremely powerful and cunning, who directs his entire effort to deceiving me. I shall consider the heavens, the earth, colors, shapes, sounds, and all external things to be nothing but the deceptive games of dreams.*'\n\nTheo looks at his own hands. Are they real? If an evil genius controls everything -- every perception, every thought, every seeming certainty -- then Theo cannot even trust that he has hands.\n\nThis is **total skepticism**. Everything Theo has ever believed might be a lie orchestrated by an infinitely powerful deceiver.\n\nThe room feels like it's dissolving at the edges. The fire casts no warmth. Descartes' voice comes as if from very far away: '*Now we descend.*'",
       "choices": [
         {
-          "text": "'If everything might be fake, then nothing is certain. We're stuck.'",
-          "target": "act2_despair"
-        },
-        {
-          "text": "'Wait -- even if the evil genius deceives me, I must exist to BE deceived.'",
-          "target": "act2_cogito"
-        },
-        {
-          "text": "'Let me think about this more carefully...'",
-          "target": "act2_thinking"
+          "text": "Continue -- into the abyss",
+          "target": "spine_vertigo"
         }
       ],
       "is_ending": false,
@@ -250,16 +140,48 @@ const STORY_DATA = {
       "tags": [
         "evil_genius",
         "total_doubt",
-        "convergence"
+        "spine"
       ]
     },
-    "act1_resist": {
-      "title": "The Dogmatist's Retreat",
-      "text": "Descartes looks at Theo with something between pity and impatience.\n\n'*You want to keep your beliefs? Which ones? The ones your parents gave you? The ones your culture assumed? The ones your senses -- which we have already shown to be unreliable -- delivered to you?*'\n\nHe spreads his hands. '*I am not asking you to abandon belief forever. I am asking you to test it. A belief that survives the strongest possible doubt is worth a thousand beliefs that were never questioned. But a belief that cannot survive questioning... what is it worth?*'\n\nTheo realizes Descartes isn't trying to destroy knowledge. He's trying to find **genuine** knowledge -- the kind that doesn't depend on habit, or authority, or the accident of where you were born. The **method of doubt** is not nihilism. It's quality control.\n\n'*So,*' Descartes says gently. '*Will you test your beliefs? Or will you go back to sleep?*'",
+    "spine_vertigo": {
+      "title": "The Vertigo of Doubt",
+      "text": "Theo feels the ground shifting beneath him. If nothing can be trusted -- not senses, not memory, not even reason -- then what is left? The world feels thin, like paper stretched over a void.\n\n'*Yes,*' Descartes says, watching Theo carefully. '*This is the moment most people turn back. The doubt becomes vertiginous. You feel as though you've been thrown into deep water and can neither touch the bottom nor swim to the surface.*'\n\nHe pauses. '*But I ask you to stay in the water a little longer. The **method** requires it. I am not doubting for the pleasure of destruction. I am doubting because I want to find something -- even one thing -- that cannot be doubted. Something so certain that even the most extreme skeptic must accept it.*'\n\n'*Think of it as demolishing a building. Not to leave rubble, but to lay a new foundation. The old building was rotten. We need bedrock.*'\n\nThe **Archimedean point**. One immovable certainty. That is what Descartes is searching for -- and the search demands that every false floor be smashed through first.",
       "choices": [
         {
-          "text": "'Test them. Push the doubt as far as it goes.'",
-          "target": "act1_evil_genius"
+          "text": "Continue -- keep falling",
+          "target": "spine_resist"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "doubt",
+      "vocabulary": [
+        {
+          "term": "Cartesian doubt",
+          "definition": "Named after Descartes (Latin: Cartesius), the systematic practice of doubting all beliefs to find those that are absolutely certain."
+        },
+        {
+          "term": "Archimedean point",
+          "definition": "One fixed, immovable point from which everything else can be moved. Descartes seeks the intellectual equivalent: one certainty from which all knowledge can be rebuilt."
+        }
+      ],
+      "figures": [
+        "Rene Descartes"
+      ],
+      "tags": [
+        "doubt",
+        "method",
+        "vertigo",
+        "spine"
+      ]
+    },
+    "spine_resist": {
+      "title": "The Dogmatist's Temptation",
+      "text": "Descartes looks at Theo with something between concern and challenge.\n\n'*This is where I lose most people. They want to keep their beliefs. They want to go back to the world where the chair is real, the sun rises, and 2+2=4 because it obviously is.*'\n\nHe spreads his hands. '*I am not asking you to abandon belief forever. I am asking you to **test** it. A belief that survives the strongest possible doubt is worth a thousand beliefs that were never questioned. But a belief that cannot survive questioning... what is it worth?*'\n\nTheo realizes Descartes isn't trying to destroy knowledge. He's trying to find **genuine** knowledge -- the kind that doesn't depend on habit, or authority, or the accident of where you were born. The **method of doubt** is not nihilism. It's quality control.\n\n'*So,*' Descartes says gently. '*Will you stay in the doubt? Or will you go back to sleep?*'\n\nThe fire crackles. The choice hangs in the cold air.",
+      "choices": [
+        {
+          "text": "'Stay in the doubt. Push it as far as it goes.'",
+          "target": "spine_cogito_dawn"
         },
         {
           "text": "'I'd rather go back to sleep. Some things are better unquestioned.'",
@@ -285,42 +207,17 @@ const STORY_DATA = {
       "tags": [
         "resist",
         "dogmatism",
-        "choice"
+        "choice",
+        "spine"
       ]
     },
-    "act2_despair": {
-      "title": "The Abyss",
-      "text": "Theo feels hopeless. If an evil genius can deceive him about everything -- about math, about logic, about the very structure of reality -- then knowledge is impossible. We are lost in a hall of mirrors with no exit.\n\nDescartes nods slowly. '*I felt this too. On the first day of my meditations, I went to bed in despair. Everything I had believed was gone. The world had been swept away.*'\n\nHe leans forward. '*But then I realized something. The evil genius can deceive me about what I see. He can deceive me about mathematics. He can even deceive me about whether I have a body. But there is one thing he **cannot** do.*'\n\n'*He cannot deceive me that I do not exist. Because in order to be deceived, I must exist. In order to doubt, I must exist. In order to think at all -- even to think wrongly -- there must be an \"I\" that is thinking.*'\n\nDescartes smiles. '*Cogito, ergo sum.*'",
-      "choices": [
-        {
-          "text": "'I think, therefore I am...' -- unpack this. What does it really prove?",
-          "target": "act2_cogito"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "cogito",
-      "vocabulary": [
-        {
-          "term": "existential despair",
-          "definition": "The paralysis that comes from radical doubt -- feeling that nothing is certain and no knowledge is possible."
-        }
-      ],
-      "figures": [
-        "Rene Descartes"
-      ],
-      "tags": [
-        "despair",
-        "transition"
-      ]
-    },
-    "act2_thinking": {
+    "spine_cogito_dawn": {
       "title": "The Doubter's Paradox",
-      "text": "Theo sits in silence. The evil genius hypothesis is overwhelming. But as he tries to doubt everything -- his body, the room, the fire, even mathematics -- he notices something strange.\n\nHe cannot doubt that he is doubting.\n\nEvery time he tries to doubt his own existence, the doubt itself confirms it. It's like trying to prove you're not thinking: the attempt to prove it is itself a thought. The doubt **refutes itself**.\n\n'*You see it,*' Descartes whispers, watching Theo's face. '*You're discovering it right now. The thing the evil genius cannot touch.*'\n\nTheo's mind races. If he's being deceived, he exists (something must be deceived). If he's dreaming, he exists (something must dream). If he's doubting, he exists (something must doubt). The one thing that **cannot** be doubted is the existence of the doubter.",
+      "text": "Theo sits in silence. The evil genius hypothesis is overwhelming. But as he tries to doubt everything -- his body, the room, the fire, even mathematics -- he notices something strange.\n\nHe cannot doubt that he is doubting.\n\nEvery time he tries to doubt his own existence, the doubt itself confirms it. It's like trying to prove you're not thinking: the attempt to prove it is itself a thought. The doubt **refutes itself**.\n\n'*You see it,*' Descartes whispers, watching Theo's face. '*You're discovering it right now. The thing the evil genius cannot touch.*'\n\nTheo's mind races. If he's being deceived, he exists (something must be deceived). If he's dreaming, he exists (something must dream). If he's doubting, he exists (something must doubt). The one thing that **cannot** be doubted is the existence of the doubter.\n\nAnd then it hits him -- like hitting bedrock after free-fall. Like a light igniting in the deepest chamber of a mine.\n\nDescartes smiles. '*Say it.*'",
       "choices": [
         {
           "text": "'Cogito ergo sum -- I think, therefore I am!'",
-          "target": "act2_cogito"
+          "target": "spine_cogito"
         }
       ],
       "is_ending": false,
@@ -330,29 +227,29 @@ const STORY_DATA = {
         {
           "term": "self-refuting doubt",
           "definition": "The paradox at the heart of the cogito: doubting your own existence requires you to exist, so the doubt defeats itself."
+        },
+        {
+          "term": "existential despair",
+          "definition": "The paralysis that comes from radical doubt -- feeling that nothing is certain and no knowledge is possible."
         }
       ],
-      "figures": [],
+      "figures": [
+        "Rene Descartes"
+      ],
       "tags": [
         "paradox",
-        "discovery"
+        "discovery",
+        "cogito",
+        "spine"
       ]
     },
-    "act2_cogito": {
+    "spine_cogito": {
       "title": "I Think, Therefore I Am",
-      "text": "**Cogito, ergo sum.** I think, therefore I am.\n\nIt hits Theo like lightning. This is the **Archimedean point** -- the one fixed certainty from which everything can be rebuilt. Even if the evil genius deceives him about everything else, the very act of being deceived proves that he exists as a thinking thing.\n\nDescartes is beaming. '*This is where it all begins. Not \"I see, therefore I am\" -- the senses can be wrong. Not \"I have a body, therefore I am\" -- the body might be an illusion. But \"I think, therefore I am\" is unshakeable. It is the one proposition that survives even the evil genius.*'\n\n'*But notice what we have proved: only that I exist as a **thinking thing**. A mind. A consciousness. I have not yet proved that I have a body, or that the physical world exists, or that other minds exist. I know only one thing for certain: **I am a thing that thinks**.*'\n\nFrom this single certainty, Descartes intends to rebuild all of knowledge. The question is: how?",
+      "text": "**Cogito, ergo sum.** I think, therefore I am.\n\nIt hits Theo like lightning. This is the **Archimedean point** -- the one fixed certainty from which everything can be rebuilt. Even if the evil genius deceives him about everything else, the very act of being deceived proves that he exists as a thinking thing.\n\nDescartes is beaming. '*This is where it all begins. Not \"I see, therefore I am\" -- the senses can be wrong. Not \"I have a body, therefore I am\" -- the body might be an illusion. But \"I think, therefore I am\" is unshakeable. It is the one proposition that survives even the evil genius.*'\n\n'*But notice what we have proved: only that I exist as a **thinking thing**. A mind. A consciousness. I have not yet proved that I have a body, or that the physical world exists, or that other minds exist. I know only one thing for certain: **I am a thing that thinks**.*'\n\nFrom this single certainty, Descartes intends to rebuild all of knowledge. The prison of doubt has cracked open. But the light that floods in reveals a vast landscape of questions. Which way to go?",
       "choices": [
         {
-          "text": "Ask what 'a thinking thing' means -- what kind of thing am I?",
-          "target": "act2_thinking_thing"
-        },
-        {
-          "text": "Ask how we get from 'I exist' to 'the world exists'",
-          "target": "act2_wax"
-        },
-        {
-          "text": "Challenge the cogito -- is it really as certain as Descartes claims?",
-          "target": "act2_challenge"
+          "text": "Continue -- what kind of thing am I?",
+          "target": "explosion_point"
         }
       ],
       "is_ending": false,
@@ -373,21 +270,29 @@ const STORY_DATA = {
       ],
       "tags": [
         "cogito",
-        "convergence",
-        "foundation"
+        "foundation",
+        "spine"
       ]
     },
-    "act2_thinking_thing": {
-      "title": "What Am I?",
-      "text": "'*I know I exist,*' Descartes says. '*But what am I? I am a thing that **thinks**. That is: a thing that doubts, understands, affirms, denies, wills, refuses, and also imagines and senses.*'\n\nTheo objects: '*But you just said the senses can't be trusted!*'\n\n'*Careful,*' Descartes replies. '*I said I cannot trust that what I sense is real. But I cannot doubt that I am having the experience of sensing. I might be dreaming that I see a fire -- but I cannot doubt that it seems to me that I see a fire. The experience itself is certain, even if its content is not.*'\n\nThis is a crucial distinction: the **res cogitans** -- the thinking thing -- is the mind, not the body. Descartes has separated consciousness from the physical world. Whatever I am, I am primarily a mind.",
+    "explosion_point": {
+      "title": "What Am I? What Now?",
+      "text": "'*I know I exist,*' Descartes says. '*But what am I? I am a thing that **thinks**. That is: a thing that doubts, understands, affirms, denies, wills, refuses, and also imagines and senses.*'\n\nTheo objects: '*But you just said the senses can't be trusted!*'\n\n'*Careful,*' Descartes replies. '*I said I cannot trust that what I sense is real. But I cannot doubt that I am having the experience of sensing. I might be dreaming that I see a fire -- but I cannot doubt that it seems to me that I see a fire. The experience itself is certain, even if its content is not.*'\n\nThis is a crucial distinction: the **res cogitans** -- the thinking thing -- is the mind, not the body. Descartes has separated consciousness from the physical world. Whatever Theo is, he is primarily a mind.\n\nThe study seems to expand around them. Where before there was only one path -- downward, into doubt -- now there are doors everywhere. Questions branch in every direction. The intellectual claustrophobia of the spine has broken open into dizzying freedom.\n\n'*Now,*' Descartes says, '*the real work begins. Where shall we go?*'",
       "choices": [
         {
-          "text": "Explore this further with the wax experiment",
-          "target": "act2_wax"
+          "text": "Explore the nature of mind -- what can the intellect alone reveal?",
+          "target": "exp_wax"
         },
         {
-          "text": "But how do we get beyond the mind? How do we prove the world exists?",
-          "target": "act3_god_need"
+          "text": "Challenge the cogito -- is it really as certain as Descartes claims?",
+          "target": "exp_challenge"
+        },
+        {
+          "text": "Escape the mind -- how do we prove the world exists?",
+          "target": "exp_god_need"
+        },
+        {
+          "text": "Ask Princess Elisabeth's question -- how does a mind move a body?",
+          "target": "exp_elisabeth"
         }
       ],
       "is_ending": false,
@@ -407,22 +312,26 @@ const STORY_DATA = {
         "Rene Descartes"
       ],
       "tags": [
-        "mind",
-        "thinking_thing",
-        "experience"
+        "explosion",
+        "branching",
+        "cogito"
       ]
     },
-    "act2_wax": {
+    "exp_wax": {
       "title": "The Wax Argument",
       "text": "Descartes picks up a piece of beeswax from beside the fire. '*Observe. This wax has a definite shape, color, size, and scent. It is hard. It makes a sound when you tap it.*'\n\nHe holds it near the flame. The wax melts. Its shape changes. Its color changes. Its scent evaporates. Its hardness vanishes. Everything the senses told Theo about the wax is gone.\n\n'*Is it still the same wax?*' Descartes asks.\n\n'*Yes,*' Theo says. '*Obviously.*'\n\n'*But how do you know? Every sensory quality has changed. You don't see the sameness, or touch it, or smell it. You **understand** it. Your mind grasps that the wax is a flexible, extended thing, capable of infinite changes -- and this is known through **intellect**, not through senses.*'\n\nThe **wax argument** proves that even our knowledge of physical objects depends more on the mind than on the senses. We understand the world through reason, not perception.",
       "choices": [
         {
-          "text": "The mind is more knowable than the body. But we're still trapped inside it.",
-          "target": "act3_god_need"
+          "text": "The mind is more knowable than the body. But we're trapped inside it.",
+          "target": "exp_god_need"
         },
         {
           "text": "Question the wax argument -- does understanding really work without senses?",
-          "target": "act2_challenge"
+          "target": "exp_challenge"
+        },
+        {
+          "text": "Hume would disagree with all of this. What's his objection?",
+          "target": "exp_hume"
         }
       ],
       "is_ending": false,
@@ -447,17 +356,21 @@ const STORY_DATA = {
         "perception"
       ]
     },
-    "act2_challenge": {
+    "exp_challenge": {
       "title": "Objections to the Cogito",
       "text": "Theo pushes back. '*How do you know that \"I think therefore I am\" isn't just another trick of the evil genius? Maybe the genius makes you think the cogito is certain when it isn't.*'\n\nDescartes considers this seriously. '*This is the objection that matters most. But notice: even if the evil genius makes me falsely believe that the cogito is valid -- the fact that I am believing something still proves I exist. The cogito isn't an argument that could be wrong. It's a **performance** that can't fail. The very act of doubting it confirms it.*'\n\nTheo tries another angle. '*But why \"I\" think? Maybe there's just thinking happening, with no thinker. Maybe consciousness exists without a self.*'\n\n'*Ah,*' says Descartes. '*Now you sound like a philosopher I have not yet met.*' (He means **Hume**, who will make exactly this argument a century later -- that the self is just a bundle of perceptions with no underlying substance.)\n\n'*For now, I maintain: where there is thinking, there is a thinker. But let us move forward. I must escape this prison of the mind.*'",
       "choices": [
         {
           "text": "Move forward -- how does Descartes escape solipsism?",
-          "target": "act3_god_need"
+          "target": "exp_god_need"
         },
         {
           "text": "Hume's objection is interesting. Is Descartes right about the 'I'?",
-          "target": "act2_hume"
+          "target": "exp_hume"
+        },
+        {
+          "text": "The cogito is the peak. Maybe that's enough.",
+          "target": "end_dreamer"
         }
       ],
       "is_ending": false,
@@ -483,13 +396,17 @@ const STORY_DATA = {
         "self"
       ]
     },
-    "act2_hume": {
+    "exp_hume": {
       "title": "The Bundle Theory",
       "text": "Theo considers: what if Descartes is wrong about the 'I'? What if there's no permanent self -- just a stream of experiences?\n\nDescartes waves this away. '*Without a thinker, there cannot be thought. A thought must belong to something.*'\n\nBut Theo has read ahead in his textbook. David **Hume**, writing a century after Descartes, will argue exactly the opposite: when he looks inside himself, he never finds a 'self' -- only a **bundle** of perceptions, sensations, and ideas, flowing one after another. The 'I' is a fiction we invent to organize the stream.\n\nAnd after Hume, **Kant** will try to resolve the dispute: the 'I' is not a substance (Descartes is wrong about that) but it is a necessary condition for experience (Hume is wrong to dismiss it). The self is the formal unity that makes experience possible.\n\nThree centuries of philosophy in one argument. But Descartes doesn't know this yet. He has his cogito, and he must build from it.",
       "choices": [
         {
           "text": "Return to Descartes' project -- how does he escape the mind?",
-          "target": "act3_god_need"
+          "target": "exp_god_need"
+        },
+        {
+          "text": "The cogito was the important part. The rest feels like construction.",
+          "target": "end_dreamer"
         }
       ],
       "is_ending": false,
@@ -516,21 +433,21 @@ const STORY_DATA = {
         "bundle"
       ]
     },
-    "act3_god_need": {
+    "exp_god_need": {
       "title": "Why Descartes Needs God",
-      "text": "Theo sees the problem clearly. Descartes has the cogito -- '*I exist*' -- but nothing else. He's locked inside his own mind. How does he get out?\n\n'*I need to prove that God exists,*' Descartes says.\n\nTheo is startled. '*God? What does God have to do with escaping doubt?*'\n\n'*Everything. If God exists and is not a deceiver, then I can trust my clear and distinct perceptions. If I can trust those, I can prove the external world exists. God is the **bridge** between my mind and reality.*'\n\nThis is the architecture of the Meditations: Doubt → Cogito → God → World. Without God, Descartes is trapped in **solipsism** forever. The proof of God's existence is not a religious afterthought -- it's the load-bearing wall of the entire project.\n\n'*I have two arguments,*' Descartes says. '*Would you like to hear the causal argument or the ontological argument?*'",
+      "text": "Theo sees the problem clearly. Descartes has the cogito -- '*I exist*' -- but nothing else. He's locked inside his own mind. How does he get out?\n\n'*I need to prove that God exists,*' Descartes says.\n\nTheo is startled. '*God? What does God have to do with escaping doubt?*'\n\n'*Everything. If God exists and is not a deceiver, then I can trust my clear and distinct perceptions. If I can trust those, I can prove the external world exists. God is the **bridge** between my mind and reality.*'\n\nThis is the architecture of the Meditations: Doubt -> Cogito -> God -> World. Without God, Descartes is trapped in **solipsism** forever. The proof of God's existence is not a religious afterthought -- it's the load-bearing wall of the entire project.\n\n'*I have two arguments,*' Descartes says. '*Would you like to hear the causal argument or the ontological argument?*'",
       "choices": [
         {
           "text": "The causal argument -- how does the idea of God prove God exists?",
-          "target": "act3_causal"
+          "target": "exp_causal"
         },
         {
           "text": "The ontological argument -- God's existence is in his very definition?",
-          "target": "act3_ontological"
+          "target": "exp_ontological"
         },
         {
           "text": "Both sound suspicious. Can't Descartes escape doubt without God?",
-          "target": "act3_without_god"
+          "target": "exp_without_god"
         }
       ],
       "is_ending": false,
@@ -551,21 +468,24 @@ const STORY_DATA = {
       ],
       "tags": [
         "god",
-        "convergence",
         "architecture"
       ]
     },
-    "act3_causal": {
+    "exp_causal": {
       "title": "The Causal Argument",
       "text": "'*I have an idea of God,*' Descartes says. '*An idea of a being that is infinite, eternal, omnipotent, omniscient, and perfectly good. Now: where did this idea come from?*'\n\nHe counts the possibilities. '*Could I have invented it? No -- I am finite, imperfect, limited. A finite cause cannot produce an infinite effect. The **idea** of infinity must come from something that is actually infinite.*'\n\nThis is the **causal adequacy principle**: the cause of an idea must have at least as much reality as the idea itself contains. The idea of God contains infinite perfection. Therefore, only an infinitely perfect being could have caused it.\n\nTheo frowns. '*Can't I form the idea of infinity just by negating finitude? I know I'm limited, so I imagine the opposite.*'\n\n'*But how do you know you're limited,*' Descartes counters, '*unless you already have the idea of the unlimited to compare yourself against? The idea of perfection is **prior** to the idea of imperfection.*'",
       "choices": [
         {
           "text": "This is clever but unconvincing. What's the other argument?",
-          "target": "act3_ontological"
+          "target": "exp_ontological"
         },
         {
           "text": "Accept the argument -- what does God's existence change?",
-          "target": "act3_no_deceiver"
+          "target": "exp_no_deceiver"
+        },
+        {
+          "text": "Skip the God proofs -- go straight to mind and body",
+          "target": "exp_dualism"
         }
       ],
       "is_ending": false,
@@ -590,17 +510,21 @@ const STORY_DATA = {
         "meditation3"
       ]
     },
-    "act3_ontological": {
+    "exp_ontological": {
       "title": "The Ontological Argument",
       "text": "Descartes presents his most audacious argument. '*I can clearly and distinctly conceive of God as a supremely perfect being. Now, **existence** is a perfection. A being that has every perfection except existence would be less perfect than one that also exists. Therefore, a supremely perfect being must exist.*'\n\nTheo blinks. '*You just... defined God into existence?*'\n\n'*I demonstrated that existence belongs to God's nature, just as having three angles belongs to the nature of a triangle. You cannot conceive a triangle without three angles. You cannot conceive a supremely perfect being without existence.*'\n\nThis is the **ontological argument** -- God's existence follows from the very concept of God. It's breathtaking in its ambition and has been debated for 800 years (since Anselm first proposed it in 1078).\n\nTheo's instinct says something is wrong. You can't just define things into existence... can you?",
       "choices": [
         {
           "text": "'This feels like a trick. Kant will destroy this argument later, won't he?'",
-          "target": "act3_kant_objection"
+          "target": "exp_kant_objection"
         },
         {
           "text": "Accept God's existence for now -- what follows from it?",
-          "target": "act3_no_deceiver"
+          "target": "exp_no_deceiver"
+        },
+        {
+          "text": "I got the cogito but I'm losing the thread here.",
+          "target": "end_dreamer"
         }
       ],
       "is_ending": false,
@@ -626,20 +550,59 @@ const STORY_DATA = {
         "meditation5"
       ]
     },
-    "act3_without_god": {
+    "exp_kant_objection": {
+      "title": "Kant's Devastating Critique",
+      "text": "Theo remembers reading about Kant's objection. '*Existence is not a perfection,*' he says. '*It's not a property at all.*'\n\nDescartes raises an eyebrow. '*Explain.*'\n\n'*Kant will argue -- in about 140 years -- that existence isn't a **predicate**. When you say \"God is powerful\" or \"God is good,\" you're adding a property to the concept. But when you say \"God exists,\" you're not adding anything to the concept -- you're saying the concept has a real-world instance. The concept of a hundred real dollars is identical to the concept of a hundred possible dollars.*'\n\nDescartes is silent for a moment. '*That is... a very sharp objection. I would need to think about this.*'\n\nKant's critique is widely considered fatal to the ontological argument in its classical form. But the causal argument and the broader question of God's role in the Meditations remain vital.",
+      "choices": [
+        {
+          "text": "Move on -- what does God's existence (if granted) actually prove?",
+          "target": "exp_no_deceiver"
+        },
+        {
+          "text": "This whole God section seems weak. Can the Meditations survive without it?",
+          "target": "exp_without_god"
+        },
+        {
+          "text": "Skip to dualism -- the mind-body question",
+          "target": "exp_dualism"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "god",
+      "vocabulary": [
+        {
+          "term": "existence is not a predicate",
+          "definition": "Kant's objection: existence doesn't add anything to a concept. A real dollar and an imagined dollar have the same properties -- one just happens to exist."
+        }
+      ],
+      "figures": [
+        "Immanuel Kant"
+      ],
+      "tags": [
+        "kant",
+        "objection",
+        "ontological"
+      ]
+    },
+    "exp_without_god": {
       "title": "Can We Skip God?",
       "text": "Theo asks the modern question: can't we just trust our faculties without proving God exists first?\n\nDescartes shakes his head. '*Without God, you face the **Cartesian Circle**. I trust clear and distinct perceptions because God guarantees them. But I prove God exists through clear and distinct perceptions. Each depends on the other.*'\n\n'*This is the problem my critics will seize upon,*' Descartes admits. '*And they may be right that I have not fully escaped it. But consider the alternative: without some guarantee of truth, the evil genius wins. Every certainty you build could be an illusion.*'\n\nModern philosophy has largely abandoned Descartes' God-as-guarantor. But the **problem** he identified remains: how do we trust our own rational faculties without using those very faculties to validate themselves? This is the **problem of the criterion**, and no one has fully solved it.\n\n'*You do not have to accept my solution,*' Descartes says. '*But you should feel the weight of the problem.*'",
       "choices": [
         {
           "text": "Hear the God proofs anyway -- they're historically important",
-          "target": "act3_causal"
+          "target": "exp_causal"
         },
         {
           "text": "Skip ahead to what God's existence is supposed to guarantee",
-          "target": "act3_no_deceiver"
+          "target": "exp_no_deceiver"
         },
         {
-          "text": "The God proofs seem like a detour. I got the important part -- the cogito.",
+          "text": "Skip God entirely and go straight to dualism",
+          "target": "exp_dualism"
+        },
+        {
+          "text": "The cogito was the peak. Maybe that's enough.",
           "target": "end_dreamer"
         }
       ],
@@ -665,52 +628,17 @@ const STORY_DATA = {
         "modern"
       ]
     },
-    "act3_kant_objection": {
-      "title": "Kant's Devastating Critique",
-      "text": "Theo remembers reading about Kant's objection. '*Existence is not a perfection,*' he says. '*It's not a property at all.*'\n\nDescartes raises an eyebrow. '*Explain.*'\n\n'*Kant will argue -- in about 140 years -- that existence isn't a **predicate**. When you say \"God is powerful\" or \"God is good,\" you're adding a property to the concept. But when you say \"God exists,\" you're not adding anything to the concept -- you're saying the concept has a real-world instance. The concept of a hundred real dollars is identical to the concept of a hundred possible dollars.*'\n\nDescartes is silent for a moment. '*That is... a very sharp objection. I would need to think about this.*'\n\nKant's critique is widely considered fatal to the ontological argument in its classical form. But the causal argument and the broader question of God's role in the Meditations remain vital.",
-      "choices": [
-        {
-          "text": "Move on -- what does God's existence (if granted) actually prove?",
-          "target": "act3_no_deceiver"
-        },
-        {
-          "text": "This whole God section seems weak. Can the Meditations survive without it?",
-          "target": "act4_error"
-        },
-        {
-          "text": "I'm losing the thread. The cogito was the peak -- maybe that's enough.",
-          "target": "end_dreamer"
-        }
-      ],
-      "is_ending": false,
-      "ending_type": null,
-      "era": "god",
-      "vocabulary": [
-        {
-          "term": "existence is not a predicate",
-          "definition": "Kant's objection: existence doesn't add anything to a concept. A real dollar and an imagined dollar have the same properties -- one just happens to exist."
-        }
-      ],
-      "figures": [
-        "Immanuel Kant"
-      ],
-      "tags": [
-        "kant",
-        "objection",
-        "ontological"
-      ]
-    },
-    "act3_no_deceiver": {
+    "exp_no_deceiver": {
       "title": "God Is No Deceiver",
-      "text": "'*If God exists,*' Descartes says, '*and God is supremely perfect, then God cannot be a deceiver. Deception is an imperfection -- it implies malice or weakness. A perfect being would not deceive.*'\n\nThis is the crucial move. If God is no deceiver, then the evil genius hypothesis collapses. The things I clearly and distinctly perceive must be true, because a non-deceiving God would not allow me to be systematically wrong about what I grasp with perfect clarity.\n\n'*But wait,*' Theo says. '*We make mistakes all the time. If God doesn't deceive us, why do we err?*'\n\nDescartes nods. '*Excellent question. This is the subject of my Fourth Meditation. **Error** does not come from God. It comes from us -- from the misuse of our own faculties.*'",
+      "text": "'*If God exists,*' Descartes says, '*and God is supremely perfect, then God cannot be a deceiver. Deception is an imperfection -- it implies malice or weakness. A perfect being would not deceive.*'\n\nThis is the crucial move. If God is no deceiver, then the evil genius hypothesis collapses. The things Theo clearly and distinctly perceives must be true, because a non-deceiving God would not allow him to be systematically wrong about what he grasps with perfect clarity.\n\n'*But wait,*' Theo says. '*We make mistakes all the time. If God doesn't deceive us, why do we err?*'\n\nDescartes nods. '*Excellent question. This is the subject of my Fourth Meditation. **Error** does not come from God. It comes from us -- from the misuse of our own faculties.*'",
       "choices": [
         {
           "text": "How does error arise if God doesn't deceive us?",
-          "target": "act4_error"
+          "target": "exp_error"
         },
         {
-          "text": "Skip to the payoff -- if God guarantees truth, does the physical world exist?",
-          "target": "act5_dualism"
+          "text": "Skip to the payoff -- does the physical world exist?",
+          "target": "exp_dualism"
         }
       ],
       "is_ending": false,
@@ -735,17 +663,17 @@ const STORY_DATA = {
         "error"
       ]
     },
-    "act4_error": {
+    "exp_error": {
       "title": "The Will and the Intellect",
       "text": "Descartes explains the origin of error. '*God gave me two faculties: the **intellect**, which perceives ideas, and the **will**, which affirms or denies them. The intellect is finite -- it can grasp only so much. But the will is infinite -- it can affirm or deny anything.*'\n\n'*Error arises when I use my infinite will to judge matters that my finite intellect does not clearly grasp. When I affirm something I do not clearly understand, I am not being deceived by God -- I am overreaching.*'\n\nTheo sees the elegance. God gave us the tools for truth (clear and distinct perception) and the freedom to misuse them (the will). Error is not God's fault -- it's ours. We err when we judge too quickly, believe too carelessly, or extend our assent beyond our understanding.\n\n'*The rule, then,*' Descartes says, '*is simple: **assent only to what you clearly and distinctly perceive**. When you're unsure, withhold judgment. This is intellectual discipline, and it is the only path to truth.*'",
       "choices": [
         {
-          "text": "This is powerful. Now can we finally prove the external world exists?",
-          "target": "act5_dualism"
+          "text": "Now prove the external world exists.",
+          "target": "exp_dualism"
         },
         {
           "text": "But this makes humans responsible for error -- isn't that too harsh?",
-          "target": "act4_free_will"
+          "target": "exp_free_will"
         }
       ],
       "is_ending": false,
@@ -775,13 +703,17 @@ const STORY_DATA = {
         "meditation4"
       ]
     },
-    "act4_free_will": {
+    "exp_free_will": {
       "title": "Freedom and Responsibility",
       "text": "'*Is it harsh?*' Descartes asks. '*Or is it liberating? I am telling you that truth is within your grasp. The tools God gave you are sufficient. **You** are the source of your own errors, and therefore you are the cure.*'\n\nTheo thinks about this. In Descartes' system, **free will** is not just a moral concept -- it's an epistemic one. You are free to believe or disbelieve. You are responsible for what you assent to. Error is not fate; it's a choice.\n\nThis is profoundly modern. Before Descartes, error was often attributed to demons, or sin, or the fallen nature of humanity. Descartes places the responsibility -- and the power -- squarely in the hands of the individual thinker.\n\n'*Now,*' Descartes says, '*having understood where truth comes from and where error comes from, I am ready for the final step. I will prove that the physical world -- the world of bodies, of extension, of matter -- actually exists.*'",
       "choices": [
         {
-          "text": "Yes -- prove the world exists. That's what we've been building toward.",
-          "target": "act5_dualism"
+          "text": "Yes -- prove the world exists.",
+          "target": "exp_dualism"
+        },
+        {
+          "text": "Descartes' legacy is the questions, not the answers.",
+          "target": "end_questions"
         }
       ],
       "is_ending": false,
@@ -801,21 +733,25 @@ const STORY_DATA = {
         "responsibility"
       ]
     },
-    "act5_dualism": {
+    "exp_dualism": {
       "title": "Mind and Body",
       "text": "Descartes arrives at the Sixth Meditation. His voice is triumphant.\n\n'*I now know three things. I exist as a thinking thing. God exists and does not deceive. And I can trust my clear and distinct perceptions. Now I will prove the physical world exists.*'\n\nThe argument: I have a strong inclination to believe that physical objects cause my sensory experiences. God, who is no deceiver, would not allow me to have this inclination if it were systematically false. Therefore, physical objects exist.\n\n'*But they are not what the senses tell me,*' Descartes warns. '*The senses show me colors, sounds, tastes -- **secondary qualities** that exist in my mind. The physical world itself has only **primary qualities**: extension, shape, motion. Mathematics describes reality; the senses merely represent it.*'\n\nThe result is **Cartesian dualism**: the world contains two fundamentally different substances. **Res cogitans** (mind, thinking) and **res extensa** (body, extension). I am a mind. My body is a machine. The two interact, but they are utterly different in nature.",
       "choices": [
         {
           "text": "How do mind and body interact if they're so different?",
-          "target": "act5_interaction"
+          "target": "exp_interaction"
         },
         {
-          "text": "This seems to leave the body as a machine. Is that a problem?",
-          "target": "act5_machine"
+          "text": "This leaves the body as a machine. Is that a problem?",
+          "target": "exp_machine"
         },
         {
-          "text": "Descartes rebuilt everything from doubt to the world. Reflect on the whole arc.",
-          "target": "act6_arc"
+          "text": "Step back and see the full arc of the Meditations",
+          "target": "exp_arc"
+        },
+        {
+          "text": "Is dualism wrong? What are the alternatives?",
+          "target": "exp_alternatives"
         }
       ],
       "is_ending": false,
@@ -841,21 +777,24 @@ const STORY_DATA = {
       "tags": [
         "dualism",
         "mind_body",
-        "convergence",
         "meditation6"
       ]
     },
-    "act5_interaction": {
+    "exp_interaction": {
       "title": "The Interaction Problem",
       "text": "Theo asks the question that will haunt philosophy for centuries: '*If mind and body are completely different substances -- one thinking, one extended -- how do they interact? How does a non-physical thought cause a physical arm to move?*'\n\nDescartes hesitates. '*The mind and body interact through the **pineal gland** -- a small gland at the center of the brain. It is the seat of the soul.*'\n\nEven Theo can tell this is unsatisfying. Moving the problem to a specific gland doesn't explain *how* a non-physical mind moves a physical gland. It just relocates the mystery.\n\nThis is the **mind-body problem**, and it remains unsolved. After Descartes, philosophers tried: Malebranche said God mediates every interaction. Leibniz said mind and body run in parallel like synchronized clocks. Spinoza said they're two aspects of one substance. Today's philosophers of mind are still arguing.",
       "choices": [
         {
-          "text": "Step back and see the full arc of the Meditations",
-          "target": "act6_arc"
+          "text": "See the full arc of the Meditations",
+          "target": "exp_arc"
         },
         {
           "text": "Is dualism wrong? What are the alternatives?",
-          "target": "act5_alternatives"
+          "target": "exp_alternatives"
+        },
+        {
+          "text": "Ask Princess Elisabeth's pointed question about all this",
+          "target": "exp_elisabeth"
         }
       ],
       "is_ending": false,
@@ -881,17 +820,21 @@ const STORY_DATA = {
         "mind_body_problem"
       ]
     },
-    "act5_machine": {
+    "exp_machine": {
       "title": "The Ghost in the Machine",
       "text": "Descartes' dualism has a startling implication: the body is a **machine**. Animals, which Descartes claims do not think, are pure machines -- complex automata with no inner experience. The human body is also a machine, but one inhabited by a mind.\n\nPhilosopher Gilbert Ryle will later mock this as the doctrine of the '**ghost in the machine**' -- a mysterious, invisible soul rattling around inside a mechanical body.\n\n'*But consider the implications,*' Theo says. '*If the body is a machine, then physics can describe it completely. Medicine becomes mechanics. Biology becomes engineering. You've just given science permission to study the body without worrying about the soul.*'\n\nDescartes nods. '*That is precisely my intention. I want to free science from theology -- to let the body be studied as matter, while preserving the soul for faith. Two domains, two methods, no conflict.*'\n\nThis is why Descartes is the father of modern philosophy: he drew the line between science and religion that the modern world still follows.",
       "choices": [
         {
           "text": "See the full arc of the Meditations and what they achieved",
-          "target": "act6_arc"
+          "target": "exp_arc"
         },
         {
           "text": "But is the line really that clean? What did Descartes get wrong?",
-          "target": "act5_alternatives"
+          "target": "exp_alternatives"
+        },
+        {
+          "text": "Princess Elisabeth saw through this. What was her challenge?",
+          "target": "exp_elisabeth"
         }
       ],
       "is_ending": false,
@@ -917,17 +860,21 @@ const STORY_DATA = {
         "dualism"
       ]
     },
-    "act5_alternatives": {
+    "exp_alternatives": {
       "title": "After Descartes",
       "text": "The problems with dualism spawned three centuries of alternatives:\n\n**Materialism**: There is no mind-substance. Everything is physical. Consciousness is brain activity. This is the dominant view in neuroscience today, but it faces the '**hard problem**': why does physical brain activity feel like something from the inside?\n\n**Idealism**: There is no physical substance. Everything is mental. Berkeley argued that 'to be is to be perceived.' This solves the interaction problem but seems to deny the reality of the physical world.\n\n**Dual-aspect theory**: Mind and body are two aspects of one underlying substance. Spinoza proposed this, and some modern thinkers find it promising.\n\nNone of these is fully satisfying. Descartes' dualism may be wrong, but the **problem** he identified -- how consciousness relates to the physical world -- is as urgent today as it was in 1641.",
       "choices": [
         {
           "text": "Reflect on the whole arc of the Meditations",
-          "target": "act6_arc"
+          "target": "exp_arc"
         },
         {
           "text": "Descartes' legacy is the questions, not the answers",
           "target": "end_questions"
+        },
+        {
+          "text": "See how Descartes changed everything that came after",
+          "target": "end_modern"
         }
       ],
       "is_ending": false,
@@ -954,7 +901,7 @@ const STORY_DATA = {
         "consciousness"
       ]
     },
-    "act6_arc": {
+    "exp_arc": {
       "title": "The Arc of the Meditations",
       "text": "Descartes puts down his pen. The six Meditations are complete. Theo sees the arc whole:\n\n**Meditation I**: Doubt everything. Senses deceive, dreams confuse, even an evil genius might manipulate our very thoughts.\n\n**Meditation II**: The cogito. I think, therefore I am. The one certainty that survives total doubt.\n\n**Meditation III**: God exists (causal argument). The idea of infinity requires an infinite cause.\n\n**Meditation IV**: Error comes from misusing free will, not from God's deception.\n\n**Meditation V**: God exists (ontological argument). Existence belongs to God's nature.\n\n**Meditation VI**: The physical world exists. Mind and body are distinct substances.\n\nFrom total destruction to total reconstruction. From doubt to certainty. It is one of the most ambitious intellectual projects in human history.",
       "choices": [
@@ -980,8 +927,79 @@ const STORY_DATA = {
       ],
       "tags": [
         "summary",
-        "convergence",
         "arc"
+      ]
+    },
+    "exp_elisabeth": {
+      "title": "The Princess's Question",
+      "text": "Theo has been reading ahead again. '*There's someone you should meet,*' he tells Descartes. '*Or rather, someone who will write to you. Princess **Elisabeth of Bohemia**.*'\n\nDescartes looks intrigued. '*A princess who does philosophy?*'\n\n'*More than that. She'll ask you the question you can't answer. In 1643, she'll write: \"How can the soul of a man, being only a thinking substance, determine the bodily spirits to perform voluntary actions?\" In other words: if the mind has no extension, no shape, no physical properties at all -- how does it push matter around? How does a thought move an arm?*'\n\nDescartes is quiet for a long time. '*That is... a very good question.*'\n\n'*You'll try to answer it,*' Theo says. '*You'll talk about the pineal gland, about the union of mind and body being a primitive notion. But Elisabeth won't be satisfied. And neither will anyone else for the next four centuries.*'\n\nElisabeth's correspondence with Descartes is one of the great philosophical exchanges in history. She saw the fatal flaw in dualism before almost anyone else -- and she pressed Descartes on it with relentless clarity.",
+      "choices": [
+        {
+          "text": "Elisabeth was right. The interaction problem dooms dualism.",
+          "target": "exp_alternatives"
+        },
+        {
+          "text": "But Descartes' system is still magnificent, even if flawed.",
+          "target": "exp_arc"
+        },
+        {
+          "text": "What about Elisabeth's own philosophical contributions?",
+          "target": "exp_elisabeth_legacy"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "dualism",
+      "vocabulary": [
+        {
+          "term": "Elisabeth of Bohemia",
+          "definition": "Princess and philosopher (1618-1680) whose correspondence with Descartes exposed the fatal weakness of mind-body dualism. One of history's great philosophical critics."
+        }
+      ],
+      "figures": [
+        "Princess Elisabeth of Bohemia",
+        "Rene Descartes"
+      ],
+      "tags": [
+        "elisabeth",
+        "interaction",
+        "dualism"
+      ]
+    },
+    "exp_elisabeth_legacy": {
+      "title": "The Philosopher Princess",
+      "text": "Elisabeth of Bohemia was no mere critic. Born in exile, educated in multiple languages, she engaged with the leading minds of her era on equal terms. Her letters to Descartes didn't just poke holes -- they pushed philosophy forward.\n\nShe pressed Descartes on the **passions of the soul** -- how emotions affect the body and the body affects emotions. Descartes eventually wrote an entire book (*The Passions of the Soul*, 1649) partly in response to her questions.\n\nShe also challenged Descartes on ethics: if the mind is so separate from the body, how can physical illness cause mental suffering? How can grief make us sick? The *lived experience* of being a mind-in-a-body seemed to contradict the neat dualism Descartes proposed.\n\nElisabeth saw what many later philosophers confirmed: the mind and body are not two separate substances that happen to interact. They are intertwined in ways that dualism cannot explain. The question is whether any theory *can* explain it.",
+      "choices": [
+        {
+          "text": "See what alternatives to dualism have been proposed",
+          "target": "exp_alternatives"
+        },
+        {
+          "text": "Step back and see the full arc of the Meditations",
+          "target": "exp_arc"
+        },
+        {
+          "text": "Descartes was wrong about dualism but right about the questions",
+          "target": "end_questions"
+        }
+      ],
+      "is_ending": false,
+      "ending_type": null,
+      "era": "dualism",
+      "vocabulary": [
+        {
+          "term": "passions of the soul",
+          "definition": "Descartes' 1649 treatise on emotions, partly inspired by Elisabeth's questions: how the body causes feelings in the mind and vice versa."
+        }
+      ],
+      "figures": [
+        "Princess Elisabeth of Bohemia",
+        "Rene Descartes"
+      ],
+      "tags": [
+        "elisabeth",
+        "passions",
+        "legacy"
       ]
     },
     "end_cogito_forever": {
@@ -1061,7 +1079,7 @@ const STORY_DATA = {
     },
     "end_dreamer": {
       "title": "The Dreamer Wakes",
-      "text": "Theo followed Descartes through doubt and discovery, through the cogito and the God proofs. He understood the architecture of the Meditations -- the way each piece depends on the pieces before it.\n\nBut somewhere in the middle, his attention drifted. The God proofs were hard to follow. The will-and-intellect distinction felt abstract. He grasped the doubt and the cogito but lost the thread of reconstruction.\n\nTheo wakes at his desk. He can explain the first two Meditations perfectly: the doubt, the dream argument, the evil genius, the cogito. But ask him about Meditations III through VI and he gets vague. '*Something about God and the body,*' he says.\n\nHe's not wrong. But he's incomplete. The power of the Meditations is not just the demolition (Meditation I) or the foundation (Meditation II) -- it's the reconstruction. Descartes didn't stop at '*I think.*' He rebuilt the world.",
+      "text": "Theo followed Descartes through doubt and discovery, through the cogito and beyond. He understood the architecture of the Meditations -- the way each piece depends on the pieces before it.\n\nBut somewhere in the middle, his attention drifted. The God proofs were hard to follow. The will-and-intellect distinction felt abstract. He grasped the doubt and the cogito but lost the thread of reconstruction.\n\nTheo wakes at his desk. He can explain the first two Meditations perfectly: the doubt, the dream argument, the evil genius, the cogito. But ask him about Meditations III through VI and he gets vague. '*Something about God and the body,*' he says.\n\nHe's not wrong. But he's incomplete. The power of the Meditations is not just the demolition (Meditation I) or the foundation (Meditation II) -- it's the reconstruction. Descartes didn't stop at '*I think.*' He rebuilt the world.",
       "choices": [],
       "is_ending": true,
       "ending_type": "good",
@@ -1101,243 +1119,263 @@ const STORY_DATA = {
   "edges": [
     [
       "start",
-      "act1_senses"
+      "spine_senses"
     ],
     [
-      "start",
-      "act1_dream"
+      "spine_senses",
+      "spine_math"
     ],
     [
-      "start",
-      "act1_descartes"
+      "spine_math",
+      "spine_evil_genius"
     ],
     [
-      "act1_senses",
-      "act1_math"
+      "spine_evil_genius",
+      "spine_vertigo"
     ],
     [
-      "act1_senses",
-      "act1_vertigo"
+      "spine_vertigo",
+      "spine_resist"
     ],
     [
-      "act1_dream",
-      "act1_math"
+      "spine_resist",
+      "spine_cogito_dawn"
     ],
     [
-      "act1_dream",
-      "act1_evil_genius"
-    ],
-    [
-      "act1_descartes",
-      "act1_senses"
-    ],
-    [
-      "act1_descartes",
-      "act1_vertigo"
-    ],
-    [
-      "act1_math",
-      "act1_evil_genius"
-    ],
-    [
-      "act1_math",
-      "act1_resist"
-    ],
-    [
-      "act1_vertigo",
-      "act1_evil_genius"
-    ],
-    [
-      "act1_vertigo",
-      "act1_resist"
-    ],
-    [
-      "act1_evil_genius",
-      "act2_despair"
-    ],
-    [
-      "act1_evil_genius",
-      "act2_cogito"
-    ],
-    [
-      "act1_evil_genius",
-      "act2_thinking"
-    ],
-    [
-      "act1_resist",
-      "act1_evil_genius"
-    ],
-    [
-      "act1_resist",
+      "spine_resist",
       "end_dogmatic"
     ],
     [
-      "act2_despair",
-      "act2_cogito"
+      "spine_cogito_dawn",
+      "spine_cogito"
     ],
     [
-      "act2_thinking",
-      "act2_cogito"
+      "spine_cogito",
+      "explosion_point"
     ],
     [
-      "act2_cogito",
-      "act2_thinking_thing"
+      "explosion_point",
+      "exp_wax"
     ],
     [
-      "act2_cogito",
-      "act2_wax"
+      "explosion_point",
+      "exp_challenge"
     ],
     [
-      "act2_cogito",
-      "act2_challenge"
+      "explosion_point",
+      "exp_god_need"
     ],
     [
-      "act2_thinking_thing",
-      "act2_wax"
+      "explosion_point",
+      "exp_elisabeth"
     ],
     [
-      "act2_thinking_thing",
-      "act3_god_need"
+      "exp_wax",
+      "exp_god_need"
     ],
     [
-      "act2_wax",
-      "act3_god_need"
+      "exp_wax",
+      "exp_challenge"
     ],
     [
-      "act2_wax",
-      "act2_challenge"
+      "exp_wax",
+      "exp_hume"
     ],
     [
-      "act2_challenge",
-      "act3_god_need"
+      "exp_challenge",
+      "exp_god_need"
     ],
     [
-      "act2_challenge",
-      "act2_hume"
+      "exp_challenge",
+      "exp_hume"
     ],
     [
-      "act2_hume",
-      "act3_god_need"
-    ],
-    [
-      "act3_god_need",
-      "act3_causal"
-    ],
-    [
-      "act3_god_need",
-      "act3_ontological"
-    ],
-    [
-      "act3_god_need",
-      "act3_without_god"
-    ],
-    [
-      "act3_causal",
-      "act3_ontological"
-    ],
-    [
-      "act3_causal",
-      "act3_no_deceiver"
-    ],
-    [
-      "act3_ontological",
-      "act3_kant_objection"
-    ],
-    [
-      "act3_ontological",
-      "act3_no_deceiver"
-    ],
-    [
-      "act3_without_god",
-      "act3_causal"
-    ],
-    [
-      "act3_without_god",
-      "act3_no_deceiver"
-    ],
-    [
-      "act3_without_god",
+      "exp_challenge",
       "end_dreamer"
     ],
     [
-      "act3_kant_objection",
-      "act3_no_deceiver"
+      "exp_hume",
+      "exp_god_need"
     ],
     [
-      "act3_kant_objection",
-      "act4_error"
-    ],
-    [
-      "act3_kant_objection",
+      "exp_hume",
       "end_dreamer"
     ],
     [
-      "act3_no_deceiver",
-      "act4_error"
+      "exp_god_need",
+      "exp_causal"
     ],
     [
-      "act3_no_deceiver",
-      "act5_dualism"
+      "exp_god_need",
+      "exp_ontological"
     ],
     [
-      "act4_error",
-      "act5_dualism"
+      "exp_god_need",
+      "exp_without_god"
     ],
     [
-      "act4_error",
-      "act4_free_will"
+      "exp_causal",
+      "exp_ontological"
     ],
     [
-      "act4_free_will",
-      "act5_dualism"
+      "exp_causal",
+      "exp_no_deceiver"
     ],
     [
-      "act5_dualism",
-      "act5_interaction"
+      "exp_causal",
+      "exp_dualism"
     ],
     [
-      "act5_dualism",
-      "act5_machine"
+      "exp_ontological",
+      "exp_kant_objection"
     ],
     [
-      "act5_dualism",
-      "act6_arc"
+      "exp_ontological",
+      "exp_no_deceiver"
     ],
     [
-      "act5_interaction",
-      "act6_arc"
+      "exp_ontological",
+      "end_dreamer"
     ],
     [
-      "act5_interaction",
-      "act5_alternatives"
+      "exp_kant_objection",
+      "exp_no_deceiver"
     ],
     [
-      "act5_machine",
-      "act6_arc"
+      "exp_kant_objection",
+      "exp_without_god"
     ],
     [
-      "act5_machine",
-      "act5_alternatives"
+      "exp_kant_objection",
+      "exp_dualism"
     ],
     [
-      "act5_alternatives",
-      "act6_arc"
+      "exp_without_god",
+      "exp_causal"
     ],
     [
-      "act5_alternatives",
+      "exp_without_god",
+      "exp_no_deceiver"
+    ],
+    [
+      "exp_without_god",
+      "exp_dualism"
+    ],
+    [
+      "exp_without_god",
+      "end_dreamer"
+    ],
+    [
+      "exp_no_deceiver",
+      "exp_error"
+    ],
+    [
+      "exp_no_deceiver",
+      "exp_dualism"
+    ],
+    [
+      "exp_error",
+      "exp_dualism"
+    ],
+    [
+      "exp_error",
+      "exp_free_will"
+    ],
+    [
+      "exp_free_will",
+      "exp_dualism"
+    ],
+    [
+      "exp_free_will",
       "end_questions"
     ],
     [
-      "act6_arc",
+      "exp_dualism",
+      "exp_interaction"
+    ],
+    [
+      "exp_dualism",
+      "exp_machine"
+    ],
+    [
+      "exp_dualism",
+      "exp_arc"
+    ],
+    [
+      "exp_dualism",
+      "exp_alternatives"
+    ],
+    [
+      "exp_interaction",
+      "exp_arc"
+    ],
+    [
+      "exp_interaction",
+      "exp_alternatives"
+    ],
+    [
+      "exp_interaction",
+      "exp_elisabeth"
+    ],
+    [
+      "exp_machine",
+      "exp_arc"
+    ],
+    [
+      "exp_machine",
+      "exp_alternatives"
+    ],
+    [
+      "exp_machine",
+      "exp_elisabeth"
+    ],
+    [
+      "exp_alternatives",
+      "exp_arc"
+    ],
+    [
+      "exp_alternatives",
+      "end_questions"
+    ],
+    [
+      "exp_alternatives",
+      "end_modern"
+    ],
+    [
+      "exp_arc",
       "end_cogito_forever"
     ],
     [
-      "act6_arc",
+      "exp_arc",
       "end_questions"
     ],
     [
-      "act6_arc",
+      "exp_arc",
       "end_modern"
+    ],
+    [
+      "exp_elisabeth",
+      "exp_alternatives"
+    ],
+    [
+      "exp_elisabeth",
+      "exp_arc"
+    ],
+    [
+      "exp_elisabeth",
+      "exp_elisabeth_legacy"
+    ],
+    [
+      "exp_elisabeth_legacy",
+      "exp_alternatives"
+    ],
+    [
+      "exp_elisabeth_legacy",
+      "exp_arc"
+    ],
+    [
+      "exp_elisabeth_legacy",
+      "end_questions"
     ]
   ]
 };
