@@ -183,7 +183,7 @@ function renderCoursePage(data) {
         }
         if (data.cyoa) {
             data.cyoa.forEach(function(cyoa) {
-                html += '<a href="../Interactives/' + cyoa.id + '/index.html" target="_blank" class="course-btn cyoa">&#128218; ' + escapeHtml(cyoa.title || 'Adventure') + '</a>';
+                html += '<a href="../Interactives/' + cyoa.id + '/index.html?course=' + encodeURIComponent(data.project_id) + '" class="course-btn cyoa">&#128218; ' + escapeHtml(cyoa.title || 'Adventure') + '</a>';
             });
         }
         actionsEl.innerHTML = html;

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Theo and the Fall of the Republic — story engine
+   CYOA Story Engine — shared across all Thinker's Labyrinth adventures
    ═══════════════════════════════════════════════════════════════════════════ */
 
 if (typeof STORY_DATA === "undefined") {
@@ -19,10 +19,10 @@ const state = {
   current:  null,
   history:  [],
   step:     0,
-  vocabSeen: new Set(),  // track vocabulary terms encountered
+  vocabSeen: new Set(),
 };
 
-// ── Ending metadata ───────────────────────────────────────────────────────
+// ── Data-driven labels (read from STORY_DATA, with fallbacks) ────────────
 
 const ENDING_META = {
   best:    { icon: "\u2605", label: "Best Ending"    },
@@ -31,21 +31,31 @@ const ENDING_META = {
   bad:     { icon: "\u2715", label: "Bad Ending"     },
 };
 
-const ERA_LABELS = {
-  frame:         "Theo's Journey",
-  gracchi:       "The Gracchi Era (133\u2013121 BC)",
-  marius_sulla:  "Marius & Sulla (107\u201378 BC)",
-  caesar_rise:   "Caesar's Rise (60\u201349 BC)",
-  ides:          "The Ides of March (44 BC)",
-  triumvirate:   "The Triumvirate (43\u201331 BC)",
-  augustus:       "Augustus (31\u201327 BC)",
+// ERA_LABELS: prefer story data, fall back to generic
+const ERA_LABELS = STORY_DATA.era_labels || {
+  frame: "Theo's Journey",
 };
 
-// ── Text processing ───────────────────────────────────────────────────────
+// ── Utilities ────────────────────────────────────────────────────────────
 
-/**
- * Convert story text with **bold** and *italic* markdown to HTML paragraphs.
- */
+/** Compute edge count from nodes (if STORY_DATA.edges is absent). */
+function getEdgeCount() {
+  if (STORY_DATA.edges) return STORY_DATA.edges.length;
+  let count = 0;
+  Object.values(STORY_DATA.nodes).forEach(n => {
+    count += (n.choices || []).length;
+  });
+  return count;
+}
+
+/** Get course ID from ?course= URL parameter (for back button). */
+function getCourseParam() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("course");
+}
+
+// ── Text processing ──────────────────────────────────────────────────────
+
 function processText(text) {
   return text
     .split("\n\n")
@@ -59,23 +69,18 @@ function processText(text) {
     .join("\n");
 }
 
-/**
- * Build footnotes HTML from vocabulary array.
- */
 function buildFootnotes(vocabulary) {
   if (!vocabulary || vocabulary.length === 0) return "";
-
   const items = vocabulary.map(v => {
     state.vocabSeen.add(v.term);
     return `<div class="footnote-item">
       <span class="footnote-term">${v.term}:</span> ${v.definition}
     </div>`;
   }).join("\n");
-
   return `<h3>Vocabulary</h3>\n${items}`;
 }
 
-// ── Rendering ─────────────────────────────────────────────────────────────
+// ── Rendering ────────────────────────────────────────────────────────────
 
 function renderNode(nodeId, animate) {
   const node = STORY_DATA.nodes[nodeId];
@@ -103,7 +108,7 @@ function renderNode(nodeId, animate) {
     // Title
     document.getElementById("story-title").textContent = node.title;
 
-    // Prose (convert markdown bold/italic to HTML)
+    // Prose
     document.getElementById("story-text").innerHTML = processText(node.text);
 
     // Footnotes
@@ -133,7 +138,7 @@ function renderNode(nodeId, animate) {
     // Breadcrumb
     renderPath();
 
-    // Scroll to top of card
+    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -155,7 +160,7 @@ function renderNode(nodeId, animate) {
   }
 }
 
-// ── Breadcrumb ────────────────────────────────────────────────────────────
+// ── Breadcrumb ───────────────────────────────────────────────────────────
 
 function renderPath() {
   const nav = document.getElementById("path-nav");
@@ -184,7 +189,7 @@ function renderPath() {
   nav.innerHTML = parts.join("");
 }
 
-// ── Navigation ────────────────────────────────────────────────────────────
+// ── Navigation ───────────────────────────────────────────────────────────
 
 function makeChoice(targetId) {
   state.history.push(state.current);
@@ -201,25 +206,23 @@ function restart() {
   renderNode(state.current, false);
 }
 
-// ── Graph Stats Modal ─────────────────────────────────────────────────────
+// ── Graph Stats Modal ────────────────────────────────────────────────────
 
 function showGraphStats() {
   const nodes = STORY_DATA.nodes;
   const nodeCount = Object.keys(nodes).length;
-  const edgeCount = STORY_DATA.edges.length;
+  const edgeCount = getEdgeCount();
   const endings = Object.entries(nodes).filter(([,n]) => n.is_ending);
   const endingsByType = {};
   endings.forEach(([id, n]) => {
     endingsByType[n.ending_type] = (endingsByType[n.ending_type] || 0) + 1;
   });
 
-  // Count total vocab
   let totalVocab = new Set();
   Object.values(nodes).forEach(n => {
     (n.vocabulary || []).forEach(v => totalVocab.add(v.term));
   });
 
-  // Era distribution
   const eras = {};
   Object.values(nodes).forEach(n => {
     const era = n.era || "unknown";
@@ -261,9 +264,31 @@ function showGraphStats() {
   document.body.appendChild(modal);
 }
 
-// ── Boot ──────────────────────────────────────────────────────────────────
+// ── Boot ─────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Populate header from STORY_DATA.meta if available
+  const meta = STORY_DATA.meta || {};
+  if (meta.title) {
+    document.title = meta.title;
+    const titleEl = document.querySelector(".header-title");
+    if (titleEl) titleEl.textContent = meta.title;
+  }
+  if (meta.icon) {
+    const iconEl = document.querySelector(".header-icon");
+    if (iconEl) iconEl.textContent = meta.icon;
+  }
+
+  // Back button: if ?course= is present, show a back link
+  const courseId = getCourseParam();
+  if (courseId) {
+    const backBtn = document.getElementById("back-btn");
+    if (backBtn) {
+      backBtn.href = `../../courses/${courseId}.html`;
+      backBtn.hidden = false;
+    }
+  }
+
   document.getElementById("restart-btn").addEventListener("click", restart);
   document.getElementById("graph-btn").addEventListener("click", showGraphStats);
   state.current = STORY_DATA.start_node;
