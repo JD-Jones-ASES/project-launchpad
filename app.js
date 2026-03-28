@@ -270,7 +270,7 @@ function renderColumnCell(col, section, pid) {
     }
     if (col === 'info') {
         if (section.has_infographic) {
-            return '<td class="quiz-infographic"><a href="../infographics/' + pid + '/' + sk + '.png" class="infographic-link" target="_blank">Info</a></td>';
+            return '<td class="quiz-infographic"><button class="infographic-btn" onclick="showInfographic(\'' + pid + '\', \'' + sk + '\')">Info</button></td>';
         }
         return '<td class="quiz-infographic"><span class="guide-pending">--</span></td>';
     }
@@ -321,10 +321,54 @@ function closeSonnet() {
     if (overlay) overlay.classList.remove('active');
 }
 
-// Escape key closes sonnet
+// Escape key closes modals
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeSonnet();
+    if (e.key === 'Escape') {
+        closeSonnet();
+        closeInfographic();
+    }
 });
+
+
+/* ═══════════════════════════════════════════════════════════
+   Infographic Popup (all course pages with infographics)
+   ═══════════════════════════════════════════════════════════ */
+
+function showInfographic(pid, sk) {
+    var overlay = document.getElementById('infographic-overlay');
+    if (!overlay) return;
+    var img = document.getElementById('infographic-img');
+    var title = document.getElementById('infographic-title');
+    var loader = document.getElementById('infographic-loader');
+    var link = document.getElementById('infographic-fulllink');
+    var src = '../infographics/' + pid + '/' + sk + '.png';
+
+    // Show modal with loader, lazy-load image
+    title.textContent = sk.replace('ch', 'Ch ').replace('_s', ' \u00B7 Sec ');
+    img.style.display = 'none';
+    loader.style.display = 'block';
+    link.href = src;
+
+    img.onload = function() {
+        loader.style.display = 'none';
+        img.style.display = 'block';
+    };
+    img.onerror = function() {
+        loader.textContent = 'Image not found';
+    };
+    img.src = src;
+    overlay.classList.add('active');
+}
+
+function closeInfographic() {
+    var overlay = document.getElementById('infographic-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        // Clear src to stop loading if still in progress
+        var img = document.getElementById('infographic-img');
+        if (img) img.src = '';
+    }
+}
 
 
 /* ═══════════════════════════════════════════════════════════
