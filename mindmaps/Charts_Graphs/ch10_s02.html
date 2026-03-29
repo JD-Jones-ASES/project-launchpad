@@ -112,6 +112,87 @@
             padding: 0.1rem 0.35rem; margin-left: 0.4rem;
             vertical-align: middle;
         }
+        /* Cross-link badges on nodes */
+        .mm-link-badge {
+            display: inline-block; font-size: 0.65rem;
+            background: rgba(52,152,219,0.15); color: #3498db;
+            border-radius: 4px; padding: 0.1rem 0.35rem;
+            margin-left: 0.4rem; cursor: pointer;
+            vertical-align: middle; transition: all 0.2s;
+        }
+        .mm-link-badge:hover { background: rgba(52,152,219,0.3); }
+        /* Link popover */
+        .mm-link-popover {
+            display: none; position: absolute; z-index: 100;
+            background: var(--card-background); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 0.75rem; min-width: 260px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 0.85rem;
+            max-width: 360px;
+        }
+        .mm-link-popover.visible { display: block; }
+        .mm-link-popover a {
+            color: var(--secondary-color); text-decoration: none;
+            display: block; padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .mm-link-popover a:last-child { border-bottom: none; }
+        .mm-link-popover a:hover { color: var(--primary-color); }
+        .mm-link-type {
+            display: inline-block; font-size: 0.7rem; font-weight: 600;
+            padding: 0.1rem 0.4rem; border-radius: 3px; margin-right: 0.3rem;
+        }
+        .mm-type-contrast { background: rgba(231,76,60,0.15); color: #e74c3c; }
+        .mm-type-complement { background: rgba(39,174,96,0.15); color: #27ae60; }
+        .mm-type-prerequisite { background: rgba(52,152,219,0.15); color: #3498db; }
+        .mm-type-example { background: rgba(149,165,166,0.15); color: #95a5a6; }
+        /* Cross-links panel below tree */
+        .mm-links-panel {
+            margin-top: 2rem; padding-top: 1.5rem;
+            border-top: 2px solid var(--border-color);
+        }
+        .mm-links-panel h2 {
+            font-family: 'Cinzel', serif; color: var(--primary-color);
+            font-size: 1.2rem; margin-bottom: 1rem; text-align: center;
+        }
+        .mm-links-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.75rem;
+        }
+        .mm-link-card {
+            background: rgba(0,0,0,0.15); border-radius: 8px;
+            padding: 0.75rem 1rem; border-left: 3px solid #95a5a6;
+            cursor: pointer; transition: all 0.2s;
+            text-decoration: none; display: block; color: inherit;
+        }
+        .mm-link-card:hover { background: rgba(218,165,32,0.08); transform: translateY(-1px); }
+        .mm-link-card.type-contrast { border-left-color: #e74c3c; }
+        .mm-link-card.type-complement { border-left-color: #27ae60; }
+        .mm-link-card.type-prerequisite { border-left-color: #3498db; }
+        .mm-link-card.type-example { border-left-color: #95a5a6; }
+        .mm-link-card .mm-link-card-type {
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 600;
+            letter-spacing: 0.5px; margin-bottom: 0.25rem;
+        }
+        .mm-link-card.type-contrast .mm-link-card-type { color: #e74c3c; }
+        .mm-link-card.type-complement .mm-link-card-type { color: #27ae60; }
+        .mm-link-card.type-prerequisite .mm-link-card-type { color: #3498db; }
+        .mm-link-card.type-example .mm-link-card-type { color: #95a5a6; }
+        .mm-link-card .mm-link-card-label {
+            font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.3rem;
+        }
+        .mm-link-card .mm-link-card-target {
+            font-size: 0.8rem; color: var(--secondary-color);
+        }
+        /* Highlight animation for incoming links */
+        @keyframes mm-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(218,165,32,0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(218,165,32,0); }
+            100% { box-shadow: 0 0 0 0 rgba(218,165,32,0); }
+        }
+        .mm-highlight {
+            animation: mm-pulse 1.5s ease-in-out 3;
+            background: rgba(218,165,32,0.15) !important;
+            border-color: var(--secondary-color) !important;
+        }
     </style>
 </head>
 <body>
@@ -376,8 +457,47 @@
         return total;
     }
 
-    function buildTree(node, depth) {
+    /* Close any open popover when clicking elsewhere */
+    var activePopover = null;
+    document.addEventListener('click', function(e) {
+        if (activePopover && !activePopover.contains(e.target) && !e.target.classList.contains('mm-link-badge')) {
+            activePopover.classList.remove('visible');
+            activePopover = null;
+        }
+    });
+
+    function showLinkPopover(badge, links, pid) {
+        /* Close any existing popover */
+        if (activePopover) activePopover.classList.remove('visible');
+        var existing = badge.parentNode.querySelector('.mm-link-popover');
+        if (existing) {
+            existing.classList.toggle('visible');
+            activePopover = existing.classList.contains('visible') ? existing : null;
+            return;
+        }
+        var pop = document.createElement('div');
+        pop.className = 'mm-link-popover visible';
+        links.forEach(function(lnk) {
+            var a = document.createElement('a');
+            var targetParts = lnk.target.split('#');
+            var targetSection = targetParts[0];
+            var targetId = targetParts[1] || '';
+            a.href = targetSection + '.html' + (targetId ? '#' + targetId : '');
+            var typeSpan = document.createElement('span');
+            typeSpan.className = 'mm-link-type mm-type-' + (lnk.type || 'example');
+            typeSpan.textContent = lnk.type || 'link';
+            a.appendChild(typeSpan);
+            a.appendChild(document.createTextNode(' ' + lnk.label));
+            pop.appendChild(a);
+        });
+        badge.parentNode.style.position = 'relative';
+        badge.parentNode.appendChild(pop);
+        activePopover = pop;
+    }
+
+    function buildTree(node, depth, pid) {
         var li = document.createElement('li');
+        if (node.id) li.id = node.id;
         var span = document.createElement('span');
         span.className = 'mm-node mm-depth-' + Math.min(depth, 3);
         var hasKids = node.children && node.children.length > 0;
@@ -397,6 +517,19 @@
                 badge.textContent = count;
                 span.appendChild(badge);
             }
+            /* Show link badge if node has cross-links */
+            if (node.links && node.links.length > 0) {
+                var linkBadge = document.createElement('span');
+                linkBadge.className = 'mm-link-badge';
+                linkBadge.textContent = '\u2197 ' + node.links.length;
+                linkBadge.title = node.links.length + ' connection(s)';
+                var nodeLinks = node.links;
+                linkBadge.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showLinkPopover(linkBadge, nodeLinks, pid);
+                });
+                span.appendChild(linkBadge);
+            }
             li.addEventListener('click', function(e) {
                 e.stopPropagation();
                 li.classList.toggle('mm-collapsed');
@@ -404,14 +537,82 @@
         } else {
             span.classList.add('mm-leaf');
             renderMath(node.name, span);
+            /* Links on leaf nodes too */
+            if (node.links && node.links.length > 0) {
+                var linkBadge = document.createElement('span');
+                linkBadge.className = 'mm-link-badge';
+                linkBadge.textContent = '\u2197 ' + node.links.length;
+                var nodeLinks = node.links;
+                linkBadge.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showLinkPopover(linkBadge, nodeLinks, pid);
+                });
+                span.appendChild(linkBadge);
+            }
         }
         li.appendChild(span);
         if (hasKids) {
             var ul = document.createElement('ul');
-            node.children.forEach(function(child) { ul.appendChild(buildTree(child, depth + 1)); });
+            node.children.forEach(function(child) { ul.appendChild(buildTree(child, depth + 1, pid)); });
             li.appendChild(ul);
         }
         return li;
+    }
+
+    function renderLinksPanel(data) {
+        if (!data.cross_links || data.cross_links.length === 0) return;
+        var container = document.querySelector('.mm-container');
+        var panel = document.createElement('div');
+        panel.className = 'mm-links-panel';
+        var h2 = document.createElement('h2');
+        h2.textContent = 'Connections to Other Chapters';
+        panel.appendChild(h2);
+        var grid = document.createElement('div');
+        grid.className = 'mm-links-grid';
+        data.cross_links.forEach(function(cl) {
+            var card = document.createElement('a');
+            var targetParts = cl.to.split('#');
+            var targetSection = targetParts[0];
+            var targetId = targetParts[1] || '';
+            card.href = targetSection + '.html' + (targetId ? '#' + targetId : '');
+            card.className = 'mm-link-card type-' + (cl.type || 'example');
+            var typeDiv = document.createElement('div');
+            typeDiv.className = 'mm-link-card-type';
+            typeDiv.textContent = cl.type || 'link';
+            card.appendChild(typeDiv);
+            var labelDiv = document.createElement('div');
+            labelDiv.className = 'mm-link-card-label';
+            labelDiv.textContent = cl.label;
+            card.appendChild(labelDiv);
+            var targetDiv = document.createElement('div');
+            targetDiv.className = 'mm-link-card-target';
+            targetDiv.textContent = '\u2192 ' + targetSection.replace('ch', 'Chapter ');
+            card.appendChild(targetDiv);
+            grid.appendChild(card);
+        });
+        panel.appendChild(grid);
+        container.appendChild(panel);
+    }
+
+    function highlightTarget() {
+        var hash = location.hash;
+        if (!hash || hash.length < 2) return;
+        var targetId = hash.substring(1);
+        var targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+        /* Expand all ancestors so target is visible */
+        var parent = targetEl.parentElement;
+        while (parent) {
+            if (parent.tagName === 'LI' && parent.classList.contains('mm-collapsed')) {
+                parent.classList.remove('mm-collapsed');
+            }
+            parent = parent.parentElement;
+        }
+        /* Highlight the target node */
+        var nodeSpan = targetEl.querySelector('.mm-node');
+        if (nodeSpan) nodeSpan.classList.add('mm-highlight');
+        /* Scroll into view */
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function expandAll() {
@@ -425,15 +626,18 @@
         });
     }
 
+    var pid = 'Charts_Graphs';
     var root = document.getElementById('mindmap-tree');
     var h1 = document.createElement('h1');
     h1.textContent = mmData.name;
     root.appendChild(h1);
     if (mmData.children) {
         var ul = document.createElement('ul');
-        mmData.children.forEach(function(child) { ul.appendChild(buildTree(child, 1)); });
+        mmData.children.forEach(function(child) { ul.appendChild(buildTree(child, 1, pid)); });
         root.appendChild(ul);
     }
+    renderLinksPanel(mmData);
+    highlightTarget();
     </script>
 </body>
 </html>
