@@ -170,13 +170,19 @@ function renderCoursePage(data) {
     if (actionsEl) {
         var html = '';
         if (data.textbook_url) {
-            html += '<a href="../' + data.textbook_url + '" class="course-btn read" download>&#128214; Textbook</a>';
+            var tbHref = data.textbook_url.indexOf('://') !== -1 ? data.textbook_url : '../' + data.textbook_url;
+            var tbTarget = data.textbook_url.indexOf('://') !== -1 ? ' target="_blank"' : ' download';
+            html += '<a href="' + tbHref + '" class="course-btn read"' + tbTarget + '>&#128214; Textbook</a>';
         }
         if (data.teacher_zip) {
-            html += '<a href="../' + data.teacher_zip + '" class="course-btn teacher" download>&#128218; Teacher Edition</a>';
+            var tzHref = data.teacher_zip.indexOf('://') !== -1 ? data.teacher_zip : '../' + data.teacher_zip;
+            var tzTarget = data.teacher_zip.indexOf('://') !== -1 ? ' target="_blank"' : ' download';
+            html += '<a href="' + tzHref + '" class="course-btn teacher"' + tzTarget + '>&#128218; Teacher Edition</a>';
         }
         if (data.workbook_zip) {
-            html += '<a href="../' + data.workbook_zip + '" class="course-btn workbook" download>&#128221; Workbook</a>';
+            var wbHref = data.workbook_zip.indexOf('://') !== -1 ? data.workbook_zip : '../' + data.workbook_zip;
+            var wbTarget = data.workbook_zip.indexOf('://') !== -1 ? ' target="_blank"' : ' download';
+            html += '<a href="' + wbHref + '" class="course-btn workbook"' + wbTarget + '>&#128221; Workbook</a>';
         }
         if (data.playlist_url) {
             html += '<a href="' + data.playlist_url + '" target="_blank" class="course-btn watch">&#127909; Playlist</a>';
@@ -270,7 +276,11 @@ function renderColumnCell(col, section, pid) {
     }
     if (col === 'info') {
         if (section.has_infographic) {
-            return '<td class="quiz-infographic"><button class="infographic-btn" onclick="showInfographic(\'' + pid + '\', \'' + sk + '\')">Info</button></td>';
+            var infoArgs = "'" + pid + "', '" + sk + "'";
+            if (section.infographic_url) {
+                infoArgs += ", '" + section.infographic_url + "'";
+            }
+            return '<td class="quiz-infographic"><button class="infographic-btn" onclick="showInfographic(' + infoArgs + ')">Info</button></td>';
         }
         return '<td class="quiz-infographic"><span class="guide-pending">--</span></td>';
     }
@@ -364,14 +374,14 @@ function closeVideo() {
    Infographic Popup (all course pages with infographics)
    ═══════════════════════════════════════════════════════════ */
 
-function showInfographic(pid, sk) {
+function showInfographic(pid, sk, driveUrl) {
     var overlay = document.getElementById('infographic-overlay');
     if (!overlay) return;
     var img = document.getElementById('infographic-img');
     var title = document.getElementById('infographic-title');
     var loader = document.getElementById('infographic-loader');
     var link = document.getElementById('infographic-fulllink');
-    var src = '../infographics/' + pid + '/' + sk + '.png';
+    var src = driveUrl || '../infographics/' + pid + '/' + sk + '.png';
 
     // Show modal with loader, lazy-load image
     title.textContent = sk.replace('ch', 'Ch ').replace('_s', ' \u00B7 Sec ');
