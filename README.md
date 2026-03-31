@@ -79,6 +79,6 @@ All content is freely available for use, remix, and redistribution with attribut
 
 ## Investment
 
-This project seeks partners in AI or venture capital who see the opportunity in AI-accelerated educational publishing. The content is free. The capability is the product. [Get in touch via GitHub Issues](https://github.com/JD-Jones-ASES/project-launchpad/issues).
+This project seeks partners in AI who see the opportunity in AI-accelerated educational publishing. The content is free. The capability is the product. Get it touch: jd-jones@curriculabydesign.com
 
 Copyright 2025-2026 JD Jones
