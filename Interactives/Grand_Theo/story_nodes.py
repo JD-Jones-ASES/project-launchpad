@@ -44,7 +44,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                               '**Impermanence** is supposed to be loss. He was taught that, somewhere, by the '
                               'accumulation of everything he feared -- that the things you love end, that summer '
                               "becomes autumn becomes the bare black branch. But standing at the valley's entrance "
-                              'with the yew staff or the ash staff in his hand and Mt. Nebo rising above, he feels '
+                              '{{#staff}}with the {{staff}} staff in his hand {{/staff}}{{^staff}}with empty hands {{/staff}}and Mt. Nebo rising above, he feels '
                               'something that is not grief and not denial but something more like **equanimity**: the '
                               'ability to hold all the seasons at once, to say yes to the turning.\n'
                               '\n'
@@ -53,7 +53,9 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                               'All things become what comes after.\n'
                               '\n'
                               'He is seventeen years old and standing at the entrance of a valley that contains every '
-                              'season simultaneously, and the road ahead bends north and then east, and he does not '
+                              'season simultaneously, {{#staff}}the {{staff}} staff {{#staff_cracked}}(cracked but still '
+                              'his) {{/staff_cracked}}in his hand, {{/staff}}{{^staff}}his hands empty but his eyes '
+                              'open, {{/staff}}and the road ahead bends north and then east, and he does not '
                               'know what is there.\n'
                               '\n'
                               'He walks toward it.',
@@ -188,8 +190,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                            'something almost like affection. *That one tried,* he thinks. *That one failed in ways '
                            'that mattered and some that did not. That one kept walking.*\n'
                            '\n'
-                           "He stays at the pool's edge until the light shifts. The pouch of Hafthor is warm at his "
-                           'belt. The ash staff stands planted beside him, and he holds it the way you hold the hand '
+                           "He stays at the pool's edge until the light shifts. {{#has_pouch}}The pouch of Hafthor is warm at his "
+                           'belt. {{/has_pouch}}The {{staff}} staff stands planted beside him, and he holds it the way you hold the hand '
                            'of someone you trust.\n'
                            '\n'
                            'When he rises, the water ripples once, as if it has been waiting for exactly this -- for '
@@ -248,10 +250,11 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                                           'causes, their consequences, their cost.',
                                             'term': 'reckoning'}]},
     'a12_h_bargain': {   'choices': [   {   'target': 'a13_transform',
-                                            'text': 'Refuse the trade -- the pouch (or staff) is worth more than '
+                                            'text': 'Refuse the trade -- the {{#has_pouch}}pouch{{/has_pouch}}{{^has_pouch}}staff{{/has_pouch}} is worth more than '
                                                     "Mack's perspective."},
                                         {   'target': 'a13_cling',
-                                            'text': 'Make the trade. Give Mack what he asked for.'}],
+                                            'text': 'Make the trade. Give Mack what he asked for.',
+                                            'set_flags': {'traded_to_mack': True}}],
                          'ending_type': None,
                          'era': 'ravines',
                          'figures': ['Mack'],
@@ -296,9 +299,70 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                          'vocabulary': [   {   'definition': 'A readiness to notice and understand things clearly; '
                                                              'sharp, clear insight.',
                                                'term': 'perspicacity'}]},
+    'a12_h_question': {   'choices': [   {   'target': 'a13_transform',
+                                             'text': 'Sit with the question. Let it settle. The mountain is patient '
+                                                     'enough for one honest answer.'},
+                                         {   'target': 'a13_cling',
+                                             'text': 'Give Mack an answer -- quickly, before the silence swallows you.'}],
+                          'ending_type': None,
+                          'era': 'ravines',
+                          'figures': ['Mack'],
+                          'is_ending': False,
+                          'tags': ['horizontal', 'mack', 'question', 'pool', 'trickster'],
+                          'text': 'Mack turns the pocket watch over once in his fingers -- forward, then backward, then '
+                                  'forward again -- and sets it face-down on the stone.\n'
+                                  '\n'
+                                  '*"Good,"* he says. *"The question first. Most people choose the riddle first because '
+                                  "riddles have answers, and a riddle with the wrong answer is still a riddle. A "
+                                  'question is different. A question you answer wrong stays wrong."*\n'
+                                  '\n'
+                                  'He looks at Theo for the first time since Theo sat down. The eyes are dark and quick, '
+                                  'and there is nothing unkind in them and nothing especially kind either -- the look of '
+                                  'someone who is genuinely curious about what you will do next.\n'
+                                  '\n'
+                                  '*"Here it is: What do you carry that does not belong to you?"*\n'
+                                  '\n'
+                                  "The pool is very still. In it, Mack's reflection holds the broad lion-brow, then "
+                                  'the narrow fox-face, then something between -- and it is watching Theo the way the '
+                                  'real Mack is watching him: with interest, without expectation.\n'
+                                  '\n'
+                                  "Theo's first thought is: nothing. His second thought is: everything. His third "
+                                  'thought is longer and harder to name.\n'
+                                  '\n'
+                                  'There is the **inherited burden** -- the weight that was placed on him before he '
+                                  'could choose whether to accept it. The way Brok spoke to him. The way the Temple ran. '
+                                  'The version of himself he learned to perform for rooms that required a certain kind '
+                                  'of person. None of these were his idea. All of them are in his pack right now.\n'
+                                  '\n'
+                                  'And then there is the grief. The grief he has been carrying in the name of people '
+                                  "who are not here. He holds their sadness for them, has been holding it so long he "
+                                  'cannot remember which sorrows are actually his.\n'
+                                  '\n'
+                                  '*"Take your time,"* Mack says, and he means it. He resettles on the rock, '
+                                  'unhurried, like a man prepared to wait through weather. *"Most people answer fast '
+                                  "because they're afraid the slow answer will be worse. It usually isn't. It's usually "
+                                  'just truer."*\n'
+                                  '\n'
+                                  "The **proxy** weight of other people's fear, other people's ambition, other "
+                                  "people's stories about who he is and what he is for -- this is what Theo has been "
+                                  'carrying, he realizes. Not all of it unwillingly. Some of it he picked up because it '
+                                  "felt like love, and some of it because he didn't know yet that he was allowed to "
+                                  'put it down. Both are true. Neither cancels the other.\n'
+                                  '\n'
+                                  'Mack does not press him. The watch lies face-down on the stone. The pool holds its '
+                                  'shifting face and waits.',
+                          'title': "Mack's Question",
+                          'vocabulary': [   {   'definition': 'A weight, responsibility, or expectation passed down from '
+                                                              'others -- family, culture, institution -- before one had '
+                                                              'the knowledge or standing to accept or refuse it.',
+                                                'term': 'inherited burden'},
+                                            {   'definition': 'Acting or feeling on behalf of another; carrying '
+                                                              'something -- emotion, expectation, or identity -- that '
+                                                              'properly belongs to someone else.',
+                                                'term': 'proxy'}]},
     'a12_pool': {   'choices': [   {'target': 'a13_maiden', 'text': 'Ask about the riddle first.'},
                                    {'target': 'a12_h_bargain', 'text': 'Ask about the trade first.'},
-                                   {   'target': 'a13_cling',
+                                   {   'target': 'a12_h_question',
                                        'text': 'Ask about the question first -- the one Mack said he had.'}],
                     'ending_type': None,
                     'era': 'ravines',
@@ -325,8 +389,9 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                             'Theo sits.\n'
                             '\n'
                             '*"I\'m Mack,"* the man says, still watching his shifting reflection. *"And you\'re the '
-                            "one Brok sent home with the pouch. I can smell Hafthor's work from here -- good pouch. "
-                            'Older than it looks."*\n'
+                            "one Brok {{#has_pouch}}sent home with the pouch. I can smell Hafthor's work from here -- good pouch. "
+                            'Older than it looks.{{/has_pouch}}{{^has_pouch}}sent out from the Temple. I can tell from the way you walk -- '
+                            "straight back, careful eyes. Brok's training.{{/has_pouch}}\"*\n"
                             '\n'
                             'He snaps the pocket watch shut.\n'
                             '\n'
@@ -635,9 +700,9 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              '*"You look like someone who\'s been trying to choose between fire and water,"* she says. '
                              '*"As if they couldn\'t both be true at once."*\n'
                              '\n'
-                             'Theo looks at his cup. The pouch at his belt gives off a warmth that is different from '
+                             'Theo looks at his cup. {{#has_pouch}}The pouch at his belt gives off a warmth that is different from '
                              "the room's warmth -- older, more precise, like the heat of embers that have been banked "
-                             'for the night.\n'
+                             'for the night.{{/has_pouch}}\n'
                              '\n'
                              '*"Brok taught you something about duty,"* she says. Not a question. *"And duty is fire '
                              "-- it burns clean when it's in proportion and burns everything when it's out of "
@@ -650,10 +715,10 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              'on its own -- fire with no memory burns indiscriminately, water with no direction drowns '
                              'the very thing it was meant to nourish."*\n'
                              '\n'
-                             'The pouch glows. He puts his hand on it without thinking.\n'
+                             '{{#has_pouch}}The pouch glows. He puts his hand on it without thinking.\n'
                              '\n'
                              '*"That\'s Hafthor\'s work,"* she says, glancing at it. *"He always knew how to hold two '
-                             'things at once without breaking either of them."* She pauses. *"You\'re going higher. '
+                             'things at once without breaking either of them."*{{/has_pouch}} She pauses. *"You\'re going higher. '
                              'The mountain will ask you again -- fire or water. The answer is neither. The answer is '
                              'the cup."*\n'
                              '\n'
@@ -1158,8 +1223,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                '\n'
                                'Something shifts inside your chest.\n'
                                '\n'
-                               'It is not a breaking, exactly. Or not the kind of breaking you have dreaded. The yew '
-                               "staff hums faintly in your palm, and Hafthor's pouch rests warm at your hip, and you "
+                               'It is not a breaking, exactly. Or not the kind of breaking you have dreaded. The {{staff}} '
+                               "staff hums faintly in your palm, {{#has_pouch}}and Hafthor's pouch rests warm at your hip, {{/has_pouch}}and you "
                                'understand -- standing here on the **threshold** -- that everything you have carried '
                                'to this point has been preparation for a threshold you could not have recognized until '
                                'you stood before it.\n'
@@ -1314,17 +1379,24 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                     'figures': ['Bartop'],
                     'is_ending': False,
                     'tags': ['light_path', 'starstone', 'bartop', 'grotto'],
-                    'text': 'Bartop has been here before. Twelve times in each direction across the Seven Corridors, '
+                    'text': '{{#has_met_Bartop}}Bartop has been here before. Twelve times in each direction across the Seven Corridors, '
                             'you somehow know -- or perhaps you do not know but your body knows, the way it knows '
                             'certain things about the people who have walked the same ground for centuries before '
                             'you.\n'
                             '\n'
                             'He leads you -- or you follow the direction of his stillness, which amounts to the same '
-                            'thing -- into a passage that descends.\n'
+                            'thing -- into a passage that descends.{{/has_met_Bartop}}'
+                            '{{^has_met_Bartop}}Something has been here before you. You find the marks in the deepest corridor -- '
+                            'faint grooves in the stone floor, too wide to be human feet, too deliberate to be natural. '
+                            'Whatever made them walked this passage twelve times in each direction. You know this the way '
+                            'you know certain things about the people who have walked the same ground for centuries '
+                            'before you.\n'
+                            '\n'
+                            'You follow the grooves into a passage that descends.{{/has_met_Bartop}}\n'
                             '\n'
                             'The descent is long. The marble gives way to rougher stone, then to something older: dark '
                             'and glassy, volcanic, formed in fires that predate the Temple by orders of magnitude no '
-                            'number could usefully represent. The passage narrows. You are holding the yew staff '
+                            'number could usefully represent. The passage narrows. You are holding the {{staff}} staff '
                             'before you now, not for support but because it hums more clearly here, and the hum is a '
                             'kind of company.\n'
                             '\n'
@@ -1343,7 +1415,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                             '\n'
                             'The Starstone.\n'
                             '\n'
-                            'You understand, looking at it, what Bartop spent a century **contemplating** from this '
+                            'You understand, looking at it, what {{#has_met_Bartop}}Bartop{{/has_met_Bartop}}{{^has_met_Bartop}}something ancient{{/has_met_Bartop}} spent a century **contemplating** from this '
                             'exact spot. Not the stone itself -- though the stone is wondrous. The fact of it. The '
                             'fact that light exists in the deepest darkness. Not despite the darkness. Within it. '
                             'Chosen by it, or choosing it, or simply present there, unbothered by what surrounds it, '
@@ -1919,8 +1991,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                               '"The King is expecting you," it said at last. "He has been expecting you since the '
                               'Forest Gate."\n'
                               '\n'
-                              "Theo touched the pouch of Hafthor at his belt. He touched Gunnin's spectacles, folded "
-                              'in his breast pocket. He touched the staff in his hand -- ash, or willow, or yew, '
+                              "{{#has_pouch}}Theo touched the pouch of Hafthor at his belt. {{/has_pouch}}He touched Gunnin's spectacles, folded "
+                              'in his breast pocket. {{#staff}}He touched the {{staff}} staff in his hand, '
                               'smooth with use. He thought of Phil the pillbug asking, very seriously, to be helped '
                               "through a keyhole. He thought of Mr. Lock's slow, approving nod. He thought of Brok "
                               'opening his chest cavity in the crypt and saying, with absolute simplicity, *this is '
@@ -3206,7 +3278,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                          'vocabulary': [   {   'definition': 'Deep, unhurried thinking or reflection; the practice of '
                                                              'giving full attention to a question or experience.',
                                                'term': 'contemplation'}]},
-    'a7_balance': {   'choices': [{'target': 'a8_gentle', 'text': 'Walk to Brok with the yew staff. You are ready.'}],
+    'a7_balance': {   'choices': [{'target': 'a8_gentle', 'text': 'Walk to Brok with the yew staff. You are ready.', 'set_flags': {'staff': 'yew', 'staff_cracked': False}}],
                       'ending_type': None,
                       'era': 'temple',
                       'figures': [],
@@ -3261,7 +3333,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                             'term': 'resonance'}]},
     'a7_shadow_force': {   'choices': [   {   'target': 'a8_rough',
                                               'text': 'Take one staff -- the ash. Grip what strength remains and '
-                                                      'leave.'},
+                                                      'leave.',
+                                              'set_flags': {'staff': 'ash', 'staff_cracked': True}},
                                           {   'target': 'ending_temple_trapped',
                                               'text': 'Stand here until the Temple decides for you.'}],
                            'ending_type': None,
@@ -3321,9 +3394,11 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                                                'a form of defeat.',
                                                  'term': 'submission'}]},
     'a7_struggle': {   'choices': [   {   'target': 'a8_steady',
-                                          'text': 'Take the yew staff. It is not certainty, but it is a choice.'},
+                                          'text': 'Take the yew staff. It is not certainty, but it is a choice.',
+                                          'set_flags': {'staff': 'yew', 'staff_cracked': False}},
                                       {   'target': 'a8_rough',
-                                          'text': 'Take the ash staff. Strength first. Think later.'}],
+                                          'text': 'Take the ash staff. Strength first. Think later.',
+                                          'set_flags': {'staff': 'ash', 'staff_cracked': False}}],
                        'ending_type': None,
                        'era': 'temple',
                        'figures': [],
@@ -3374,8 +3449,10 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                                            'than instinct.',
                                              'term': 'discernment'}]},
     'a8_gentle': {   'choices': [   {   'target': 'a9_wise_solitude',
-                                        'text': 'Descend with purpose into the ravines. The road is clear.'},
-                                    {'target': 'a9_path', 'text': 'Descend carefully, taking in the new landscape.'}],
+                                        'text': 'Descend with purpose into the ravines. The road is clear.',
+                                        'set_flags': {'has_pouch': True}},
+                                    {'target': 'a9_path', 'text': 'Descend carefully, taking in the new landscape.',
+                                     'set_flags': {'has_pouch': True}}],
                      'ending_type': None,
                      'era': 'temple',
                      'figures': [],
@@ -3433,7 +3510,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              'the ability to receive what is offered in the form it can be offered, and not demand '
                              'that it come in a different shape.\n'
                              '\n'
-                             'He attaches the pouch to his belt. He adjusts the yew staff in his hand. He looks once '
+                             'He attaches the pouch to his belt. He adjusts the {{staff}} staff in his hand. He looks once '
                              'more at Brok.\n'
                              '\n'
                              '"Thank you," he says. "For everything. The sweeping included."\n'
@@ -3509,7 +3586,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              'alone.\n'
                              '\n'
                              'He did not expect Brok to accompany him. He half-hoped for it, which is different. But '
-                             'when he emerged from the stave-room with the yew staff in hand -- chosen after long '
+                             'when he emerged from the stave-room with the {{staff}} staff in hand -- chosen after long '
                              'hesitation, but chosen -- Brok was not waiting at the passage entrance. The passage '
                              'simply opened before him, and the logic of the Temple said: this is the way.\n'
                              '\n'
@@ -3526,7 +3603,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              'machinery, the sound of Brok going about his routines. Forty-eight hour maintenance '
                              'schedule. The Temple remains tidy.\n'
                              '\n'
-                             'Theo wraps his hand around the yew staff more firmly. It is a good staff. He chose it '
+                             'Theo wraps his hand around the {{staff}} staff more firmly. It is a good staff. He chose it '
                              'without full certainty, and it has not punished him for that. Maybe certainty is '
                              'overrated. Maybe the choosing itself is what matters.\n'
                              '\n'
@@ -3666,7 +3743,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              '\n'
                              'The fire catches. The ravine fills with light that is orange and mortal and much smaller '
                              'than the stars but warmer in a way the stars cannot be, and Theo sits with his back '
-                             'against the stone and the yew staff across his knees and watches the flame.\n'
+                             'against the stone and the {{staff}} staff across his knees and watches the flame.\n'
                              '\n'
                              'The staff glows.\n'
                              '\n'
@@ -3722,8 +3799,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                              '\n'
                              'He does not have the pouch of Hafthor. He did not earn it, or did not leave the Temple '
                              'in the way that produced it, and the absence now is a physical thing -- his hands are '
-                             'cold, his pack carries no extra warmth, and the yew staff (or the ash, if that is what '
-                             'he chose) is just wood in his hand, useful for walking, nothing more.\n'
+                             'cold, his pack carries no extra warmth, and the {{staff}} staff '
+                             'is just wood in his hand, useful for walking, nothing more.\n'
                              '\n'
                              'He is aware of being **bereft** in a way he has not allowed himself to feel since he '
                              'arrived in the Elysian Kingdom.\n'
@@ -3817,7 +3894,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                     'a sky so dark and so crowded with stars that he has to stop and stare, once, for '
                                     'a long time, before he can walk again.\n'
                                     '\n'
-                                    'The yew staff fits the terrain naturally. He did not expect that either. It finds '
+                                    'The {{staff}} staff fits the terrain naturally. He did not expect that either. It finds '
                                     'the angles of loose stone before his feet do, pressing lightly against surfaces '
                                     'that hold and pulling back from surfaces that will not. He could not have '
                                     'explained how he knows which pressure is which. He just knows.\n'
@@ -3837,7 +3914,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                     'arrive at your own company and find it sufficient.\n'
                                     '\n'
                                     'He walks until the first stars fade, and then he sleeps on flat stone with the '
-                                    'pouch under his head and the yew staff across his chest, and the mountain '
+                                    'pouch under his head and the {{staff}} staff across his chest, and the mountain '
                                     'breathes around him, and he does not dream of the Temple or of Brok or of the '
                                     'crossroads.\n'
                                     '\n'
@@ -3932,8 +4009,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                 '\n'
                                 'He worked carefully, as he always worked -- geological patience, millennial '
                                 "precision. The boy's face took shape in the limestone. The spectacles in the pocket. "
-                                'The staff laid down beside him. The pouch of Hafthor at his belt, full of gifts he '
-                                'had received and not yet learned to give away.\n'
+                                '{{#staff}}The {{staff}} staff laid down beside him. {{/staff}}{{#has_pouch}}The pouch of Hafthor at his belt, full of gifts he '
+                                'had received and not yet learned to give away. {{/has_pouch}}\n'
                                 '\n'
                                 'Bartop made him beautiful, as he made all his figures beautiful, because the truth '
                                 'deserved beauty even when -- especially when -- the truth was a warning.\n'
@@ -4006,8 +4083,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                      '\n'
                                      'He was changed but mortal. He had seen the light through fog.\n'
                                      '\n'
-                                     'He would carry this. The spectacles, heavy in his pocket. The pouch of Hafthor, '
-                                     'still at his belt. The staff, still in his hand. These were real. What he had '
+                                     'He would carry this. The spectacles, heavy in his pocket. {{#has_pouch}}The pouch of Hafthor, '
+                                     'still at his belt. {{/has_pouch}}{{#staff}}The {{staff}} staff, still in his hand. {{/staff}}These were real. What he had '
                                      'learned was real. The King, glimpsed through the glass of his own '
                                      'incompleteness, was real.\n'
                                      '\n'
@@ -4540,8 +4617,8 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                   'than afraid.\n'
                                   '\n'
                                   'He thought of Brok in the crypt, opening his chest cavity. A drone built for '
-                                  "service, capable of love. The pouch of Hafthor was still at Theo's belt -- he "
-                                  "reached for it, held it. Heavy with Brok's history. Given without calculation. "
+                                  "service, capable of love. {{#has_pouch}}The pouch of Hafthor was still at Theo's belt -- he "
+                                  "reached for it, held it. Heavy with Brok's history. Given without calculation. {{/has_pouch}}"
                                   "*This is for you.* That was the King's voice, speaking through a metal drone in a "
                                   "stone crypt beneath a mountain. That was the King's hand, extended through Brok's "
                                   'mechanical palm.\n'
@@ -4567,7 +4644,7 @@ NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
                                   '\n'
                                   'Theo felt something loosen in him -- not break, not dissolve, but loosen, the way a '
                                   'knot loosens when you find the right thread to pull. Everything he had carried -- '
-                                  "the staff, the spectacles, the pouch, the Starstone's light still warm in his "
+                                  "{{#staff}}the {{staff}} staff, {{/staff}}the spectacles, {{#has_pouch}}the pouch, {{/has_pouch}}the Starstone's light still warm in his "
                                   'memory -- had been preparation. The carrying had changed him. The lessons had '
                                   'changed him. He was not the boy who had fallen asleep over a textbook. That boy had '
                                   'been complete, too, but in the way a seed is complete -- all the information '

@@ -20,6 +20,8 @@ const state = {
   history:  [],
   step:     0,
   vocabSeen: new Set(),
+  flags:    {},       // inventory & story flags (e.g. staff: "yew", has_pouch: true)
+  has_met:  new Set(),  // character names encountered via figures[]
 };
 
 // ── Data-driven labels (read from STORY_DATA, with fallbacks) ────────────
@@ -56,7 +58,41 @@ function getCourseParam() {
 
 // ── Text processing ──────────────────────────────────────────────────────
 
+/**
+ * Resolve template variables and conditionals against state.flags + state.has_met.
+ *   {{flag_name}}              → value of flag (empty string if unset)
+ *   {{#flag_name}}...{{/flag_name}}  → include block only if flag is truthy
+ *   {{^flag_name}}...{{/flag_name}}  → include block only if flag is falsy/unset
+ *
+ * has_met_CharName is truthy when state.has_met.has("CharName").
+ */
+function resolveTemplate(text) {
+  const lookup = (key) => {
+    if (key.startsWith("has_met_")) {
+      return state.has_met.has(key.slice(8));
+    }
+    return state.flags[key];
+  };
+
+  // Conditional blocks: {{#key}}...{{/key}} and {{^key}}...{{/key}}
+  text = text.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, body) => {
+    return lookup(key) ? body : "";
+  });
+  text = text.replace(/\{\{\^(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, key, body) => {
+    return lookup(key) ? "" : body;
+  });
+
+  // Variable substitution: {{key}}
+  text = text.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+    const val = lookup(key);
+    return val != null ? String(val) : "";
+  });
+
+  return text;
+}
+
 function processText(text) {
+  text = resolveTemplate(text);
   return text
     .split("\n\n")
     .filter(p => p.trim())
@@ -125,10 +161,20 @@ function renderNode(nodeId, animate) {
     const choicesEl = document.getElementById("choices");
     choicesEl.innerHTML = "";
     for (const choice of node.choices) {
+      // Skip choices with unmet requirements
+      if (choice.requires) {
+        const met = Object.entries(choice.requires).every(([k, v]) => {
+          if (k.startsWith("has_met_")) return state.has_met.has(k.slice(8)) === v;
+          if (v === true) return !!state.flags[k];
+          if (v === false) return !state.flags[k];
+          return state.flags[k] === v;
+        });
+        if (!met) continue;
+      }
       const btn = document.createElement("button");
       btn.className = "choice-btn";
-      btn.textContent = choice.text;
-      btn.addEventListener("click", () => makeChoice(choice.target));
+      btn.textContent = resolveTemplate(choice.text);
+      btn.addEventListener("click", () => makeChoice(choice.target, choice.set_flags));
       choicesEl.appendChild(btn);
     }
 
@@ -191,10 +237,19 @@ function renderPath() {
 
 // ── Navigation ───────────────────────────────────────────────────────────
 
-function makeChoice(targetId) {
+function makeChoice(targetId, setFlags) {
   state.history.push(state.current);
+  // Apply any flags from the choice
+  if (setFlags) {
+    Object.assign(state.flags, setFlags);
+  }
   state.current = targetId;
   state.step += 1;
+  // Track character encounters from the target node's figures
+  const targetNode = STORY_DATA.nodes[targetId];
+  if (targetNode && targetNode.figures) {
+    targetNode.figures.forEach(f => state.has_met.add(f));
+  }
   renderNode(targetId, true);
 }
 
@@ -203,6 +258,13 @@ function restart() {
   state.history = [];
   state.step = 0;
   state.vocabSeen = new Set();
+  state.flags = {};
+  state.has_met = new Set();
+  // Track figures on the start node
+  const startNode = STORY_DATA.nodes[state.current];
+  if (startNode && startNode.figures) {
+    startNode.figures.forEach(f => state.has_met.add(f));
+  }
   renderNode(state.current, false);
 }
 
