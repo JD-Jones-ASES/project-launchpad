@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 21</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Intermediate_Science.html">&larr; Back to Intermediate Science</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the definition of evolution?", "back": "Evolution is the change in the inherited characteristics of a population over successive generations.", "id": "fc01"}, {"front": "What overarching concept do shared features among all living things, such as being made of cells, indicate?", "back": "These shared features indicate common ancestry, meaning all living organisms descended from shared ancestors over billions of years.", "id": "fc02"}, {"front": "Define 'fossil.'", "back": "A fossil is any preserved evidence of a past organism, such as mineralized bones, impressions in rock (molds/casts), preserved footprints, or organisms trapped in amber or ice.", "id": "fc03"}, {"front": "What is the 'fossil record' and what does it represent?", "back": "The fossil record is a chronological archive of life on Earth, formed by the collection of all discovered fossils.", "id": "fc04"}, {"front": "How does the complexity of organisms generally change as you move through older to younger rock layers in the fossil record?", "back": "Older (deeper) rock layers tend to contain fossils of simpler, often single-celled organisms, while progressively younger layers show more complex organisms like fish, amphibians, reptiles, and mammals.", "id": "fc05"}, {"front": "What role do 'transitional fossils' play in understanding evolution, and provide an example.", "back": "Transitional fossils show intermediate features between different groups, bridging gaps in the evolutionary record. *Tiktaalik*, with features of both fish and land-dwelling amphibians, is an example.", "id": "fc06"}, {"front": "What does the fossil record reveal about the prevalence of extinction?", "back": "The fossil record indicates that over 99% of all species that have ever lived are now extinct, documenting species that thrived and then disappeared.", "id": "fc07"}, {"front": "How do geologists determine the age of fossils and the rocks they are found in?", "back": "Geologists use radiometric dating methods, such as Carbon-14 dating for younger samples and potassium-argon dating for much older rocks, to determine their age.", "id": "fc08"}, {"front": "Define 'homologous structures' and provide an example.", "back": "Homologous structures are body parts similar in structure across different species because they were inherited from a common ancestor, even if their functions differ. Examples include the forelimbs of humans, cats, whales, and bats.", "id": "fc09"}, {"front": "What do homologous structures suggest about the evolutionary relationship between different species?", "back": "Homologous structures are strong evidence for common ancestry, indicating that different species inherited a shared body plan from a common ancestor which was later modified by natural selection.", "id": "fc10"}, {"front": "Define 'analogous structures' and explain how they differ from homologous structures.", "back": "Analogous structures perform similar functions but evolved independently in unrelated organisms and have different internal structures and developmental origins. Homologous structures, in contrast, share common ancestry.", "id": "fc11"}, {"front": "What is 'convergent evolution' and what type of structures does it result in?", "back": "Convergent evolution is the process where unrelated species evolve similar features because they face similar environmental challenges. It results in analogous structures.", "id": "fc12"}, {"front": "Define 'vestigial structure' and give two examples.", "back": "A vestigial structure is a body structure that is reduced in size or function compared to the same structure in an ancestral species. Examples include the human appendix, tiny leg bones in some snakes, and non-functional eyes of cave-dwelling fish.", "id": "fc13"}, {"front": "How does comparative embryology provide evidence for evolution?", "back": "The remarkable similarities in the early embryonic development of vertebrates (e.g., pharyngeal pouches, tails) suggest they inherited a common developmental program from a shared ancestor.", "id": "fc14"}, {"front": "What is the most compelling molecular evidence for evolution regarding the genetic code?", "back": "The universality of the genetic code—all living organisms using the same four nucleotide bases and codon system to build proteins—strongly suggests that all life descended from a common ancestor.", "id": "fc15"}, {"front": "How do scientists use DNA and protein sequences to infer evolutionary relationships?", "back": "Scientists compare DNA and protein sequences across species; the more similar the sequences, the more recently the two species shared a common ancestor.", "id": "fc16"}, {"front": "What is the approximate DNA similarity between humans and chimpanzees, and what does this indicate?", "back": "Human and chimpanzee DNA differ by only about 1.2%, indicating a very recent common ancestor.", "id": "fc17"}, {"front": "Define 'biogeography.'", "back": "Biogeography is the study of where organisms live and why, examining the geographic distribution of species.", "id": "fc18"}, {"front": "How do island species provide evidence for evolution through biogeography?", "back": "Island species often resemble nearby mainland species but have evolved unique adaptations to their specific island environments, like the Galápagos finches evolving different beak shapes.", "id": "fc19"}, {"front": "What pattern of evolution is observed in species on isolated continents, such as Australia?", "back": "Isolated continents, like Australia, develop unique species (e.g., marsupials) that evolve to fill ecological roles occupied by different types of organisms elsewhere, due to long periods of separation.", "id": "fc20"}, {"front": "Provide an example of how similar environments can lead to similar-looking but unrelated species, illustrating convergent evolution through biogeography.", "back": "Deserts around the world have plants like cacti (Americas) and euphorbia (Africa) that look similar due to adaptations to arid conditions but are not closely related, demonstrating convergent evolution.", "id": "fc21"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

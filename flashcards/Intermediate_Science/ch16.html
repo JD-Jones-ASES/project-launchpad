@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intermediate Science &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Intermediate Science &mdash; Chapter 16</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Intermediate_Science.html">&larr; Back to Intermediate Science</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What does DNA stand for and what is its primary function?", "back": "DNA (deoxyribonucleic acid) is the molecule that carries the genetic instructions for the development, functioning, and reproduction of all known living organisms.", "id": "fc01"}, {"front": "Where is DNA primarily found within a eukaryotic cell?", "back": "DNA is found primarily in the cell nucleus, organized into structures called chromosomes.", "id": "fc02"}, {"front": "Who built the first accurate model of DNA's three-dimensional structure and when?", "back": "James Watson and Francis Crick built the first accurate model of DNA's three-dimensional structure in 1953.", "id": "fc03"}, {"front": "Whose X-ray crystallography images were crucial for Watson and Crick's DNA model?", "back": "Rosalind Franklin and Maurice Wilkins produced the X-ray crystallography images that were heavily relied upon.", "id": "fc04"}, {"front": "Describe the overall shape of the DNA molecule according to Watson and Crick's model.", "back": "DNA has the shape of a double helix, which can be imagined as a ladder twisted into a spiral.", "id": "fc05"}, {"front": "What molecules make up the 'rails' (backbone) of the DNA double helix ladder?", "back": "The 'rails' of the DNA ladder are made of alternating sugar and phosphate molecules.", "id": "fc06"}, {"front": "What molecules form the 'rungs' of the DNA double helix ladder?", "back": "The 'rungs' are pairs of nitrogen-containing chemicals called bases.", "id": "fc07"}, {"front": "What is a nucleotide?", "back": "A nucleotide is the monomer (building block) of DNA and RNA. Each nucleotide consists of three parts: a sugar molecule (deoxyribose in DNA), a phosphate group, and a nitrogen-containing base.", "id": "fc08"}, {"front": "What are the three components of a DNA nucleotide?", "back": "A DNA nucleotide consists of a deoxyribose sugar molecule, a phosphate group, and a nitrogen-containing base.", "id": "fc09"}, {"front": "List the four types of nitrogen-containing bases found in DNA.", "back": "The four types of bases are Adenine (A), Thymine (T), Guanine (G), and Cytosine (C).", "id": "fc10"}, {"front": "How do the sugar-phosphate groups and bases form a DNA strand?", "back": "The sugar-phosphate groups form the backbone of each DNA strand, while the bases point inward toward the center of the helix, connecting to bases on the opposite strand.", "id": "fc11"}, {"front": "What type of chemical bond holds the base pairs together to form the rungs of the DNA ladder?", "back": "Weak chemical bonds called hydrogen bonds hold the base pairs together.", "id": "fc12"}, {"front": "State the complementary base pairing rules for DNA.", "back": "Adenine (A) always pairs with thymine (T), and guanine (G) always pairs with cytosine (C).", "id": "fc13"}, {"front": "What does it mean for the two strands of DNA to be 'complementary'?", "back": "It means that if you know the sequence of one strand, you can determine the sequence of the other strand using the base pairing rules.", "id": "fc14"}, {"front": "If one DNA strand reads A–T–G–C–C–A, what would be the sequence of its complementary strand?", "back": "The complementary strand would read T–A–C–G–G–T.", "id": "fc15"}, {"front": "Why is a G-C base pair slightly stronger than an A-T base pair?", "back": "Adenine and thymine are held together by two hydrogen bonds, while guanine and cytosine are held by three hydrogen bonds, making the G-C pair stronger.", "id": "fc16"}, {"front": "What is a gene?", "back": "A gene is a segment of DNA that contains the instructions for building a specific protein (or set of proteins).", "id": "fc17"}, {"front": "What is the role of genes in heredity?", "back": "Genes are the basic units of heredity, passed from parent to offspring during reproduction.", "id": "fc18"}, {"front": "What percentage of human DNA is made up of genes?", "back": "Approximately 1.5% of total human DNA is made up of genes.", "id": "fc19"}, {"front": "What are alleles?", "back": "Alleles are different versions of the same gene.", "id": "fc20"}, {"front": "Why must a cell replicate its DNA before cell division?", "back": "Before a cell divides, it must copy its DNA so that each daughter cell receives a complete and identical set of genetic instructions.", "id": "fc21"}, {"front": "What is DNA replication?", "back": "DNA replication is the process by which a cell copies its DNA before cell division, producing two identical DNA molecules.", "id": "fc22"}, {"front": "Describe the first step of DNA replication, including the enzyme involved.", "back": "Unzip: Enzymes called helicases break the hydrogen bonds between base pairs, separating the two strands of the double helix.", "id": "fc23"}, {"front": "What happens during the 'Match' step of DNA replication?", "back": "Each original strand serves as a template, and free-floating nucleotides in the nucleus pair up with their complementary bases on each template strand (A with T, G with C).", "id": "fc24"}, {"front": "Which enzyme is responsible for linking new nucleotides together during DNA replication?", "back": "An enzyme called DNA polymerase links the new nucleotides together, forming a continuous new strand.", "id": "fc25"}, {"front": "What is the final result of DNA replication?", "back": "The process produces two identical DNA molecules, each consisting of one original strand and one newly synthesized strand.", "id": "fc26"}, {"front": "Explain what 'semiconservative replication' means.", "back": "Semiconservative replication means that each new DNA molecule 'conserves' (keeps) one half of the original DNA molecule, and the other half is newly synthesized.", "id": "fc27"}, {"front": "If a section of one DNA strand has the sequence A–G–C–T–T–A, what would the complementary strand's sequence be after replication?", "back": "The complementary strand would have the sequence T–C–G–A–A–T.", "id": "fc28"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>
