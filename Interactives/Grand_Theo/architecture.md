@@ -8,7 +8,7 @@ Major Arcana, never named). The story is rendered as an inverted triangle:
 narrow at the start (choices cluster tight), widening as accumulated virtue
 or vice creates narrative drift.
 
-**Target:** ~120 nodes, ~200 edges, 14 endings (1 best, 3 good, 3 neutral, 7 bad)
+**Current:** 101 nodes, 182 edges, 13 endings (1 best, 3 good, 2 neutral, 7 bad)
 **Three apex endings:** Theosis (top-left), The Crossroads (top-center), The Abyss (top-right)
 
 ## The World
@@ -217,6 +217,10 @@ a6_crossroads_blind [SHADOW]
 ```
 a7_balance [LIGHT]
   → a8_gentle
+  → a7_h_brok_stream
+
+a7_h_brok_stream [LIGHT horizontal — Brok's leaf-boats]
+  → a8_gentle
 
 a7_struggle [CENTER]
   → a8_steady
@@ -260,6 +264,10 @@ a9_h_fire [LIGHT horizontal — star-watcher's camp]
 a9_path [CENTER]
   → a10_accept
   → a10_cling
+  → a9_h_phil
+
+a9_h_phil [CENTER horizontal — Phil returns with a seed]
+  → a10_accept
 
 a9_lonely [SHADOW]
   → a10_cling
@@ -282,6 +290,10 @@ a9_h_breakdown [SHADOW horizontal — the lowest point]
 a10_accept [LIGHT]
   → a11_own
   → a11_reckon
+  → a10_h_seasons
+
+a10_h_seasons [LIGHT horizontal — the garden of all four seasons]
+  → a11_own
 
 a10_cling [SHADOW]
   → a11_reckon
@@ -300,6 +312,11 @@ a11_own [LIGHT]
 a11_reckon [CENTER]
   → a12_pool
   → a12_stubborn
+  → a11_h_mirror_pool
+
+a11_h_mirror_pool [CENTER horizontal — the stone's question, reckoning]
+  → a12_surrender
+  → a12_pool
 
 a11_blame [SHADOW]
   → a12_stubborn
@@ -342,6 +359,11 @@ a13_maiden [CENTER]
   → a14_garden
   → a14_harsh
   → ending_peace_garden
+  → a13_h_garden_memory
+
+a13_h_garden_memory [CENTER horizontal — the pouch on the windowsill]
+  → a14_blend
+  → a14_garden
 
 a13_cling [SHADOW]
   → a14_harsh
@@ -365,6 +387,11 @@ a14_garden [CENTER]
   → a15_bargain
   → a15_tempted
   → a14_h_riddle
+  → a14_h_well
+
+a14_h_well [CENTER horizontal — the well between hills]
+  → a15_recognize
+  → a15_bargain
 
 a14_h_riddle [CENTER horizontal — the riddle of three hills]
   → a15_recognize (choose what you fear)
@@ -492,11 +519,20 @@ a19_pride [SHADOW]
 a20_answer [LIGHT]
   → a21_whole
   → a20_h_fire_vision
+  → a20_h_bartop_summit
 
 a20_h_fire_vision [LIGHT horizontal — the sacred fire shows visions]
   → a21_whole
 
+a20_h_bartop_summit [LIGHT horizontal — Bartop's farewell at the last turn]
+  → a21_whole
+
 a20_refuse [SHADOW]
+  → a21_fragment
+  → ending_retreat
+  → a20_h_descent_voice
+
+a20_h_descent_voice [SHADOW horizontal — Phil's echo on the wind]
   → a21_fragment
   → ending_retreat
 ```
@@ -507,6 +543,10 @@ a20_refuse [SHADOW]
 
 ```
 a21_whole [LIGHT]
+  → ending_theosis
+  → a21_h_gate
+
+a21_h_gate [LIGHT horizontal — the door that is not a door, kenosis]
   → ending_theosis
 
 a21_fragment [SHADOW]
@@ -540,12 +580,12 @@ a21_fragment [SHADOW]
 |--------|--------|-------------|------------|---------|-------|
 | Threshold | 0 | 1 | 0 | 0 | 1 |
 | Forest | I–III | 11 | 3 | 1 | 15 |
-| Temple | IV–VIII | 16 | 4 | 1 | 21 |
-| Ravines | IX–XII | 16 | 4 | 1 | 21 |
-| Maiden | XIII–XV | 12 | 4 | 3 | 19 |
+| Temple | IV–VIII | 16 | 5 | 1 | 22 |
+| Ravines | IX–XII | 16 | 7 | 1 | 24 |
+| Maiden | XIII–XV | 12 | 6 | 3 | 21 |
 | Depths | XVI–XIX | 14 | 4 | 2 | 20 |
-| Heights | XX–XXI | 5 | 1 | 4 | 10 |
-| **TOTAL** | | **75** | **20** | **13** | **~107** |
+| Heights | XX–XXI | 5 | 4 | 4 | 13 |
+| **TOTAL** | | **75** | **29** | **13** | **101** |
 
 ## Era Labels (for engine)
 
@@ -562,7 +602,7 @@ ERA_LABELS = {
 }
 ```
 
-## Vocabulary Plan (~80 terms across all nodes)
+## Vocabulary Plan (~104 terms across all nodes)
 
 Literary, philosophical, and mythological terms woven naturally into the prose:
 - threshold, apotheosis, parallax, cartography, chrysalis, chimera

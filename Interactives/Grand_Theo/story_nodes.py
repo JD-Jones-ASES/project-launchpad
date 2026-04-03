@@ -3,4850 +3,6083 @@
 
 START_NODE = "start"
 
-NODES = {   'a10_accept': {   'choices': [   {   'target': 'a11_own',
-                                         'text': 'Walk toward the birch trees. The road bends east -- go with it.'},
-                                     {   'target': 'a11_reckon',
-                                         'text': "Sit at the valley's center among the seasons. Something wants to be "
-                                                 'understood.'}],
-                      'ending_type': None,
-                      'era': 'ravines',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['ravines', 'light_path', 'seasons', 'wheel', 'acceptance'],
-                      'text': 'There is a turn in the ravine that Theo almost does not take.\n'
-                              '\n'
-                              'He is tired -- not the bone-deep exhaustion of despair but the honest tiredness of a '
-                              'body that has walked a long way -- and the path bends sharply right around a shoulder '
-                              'of rock, and something in him says: more of the same. More stone. More scrub. More cold '
-                              'sky and indifferent distance.\n'
-                              '\n'
-                              'But he takes the turn.\n'
-                              '\n'
-                              'And the ravine opens.\n'
-                              '\n'
-                              'Not dramatically -- there are no trumpets, no sudden sunlight breaking through clouds, '
-                              'no voice explaining what he is seeing. The ravine simply widens, over the course of '
-                              'perhaps fifty meters, into a valley floor broad enough to contain a meadow. The meadow '
-                              'is new growth pushing through old stone -- small yellow flowers he cannot name, pale '
-                              'grasses finding purchase in the cracks, a stand of thin birch trees at the far end with '
-                              'bark so white it seems to generate its own light in the dim morning.\n'
-                              '\n'
-                              'And in the circle of that valley, somehow, he can see all the seasons at once.\n'
-                              '\n'
-                              'This should not be possible. He knows it should not be possible. But the evidence is in '
-                              'front of him: the birch trees at the far end are bare, black-branched, late autumn. The '
-                              "grass at the valley's edge is the green of spring's earliest arrival. The flowers in "
-                              'the center are full midsummer. The moss on the stone at his feet is rust-red, '
-                              'October-leaning.\n'
-                              '\n'
-                              'The wheel of seasons in one glance.\n'
-                              '\n'
-                              '**Impermanence** is supposed to be loss. He was taught that, somewhere, by the '
-                              'accumulation of everything he feared -- that the things you love end, that summer '
-                              "becomes autumn becomes the bare black branch. But standing at the valley's entrance "
-                              '{{#staff}}with the {{staff}} staff in his hand {{/staff}}{{^staff}}with empty hands {{/staff}}and Mt. Nebo rising above, he feels '
-                              'something that is not grief and not denial but something more like **equanimity**: the '
-                              'ability to hold all the seasons at once, to say yes to the turning.\n'
-                              '\n'
-                              'All things change.\n'
-                              '\n'
-                              'All things become what comes after.\n'
-                              '\n'
-                              'He is seventeen years old and standing at the entrance of a valley that contains every '
-                              'season simultaneously, {{#staff}}the {{staff}} staff {{#staff_cracked}}(cracked but still '
-                              'his) {{/staff_cracked}}in his hand, {{/staff}}{{^staff}}his hands empty but his eyes '
-                              'open, {{/staff}}and the road ahead bends north and then east, and he does not '
-                              'know what is there.\n'
-                              '\n'
-                              'He walks toward it.',
-                      'title': 'The Valley Opens',
-                      'vocabulary': [   {   'definition': 'The quality of not lasting forever; the condition of all '
-                                                          'things being subject to change and eventual ending.',
-                                            'term': 'impermanence'},
-                                        {   'definition': 'Mental calmness and composure, especially in the face of '
-                                                          'difficulty or change; an evenness of spirit that does not '
-                                                          'depend on circumstances.',
-                                            'term': 'equanimity'}]},
-    'a10_cling': {   'choices': [   {   'target': 'a11_reckon',
-                                        'text': 'Round the bend. One step, then the next. That is all there is.'},
-                                    {   'target': 'a11_blame',
-                                        'text': 'Stand here in the narrowing and let the bitterness speak for once.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['ravines', 'shadow_path', 'narrowing', 'clinging', 'wheel'],
-                     'text': 'The ravine narrows.\n'
-                             '\n'
-                             'It has been narrowing for a while, Theo realizes -- he just did not notice when it '
-                             'started. The walls are closer now, the sky above reduced to a strip of gray-white that '
-                             'does not offer much comfort. The stream at the bottom has gone underground. He has not '
-                             'seen it for an hour. The scrub is thicker here but less various -- the same three '
-                             'species repeating, the same stone repeating, the same turn of the path repeating in a '
-                             'way that makes him wonder if he is walking in a long circle.\n'
-                             '\n'
-                             'He is not walking in a circle. He knows this. But the feeling is real, and the feeling '
-                             'is: nothing is changing, nothing will change, and the way back to the Temple was better '
-                             'than this, and even the crossroads would be better than this, and even Brok saying '
-                             '"Temple tidy" in his maintenance-schedule tone would be better than this open and '
-                             'indifferent stone that does not know his name and does not care to learn it.\n'
-                             '\n'
-                             'The **atavistic** urge to go back is very strong here.\n'
-                             '\n'
-                             'Atavistic: he learned that word somewhere -- the pull toward what was, the preference '
-                             'for the known over the unknown, the backward-leaning that lives in the oldest part of '
-                             'the brain. He understands it now not as a character flaw but as a genuine force. Going '
-                             'back is not stupidity. Going back is the honest report of a self that has reached a '
-                             'limit.\n'
-                             '\n'
-                             'But the way back is closed. He has known this since the southeastern passage. The '
-                             "Temple's doors do not reopen. The forest behind him has rearranged itself, as forests in "
-                             'the Elysian Kingdom do. There is no back.\n'
-                             '\n'
-                             'There is only the narrowing ravine and the strip of sky and the road that bends ahead '
-                             'out of sight.\n'
-                             '\n'
-                             'He stops walking.\n'
-                             '\n'
-                             'He is not ready to round that bend.\n'
-                             '\n'
-                             'He stands in the narrow place between the stone walls and breathes, and the mountain '
-                             'waits, and the sky does not widen, and the road does not flatten itself to make him '
-                             'comfortable, and after a long time he takes one more step.',
-                     'title': 'The Narrowing',
-                     'vocabulary': [   {   'definition': 'Relating to a reversion to something ancient or ancestral; a '
-                                                         'pull toward earlier, more instinctive states or behaviors.',
-                                           'term': 'atavistic'}]},
-    'a11_blame': {   'choices': [   {   'target': 'a12_stubborn',
-                                        'text': 'Move toward the closer sound -- the one that seems to come from '
-                                                'below.'},
-                                    {   'target': 'a12_pool',
-                                        'text': 'Move toward the farther sound -- the one that seems to come from '
-                                                'light.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['shadow_path', 'blame', 'wind', 'denial'],
-                     'text': 'The wind finds him in the narrowest part of the ravine, where the walls lean toward each '
-                             'other overhead and the sky is a thin ribbon of grey.\n'
-                             '\n'
-                             "It carries his failures back to him. Not his voice -- the wind's voice, which is older "
-                             'and less forgiving. It knows the names of things. It knows the gate he lingered at too '
-                             'long. The conversation he turned away from. The moment in the temple when his hands '
-                             'moved slowly and the consequence spread outward like a stone dropped in still water.\n'
-                             '\n'
-                             'Theo hunches his shoulders and walks faster.\n'
-                             '\n'
-                             '*The gate was strange,* he thinks. *Brok asked too much. The mountain is designed to '
-                             'break people. None of this is my fault in the ways that matter.*\n'
-                             '\n'
-                             'The wind does not argue. It simply repeats. It has all the patience of weather.\n'
-                             '\n'
-                             'Here is the thing about blame that Theo knows but will not think directly: it is not '
-                             'entirely wrong. The gate was strange. Brok did ask much. The mountain is designed to '
-                             'test. These things are true. And they are also not the whole truth, and choosing to live '
-                             'only in the part of the truth that clears you of responsibility is a kind of comfortable '
-                             'darkness, a room where you can always see yourself as the wronged party.\n'
-                             '\n'
-                             'The ravine opens a little. He did not expect it to open.\n'
-                             '\n'
-                             'A sound reaches him -- music, or something that resembles music the way a reflection '
-                             'resembles the thing reflected. It comes from two directions at once, and he cannot tell '
-                             'which is source and which is echo.\n'
-                             '\n'
-                             'His staff scrapes against the stone wall and leaves a white mark.',
-                     'title': 'The Howling Catalog',
-                     'vocabulary': [   {   'definition': 'Responsibility for a fault or wrong; the quality of '
-                                                         'deserving blame.',
-                                           'term': 'culpability'},
-                                       {   'definition': 'Turning aside a question or an accusation; redirecting '
-                                                         'attention away from oneself.',
-                                           'term': 'deflection'}]},
-    'a11_own': {   'choices': [   {'target': 'a12_surrender', 'text': 'Follow the upside-down air to the west.'},
-                                  {'target': 'a12_pool', 'text': 'Follow the sound of deeper water to the south.'}],
+NODES = {'a10_accept': {'choices': [{'target': 'a11_own',
+                             'text': 'Walk toward the birch trees. The road bends east -- go with '
+                                     'it.'},
+                            {'target': 'a11_reckon',
+                             'text': "Sit at the valley's center among the seasons. Something "
+                                     'wants to be understood.'},
+                            {'target': 'a10_h_seasons',
+                             'text': 'Linger in the place where all four seasons breathe at '
+                                     'once.'}],
+                'ending_type': None,
+                'era': 'ravines',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['ravines', 'light_path', 'seasons', 'wheel', 'acceptance'],
+                'text': 'There is a turn in the ravine that Theo almost does not take.\n'
+                        '\n'
+                        'He is tired -- not the bone-deep exhaustion of despair but the honest '
+                        'tiredness of a body that has walked a long way -- and the path bends '
+                        'sharply right around a shoulder of rock, and something in him says: more '
+                        'of the same. More stone. More scrub. More cold sky and indifferent '
+                        'distance.\n'
+                        '\n'
+                        'But he takes the turn.\n'
+                        '\n'
+                        'And the ravine opens.\n'
+                        '\n'
+                        'Not dramatically -- there are no trumpets, no sudden sunlight breaking '
+                        'through clouds, no voice explaining what he is seeing. The ravine simply '
+                        'widens, over the course of perhaps fifty meters, into a valley floor '
+                        'broad enough to contain a meadow. The meadow is new growth pushing '
+                        'through old stone -- small yellow flowers he cannot name, pale grasses '
+                        'finding purchase in the cracks, a stand of thin birch trees at the far '
+                        'end with bark so white it seems to generate its own light in the dim '
+                        'morning.\n'
+                        '\n'
+                        'And in the circle of that valley, somehow, he can see all the seasons at '
+                        'once.\n'
+                        '\n'
+                        'This should not be possible. He knows it should not be possible. But the '
+                        'evidence is in front of him: the birch trees at the far end are bare, '
+                        "black-branched, late autumn. The grass at the valley's edge is the green "
+                        "of spring's earliest arrival. The flowers in the center are full "
+                        'midsummer. The moss on the stone at his feet is rust-red, '
+                        'October-leaning.\n'
+                        '\n'
+                        'The wheel of seasons in one glance.\n'
+                        '\n'
+                        '**Impermanence** is supposed to be loss. He was taught that, somewhere, '
+                        'by the accumulation of everything he feared -- that the things you love '
+                        'end, that summer becomes autumn becomes the bare black branch. But '
+                        "standing at the valley's entrance {{#staff}}with the {{staff}} staff in "
+                        'his hand {{/staff}}{{^staff}}with empty hands {{/staff}}and Mt. Nebo '
+                        'rising above, he feels something that is not grief and not denial but '
+                        'something more like **equanimity**: the ability to hold all the seasons '
+                        'at once, to say yes to the turning.\n'
+                        '\n'
+                        'All things change.\n'
+                        '\n'
+                        'All things become what comes after.\n'
+                        '\n'
+                        'He is seventeen years old and standing at the entrance of a valley that '
+                        'contains every season simultaneously, {{#staff}}the {{staff}} staff '
+                        '{{#staff_cracked}}(cracked but still his) {{/staff_cracked}}in his hand, '
+                        '{{/staff}}{{^staff}}his hands empty but his eyes open, {{/staff}}and the '
+                        'road ahead bends north and then east, and he does not know what is '
+                        'there.\n'
+                        '\n'
+                        'He walks toward it.',
+                'title': 'The Valley Opens',
+                'vocabulary': [{'definition': 'The quality of not lasting forever; the condition '
+                                              'of all things being subject to change and eventual '
+                                              'ending.',
+                                'term': 'impermanence'},
+                               {'definition': 'Mental calmness and composure, especially in the '
+                                              'face of difficulty or change; an evenness of spirit '
+                                              'that does not depend on circumstances.',
+                                'term': 'equanimity'}]},
+ 'a10_cling': {'choices': [{'target': 'a11_reckon',
+                            'text': 'Round the bend. One step, then the next. That is all there '
+                                    'is.'},
+                           {'target': 'a11_blame',
+                            'text': 'Stand here in the narrowing and let the bitterness speak for '
+                                    'once.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['ravines', 'shadow_path', 'narrowing', 'clinging', 'wheel'],
+               'text': 'The ravine narrows.\n'
+                       '\n'
+                       'It has been narrowing for a while, Theo realizes -- he just did not notice '
+                       'when it started. The walls are closer now, the sky above reduced to a '
+                       'strip of gray-white that does not offer much comfort. The stream at the '
+                       'bottom has gone underground. He has not seen it for an hour. The scrub is '
+                       'thicker here but less various -- the same three species repeating, the '
+                       'same stone repeating, the same turn of the path repeating in a way that '
+                       'makes him wonder if he is walking in a long circle.\n'
+                       '\n'
+                       'He is not walking in a circle. He knows this. But the feeling is real, and '
+                       'the feeling is: nothing is changing, nothing will change, and the way back '
+                       'to the Temple was better than this, and even the crossroads would be '
+                       'better than this, and even Brok saying "Temple tidy" in his '
+                       'maintenance-schedule tone would be better than this open and indifferent '
+                       'stone that does not know his name and does not care to learn it.\n'
+                       '\n'
+                       'The **atavistic** urge to go back is very strong here.\n'
+                       '\n'
+                       'Atavistic: he learned that word somewhere -- the pull toward what was, the '
+                       'preference for the known over the unknown, the backward-leaning that lives '
+                       'in the oldest part of the brain. He understands it now not as a character '
+                       'flaw but as a genuine force. Going back is not stupidity. Going back is '
+                       'the honest report of a self that has reached a limit.\n'
+                       '\n'
+                       'But the way back is closed. He has known this since the southeastern '
+                       "passage. The Temple's doors do not reopen. The forest behind him has "
+                       'rearranged itself, as forests in the Elysian Kingdom do. There is no '
+                       'back.\n'
+                       '\n'
+                       'There is only the narrowing ravine and the strip of sky and the road that '
+                       'bends ahead out of sight.\n'
+                       '\n'
+                       'He stops walking.\n'
+                       '\n'
+                       'He is not ready to round that bend.\n'
+                       '\n'
+                       'He stands in the narrow place between the stone walls and breathes, and '
+                       'the mountain waits, and the sky does not widen, and the road does not '
+                       'flatten itself to make him comfortable, and after a long time he takes one '
+                       'more step.',
+               'title': 'The Narrowing',
+               'vocabulary': [{'definition': 'Relating to a reversion to something ancient or '
+                                             'ancestral; a pull toward earlier, more instinctive '
+                                             'states or behaviors.',
+                               'term': 'atavistic'}]},
+ 'a10_h_seasons': {'choices': [{'target': 'a11_own',
+                                'text': 'Leave the garden and follow the sound of water deeper '
+                                        'into the valley.'}],
                    'ending_type': None,
                    'era': 'ravines',
                    'figures': [],
+                   'flags_set': [],
                    'is_ending': False,
-                   'tags': ['accountability', 'light_path', 'pool', 'self-knowledge'],
-                   'text': 'The ravine opens without warning into a wide shelf of pale stone, and at its center lies a '
-                           'pool so still it looks like a hole cut through the world.\n'
+                   'tags': ['ravines', 'light_path', 'horizontal', 'seasons', 'change'],
+                   'text': 'The garden had no gate and no fence, and it did not need one. It kept '
+                           'itself.\n'
                            '\n'
-                           'Theo crouches at the edge, expecting to see his face.\n'
+                           'Theo stepped off the ravine path and into it without deciding to -- '
+                           'one moment he was walking, the next his boot pressed down on snow and '
+                           'he looked up to find cherry blossoms falling through it, white on '
+                           'white, each petal finding its own lazy path to the ground. Beside the '
+                           'snow-patch, a row of wheat stood ripe and gold in still air. Twenty '
+                           'feet beyond that, a single maple blazed red and orange, shedding its '
+                           'leaves in slow spirals. The leaves did not land in the snow. They '
+                           'disappeared just before they crossed into winter, as if each season '
+                           'had agreed to stay in its own house but leave the doors open.\n'
                            '\n'
-                           'He does not see his face.\n'
+                           "He stood very still, the way you stand when you don't want to startle "
+                           'something beautiful.\n'
                            '\n'
-                           'He sees the Forest Gate, and Phil curled beneath the root, and the moment he almost walked '
-                           "past without stopping. He sees Mr. Lock's eyes when Theo answered his question wrong the "
-                           'first time -- that flicker of patience, that small recalibration. He sees Brok rising on '
-                           "its rotors in the temple dark, carrying the weight of ten thousand seasons' duty. He sees "
-                           "the crack he put in someone's wall, the time he said the wrong thing, the turning he "
-                           'missed.\n'
+                           'This was not disorder. That was the first thing he understood. Each '
+                           'season here was fully itself -- the cold was genuinely cold, the wheat '
+                           "actually smelled of summer, the maple's red was the red of honest "
+                           'dying. They did not muddle each other. They coexisted the way a chord '
+                           'coexists, four notes held together without any of them becoming the '
+                           'others.\n'
                            '\n'
-                           'None of it is catastrophe. That is the hardest part to accept.\n'
+                           'The word came to him from some half-remembered lesson: **equinox** -- '
+                           'the hinge-moment, when day and night are equal, when the world pauses '
+                           'in perfect balance before tipping again. He had always thought of it '
+                           'as a single knife-edge of a day, a technicality. Standing here, he '
+                           'thought maybe it was more like this garden -- not the moment of '
+                           'balance, but the willingness to pass through all the moments.\n'
                            '\n'
-                           'He watches himself the way you watch a stranger on a long road -- with curiosity, with '
-                           'something almost like affection. *That one tried,* he thinks. *That one failed in ways '
-                           'that mattered and some that did not. That one kept walking.*\n'
+                           'He thought about the word **solstice**, too -- the sun standing still, '
+                           'for just an instant, before reversing course. He thought he '
+                           'understood, now, why the old calendars made festivals of it. It is '
+                           'strange and worth marking: the longest day admitting that darkness '
+                           'will grow back. The shortest night admitting it will shrink again. '
+                           'Even the sun does not cling.\n'
                            '\n'
-                           "He stays at the pool's edge until the light shifts. {{#has_pouch}}The pouch of Hafthor is warm at his "
-                           'belt. {{/has_pouch}}The {{staff}} staff stands planted beside him, and he holds it the way you hold the hand '
-                           'of someone you trust.\n'
+                           '{{#staff}}He shifted the yew staff in his grip and felt it shiver. Not '
+                           'a tremor -- a response. He looked down. Near the base of the staff, '
+                           'where the wood was smoothest, three small buds had appeared on the '
+                           'grain itself, tight and green as April. He watched them. They held for '
+                           'a long breath -- warm, possible, present. Then, slowly, they closed '
+                           'back into the wood, leaving no mark. The staff had said something it '
+                           'did not need to say twice.{{/staff}}\n'
                            '\n'
-                           'When he rises, the water ripples once, as if it has been waiting for exactly this -- for '
-                           'someone to look without flinching, and then stand up again.\n'
+                           "{{#has_pouch}}The pouch at his side, Brok's gift of flying-goat fur "
+                           'and crow-cured leather, grew warm -- not hot, just the warmth of '
+                           'something remembering. He pressed a hand to it briefly, and thought he '
+                           'understood. The goat had lived on open sky. The fur knew what it was '
+                           'to move through seasons without choosing between them.{{/has_pouch}}\n'
                            '\n'
-                           'The ravine beyond the pool opens in two directions. To the west, the air smells of '
-                           "something turned upside down, green and electric, like rain that hasn't fallen yet. To the "
-                           'south, the sound of water deeper than this pool, more insistent, moving.',
-                   'title': 'What the Water Holds',
-                   'vocabulary': [   {   'definition': 'A small, careful adjustment -- in thought or behavior -- after '
-                                                       'something goes slightly wrong.',
-                                         'term': 'recalibration'},
-                                     {   'definition': 'The instinct to look away from something painful or difficult; '
-                                                       'the opposite of facing it steadily.',
-                                         'term': 'flinching'}]},
-    'a11_reckon': {   'choices': [   {'target': 'a12_pool', 'text': 'Follow the strange, musical sound.'},
-                                     {'target': 'a12_stubborn', 'text': 'Press forward into the narrowing shadow.'}],
-                      'ending_type': None,
-                      'era': 'ravines',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['accountability', 'center_path', 'partial_honesty', 'flat_stone'],
-                      'text': 'There is a stone in the middle of the ravine that seems placed there by intention -- '
-                              'flat as a table, broad as a bed, worn smooth by centuries of weather or by the weight '
-                              'of everyone who ever sat here to think.\n'
-                              '\n'
-                              'Theo sits on it.\n'
-                              '\n'
-                              'He does not know what he is waiting for. The wind moves through the scrub pine with a '
-                              'sound that is almost language, and he listens to it the way you listen to someone '
-                              'speaking in a room just too far away to make out the words.\n'
-                              '\n'
-                              'He thinks about the temple. About Brok. About the choices that led him here instead of '
-                              'somewhere else -- and this is the honest part -- he cannot quite bring himself to claim '
-                              'all of them. Some he will own. The ones that turned out well, or that turned out badly '
-                              'through no particular virtue of his. The ones that were obviously his.\n'
-                              '\n'
-                              "But the others. The ones that sit in shadow, where cause and consequence don't line up "
-                              "neatly. Those he holds at arm's length and turns slowly, studying them without quite "
-                              "acknowledging what he's looking at.\n"
-                              '\n'
-                              "*Partial,* something in him says. *That's what this is. Partial honesty. Better than "
-                              'none.*\n'
-                              '\n'
-                              "He's not sure if better than none is enough.\n"
-                              '\n'
-                              'The stone is warm from the sun. A small green lizard pauses near his hand, regards him '
-                              'with an eye like a polished bead, and vanishes into a crack. He is not alone on this '
-                              'mountain. He has never been alone on this mountain.\n'
-                              '\n'
-                              'When he stands, one path leads toward a sound he cannot name -- strange, musical, '
-                              'faintly wrong in the way that interesting things are faintly wrong. The other leads '
-                              'toward shadow and silence, where the ravine walls close in.',
-                      'title': 'The Flat Stone',
-                      'vocabulary': [   {   'definition': "The act of facing a full account of one's actions -- their "
-                                                          'causes, their consequences, their cost.',
-                                            'term': 'reckoning'}]},
-    'a12_h_bargain': {   'choices': [   {   'target': 'a13_transform',
-                                            'text': 'Refuse the trade -- the {{#has_pouch}}pouch{{/has_pouch}}{{^has_pouch}}staff{{/has_pouch}} is worth more than '
-                                                    "Mack's perspective."},
-                                        {   'target': 'a13_cling',
-                                            'text': 'Make the trade. Give Mack what he asked for.',
-                                            'set_flags': {'traded_to_mack': True}}],
-                         'ending_type': None,
-                         'era': 'ravines',
-                         'figures': ['Mack'],
-                         'is_ending': False,
-                         'tags': ['horizontal', 'mack', 'bargain', 'trade', 'pouch', 'staff'],
-                         'text': 'Mack sets the pocket watch on the stone between them and opens his hands, palms up '
-                                 '-- a gesture that suggests emptiness, though Theo has the strong intuition that '
-                                 "Mack's hands are never truly empty.\n"
-                                 '\n'
-                                 '*"Here is what I want,"* he says. *"The pouch at your belt. Brok\'s pouch. '
-                                 'Hafthor\'s work. Whatever you want to call it."* He pauses. *"Or, if you haven\'t '
-                                 'got the pouch -- some people make choices along the way that cost them things -- '
-                                 "I'll take the staff. Ash or willow or yew, doesn't matter to me. I have my own "
-                                 'staff. I\'d just like another."*\n'
-                                 '\n'
-                                 '*"And what do you offer in return?"* Theo asks.\n'
-                                 '\n'
-                                 "Mack's expression does not change, but something behind the expression does -- some "
-                                 'internal weather system shifts.\n'
-                                 '\n'
-                                 '*"Perspective,"* he says. *"The view from the other side of the pool. The knowledge '
-                                 'of what you look like to the mountain -- not to yourself, not to the people who love '
-                                 'you, but to the mountain, which has no opinion of you whatsoever and therefore sees '
-                                 'you with perfect clarity."*\n'
-                                 '\n'
-                                 'He picks up the watch again, studies it.\n'
-                                 '\n'
-                                 '*"I know what you\'re thinking. You\'re thinking: that doesn\'t sound like much. And '
-                                 "you'd be right, except that it is -- it is the rarest thing I have to offer, because "
-                                 'most people would rather have anything else. A safe road. A warm meal. Certainty of '
-                                 'arrival. Perspective costs me nothing to give and costs you everything to use, and '
-                                 'that is why it\'s valuable and why almost no one takes it."*\n'
-                                 '\n'
-                                 'He holds the watch out.\n'
-                                 '\n'
-                                 '*"But I also have this. Runs backwards. Extremely useful if you\'re going where I '
-                                 'think you\'re going."*\n'
-                                 '\n'
-                                 'The watch ticks in the wrong direction. The mountain waits. The choice sits between '
-                                 'them on the cold stone.',
-                         'title': "Mack's First Trade",
-                         'vocabulary': [   {   'definition': 'A readiness to notice and understand things clearly; '
-                                                             'sharp, clear insight.',
-                                               'term': 'perspicacity'}]},
-    'a12_h_question': {   'choices': [   {   'target': 'a13_transform',
-                                             'text': 'Sit with the question. Let it settle. The mountain is patient '
-                                                     'enough for one honest answer.'},
-                                         {   'target': 'a13_cling',
-                                             'text': 'Give Mack an answer -- quickly, before the silence swallows you.'}],
-                          'ending_type': None,
-                          'era': 'ravines',
-                          'figures': ['Mack'],
-                          'is_ending': False,
-                          'tags': ['horizontal', 'mack', 'question', 'pool', 'trickster'],
-                          'text': 'Mack turns the pocket watch over once in his fingers -- forward, then backward, then '
-                                  'forward again -- and sets it face-down on the stone.\n'
-                                  '\n'
-                                  '*"Good,"* he says. *"The question first. Most people choose the riddle first because '
-                                  "riddles have answers, and a riddle with the wrong answer is still a riddle. A "
-                                  'question is different. A question you answer wrong stays wrong."*\n'
-                                  '\n'
-                                  'He looks at Theo for the first time since Theo sat down. The eyes are dark and quick, '
-                                  'and there is nothing unkind in them and nothing especially kind either -- the look of '
-                                  'someone who is genuinely curious about what you will do next.\n'
-                                  '\n'
-                                  '*"Here it is: What do you carry that does not belong to you?"*\n'
-                                  '\n'
-                                  "The pool is very still. In it, Mack's reflection holds the broad lion-brow, then "
-                                  'the narrow fox-face, then something between -- and it is watching Theo the way the '
-                                  'real Mack is watching him: with interest, without expectation.\n'
-                                  '\n'
-                                  "Theo's first thought is: nothing. His second thought is: everything. His third "
-                                  'thought is longer and harder to name.\n'
-                                  '\n'
-                                  'There is the **inherited burden** -- the weight that was placed on him before he '
-                                  'could choose whether to accept it. The way Brok spoke to him. The way the Temple ran. '
-                                  'The version of himself he learned to perform for rooms that required a certain kind '
-                                  'of person. None of these were his idea. All of them are in his pack right now.\n'
-                                  '\n'
-                                  'And then there is the grief. The grief he has been carrying in the name of people '
-                                  "who are not here. He holds their sadness for them, has been holding it so long he "
-                                  'cannot remember which sorrows are actually his.\n'
-                                  '\n'
-                                  '*"Take your time,"* Mack says, and he means it. He resettles on the rock, '
-                                  'unhurried, like a man prepared to wait through weather. *"Most people answer fast '
-                                  "because they're afraid the slow answer will be worse. It usually isn't. It's usually "
-                                  'just truer."*\n'
-                                  '\n'
-                                  "The **proxy** weight of other people's fear, other people's ambition, other "
-                                  "people's stories about who he is and what he is for -- this is what Theo has been "
-                                  'carrying, he realizes. Not all of it unwillingly. Some of it he picked up because it '
-                                  "felt like love, and some of it because he didn't know yet that he was allowed to "
-                                  'put it down. Both are true. Neither cancels the other.\n'
-                                  '\n'
-                                  'Mack does not press him. The watch lies face-down on the stone. The pool holds its '
-                                  'shifting face and waits.',
-                          'title': "Mack's Question",
-                          'vocabulary': [   {   'definition': 'A weight, responsibility, or expectation passed down from '
-                                                              'others -- family, culture, institution -- before one had '
-                                                              'the knowledge or standing to accept or refuse it.',
-                                                'term': 'inherited burden'},
-                                            {   'definition': 'Acting or feeling on behalf of another; carrying '
-                                                              'something -- emotion, expectation, or identity -- that '
-                                                              'properly belongs to someone else.',
-                                                'term': 'proxy'}]},
-    'a12_pool': {   'choices': [   {'target': 'a13_maiden', 'text': 'Ask about the riddle first.'},
-                                   {'target': 'a12_h_bargain', 'text': 'Ask about the trade first.'},
-                                   {   'target': 'a12_h_question',
-                                       'text': 'Ask about the question first -- the one Mack said he had.'}],
+                           'A **perennial** plant beside his foot -- he could not name the species '
+                           '-- pushed new green up through the snow without distress. It would die '
+                           'back. It would return. It had done this so many times that the dying '
+                           'had become part of the returning.\n'
+                           '\n'
+                           'Theo stayed longer than he needed to. That felt right, too.',
+                   'title': 'The Garden That Keeps No Calendar',
+                   'vocabulary': [{'definition': 'Either of the two moments in the year when the '
+                                                 'sun crosses the celestial equator, making day '
+                                                 'and night of approximately equal length. From '
+                                                 'the Latin aequus (equal) and nox (night). A '
+                                                 'point of balance before tipping.',
+                                   'term': 'equinox'},
+                                  {'definition': 'Either of the two moments when the sun reaches '
+                                                 'its highest or lowest point in the sky, marking '
+                                                 'the longest or shortest day. From the Latin sol '
+                                                 '(sun) and sistere (to stand still). The sun '
+                                                 'pauses before reversing.',
+                                   'term': 'solstice'},
+                                  {'definition': 'A plant that lives for more than two years, '
+                                                 'dying back in winter and returning in spring. '
+                                                 'From the Latin perennis (lasting through the '
+                                                 'year). Something that endures by accepting the '
+                                                 'cycle of dying and returning.',
+                                   'term': 'perennial'}]},
+ 'a11_blame': {'choices': [{'target': 'a12_stubborn',
+                            'text': 'Move toward the closer sound -- the one that seems to come '
+                                    'from below.'},
+                           {'target': 'a12_pool',
+                            'text': 'Move toward the farther sound -- the one that seems to come '
+                                    'from light.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['shadow_path', 'blame', 'wind', 'denial'],
+               'text': 'The wind finds him in the narrowest part of the ravine, where the walls '
+                       'lean toward each other overhead and the sky is a thin ribbon of grey.\n'
+                       '\n'
+                       "It carries his failures back to him. Not his voice -- the wind's voice, "
+                       'which is older and less forgiving. It knows the names of things. It knows '
+                       'the gate he lingered at too long. The conversation he turned away from. '
+                       'The moment in the temple when his hands moved slowly and the consequence '
+                       'spread outward like a stone dropped in still water.\n'
+                       '\n'
+                       'Theo hunches his shoulders and walks faster.\n'
+                       '\n'
+                       '*The gate was strange,* he thinks. *Brok asked too much. The mountain is '
+                       'designed to break people. None of this is my fault in the ways that '
+                       'matter.*\n'
+                       '\n'
+                       'The wind does not argue. It simply repeats. It has all the patience of '
+                       'weather.\n'
+                       '\n'
+                       'Here is the thing about blame that Theo knows but will not think directly: '
+                       'it is not entirely wrong. The gate was strange. Brok did ask much. The '
+                       'mountain is designed to test. These things are true. And they are also not '
+                       'the whole truth, and choosing to live only in the part of the truth that '
+                       'clears you of responsibility is a kind of comfortable darkness, a room '
+                       'where you can always see yourself as the wronged party.\n'
+                       '\n'
+                       'The ravine opens a little. He did not expect it to open.\n'
+                       '\n'
+                       'A sound reaches him -- music, or something that resembles music the way a '
+                       'reflection resembles the thing reflected. It comes from two directions at '
+                       'once, and he cannot tell which is source and which is echo.\n'
+                       '\n'
+                       'His staff scrapes against the stone wall and leaves a white mark.',
+               'title': 'The Howling Catalog',
+               'vocabulary': [{'definition': 'Responsibility for a fault or wrong; the quality of '
+                                             'deserving blame.',
+                               'term': 'culpability'},
+                              {'definition': 'Turning aside a question or an accusation; '
+                                             'redirecting attention away from oneself.',
+                               'term': 'deflection'}]},
+ 'a11_h_mirror_pool': {'choices': [{'target': 'a12_surrender',
+                                    'text': 'Stay on the stone and let the weight break something '
+                                            'open in you -- whatever needs to break.'},
+                                   {'target': 'a12_pool',
+                                    'text': 'Rise, carrying what the stone gave you, and walk '
+                                            'toward the sound of water ahead.'}],
+                       'ending_type': None,
+                       'era': 'ravines',
+                       'figures': [],
+                       'flags_set': [],
+                       'is_ending': False,
+                       'tags': ['ravines',
+                                'center_path',
+                                'horizontal',
+                                'accountability',
+                                'reckoning'],
+                       'text': 'He had been sitting on the flat stone for some time before he '
+                               'thought to ask it anything.\n'
+                               '\n'
+                               'The wind had moved on. The ravine was very quiet. Theo looked at '
+                               'his hands, which were dirty from the climb, the knuckles a little '
+                               'scraped. His hands had carried the staff, eaten the bread from the '
+                               'pouch, pushed through bramble. They had waved at Phil and reached '
+                               "for Brok's shoulder once and then pulled back. They had done "
+                               'things. They had not done other things.\n'
+                               '\n'
+                               "He placed both palms flat on the stone's surface and said, "
+                               'quietly, "What do I owe?"\n'
+                               '\n'
+                               'The stone did not speak. It transmitted.\n'
+                               '\n'
+                               'It was not the same as the mirror pool, which he had heard about '
+                               '-- which showed you your own past like a record played back. This '
+                               'was different. This was the record from somewhere else. He felt '
+                               'what his choices had cost, not to him, but to others.\n'
+                               '\n'
+                               '{{#has_met_Brok}}He felt Brok first, and it surprised him with its '
+                               'specificity. Not Brok in motion, purposeful and duty-bound, but '
+                               'Brok after -- standing in a passage with no particular task, '
+                               'running one metal digit along the seam of a wall, slowly, back and '
+                               'forth. The loneliness was not dramatic. That was what made it '
+                               'hard. It was just the ordinary loneliness of a creature built for '
+                               'company who had been left in a corridor.{{/has_met_Brok}}\n'
+                               '\n'
+                               'Then the forest -- the quiet there, the way the light had changed '
+                               'after the gate, the way the trees had said nothing but the '
+                               'saying-nothing had a shape to it. Not anger. Something more like '
+                               'the feeling when you tell a true thing to someone and they look '
+                               'away. Disappointment, maybe. Or just acknowledgment that the world '
+                               'requires this of them.\n'
+                               '\n'
+                               'Then Phil -- small Phil, carrying language the way a ship carries '
+                               'cargo, all that eloquence organized around being useful to Theo. '
+                               'He felt the weight of having been cared for. He had not always '
+                               'treated that weight carefully.\n'
+                               '\n'
+                               'The stone was not accusing him. That was the second surprise. The '
+                               'word **reckoning** had always sounded punitive to him -- a bill '
+                               'coming due, a settling-up with interest. But this was not '
+                               'punishment. It was just honesty. The stone was showing him the '
+                               'full ledger.\n'
+                               '\n'
+                               '**Restitution** -- he turned the word over. The act of returning '
+                               'what was taken or restoring what was broken. He thought: some of '
+                               'this I can restore. Some of it I can only carry.\n'
+                               '\n'
+                               '{{#staff}}He had leaned the staff against his knee, and as his '
+                               'palms pressed harder into the stone -- not for balance, but for '
+                               'contact -- the staff vibrated against his leg, a low and steady '
+                               'hum, conducting. The weight traveled up through his palms, through '
+                               'his shoulders, all the way down. He let it.{{/staff}}\n'
+                               '\n'
+                               'The third word came on its own: **absolution**. Release from '
+                               'consequence. He sat with the question of whether he wanted it, or '
+                               'whether wanting it was exactly the wrong move. Maybe the weight '
+                               'was something to carry. Maybe carrying it was the point.\n'
+                               '\n'
+                               'He took his hands from the stone. His palms were warm.',
+                       'title': "The Stone's Question",
+                       'vocabulary': [{'definition': "The act of facing a full account of one's "
+                                                     'actions -- their causes, their consequences, '
+                                                     'their cost. Not punishment, but honest '
+                                                     'accounting.',
+                                       'term': 'reckoning'},
+                                      {'definition': 'The act of returning what was taken or '
+                                                     'restoring what was broken. From the Latin '
+                                                     'restituere (to set up again). Some things '
+                                                     'can be restored; others can only be carried.',
+                                       'term': 'restitution'},
+                                      {'definition': 'Release from guilt, blame, or consequence. '
+                                                     'From the Latin absolvere (to set free). The '
+                                                     'question is whether seeking it is wisdom or '
+                                                     'evasion.',
+                                       'term': 'absolution'}]},
+ 'a11_own': {'choices': [{'target': 'a12_surrender',
+                          'text': 'Follow the upside-down air to the west.'},
+                         {'target': 'a12_pool',
+                          'text': 'Follow the sound of deeper water to the south.'}],
+             'ending_type': None,
+             'era': 'ravines',
+             'figures': [],
+             'is_ending': False,
+             'tags': ['accountability', 'light_path', 'pool', 'self-knowledge'],
+             'text': 'The ravine opens without warning into a wide shelf of pale stone, and at its '
+                     'center lies a pool so still it looks like a hole cut through the world.\n'
+                     '\n'
+                     'Theo crouches at the edge, expecting to see his face.\n'
+                     '\n'
+                     'He does not see his face.\n'
+                     '\n'
+                     'He sees the Forest Gate, and Phil curled beneath the root, and the moment he '
+                     "almost walked past without stopping. He sees Mr. Lock's eyes when Theo "
+                     'answered his question wrong the first time -- that flicker of patience, that '
+                     'small recalibration. He sees Brok rising on its rotors in the temple dark, '
+                     "carrying the weight of ten thousand seasons' duty. He sees the crack he put "
+                     "in someone's wall, the time he said the wrong thing, the turning he missed.\n"
+                     '\n'
+                     'None of it is catastrophe. That is the hardest part to accept.\n'
+                     '\n'
+                     'He watches himself the way you watch a stranger on a long road -- with '
+                     'curiosity, with something almost like affection. *That one tried,* he '
+                     'thinks. *That one failed in ways that mattered and some that did not. That '
+                     'one kept walking.*\n'
+                     '\n'
+                     "He stays at the pool's edge until the light shifts. {{#has_pouch}}The pouch "
+                     'of Hafthor is warm at his belt. {{/has_pouch}}The {{staff}} staff stands '
+                     'planted beside him, and he holds it the way you hold the hand of someone you '
+                     'trust.\n'
+                     '\n'
+                     'When he rises, the water ripples once, as if it has been waiting for exactly '
+                     'this -- for someone to look without flinching, and then stand up again.\n'
+                     '\n'
+                     'The ravine beyond the pool opens in two directions. To the west, the air '
+                     'smells of something turned upside down, green and electric, like rain that '
+                     "hasn't fallen yet. To the south, the sound of water deeper than this pool, "
+                     'more insistent, moving.',
+             'title': 'What the Water Holds',
+             'vocabulary': [{'definition': 'A small, careful adjustment -- in thought or behavior '
+                                           '-- after something goes slightly wrong.',
+                             'term': 'recalibration'},
+                            {'definition': 'The instinct to look away from something painful or '
+                                           'difficult; the opposite of facing it steadily.',
+                             'term': 'flinching'}]},
+ 'a11_reckon': {'choices': [{'target': 'a12_pool', 'text': 'Follow the strange, musical sound.'},
+                            {'target': 'a12_stubborn',
+                             'text': 'Press forward into the narrowing shadow.'},
+                            {'target': 'a11_h_mirror_pool',
+                             'text': 'Place both hands flat on the stone and ask what you owe.'}],
+                'ending_type': None,
+                'era': 'ravines',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['accountability', 'center_path', 'partial_honesty', 'flat_stone'],
+                'text': 'There is a stone in the middle of the ravine that seems placed there by '
+                        'intention -- flat as a table, broad as a bed, worn smooth by centuries of '
+                        'weather or by the weight of everyone who ever sat here to think.\n'
+                        '\n'
+                        'Theo sits on it.\n'
+                        '\n'
+                        'He does not know what he is waiting for. The wind moves through the scrub '
+                        'pine with a sound that is almost language, and he listens to it the way '
+                        'you listen to someone speaking in a room just too far away to make out '
+                        'the words.\n'
+                        '\n'
+                        'He thinks about the temple. About Brok. About the choices that led him '
+                        'here instead of somewhere else -- and this is the honest part -- he '
+                        'cannot quite bring himself to claim all of them. Some he will own. The '
+                        'ones that turned out well, or that turned out badly through no particular '
+                        'virtue of his. The ones that were obviously his.\n'
+                        '\n'
+                        'But the others. The ones that sit in shadow, where cause and consequence '
+                        "don't line up neatly. Those he holds at arm's length and turns slowly, "
+                        "studying them without quite acknowledging what he's looking at.\n"
+                        '\n'
+                        "*Partial,* something in him says. *That's what this is. Partial honesty. "
+                        'Better than none.*\n'
+                        '\n'
+                        "He's not sure if better than none is enough.\n"
+                        '\n'
+                        'The stone is warm from the sun. A small green lizard pauses near his '
+                        'hand, regards him with an eye like a polished bead, and vanishes into a '
+                        'crack. He is not alone on this mountain. He has never been alone on this '
+                        'mountain.\n'
+                        '\n'
+                        'When he stands, one path leads toward a sound he cannot name -- strange, '
+                        'musical, faintly wrong in the way that interesting things are faintly '
+                        'wrong. The other leads toward shadow and silence, where the ravine walls '
+                        'close in.',
+                'title': 'The Flat Stone',
+                'vocabulary': [{'definition': "The act of facing a full account of one's actions "
+                                              '-- their causes, their consequences, their cost.',
+                                'term': 'reckoning'}]},
+ 'a12_h_bargain': {'choices': [{'target': 'a13_transform',
+                                'text': 'Refuse the trade -- the '
+                                        '{{#has_pouch}}pouch{{/has_pouch}}{{^has_pouch}}staff{{/has_pouch}} '
+                                        "is worth more than Mack's perspective."},
+                               {'set_flags': {'has_pouch': False, 'traded_to_mack': True},
+                                'target': 'a13_cling',
+                                'text': 'Make the trade. Give Mack what he asked for.'}],
+                   'ending_type': None,
+                   'era': 'ravines',
+                   'figures': ['Mack'],
+                   'is_ending': False,
+                   'tags': ['horizontal', 'mack', 'bargain', 'trade', 'pouch', 'staff'],
+                   'text': 'Mack sets the pocket watch on the stone between them and opens his '
+                           'hands, palms up -- a gesture that suggests emptiness, though Theo has '
+                           "the strong intuition that Mack's hands are never truly empty.\n"
+                           '\n'
+                           '*"Here is what I want,"* he says. *"The pouch at your belt. Brok\'s '
+                           'pouch. Hafthor\'s work. Whatever you want to call it."* He pauses. '
+                           '*"Or, if you haven\'t got the pouch -- some people make choices along '
+                           "the way that cost them things -- I'll take the staff. Ash or willow or "
+                           "yew, doesn't matter to me. I have my own staff. I'd just like "
+                           'another."*\n'
+                           '\n'
+                           '*"And what do you offer in return?"* Theo asks.\n'
+                           '\n'
+                           "Mack's expression does not change, but something behind the expression "
+                           'does -- some internal weather system shifts.\n'
+                           '\n'
+                           '*"Perspective,"* he says. *"The view from the other side of the pool. '
+                           'The knowledge of what you look like to the mountain -- not to '
+                           'yourself, not to the people who love you, but to the mountain, which '
+                           'has no opinion of you whatsoever and therefore sees you with perfect '
+                           'clarity."*\n'
+                           '\n'
+                           'He picks up the watch again, studies it.\n'
+                           '\n'
+                           '*"I know what you\'re thinking. You\'re thinking: that doesn\'t sound '
+                           "like much. And you'd be right, except that it is -- it is the rarest "
+                           'thing I have to offer, because most people would rather have anything '
+                           'else. A safe road. A warm meal. Certainty of arrival. Perspective '
+                           'costs me nothing to give and costs you everything to use, and that is '
+                           'why it\'s valuable and why almost no one takes it."*\n'
+                           '\n'
+                           'He holds the watch out.\n'
+                           '\n'
+                           '*"But I also have this. Runs backwards. Extremely useful if you\'re '
+                           'going where I think you\'re going."*\n'
+                           '\n'
+                           'The watch ticks in the wrong direction. The mountain waits. The choice '
+                           'sits between them on the cold stone.',
+                   'title': "Mack's First Trade",
+                   'vocabulary': [{'definition': 'A readiness to notice and understand things '
+                                                 'clearly; sharp, clear insight.',
+                                   'term': 'perspicacity'}]},
+ 'a12_h_question': {'choices': [{'target': 'a13_transform',
+                                 'text': 'Sit with the question. Let it settle. The mountain is '
+                                         'patient enough for one honest answer.'},
+                                {'target': 'a13_cling',
+                                 'text': 'Give Mack an answer -- quickly, before the silence '
+                                         'swallows you.'}],
                     'ending_type': None,
                     'era': 'ravines',
                     'figures': ['Mack'],
                     'is_ending': False,
-                    'tags': ['center_path', 'mack', 'pool', 'trickster', 'first_meeting'],
-                    'text': "He is sitting on a rock at the pool's edge, and he looks like he has been sitting there "
-                            'since before the mountain was a mountain.\n'
-                            '\n'
-                            'The man -- if man is the right word -- wears a yellow vest over a lime green shirt, and '
-                            'his pants are the color of new grass. He is lean in the way that foxes are lean, with '
-                            'quick dark eyes and hands that are never entirely still. A silver pocket watch sits open '
-                            'on his knee, though he does not appear to be watching the time. He is watching the pool.\n'
-                            '\n'
-                            'In the pool, his reflection shifts. Theo sees it: the narrow fox-face, then the broad '
-                            'lion-brow, then something between the two that is neither and both.\n'
-                            '\n'
-                            '*"Fool or sage, they say,"* the man murmurs, as if continuing a conversation Theo '
-                            'interrupted. *"Serpent or dove. As if you have to pick one and stick with it."* He tilts '
-                            'his head without turning it. *"You found the pool. Not everyone finds the pool. Some '
-                            'people walk right past it and spend years looking for what they already walked past. Sit '
-                            'down, if you like. The water is cold but the light is good."*\n'
-                            '\n'
-                            'Theo sits.\n'
-                            '\n'
-                            '*"I\'m Mack,"* the man says, still watching his shifting reflection. *"And you\'re the '
-                            "one Brok {{#has_pouch}}sent home with the pouch. I can smell Hafthor's work from here -- good pouch. "
-                            'Older than it looks.{{/has_pouch}}{{^has_pouch}}sent out from the Temple. I can tell from the way you walk -- '
-                            "straight back, careful eyes. Brok's training.{{/has_pouch}}\"*\n"
-                            '\n'
-                            'He snaps the pocket watch shut.\n'
-                            '\n'
-                            '*"I have a question for you, and a riddle, and a trade. In that order. Or reversed, if '
-                            "you prefer. I've found most people prefer to know what they're trading before they answer "
-                            'the riddle, though that\'s not the wisest order."* He grins. The grin is a fox\'s. '
-                            '*"What\'ll it be?"*\n'
-                            '\n'
-                            "The water between them holds both their reflections. Mack's shifts and Theo's does not, "
-                            'and Theo cannot decide which of them is the more unsettling for it.',
-                    'title': 'The Trickster at the Water',
-                    'vocabulary': [   {   'definition': 'Charming or enchanting in a way that can deceive; attracting '
-                                                        'attention while obscuring something underneath.',
-                                          'term': 'beguiling'}]},
-    'a12_stubborn': {   'choices': [   {'target': 'a13_cling', 'text': 'Force forward along the narrowing ledge.'},
-                                       {   'target': 'ending_illusion_bound',
-                                           'text': 'The song grows louder. Something stops. Turn back toward it.'}],
-                        'ending_type': None,
-                        'era': 'ravines',
-                        'figures': [],
-                        'is_ending': False,
-                        'tags': ['shadow_path', 'refusal', 'pool', 'stubbornness'],
-                        'text': 'The pool is here. He can see it -- a dark oval of water, motionless, tucked against '
-                                'the ravine wall where the stone overhangs like a drawn curtain.\n'
-                                '\n'
-                                'He walks past it.\n'
-                                '\n'
-                                'This is not a conscious decision. It happens the way most refusals happen -- not as a '
-                                'grand act of will but as a series of small redirections, each one so minor it barely '
-                                'registers. He looks at the pool and thinks: *later.* He looks again and thinks: '
-                                "*there's nothing in it.* He glances back once as the ravine curves and the pool "
-                                'passes out of sight, and he thinks: *just a pool.*\n'
-                                '\n'
-                                'He is wrong about the last part, and some part of him knows it, which is why the '
-                                'refusal costs more than it should.\n'
-                                '\n'
-                                'The ravine narrows. This is not metaphor -- the stone walls genuinely close in, the '
-                                'path becomes a ledge, and the ledge becomes a line of handholds cut into the rock '
-                                'face, and Theo moves along them with his jaw set and his eyes fixed on what is '
-                                'directly in front of him and nowhere else.\n'
-                                '\n'
-                                'From somewhere behind him -- from the pool he did not look into -- comes a sound. A '
-                                'voice, low and musical, not singing exactly but not not singing either, the kind of '
-                                'sound that is always almost about to become a song.\n'
-                                '\n'
-                                "*And low he's high, a friend to all...*\n"
-                                '\n'
-                                'He does not turn back.\n'
-                                '\n'
-                                'The mountain receives him in his stubbornness, which is not the same as welcoming '
-                                'him. The path ahead has two alternatives, and both of them will cost something, and '
-                                'neither of them will give back what he left behind at the pool.',
-                        'title': 'The Pool That Shows Nothing',
-                        'vocabulary': [   {   'definition': 'Stubbornness; the quality of being unyielding, especially '
-                                                            'in the face of evidence that one should reconsider.',
-                                              'term': 'obduracy'}]},
-    'a12_surrender': {   'choices': [   {   'target': 'a13_transform',
-                                            'text': "Walk on toward the mountain's south face, carrying the new "
-                                                    'lightness.'},
-                                        {   'target': 'a13_maiden',
-                                            'text': 'Follow the sound of the cottage bells that drift up from the '
-                                                    'valley below.'}],
-                         'ending_type': None,
-                         'era': 'ravines',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['light_path', 'pool', 'inverted_world', 'new_perspective'],
-                         'text': 'The pool Theo finds here is larger than the last -- not still but moving in slow '
-                                 'circles, fed by a stream that enters from above and exits through a crack in the '
-                                 'stone floor. The water is so clear that for a moment he mistakes the reflected sky '
-                                 'for the real one, and the real one for a reflection, and the dislocation is complete '
-                                 'before he has time to resist it.\n'
-                                 '\n'
-                                 "He is looking up at himself from below the water's surface.\n"
-                                 '\n'
-                                 'Or he is looking down at a stranger who wears his coat.\n'
-                                 '\n'
-                                 'The stranger in the pool is walking -- no, has been walking for a very long time -- '
-                                 'through a country that has the same hills as the country above but arranged '
-                                 'differently, as if someone shook the landscape like a cloth and let it settle. '
-                                 'Everything is the same and precisely wrong. The trees grow down into the earth. The '
-                                 'mountain is a valley. The valley is the sky.\n'
-                                 '\n'
-                                 'And the stranger -- Theo, not-Theo, the inverted traveler -- seems perfectly at home '
-                                 'in this version. Seems, in fact, to be making better progress than the original.\n'
-                                 '\n'
-                                 '*Who taught me,* Theo thinks, *that my version is the right-side-up one?*\n'
-                                 '\n'
-                                 'The thought does not frighten him. This is the surprise. He expected to feel unmade '
-                                 'by it, and instead he feels -- lighter. As if the self he has been carrying was '
-                                 'heavier than he knew, and setting it down, even for a moment, is a relief so large '
-                                 'it has the texture of joy.\n'
-                                 '\n'
-                                 "He stands at the pool's edge until the circles slow. Until the reflection and the "
-                                 'real converge.\n'
-                                 '\n'
-                                 'Then he walks on, and the mountain ahead looks different than it did -- not smaller, '
-                                 'not easier, but more genuinely itself, as if it has stopped performing mountainhood '
-                                 'and is simply being what it is.',
-                         'title': 'The Upside-Down Country',
-                         'vocabulary': [   {   'definition': 'A feeling of disorientation -- of being removed from '
-                                                             "familiar surroundings or from one's usual sense of self.",
-                                               'term': 'dislocation'},
-                                           {   'definition': 'A reversal of position, order, or relationship; seeing '
-                                                             'the world from an opposite vantage point.',
-                                               'term': 'inversion'}]},
-    'a13_cling': {   'choices': [   {   'target': 'a14_harsh',
-                                        'text': 'Head toward the cottage smoke -- maybe rest will end the half-life.'},
-                                    {   'target': 'a13_h_phantom',
-                                        'text': 'Stop walking. Turn and look at what is walking beside you.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['shadow_path', 'clinging', 'old_self', 'half_life'],
-                     'text': 'He is walking. He knows he is walking because the scenery changes -- the ravine walls '
-                             'shift, a stream crosses his path and he steps over it, the light moves from morning-grey '
-                             'to afternoon-grey -- but it does not feel like walking. It feels like the idea of '
-                             'walking, performed by a body that has forgotten what the purpose is.\n'
-                             '\n'
-                             "The old Theo is still here. That's the problem.\n"
-                             '\n'
-                             'Not dramatically -- not like a ghost or a haunting. More like an old habit that will not '
-                             'stop firing. He reaches for certainties he no longer has. He forms sentences in his head '
-                             'that begin *back home* and *before all this* and *when things were normal.* He runs the '
-                             "old arguments in the background like a fire that won't quite go out and won't quite give "
-                             'warmth.\n'
-                             '\n'
-                             'He is walking toward something -- he knows this in the way you know things you cannot '
-                             "feel. But the knowledge doesn't help much. You can understand perfectly well that you "
-                             'need to move forward and still find your feet pulling toward the last place you felt '
-                             'solid.\n'
-                             '\n'
-                             '*Half-life,* Theo thinks. The word comes from somewhere -- Brok, maybe, or the flat '
-                             'stone, or the howling wind. A half-life: still decaying. Still moving. But at half the '
-                             'rate of the living.\n'
-                             '\n'
-                             'The ravine opens onto a slope. To the south, three hills and the smoke of a cottage '
-                             "chimney. To the west, the mountain's hard face, uncompromising, offering nothing.\n"
-                             '\n'
-                             'Beside him, just at the edge of his vision -- something walks.\n'
-                             '\n'
-                             'He does not turn to look.',
-                     'title': 'The Half-Life',
-                     'vocabulary': [   {   'definition': 'Originally a scientific term for decay; here used to '
-                                                         'describe a state of existing at reduced vitality -- still '
-                                                         'moving, but not fully alive to the present.',
-                                           'term': 'half-life'}]},
-    'a13_h_phantom': {   'choices': [   {   'target': 'a14_harsh',
-                                            'text': 'Let the phantom walk beside you and keep moving. It will dissolve '
-                                                    "when it's ready."},
-                                        {   'target': 'ending_illusion_bound',
-                                            'text': 'Reach toward the phantom -- try to absorb it, to bring it back '
-                                                    'into yourself.'}],
-                         'ending_type': None,
-                         'era': 'ravines',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['horizontal', 'shadow_path', 'phantom', 'old_self', 'psychological'],
-                         'text': 'He turns.\n'
-                                 '\n'
-                                 'It is him. Or: it is what he was, assembled from memory into something that walks '
-                                 'and breathes and has his face -- the face before the forest, before the temple, '
-                                 'before any of this. It wears the coat he left somewhere in the first ravine, the one '
-                                 'that got too heavy. It carries nothing. It looks back at him with an expression of '
-                                 'mild reproach.\n'
-                                 '\n'
-                                 '*"I want to go home,"* it says. His voice. Exactly his voice, with the inflection he '
-                                 'uses when he is tired but not angry -- the flat, factual tiredness of late nights.\n'
-                                 '\n'
-                                 '*"I know,"* Theo says.\n'
-                                 '\n'
-                                 '*"This was supposed to be a short trip. You said a short trip."*\n'
-                                 '\n'
-                                 '*"I know."*\n'
-                                 '\n'
-                                 '*"There are things at home. Things that need doing. People who are waiting. You\'ve '
-                                 'been walking this mountain for -- for how long? And what have you got to show for '
-                                 'it?"*\n'
-                                 '\n'
-                                 'Theo looks at the phantom for a long time. It looks back. Its eyes are his eyes, '
-                                 'which is to say they are genuine -- it is not lying. It really does want to go home. '
-                                 'It really does believe the trip was supposed to be short. It really does miss what '
-                                 'was left behind.\n'
-                                 '\n'
-                                 '*"You\'re not wrong,"* Theo says finally. *"About any of it. The things at home are '
-                                 'real. The people are real."*\n'
-                                 '\n'
-                                 '*"Then turn around."*\n'
-                                 '\n'
-                                 '*"But you\'re not me anymore,"* he says. *"You\'re what I was before I knew what I '
-                                 'know now. And I can\'t un-know it. I can\'t be you again."*\n'
-                                 '\n'
-                                 "The phantom's expression does not change. It will not argue. It will simply walk "
-                                 'beside him until he either accepts it or lets it go -- and those are the only two '
-                                 'options, and both of them will hurt.',
-                         'title': 'The Other Walker',
-                         'vocabulary': [   {   'definition': 'An apparition; a figure that appears from memory or '
-                                                             'imagination and seems to have its own presence and will.',
-                                               'term': 'phantasm'},
-                                           {   'definition': 'The act of refusing to claim or acknowledge something as '
-                                                             "one's own; a denial of connection or responsibility.",
-                                               'term': 'disavowal'}]},
-    'a13_maiden': {   'choices': [   {   'target': 'a14_garden',
-                                         'text': 'Accept her hospitality and go deeper -- ask about the mountain.'},
-                                     {   'target': 'a14_harsh',
-                                         'text': 'Decline the hospitality, but gently -- the mountain is waiting.'},
-                                     {   'target': 'ending_peace_garden',
-                                         'text': 'Accept her hospitality fully. Stay. This is enough.'}],
-                      'ending_type': None,
-                      'era': 'maiden',
-                      'figures': ['The Maiden'],
-                      'is_ending': False,
-                      'tags': ['center_path', 'maiden', 'cottage', 'arrival', 'rest'],
-                      'text': 'The cottage sits in the hollow where three hills converge, and it looks like it grew '
-                              'there rather than being built -- the garden has spread into the slope on the left, the '
-                              'stone wall on the right has moss on it in patterns that suggest decades, and the '
-                              'chimney smoke rises in a column so straight it looks drawn.\n'
-                              '\n'
-                              'The gate is wooden, painted once in a color that has faded to a warm grey. Theo pushes '
-                              'it open -- it swings easily, recently oiled -- and follows the path through the garden '
-                              'to the door.\n'
-                              '\n'
-                              'Before he can knock, the door opens.\n'
-                              '\n'
-                              'The woman who stands in it is perhaps forty or perhaps ageless in the way that certain '
-                              'people are ageless -- not because they look young but because age seems beside the '
-                              'point. She has flour on one hand and a look on her face that is not surprise.\n'
-                              '\n'
-                              '*"Good sir,"* she says. *"How are you?"*\n'
-                              '\n'
-                              'The question is so ordinary and so direct that it stops him completely. Not *where are '
-                              'you going* or *who sent you* or *what do you want* -- but *how are you,* asked as if '
-                              'the answer matters, as if she has time for it, as if she has been waiting for exactly '
-                              'this question to give to exactly this person.\n'
-                              '\n'
-                              'He realizes he has no idea how to answer it honestly.\n'
-                              '\n'
-                              'She steps back from the door.\n'
-                              '\n'
-                              '*"Come in, then. That\'s answer enough."*\n'
-                              '\n'
-                              'Inside: warmth, the smell of bread, a low table with two cups already set. The window '
-                              'looks out on the garden and the hills and the mountain beyond, and the mountain, seen '
-                              'from here, looks manageable.',
-                      'title': 'Three Hills',
-                      'vocabulary': [   {   'definition': 'The generous reception of guests; the quality of making '
-                                                          'others feel welcomed, fed, and cared for.',
-                                            'term': 'hospitality'}]},
-    'a13_transform': {   'choices': [   {'target': 'a14_blend', 'text': 'Approach the cottage and knock at the gate.'},
-                                        {   'target': 'a14_garden',
-                                            'text': 'Walk around the cottage -- toward the garden on the far side.'}],
-                         'ending_type': None,
-                         'era': 'maiden',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['light_path', 'transformation', 'old_self', 'cottage', 'maiden'],
-                         'text': 'It happens somewhere between one step and the next, in the middle of a ravine that '
-                                 'looks like every other part of the ravine and is therefore the perfect place for '
-                                 'it.\n'
-                                 '\n'
-                                 'The old Theo falls away.\n'
-                                 '\n'
-                                 "Not like dying -- nothing so dramatic. More like the moment you realize you've been "
-                                 'holding your shoulders up around your ears for so long that when you finally release '
-                                 "them, you can't remember what the tension felt like, only the absence of it. It is "
-                                 'the subtraction of something that was pretending to be essential.\n'
-                                 '\n'
-                                 'What was it? He tries to name it as it leaves. Pride dressed as principle. Certainty '
-                                 'dressed as clarity. The story he told himself about himself, which was not a lie '
-                                 'exactly but was also not the whole map. He had been carrying that story like a stone '
-                                 'in his boot -- present at every step, shaping the way he walked, never quite '
-                                 'admitting it hurt.\n'
-                                 '\n'
-                                 'He stands still in the ravine for a moment. The scrub pine moves in a wind he cannot '
-                                 "feel at his face. A crystal stream -- one of the many that thread through Mt. Nebo's "
-                                 'southwest slopes -- passes over smooth stones to his left, and the sound is the '
-                                 'sound of something being washed clean.\n'
-                                 '\n'
-                                 'Then, to the south, over the last ridge of the ravine: three hills, rounded and '
-                                 'green, and between them -- nestled in the hollow where three slopes meet -- a '
-                                 'cottage with a garden and a gate and smoke rising from a low chimney.\n'
-                                 '\n'
-                                 'He did not know he was tired until he sees it.\n'
-                                 '\n'
-                                 'He goes toward it the way you go toward something that was waiting for you without '
-                                 'knowing you were coming -- with the feeling of an arrival that was always going to '
-                                 'happen.',
-                         'title': 'The Coat He Outgrew',
-                         'vocabulary': [   {   'definition': 'The gradual release of something that was once necessary '
-                                                             'but has become a burden -- a habit, an identity, a fear.',
-                                               'term': 'shedding'}]},
-    'a14_blend': {   'choices': [   {   'target': 'a15_recognize',
-                                        'text': 'Ask her about Mack -- you sense she knows him.'},
-                                    {   'target': 'a15_bargain',
-                                        'text': 'Ask her about what lies ahead on the mountain.'}],
-                     'ending_type': None,
-                     'era': 'maiden',
-                     'figures': ['The Maiden'],
-                     'is_ending': False,
-                     'tags': ['light_path', 'maiden', 'teaching', 'fire_water', 'integration', 'pouch'],
-                     'text': 'The Maiden pours from a clay pot -- something warm and dark, that smells of bark and '
-                             'dried flowers -- and sets the cup in front of Theo without ceremony, the way you set a '
-                             "cup in front of someone you've known for years.\n"
-                             '\n'
-                             '*"You look like someone who\'s been trying to choose between fire and water,"* she says. '
-                             '*"As if they couldn\'t both be true at once."*\n'
-                             '\n'
-                             'Theo looks at his cup. {{#has_pouch}}The pouch at his belt gives off a warmth that is different from '
-                             "the room's warmth -- older, more precise, like the heat of embers that have been banked "
-                             'for the night.{{/has_pouch}}\n'
-                             '\n'
-                             '*"Brok taught you something about duty,"* she says. Not a question. *"And duty is fire '
-                             "-- it burns clean when it's in proportion and burns everything when it's out of "
-                             'proportion. What did the mountain teach you?"*\n'
-                             '\n'
-                             '*"That consequences are real,"* he says. *"That you can\'t walk backward."*\n'
-                             '\n'
-                             '*"Water. Yes."* She refills his cup before he\'s finished it, a small extravagance. '
-                             '*"Fire knows where it\'s going. Water remembers where it\'s been. Neither one is enough '
-                             'on its own -- fire with no memory burns indiscriminately, water with no direction drowns '
-                             'the very thing it was meant to nourish."*\n'
-                             '\n'
-                             '{{#has_pouch}}The pouch glows. He puts his hand on it without thinking.\n'
-                             '\n'
-                             '*"That\'s Hafthor\'s work,"* she says, glancing at it. *"He always knew how to hold two '
-                             'things at once without breaking either of them."*{{/has_pouch}} She pauses. *"You\'re going higher. '
-                             'The mountain will ask you again -- fire or water. The answer is neither. The answer is '
-                             'the cup."*\n'
-                             '\n'
-                             'She stands, and through the window the three hills are clear against the afternoon sky, '
-                             'and beyond them the mountain waits, and it does not look manageable anymore but it looks '
-                             'real.',
-                     'title': 'Fire and Water',
-                     'vocabulary': [   {   'definition': 'The bringing together of separate or opposing elements into '
-                                                         'a unified whole; not the elimination of opposites but their '
-                                                         'harmony.',
-                                           'term': 'integration'},
-                                       {   'definition': 'The correct or appropriate relationship between parts; the '
-                                                         'condition in which nothing is too much or too little.',
-                                           'term': 'proportion'}]},
-    'a14_garden': {   'choices': [   {   'target': 'a14_h_riddle',
-                                         'text': 'Climb the center hill -- the one that seems beside the point.'},
-                                     {   'target': 'a15_bargain',
-                                         'text': 'Climb the rocky right hill -- the one that costs something.'},
-                                     {   'target': 'a15_tempted',
-                                         'text': 'Climb the tall dark left hill -- the one you want.'}],
-                      'ending_type': None,
-                      'era': 'maiden',
-                      'figures': ['The Maiden'],
-                      'is_ending': False,
-                      'tags': ['center_path', 'maiden', 'garden', 'three_hills', 'riddle'],
-                      'text': 'The garden runs along the south face of the cottage and up the gentle slope of the '
-                              'left-hand hill, and the Maiden walks through it with the ease of someone who knows '
-                              'every plant by name and disposition.\n'
-                              '\n'
-                              '*"Three hills,"* she says, gesturing. *"Left, right, center. They\'ve been here since '
-                              'before the cottage. I didn\'t choose them."*\n'
-                              '\n'
-                              'The left hill is the tallest, green-dark with old growth. The right hill is rocky, '
-                              'sparse, windswept. The center hill is the smallest, but something grows there that does '
-                              'not grow on the others -- a flower Theo cannot name, pale and persistent, the kind of '
-                              'thing you almost overlook.\n'
-                              '\n'
-                              '*"Here is the riddle,"* she says, stopping at the garden gate. *"One hill is what you '
-                              'want. One hill is what you need. One hill is what you fear. You have to climb one of '
-                              'them before you go higher."* She tilts her head. *"Which is which -- that\'s not my '
-                              'puzzle to solve for you. It\'s yours."*\n'
-                              '\n'
-                              'She watches him look at the hills.\n'
-                              '\n'
-                              '*"I\'ll tell you one thing,"* she says, after a while. *"The one you want to climb is '
-                              "never the one that will do you the most good. And the one you're most afraid to climb "
-                              'is never as terrible as it looks from down here."* A pause. *"The useful one is always '
-                              'the one that seems beside the point."*\n'
-                              '\n'
-                              'The center hill with its unnamed flower seems very much beside the point.\n'
-                              '\n'
-                              'He looks at the tall, dark left hill and feels desire.\n'
-                              'He looks at the rocky right hill and feels -- something that resembles what he felt in '
-                              'the ravine when the wind named his failures.\n'
-                              'He looks at the small center hill and feels nothing in particular, which is its own '
-                              'kind of answer.',
-                      'title': 'The Riddle of Three Hills',
-                      'vocabulary': [   {   'definition': 'The ability to perceive clearly; to judge accurately '
-                                                          'between options, especially when appearances are '
-                                                          'misleading.',
-                                            'term': 'discernment'}]},
-    'a14_h_riddle': {   'choices': [   {   'target': 'a15_recognize',
-                                           'text': 'Take the path the Maiden points toward -- the north face of Mt. '
-                                                   'Nebo.'},
-                                       {   'target': 'a15_bargain',
-                                           'text': 'Ask the Maiden about the fox-lion man you met at the pool.'}],
-                        'ending_type': None,
-                        'era': 'maiden',
-                        'figures': ['The Maiden'],
-                        'is_ending': False,
-                        'tags': ['horizontal', 'center_path', 'riddle_resolved', 'three_hills', 'fear_path'],
-                        'text': 'From the top of the center hill, Theo can see everything.\n'
-                                '\n'
-                                'Not everything in the broad sense -- not the whole world, not the future, not the '
-                                "answer to any question he hasn't already asked. But he can see the cottage below, and "
-                                'the garden, and the Maiden watching from the gate with something that might be '
-                                'satisfaction. He can see the ravines behind him, the paths he took and the ones he '
-                                "didn't. He can see the mountain ahead, its ridges catching the afternoon light, and "
-                                'there are places on it that he cannot make out clearly and places that are perfectly '
-                                'sharp.\n'
-                                '\n'
-                                'The flower that grows only on this hill is at his feet. Up close it is not beautiful '
-                                'in any dramatic way -- pale, five-petaled, with a stem that bends slightly under its '
-                                'own weight. It smells faintly of rain.\n'
-                                '\n'
-                                'He sits on the hilltop for a long time.\n'
-                                '\n'
-                                'The left hill was desire. He can see that clearly now -- from up here he can see the '
-                                "left hill's shadow side, the part you can't see from the garden, and it is a long "
-                                'shadow. The right hill was necessity, and the rock face was real, and the cost was '
-                                'real, and there was nothing wrong with that path. But the center hill -- the hill '
-                                'that seemed beside the point -- turned out to be the hill of the present moment, the '
-                                'one that asks nothing of you except that you be exactly where you are.\n'
-                                '\n'
-                                'The Maiden calls up from the gate: *"Fear lets you see. Desire lets you move. '
-                                'Necessity keeps you honest. But the center --"* She pauses. *"The center is where you '
-                                'learn which of the other three to trust."*\n'
-                                '\n'
-                                'He comes down from the hill carrying the unnamed flower, and the path to the mountain '
-                                'is clearer than it has been since the Forest Gate.',
-                        'title': 'The Smallest Hill',
-                        'vocabulary': [   {   'definition': 'Mental calmness and composure in difficult situations; a '
-                                                            'balance of mind that does not tip toward extremes.',
-                                              'term': 'equanimity'}]},
-    'a14_harsh': {   'choices': [   {   'target': 'a15_tempted',
-                                        'text': 'Keep climbing. The mountain is ahead and exhaustion is not a reason '
-                                                'to stop.'},
-                                    {   'target': 'ending_wanderer',
-                                        'text': 'Find a place to sit -- just for a moment. Not the garden, but '
-                                                'something.'}],
-                     'ending_type': None,
-                     'era': 'maiden',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['shadow_path', 'exhaustion', 'no_rest', 'harsh_path'],
-                     'text': 'The cottage is there -- he can see its chimney smoke from the ridge. He does not go to '
-                             'it.\n'
-                             '\n'
-                             'This is not a decision he makes so much as a direction he maintains. Stopping feels '
-                             'impossible, not because the mountain forbids it but because he has forgotten how. His '
-                             'legs know forward. The rest of him is too tired to argue.\n'
-                             '\n'
-                             'The slope rises. The ravine walls are behind him now and the mountain is in front of him '
-                             'in earnest -- not a suggestion of mountain, not a view from a distance, but the actual '
-                             'bulk of it, its weight pressing down on the air, its stone face offering nothing.\n'
-                             '\n'
-                             "Theo's legs ache. His shoulders ache. He cannot remember the last time he ate something. "
-                             'The pouch, if he still has it, is silent. The staff, if he still has it, is just a '
-                             'stick.\n'
-                             '\n'
-                             'There is a kind of exhaustion that goes past the body into something underneath the '
-                             'body, something that exhaustion is a translation of. He is tired not of walking but of '
-                             'what walking requires -- the constant small decisions, the maintenance of the self, the '
-                             'work of being someone specific moving through specific terrain toward a specific place.\n'
-                             '\n'
-                             'What he wants, he thinks, is to be no one for a little while. To put down the project of '
-                             'himself.\n'
-                             '\n'
-                             'He does not know yet that this is wisdom speaking in the only vocabulary it has left -- '
-                             'the vocabulary of pain. He does not know that the mountain, ahead, will offer exactly '
-                             'this: the opportunity to put himself down. What he cannot yet see is the difference '
-                             "between putting something down because you're done with it and putting it down so you "
-                             'can pick it up again changed.\n'
-                             '\n'
-                             'He walks. The mountain gets closer. Somewhere up ahead, something is waiting for him.',
-                     'title': 'No Garden',
-                     'vocabulary': [   {   'definition': 'Gradual wearing down through sustained pressure or effort; a '
-                                                         'slow diminishment of strength or will.',
-                                           'term': 'attrition'}]},
-    'a15_bargain': {   'choices': [   {   'target': 'a16_entry',
-                                          'text': 'Accept the deal -- safe passage in exchange for the hidden precious '
-                                                  'thing.'},
-                                      {   'target': 'a15_h_counteroffer',
-                                          'text': 'Try to out-talk Mack. Negotiate as an equal.'},
-                                      {   'target': 'a16_collapse',
-                                          'text': 'Refuse both options. Find your own way through the pass.'}],
-                       'ending_type': None,
-                       'era': 'ravines',
-                       'figures': ['Mack'],
-                       'is_ending': False,
-                       'tags': ['center_path', 'mack', 'fox_aspect', 'deal', 'negotiation'],
-                       'text': 'Mack has the pocket watch out again. He is sitting on a stone at the edge of the pass '
-                               '-- the same loose-limbed posture as the pool, the same quality of having been there '
-                               'for slightly longer than should be possible -- and he is the fox this time: lean, '
-                               'bright-eyed, one hand moving in small precise gestures as he talks.\n'
-                               '\n'
-                               '*"You came from the garden,"* he says, by way of greeting. *"She feeds everyone, that '
-                               'one. Does she still have the three-hills routine?"* He grins. *"She\'s had that one '
-                               'for years. Still works, I see."*\n'
-                               '\n'
-                               '*"She mentioned you,"* Theo says.\n'
-                               '\n'
-                               '*"She always does."* Mack\'s voice carries a particular texture when he says this -- '
-                               'not quite pride, not quite sorrow, something that lives at the intersection of both. '
-                               '*"We have an arrangement. She rests people; I move them. Different jobs, same '
-                               'mountain."*\n'
-                               '\n'
-                               'He stands, brushing stone-dust from his green pants.\n'
-                               '\n'
-                               '*"Here is the deal I\'m offering, and I\'ll be straight with you because you\'ve '
-                               'earned it: safe passage through the pass. No illusions, no riddles, no looking '
-                               'sideways at things. Just: you walk through, you arrive at the Temple of Memories, and '
-                               'whatever happens there, happens."*\n'
-                               '\n'
-                               'He tilts his head.\n'
-                               '\n'
-                               '*"The price: something precious. Not the staff, not the pouch -- I already made that '
-                               "offer. Something you're still carrying that you don't know you're carrying. I'll know "
-                               'it when I see it. You might not."*\n'
-                               '\n'
-                               'The watch ticks in the right direction this time.\n'
-                               '\n'
-                               '*"Or,"* he says, and his eyes sharpen, *"you could try to out-talk me. First time '
-                               'anyone\'s managed it, but I\'m always interested in a first time."*',
-                       'title': 'The Fox at the Gate',
-                       'vocabulary': [   {   'definition': 'A guarantee of being allowed to travel without '
-                                                           'interference or harm; often offered as a bargain, with '
-                                                           'conditions.',
-                                             'term': 'safe passage'}]},
-    'a15_h_counteroffer': {   'choices': [   {   'target': 'a16_rebuild',
-                                                 'text': 'Shake his hand and take the information -- use it to rebuild '
-                                                         'your approach to the mountain.'},
-                                             {   'target': 'a16_entry',
-                                                 'text': 'Shake his hand and take the passage -- move forward without '
-                                                         'the extra knowledge.'}],
-                              'ending_type': None,
-                              'era': 'ravines',
-                              'figures': ['Mack'],
-                              'is_ending': False,
-                              'tags': ['horizontal', 'mack', 'negotiation', 'equals', 'counteroffer'],
-                              'text': 'They go back and forth for what might be an hour.\n'
-                                      '\n'
-                                      'It begins with Theo declining the terms and Mack recalibrating, and then Theo '
-                                      'proposing an alternative and Mack finding the flaw in it -- not unkindly, '
-                                      'actually with something approaching delight -- and then a silence, and then '
-                                      "Theo finds a different angle, and Mack's eyes sharpen, and they are off again.\n"
-                                      '\n'
-                                      'At some point, Mack puts the pocket watch away.\n'
-                                      '\n'
-                                      'At some point, Theo realizes that Mack is not performing negotiation but '
-                                      'actually engaged in it -- genuinely working, leaning into the problem of this '
-                                      'particular person at this particular pass with all the same care he would bring '
-                                      'to any problem worth his time.\n'
-                                      '\n'
-                                      '*"You\'re doing the thing,"* Mack says at one point.\n'
-                                      '\n'
-                                      '*"What thing?"*\n'
-                                      '\n'
-                                      '*"The thing where you listen to what I\'m not saying. Most people only hear the '
-                                      'words."* He studies Theo with the fox-eyes, quick and clear. *"Where did you '
-                                      'learn that?"*\n'
-                                      '\n'
-                                      '*"The flat stone,"* Theo says, without quite knowing why.\n'
-                                      '\n'
-                                      'Mack nods slowly, as if this is an answer he has encountered before and '
-                                      'respects.\n'
-                                      '\n'
-                                      "The counteroffer they arrive at is this: Theo will carry something of Mack's "
-                                      'through the pass -- not the chain, not the watch, something else, something '
-                                      'small -- and Mack will give Theo free passage and one piece of information '
-                                      'about what lies ahead. Neither of them is entirely satisfied with this. Both of '
-                                      'them find it acceptable, which is the definition of a genuine negotiation.\n'
-                                      '\n'
-                                      '*"Hm,"* Mack says, when it\'s settled. He holds out his hand. His expression is '
-                                      'one Theo has not seen on him before -- open, undefended, almost young. *"You '
-                                      'know, I\'ve been running these passes for a long time, and almost no one --"* '
-                                      'He stops. Starts again. *"Almost no one makes me work for it."*\n'
-                                      '\n'
-                                      'He seems, for one unguarded moment, genuinely glad.',
-                              'title': 'Two Talkers at a Pass',
-                              'vocabulary': [   {   'definition': 'A conference between opposing or different parties; '
-                                                                  'a genuine negotiation between two people who take '
-                                                                  'each other seriously.',
-                                                    'term': 'parley'}]},
-    'a15_recognize': {   'choices': [   {   'target': 'a16_rebuild',
-                                            'text': 'Ask Mack what lies beyond the pass -- earn the information '
-                                                    'outright.'},
-                                        {   'target': 'a16_entry',
-                                            'text': 'Walk past Mack without asking anything. The pass is open.'}],
-                         'ending_type': None,
-                         'era': 'ravines',
-                         'figures': ['Mack'],
-                         'is_ending': False,
-                         'tags': ['light_path', 'mack', 'lion_aspect', 'golden_chain', 'recognition'],
-                         'text': 'He is standing at the pass -- a narrow cut between two outcroppings, the last '
-                                 "obstacle before the mountain's middle slopes -- and he is magnificent.\n"
-                                 '\n'
-                                 'Not the fox-Mack that Theo met at the pool, all quicksilver and pocket watches. This '
-                                 'is the lion aspect: broad-shouldered, still, with a quality of contained power that '
-                                 'makes the air around him feel denser. He wears a purple tunic and green pants, and '
-                                 'there is something in his bearing that would be entirely ridiculous except that it '
-                                 "isn't, that transforms the garish colors into something regal through sheer force of "
-                                 'conviction.\n'
-                                 '\n'
-                                 'In his hands: a chain. Golden, finely wrought, each link precisely sized. It catches '
-                                 'the light and multiplies it.\n'
-                                 '\n'
-                                 '*"I\'ve been watching you since the pool,"* Mack says. His voice in this aspect is '
-                                 'lower, steadier -- not the quick-river voice from before but something more like '
-                                 'weather. *"You\'ve come a long way. You\'ve given up things that were hard to give '
-                                 'up. You\'ve kept things that were harder to keep."*\n'
-                                 '\n'
-                                 'He holds the chain out.\n'
-                                 '\n'
-                                 '*"This is for you. A reward, if you want. Comfort. Certainty. Every morning knowing '
-                                 "what the day will ask and knowing you're equal to it. No more climbing. No more "
-                                 'not-knowing. An end to the whole exhausting project of becoming."*\n'
-                                 '\n'
-                                 'The chain is beautiful. This is important -- it is genuinely, objectively beautiful, '
-                                 "and the offer is genuine, and Mack's face holds no malice whatsoever.\n"
-                                 '\n'
-                                 "Theo looks at the chain. He looks at Mack's eyes, which are the lion's eyes -- "
-                                 'ancient, patient, neither kind nor cruel.\n'
-                                 '\n'
-                                 'He looks at his own hands.\n'
-                                 '\n'
-                                 '*"No,"* he says.\n'
-                                 '\n'
-                                 "Mack's expression doesn't change. But something in it does -- some internal weather. "
-                                 'And then, for just a moment, he looks pleased.',
-                         'title': 'The Lion at the Pass',
-                         'vocabulary': [   {   'definition': 'A position or condition requiring little effort but '
-                                                             'offering comfort and security; a comfortable trap.',
-                                               'term': 'sinecure'},
-                                           {   'definition': 'The state of ceasing to develop or progress; comfortable '
-                                                             'stillness that masks the absence of growth.',
-                                               'term': 'stagnation'}]},
-    'a15_tempted': {   'choices': [   {   'target': 'ending_shadow_bound',
-                                          'text': 'Take the map. Stop climbing. This is not the time.'},
-                                      {   'target': 'a16_collapse',
-                                          'text': 'Leave everything on the stone. Stand up. Keep going.'}],
-                       'ending_type': None,
-                       'era': 'ravines',
-                       'figures': ['Mack'],
-                       'is_ending': False,
-                       'tags': ['shadow_path', 'mack', 'temptation', 'exhaustion', 'everything_offered'],
-                       'text': 'Mack is waiting at the pass in neither aspect -- not fox, not lion -- just a man in a '
-                               'yellow vest and lime green pants, leaning against the stone wall with his arms '
-                               'crossed, watching Theo come up the slope with the appraising look of someone who has '
-                               'been watching for a long time.\n'
-                               '\n'
-                               '*"You look terrible,"* he says.\n'
-                               '\n'
-                               '*"I know."*\n'
-                               '\n'
-                               '*"Sit down."* Not unkind. Direct.\n'
-                               '\n'
-                               'Theo sits on the nearest stone and the exhaustion comes in like a tide -- the kind '
-                               'that has been waiting behind a wall and gets released all at once when you finally '
-                               'stop moving.\n'
-                               '\n'
-                               'Mack reaches into his vest and produces things, one by one, and sets them on the stone '
-                               'beside Theo.\n'
-                               '\n'
-                               'The pouch of Hafthor, if Theo gave it away. Warm, glowing, exactly as it was.\n'
-                               'The staff, if it cracked or was traded. Whole again, the grain of the ash wood clean '
-                               'and straight.\n'
-                               "A map, hand-drawn, showing paths that Theo hasn't taken but recognizes -- the ones "
-                               'that might have been easier.\n'
-                               "A meal, warm, the kind you don't think about the specifics of when you're hungry "
-                               'enough.\n'
-                               'And last: a direction. A clear, unambiguous direction home.\n'
-                               '\n'
-                               '*"I\'m not keeping you here,"* Mack says. *"The mountain is still there. You can still '
-                               'go up. But you have to want to, and right now --"* He tilts his head. *"Right now '
-                               "you're running on obligation, and obligation without will is just a longer way to the "
-                               'same stopping point."*\n'
-                               '\n'
-                               'He holds out the map.\n'
-                               '\n'
-                               '*"The price is simple. You stop climbing. Not forever. Just: stop climbing this '
-                               'mountain, this time."*\n'
-                               '\n'
-                               'Theo looks at the map. The direction home is very clear. It is a good map.',
-                       'title': 'Everything He Lost',
-                       'vocabulary': [   {   'definition': 'The act of giving in; surrender, especially to something '
-                                                           'that has been resisted for a long time.',
-                                             'term': 'capitulation'}]},
-    'a16_collapse': {   'choices': [   {   'target': 'a17_dark',
-                                           'text': 'Go in. Whatever is waiting in the darkness, face it.'},
-                                       {   'target': 'ending_retreat',
-                                           'text': 'Turn back. The mountain has defeated you. There is no shame in '
-                                                   'retreat -- only truth.'}],
-                        'ending_type': None,
-                        'era': 'depths',
-                        'figures': [],
-                        'is_ending': False,
-                        'tags': ['shadow_path', 'temple_entry', 'despair'],
-                        'text': 'Everything has come apart.\n'
-                                '\n'
-                                'You stand before the south face of Mt. Nebo and you cannot remember, precisely, what '
-                                'you came here for. The journey has taken too long. The things you lost along the way '
-                                '-- you are not sure anymore whether you lost them or threw them away or whether you '
-                                'ever had them.\n'
-                                '\n'
-                                "The mountain's entrance opens before you and it looks nothing like a door. It looks "
-                                'like a mouth. It looks like the end of something.\n'
-                                '\n'
-                                'Your hands are empty. Your feet are tired. The cold air from within the Temple '
-                                'breathes against your face and it does not feel welcoming -- it feels like the breath '
-                                'of a thing that does not distinguish between the living and the dead, that receives '
-                                'all things with the same **impassive** patience.\n'
-                                '\n'
-                                'You have two choices and they are both the same choice in different clothing.\n'
-                                '\n'
-                                'You can go in.\n'
-                                '\n'
-                                'Or you can stop moving entirely, here, on this threshold, and let the mountain decide '
-                                'what to do with you.\n'
-                                '\n'
-                                'Somewhere inside, the Seven Corridors wait. You cannot see them. You cannot see '
-                                'anything except the darkness and, at its far edge, something that might be the '
-                                'absence of something that might have been light.',
-                        'title': 'The Yawning Gate',
-                        'vocabulary': [   {   'definition': 'Not showing or feeling emotion; unmoved by what would '
-                                                            'stir ordinary creatures to response.',
-                                              'term': 'impassive'}]},
-    'a16_entry': {   'choices': [   {'target': 'a16_h_bartop', 'text': 'Move toward the shape in the darkness.'},
-                                    {   'target': 'a17_pool',
-                                        'text': 'Approach the nearest of the Seven Corridors and peer into its depth.'},
-                                    {   'target': 'a17_dark',
-                                        'text': 'Stand still and let your eyes adjust. Let the Temple come to you.'}],
-                     'ending_type': None,
-                     'era': 'depths',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['center_path', 'temple_entry', 'seven_corridors'],
-                     'text': 'The south face of Mt. Nebo opens and you enter because there is nowhere else to go.\n'
-                             '\n'
-                             'The walls are marble -- smooth and white as a closed eye. The darkness ahead is absolute '
-                             'beyond the first twenty paces, where the last gray light from outside gives out '
-                             'entirely. The air is cold. It carries the smell of old stone and older silence.\n'
-                             '\n'
-                             'The Seven Corridors stretch before you, their mouths opening like questions you cannot '
-                             'yet read. Each is the same width, the same height. Each exhales a breath of slightly '
-                             'different temperature. Between them, smaller passages thread away into deeper darkness.\n'
-                             '\n'
-                             'The **frescoes** begin almost at once. On the wall to your left, a painted figure in '
-                             'faded ochre stands at the edge of a cliff that may be a mountain or may be something '
-                             "else -- the painter's meaning is not clear. On your right, a knight in chipped silver "
-                             'paint kneels before a woman who may be praying or may be weeping. You cannot tell '
-                             'which.\n'
-                             '\n'
-                             'You stand in the entrance hall and feel the size of this place. Not just the physical '
-                             'size, though that is considerable. The size that comes from years. Centuries poured into '
-                             'stone and paint and cool air.\n'
-                             '\n'
-                             'Something moves in the darkness at the edge of sight -- or seems to. You cannot be sure.',
-                     'title': 'The Temple of Memories',
-                     'vocabulary': [   {   'definition': 'A method of painting on freshly laid plaster, allowing '
-                                                         'pigment to bond with the wall itself; the resulting work '
-                                                         'endures for centuries.',
-                                           'term': 'fresco'}]},
-    'a16_h_bartop': {   'choices': [   {   'target': 'a17_star',
-                                           'text': "Follow the direction of Bartop's gaze into the deepest corridor."},
-                                       {   'target': 'a17_pool',
-                                           'text': "Move past him carefully and approach the dark pool at the Temple's "
-                                                   'heart.'}],
-                        'ending_type': None,
-                        'era': 'depths',
-                        'figures': ['Bartop'],
-                        'is_ending': False,
-                        'tags': ['center_path', 'bartop', 'deep_time', 'horizontal'],
-                        'text': 'You move toward the shape and understand, after a long moment, that it is not a '
-                                'shadow.\n'
-                                '\n'
-                                'It is a figure. Or a formation. Or both.\n'
-                                '\n'
-                                'He stands perhaps eight feet tall, composed of something that is clearly limestone -- '
-                                'banded and layered, gray-cream-gray, faintly luminous in the dark. His surface is not '
-                                'rough like raw rock but worn smooth over what must have been an enormous span of '
-                                'time, the way river stones are smooth: not shaped by intention but by the patient, '
-                                'indifferent work of years beyond counting.\n'
-                                '\n'
-                                'His face has features. Eyes that are recesses in the stone -- deep, shadow-filled, '
-                                'not reflecting light but somehow seeing. A mouth that is a horizontal seam, slightly '
-                                'open. Hands at his sides, each finger as thick as your wrist.\n'
-                                '\n'
-                                'He does not move. But he is not stone.\n'
-                                '\n'
-                                'You are not certain how you know this. Perhaps it is the faint warmth that comes from '
-                                'him -- barely more than the ambient temperature of the rock around you, but present. '
-                                'Perhaps it is the quality of stillness, which is different from the stillness of a '
-                                'statue. A statue has never moved. This creature has moved, and simply is not moving '
-                                'now, and will move again, in time.\n'
-                                '\n'
-                                'The time in question may be considerable.\n'
-                                '\n'
-                                'A millennium passes in his gaze. It passes slowly, and you are in it, and somehow you '
-                                'do not feel crushed by it. You feel located. You feel as though, in the presence of '
-                                'something this ancient, your own smallness is not a flaw but a fact, and facts can be '
-                                'rested in.\n'
-                                '\n'
-                                'Bartop the Rock **Sentinel** does not speak. He has, perhaps, already said hello -- '
-                                'hours ago, or decades ago, or in a language that operates in geological time and that '
-                                'your bones are only beginning to learn.\n'
-                                '\n'
-                                'You wait with him for a moment that feels like more than a moment.',
-                        'title': 'The Rock Sentinel',
-                        'vocabulary': [   {   'definition': 'A guard or watchman stationed to keep watch and warn of '
-                                                            "danger or mark a boundary; from the Latin for 'the one "
-                                                            "who watches.'",
-                                              'term': 'sentinel'}]},
-    'a16_rebuild': {   'choices': [   {   'target': 'a17_star',
-                                          'text': 'Follow the hum of the staff deeper, toward the sound of distant '
-                                                  'water.'},
-                                      {   'target': 'a17_pool',
-                                          'text': 'Pause on the threshold and let your eyes adjust to the darkness.'}],
-                       'ending_type': None,
-                       'era': 'depths',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['light_path', 'temple_entry', 'transformation'],
-                       'text': 'The south face of Mt. Nebo opens before you -- not with thunder, not with ceremony, '
-                               'but the way a door opens that has always been unlocked. You only had to stop pushing '
-                               'against it.\n'
-                               '\n'
-                               'The marble is pale as old bone. The air that breathes outward is cool and carries the '
-                               'smell of deep stone and something older than fire. Inside, darkness waits. Not the '
-                               'darkness of threat but the darkness of depth -- the darkness at the bottom of a well '
-                               'where the water runs cleanest.\n'
-                               '\n'
-                               'Something shifts inside your chest.\n'
-                               '\n'
-                               'It is not a breaking, exactly. Or not the kind of breaking you have dreaded. The {{staff}} '
-                               "staff hums faintly in your palm, {{#has_pouch}}and Hafthor's pouch rests warm at your hip, {{/has_pouch}}and you "
-                               'understand -- standing here on the **threshold** -- that everything you have carried '
-                               'to this point has been preparation for a threshold you could not have recognized until '
-                               'you stood before it.\n'
-                               '\n'
-                               'An egg cracks from the inside. That is the difference. A wall cracks under assault; an '
-                               'egg cracks because the creature within is ready, and the shell was never the '
-                               'creature.\n'
-                               '\n'
-                               'You are not losing yourself. You are meeting yourself for the first time.\n'
-                               '\n'
-                               'The Temple of Memories breathes. You step inside.',
-                       'title': 'The Cracking of the Shell',
-                       'vocabulary': [   {   'definition': 'The strip of stone or wood beneath a doorway; by '
-                                                           'extension, any moment of crossing from one state into '
-                                                           'another.',
-                                             'term': 'threshold'}]},
-    'a17_dark': {   'choices': [   {   'target': 'a18_shadow',
-                                       'text': 'Feel your way downward toward what might be water. Follow the sound '
-                                               'into the deep.'},
-                                   {   'target': 'ending_darkness',
-                                       'text': 'Stop. Sit down on the cold marble. Accept that you are lost, and '
-                                               'wait.'}],
-                    'ending_type': None,
-                    'era': 'depths',
-                    'figures': [],
-                    'is_ending': False,
-                    'tags': ['shadow_path', 'darkness', 'lost'],
-                    'text': 'There is no light.\n'
-                            '\n'
-                            'You have gone far enough into the Temple of Memories that the gray outside light has '
-                            'completely failed, and the darkness here is a substance -- not the absence of something '
-                            'but a presence, thick and patient. The Seven Corridors breathe around you. You can hear '
-                            'them: faint air movement, the occasional soft sound of settling stone, something that '
-                            'might be water somewhere far below.\n'
-                            '\n'
-                            'You move your hand before your face and see nothing.\n'
-                            '\n'
-                            'The frescoes are here. You know they are here because you brush against them sometimes -- '
-                            'paint under your fingertips, rough plaster, the raised edges of carved stone. Stories you '
-                            'cannot read. Lessons you cannot see. The Temple is full of everything it has always been '
-                            'full of, and none of it reaches you.\n'
-                            '\n'
-                            'You call out once. The corridors return your voice in fragments, slightly altered -- your '
-                            'own word coming back to you in a different key, as though the Temple is offering a gentle '
-                            'correction.\n'
-                            '\n'
-                            'You are not sure which way is forward. You are not sure, in this darkness, that forward '
-                            'is a direction that still applies.\n'
-                            '\n'
-                            'Somewhere -- perhaps far below, perhaps unreachably far -- there might be light. You have '
-                            'heard stories. You have heard nothing at all. In this darkness, the two are equivalent.',
-                    'title': 'Corridors Echoing',
-                    'vocabulary': []},
-    'a17_h_dive': {   'choices': [   {   'target': 'a18_navigate',
-                                         'text': 'Climb out of the pool and walk the Seven Corridors -- you carry a '
-                                                 'light they cannot take.'},
-                                     {   'target': 'a18_shadow',
-                                         'text': 'The darkness rushes back in. Panic. Surface. The light recedes '
-                                                 'below.'}],
-                      'ending_type': None,
-                      'era': 'depths',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['center_path', 'starstone', 'dive', 'baptism', 'horizontal'],
-                      'text': 'You enter the water and it is cold.\n'
-                              '\n'
-                              'Not the cold of a mountain stream, which is bracing and present and over quickly. The '
-                              'cold of this water is patient. It takes you in slowly, the way a thought takes over a '
-                              'mind: first the hands, then the arms, then the chest, and finally the head -- and then '
-                              'there is only the cold, and the dark, and the pressure of depth building against your '
-                              'ears.\n'
-                              '\n'
-                              'You cannot see the surface. You cannot see the bottom. You can see the light.\n'
-                              '\n'
-                              'It is below you, steady and small, and you swim toward it the way you have swum toward '
-                              'certain things in your life without knowing why -- not because you were told to, not '
-                              'because you reasoned your way to it, but because the body sometimes knows before the '
-                              'mind arrives.\n'
-                              '\n'
-                              'The pressure builds. Your lungs have begun their slow campaign of complaint.\n'
-                              '\n'
-                              'And then the light is no longer below you. It is before you. It is a sphere of pale '
-                              'starstone the size of a closed fist, resting on the grotto floor in a cone of its own '
-                              'radiance, absolutely serene in the absolute dark. Around it, the rock is smooth and '
-                              'ancient and unbothered.\n'
-                              '\n'
-                              'You reach out.\n'
-                              '\n'
-                              'The light touches your fingers and you feel something pass through you that is not '
-                              'warmth exactly and not electricity exactly and not relief exactly but contains elements '
-                              'of all three -- a recognition, as though the light has been waiting, not urgently, not '
-                              'impatiently, but simply waiting, in the way that things wait which have nowhere else to '
-                              'be.\n'
-                              '\n'
-                              'You do not take the stone. You do not need to. What the Starstone gives, it gives by '
-                              'contact. The light enters you through your palm and travels upward through the dark '
-                              'water and deposits you, gasping, at the surface.\n'
-                              '\n'
-                              'You are changed. You carry the light now. Not in your hands. In whatever part of you '
-                              'was most in darkness.',
-                      'title': 'The Deep Plunge',
-                      'vocabulary': [   {   'definition': 'The recollection of things from a past existence; in '
-                                                          'philosophy, the idea that learning is a form of remembering '
-                                                          'what the soul already knows.',
-                                            'term': 'anamnesis'}]},
-    'a17_pool': {   'choices': [   {'target': 'a17_h_dive', 'text': 'Dive into the black water toward the light.'},
-                                   {   'target': 'a18_corridors',
-                                       'text': 'Walk the Seven Corridors first. Return to the pool when you understand '
-                                               'more.'},
-                                   {   'target': 'a18_shadow',
-                                       'text': "Stand at the pool's edge and wait. Perhaps the light will rise to meet "
-                                               'you.'}],
-                    'ending_type': None,
-                    'era': 'depths',
-                    'figures': [],
-                    'is_ending': False,
-                    'tags': ['center_path', 'starstone', 'pool', 'choice'],
-                    'text': 'You find the pool without quite meaning to. A passage between two of the Seven Corridors '
-                            'descends gradually, then steeply, and deposits you in a chamber that is too dark to see '
-                            'clearly.\n'
-                            '\n'
-                            'But you can see the water. You can see the water because there is something in the '
-                            'water.\n'
-                            '\n'
-                            'Far below the surface -- impossibly far, it seems, though the pool cannot be more than '
-                            'twenty or thirty feet across -- there is a glow. Pale and steady. The color of something '
-                            'between starlight and the light that comes through the skin of a closed hand held up to '
-                            'the sun.\n'
-                            '\n'
-                            "You crouch at the pool's edge. The water is cold even without touching it. You cannot see "
-                            'the bottom. The light seems to come from the bottom, or from beneath the bottom, or from '
-                            'some distance that does not correspond to the physical dimensions of the pool.\n'
-                            '\n'
-                            'The water is absolutely still.\n'
-                            '\n'
-                            'You have been in motion for a long time. You are tired in a way that sleep does not '
-                            'entirely address. And the light below asks nothing of you -- it does not beckon, does not '
-                            'command. It simply exists, down there in its darkness, doing what light does: '
-                            'persisting.\n'
-                            '\n'
-                            'A choice arrives, as choices do, without ceremony.\n'
-                            '\n'
-                            'Dive. Or do not dive.',
-                    'title': 'Something Glows Below',
-                    'vocabulary': []},
-    'a17_star': {   'choices': [   {'target': 'a18_navigate', 'text': 'Descend into the black water toward the light.'},
-                                   {   'target': 'a18_corridors',
-                                       'text': 'Study the grotto from its edge. Walk the Seven Corridors first, with '
-                                               'this light in your memory.'}],
-                    'ending_type': None,
-                    'era': 'depths',
-                    'figures': ['Bartop'],
-                    'is_ending': False,
-                    'tags': ['light_path', 'starstone', 'bartop', 'grotto'],
-                    'text': '{{#has_met_Bartop}}Bartop has been here before. Twelve times in each direction across the Seven Corridors, '
-                            'you somehow know -- or perhaps you do not know but your body knows, the way it knows '
-                            'certain things about the people who have walked the same ground for centuries before '
-                            'you.\n'
-                            '\n'
-                            'He leads you -- or you follow the direction of his stillness, which amounts to the same '
-                            'thing -- into a passage that descends.{{/has_met_Bartop}}'
-                            '{{^has_met_Bartop}}Something has been here before you. You find the marks in the deepest corridor -- '
-                            'faint grooves in the stone floor, too wide to be human feet, too deliberate to be natural. '
-                            'Whatever made them walked this passage twelve times in each direction. You know this the way '
-                            'you know certain things about the people who have walked the same ground for centuries '
-                            'before you.\n'
-                            '\n'
-                            'You follow the grooves into a passage that descends.{{/has_met_Bartop}}\n'
-                            '\n'
-                            'The descent is long. The marble gives way to rougher stone, then to something older: dark '
-                            'and glassy, volcanic, formed in fires that predate the Temple by orders of magnitude no '
-                            'number could usefully represent. The passage narrows. You are holding the {{staff}} staff '
-                            'before you now, not for support but because it hums more clearly here, and the hum is a '
-                            'kind of company.\n'
-                            '\n'
-                            'Then the passage opens.\n'
-                            '\n'
-                            'The **grotto** is small and absolute. The ceiling is perhaps fifteen feet above. The '
-                            'floor is a pool -- black water so still it might be obsidian.\n'
-                            '\n'
-                            'And at the bottom of that pool, far below, there is light.\n'
-                            '\n'
-                            'It is not a large light. It is the size of a closed fist. But in the absolute darkness of '
-                            'this deep place, it is -- there is no other word -- holy. It is a sphere of pale '
-                            "radiance, the color of starlight seen from a great distance, and it rests on the grotto's "
-                            'floor beneath the black water as though it has always rested there and will rest there '
-                            'always.\n'
-                            '\n'
-                            'The Starstone.\n'
-                            '\n'
-                            'You understand, looking at it, what {{#has_met_Bartop}}Bartop{{/has_met_Bartop}}{{^has_met_Bartop}}something ancient{{/has_met_Bartop}} spent a century **contemplating** from this '
-                            'exact spot. Not the stone itself -- though the stone is wondrous. The fact of it. The '
-                            'fact that light exists in the deepest darkness. Not despite the darkness. Within it. '
-                            'Chosen by it, or choosing it, or simply present there, unbothered by what surrounds it, '
-                            'sufficient to itself.\n'
-                            '\n'
-                            'The Temple above has forty-nine miles of corridors. You have a long way to travel. But '
-                            'first: this.',
-                    'title': 'Light in the Deepest Place',
-                    'vocabulary': [   {   'definition': 'A small cave or cavern, especially a picturesque one; often '
-                                                        'associated with sacred or sheltered places.',
-                                          'term': 'grotto'},
-                                      {   'definition': 'Thinking deeply and at length about something; from the Latin '
-                                                        "for 'to observe,' originally a word for divination by gazing "
-                                                        'at the sky.',
-                                          'term': 'contemplating'}]},
-    'a18_corridors': {   'choices': [   {   'target': 'a18_h_gunnin',
-                                            'text': 'Turn into the side passage toward the sound.'},
-                                        {   'target': 'a19_spectacles',
-                                            'text': 'Ignore it. Push deeper into the corridors, looking for the way '
-                                                    'up.'},
-                                        {   'target': 'a19_pride',
-                                            'text': 'Stop walking. Stand completely still and wait for the murals to '
-                                                    'resolve.'}],
-                         'ending_type': None,
-                         'era': 'depths',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['center_path', 'seven_corridors', 'murals', 'labyrinth'],
-                         'text': 'The Seven Corridors are numbered, but you cannot find the numbers. Or rather, you '
-                                 'find what might be numbers -- symbols carved at the entrance to each passage, worn '
-                                 'smooth by centuries of fingers tracing them -- but you cannot read what they say.\n'
-                                 '\n'
-                                 'You choose a corridor and walk it. The frescoes move.\n'
-                                 '\n'
-                                 'Not physically -- they do not animate, nothing lurches -- but their meaning shifts '
-                                 'as you walk. A painted woman who seemed to be weeping at the entrance seems to be '
-                                 'laughing halfway through. A painted king who seemed triumphant at the far end seems, '
-                                 'from closer, to be falling. You cannot tell if you are reading the story correctly '
-                                 'or if the story has more than one correct reading or if there is no correct reading '
-                                 'and the Temple is simply watching to see what you project onto it.\n'
-                                 '\n'
-                                 'You walk another corridor. You are not sure if it is the same one.\n'
-                                 '\n'
-                                 'The **murals** are extraordinary. Even uncertain, even lost, you can see that. A '
-                                 'painter or painters of staggering skill worked these walls over what must have been '
-                                 'generations -- each fresco connects to the one beside it, which connects to the one '
-                                 'above, which connects through an arch to the one in the adjacent corridor, the whole '
-                                 'system of images a single vast picture that you are standing inside of and can '
-                                 'therefore not stand back far enough to see.\n'
-                                 '\n'
-                                 'You hear something. In a side passage, to your left. Something that sounds like it '
-                                 'might be the faint scratch of stone on stone, which might mean Bartop, which might '
-                                 'mean you are not entirely alone in this labyrinth.',
-                         'title': 'The Shifting Murals',
-                         'vocabulary': [   {   'definition': 'A painting applied directly to a wall or ceiling, often '
-                                                             "large in scale; from the Latin for 'wall.'",
-                                               'term': 'mural'}]},
-    'a18_h_gunnin': {   'choices': [   {   'target': 'a19_spectacles',
-                                           'text': "Take the spectacles from the Maiden's feet. Gunnin made them to be "
-                                                   'used.'},
-                                       {   'target': 'a19_clarity',
-                                           'text': 'Kneel a moment in the chamber as Gunnin knelt. Then rise, and take '
-                                                   'the spectacles, and go up.'}],
-                        'ending_type': None,
-                        'era': 'depths',
-                        'figures': ['Bartop'],
-                        'is_ending': False,
-                        'tags': ['center_path', 'gunnin', 'spectacles', 'maiden', 'bartop', 'horizontal'],
-                        'text': 'The side passage is short. It ends in a chamber no larger than a modest room, and the '
-                                'chamber is a story.\n'
-                                '\n'
-                                'You read it the way you read a room someone has just left: by what remains.\n'
-                                '\n'
-                                'On the far wall, a painting. A woman kneeling in prayer -- or perhaps '
-                                '**supplication** -- her head bowed, her hands folded, her robes a deep blue that the '
-                                'centuries have faded to the color of winter sky. The painter gave her a quality of '
-                                'stillness that is not resignation. It is the stillness of someone who has waited long '
-                                'enough to know that waiting is itself a form of action.\n'
-                                '\n'
-                                'On the wall to the right: a long series of frescoes, clearly older than the painting '
-                                "but occupying the same chamber by design, or by accident, or by the Temple's own "
-                                "inscrutable intentions. A knight in silver armor, young, with a falcon's claw at his "
-                                'throat and a **pentacle** of dark wire at his breast, entering the Temple. The same '
-                                'knight, somewhat older, walking a corridor. The same knight, older still, sitting '
-                                "against a wall surrounded by open books. The knight's hair going gray across panel "
-                                'after panel -- not in a rush but in the slow ordinary way of years. Lines appearing '
-                                'around his eyes. The set of his shoulders changing, gradually, from the shoulders of '
-                                'a man looking for something to the shoulders of a man who has found something he did '
-                                'not expect to find.\n'
-                                '\n'
-                                'In the final panel: the knight kneeling before the painting of the woman. His hand '
-                                'extended toward it. His eyes closed. His face -- the painter caught it exactly -- at '
-                                'peace.\n'
-                                '\n'
-                                'On the wall to the left: a single flat stretch of stone, worn and scratched. '
-                                'Scratched with the small repeated marks of something slow and blunt that has rested '
-                                "against it for a very long time. Bartop's watching post. Centuries of waiting made "
-                                'visible in the stone.\n'
-                                '\n'
-                                'At the base of the painting of the woman, placed there with deliberation: a pair of '
-                                'spectacles. Wire frame of dark, ancient metal, twisted into careful curves. One lens '
-                                'the pale green of sea glass. One lens the quiet glow of pale moonstone.\n'
-                                '\n'
-                                'You stand in this chamber for a long time.\n'
-                                '\n'
-                                'Gunnin came here looking for a Great Beast. He spent his life in these corridors. He '
-                                'found a painting and he fashioned his weapon into spectacles so that he could see it '
-                                'clearly. He died reaching toward something beautiful. And Bartop -- ancient, slow, '
-                                'moving in geological time -- carried him to his rest, and placed these spectacles at '
-                                "the Maiden's feet, and waited.\n"
-                                '\n'
-                                'You do not speak. There is nothing to say that the chamber has not already said.',
-                        'title': "The Knight's Whole Life",
-                        'vocabulary': [   {   'definition': 'A five-pointed star used as a magical or protective '
-                                                            'symbol, often worn as an amulet; from the Greek for '
-                                                            "'five.'",
-                                              'term': 'pentacle'},
-                                          {   'definition': 'The act of humble entreaty or prayer; asking earnestly '
-                                                            'for something from a position of acknowledged need.',
-                                              'term': 'supplication'}]},
-    'a18_navigate': {   'choices': [   {   'target': 'a19_clarity',
-                                           'text': 'Put on the spectacles and continue upward toward the Porch of '
-                                                   'Sacred Fire.'},
-                                       {   'target': 'a19_spectacles',
-                                           'text': 'Study the spectacles first, and the niche that contained them, '
-                                                   'before moving on.'}],
-                        'ending_type': None,
-                        'era': 'depths',
-                        'figures': [],
-                        'is_ending': False,
-                        'tags': ['light_path', 'seven_corridors', 'spectacles', 'navigation'],
-                        'text': 'The Seven Corridors are not a maze if you carry a light.\n'
-                                '\n'
-                                'This is not a simple fact. It took you the full depth of the pool, the full cold of '
-                                'that black water, the full weight of the dark pressing against your closed eyes, to '
-                                'learn it. But it is a fact now, lodged somewhere beneath your ribs alongside the '
-                                "steady warmth that came up through your palm from the Starstone's surface.\n"
-                                '\n'
-                                'You walk the first Corridor ascending. The frescoes tell a story about a man who '
-                                'planted seeds in what appeared to be dead ground and spent his whole life waiting for '
-                                'harvest and died before it came -- and in the fresco immediately to the right, the '
-                                'harvest. Enormous. Ridiculous. Overflowing. The man is not in it. But the man is in '
-                                'it.\n'
-                                '\n'
-                                'You walk the second Corridor descending. The same images, read in reverse, tell a '
-                                'different story: the harvest first, then the planting, then the planting again -- a '
-                                'cycle rather than a line.\n'
-                                '\n'
-                                'This is what Bartop walked twelve times in each direction. This is what takes a '
-                                'geological patience to fully read: that every story in the Temple of Memories is two '
-                                'stories, depending on whether you are ascending or descending, and that neither story '
-                                'is the complete story, and that completeness requires the willingness to walk the '
-                                'same ground in both directions.\n'
-                                '\n'
-                                'In the fifth Corridor, in a small **niche** set into the wall at eye level, you find '
-                                'a pair of spectacles. The frame is dark wire -- ancient and intricate. One lens is '
-                                'sea glass, pale green, catching the light. One lens is pale moonstone, luminous with '
-                                'its own faint glow.\n'
-                                '\n'
-                                'You have seen this niche before, somehow. In the way you have seen Bartop before. In '
-                                'the way the Temple contains, if you carry the light, everything you need to '
-                                'recognize.',
-                        'title': 'The Corridors Made Legible',
-                        'vocabulary': [   {   'definition': 'A shallow recess in a wall, especially one used to '
-                                                            "display a statue or object; from the French for 'nest.'",
-                                              'term': 'niche'}]},
-    'a18_shadow': {   'choices': [   {   'target': 'a19_pride',
-                                         'text': 'Walk toward the glint. Whatever it is, it is something.'},
-                                     {   'target': 'ending_madness',
-                                         'text': 'Ignore it. Choose a direction at random and walk until you find '
-                                                 'something or cannot walk anymore.'}],
-                      'ending_type': None,
-                      'era': 'depths',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['shadow_path', 'lost', 'labyrinth', 'indifference'],
-                      'text': 'The corridors shift.\n'
-                              '\n'
-                              'This is not a figure of speech. Or it may be a figure of speech but it is also literal. '
-                              'You have walked what you believe is a straight line for what you believe is twenty '
-                              'minutes and you have arrived somewhere you have been before -- the same crack in the '
-                              'plaster, the same water stain, the same fragment of fresco showing a hand reaching '
-                              'toward something outside the frame.\n'
-                              '\n'
-                              'You chose a direction. You walked in it. You are back.\n'
-                              '\n'
-                              'The Temple of Memories is not malicious. It is not trying to trap you. It is simply '
-                              'vast, and old, and **indifferent** in the way that very old things are indifferent -- '
-                              'not unkind, but without interest in whether you succeed or fail. It has held these '
-                              'corridors for longer than human civilization has been accumulating stories, and it will '
-                              'hold them afterward, and the question of whether one small figure navigating its halls '
-                              'finds the exit is not a question it is capable of caring about.\n'
-                              '\n'
-                              'You understand this. The understanding does not help.\n'
-                              '\n'
-                              'Your feet are aching. The darkness presses. The frescoes -- everywhere, inescapable, '
-                              'elaborate -- seem to be watching you with the calm attention of things that have '
-                              'watched many pilgrims walk these halls and none of them could see what the pictures '
-                              'were saying.\n'
-                              '\n'
-                              'A new corridor opens to your left. You do not remember it being there.\n'
-                              '\n'
-                              'At its entrance, barely visible, something glints. Metal. A wire frame. A pair of '
-                              'lenses.\n'
-                              '\n'
-                              'Or your eyes are inventing comfort in the dark, which they have done before.',
-                      'title': 'The Temple Does Not Care',
-                      'vocabulary': [   {   'definition': 'Having no particular interest or sympathy; in older usage, '
-                                                          'impartial rather than uncaring -- the sun is indifferent to '
-                                                          'whom it shines upon.',
-                                            'term': 'indifferent'}]},
-    'a19_clarity': {   'choices': [{'target': 'a20_answer', 'text': 'Ascend to the Porch of Sacred Fire.'}],
-                       'ending_type': None,
-                       'era': 'depths',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['light_path', 'spectacles', 'revelation', 'ascent'],
-                       'text': 'You put on the spectacles.\n'
-                               '\n'
-                               'Through the sea glass lens -- the left -- the fresco on the wall before you resolves '
-                               'into what it is. Not what it seemed. What it is. The painted man who seemed to be '
-                               'weeping is weeping -- but not with grief. His hands are open. The thing he is '
-                               'releasing is visible now, a dark shape departing from his palm upward, and his face is '
-                               'not grief but relief, which can look identical until you have the right lens.\n'
-                               '\n'
-                               'Through the pale moonstone lens -- the right -- the same fresco opens into what it '
-                               'could become. The space above his open hands extends into light. The dark shape '
-                               'ascending becomes something unnamed, something the painter left unlabeled on purpose, '
-                               'something you are invited to supply from your own understanding.\n'
-                               '\n'
-                               'Together: the full picture. The man in the fresco is you, and is not you, and is '
-                               'everyone who has ever stood at the edge of something they needed to release, and the '
-                               'painting has been here for centuries waiting for someone to read it whole.\n'
-                               '\n'
-                               "You walk the Corridor with Gunnin's spectacles and the Temple becomes a book.\n"
-                               '\n'
-                               'Not a simple book. Not a book that tells you what to do. A book that shows you what '
-                               'is, and beside it what could be, and leaves the distance between them as your '
-                               'responsibility. The corridor that confused you curves upward and you see now that it '
-                               'has always curved upward, that the geometry of the Temple is not a puzzle to be solved '
-                               'but an architecture to be inhabited, and that you have been inhabiting it wrong by '
-                               'trying to solve it.\n'
-                               '\n'
-                               'The seventh Corridor ascends steeply. At its top, a door. Through the door, faint gold '
-                               'light.\n'
-                               '\n'
-                               'Dawn. Or something that functions as dawn in this deep, vast, marble-walled place.\n'
-                               '\n'
-                               "The Porch of Sacred Fire waits above. You climb toward it with Gunnin's spectacles on "
-                               "your face and Bartop's patience in your chest and the Starstone's warmth in your "
-                               'hands, and the climb is long, and every step is clear.',
-                       'title': 'Oh. That Is What It Means.',
-                       'vocabulary': [   {   'definition': "The apparent shift in an object's position when viewed "
-                                                           'from different angles; in broader use, the way the same '
-                                                           'thing can look entirely different depending on where you '
-                                                           'stand.',
-                                             'term': 'parallax'}]},
-    'a19_pride': {   'choices': [   {   'target': 'a20_refuse',
-                                        'text': 'Continue descending. There must be another way up on the far side.'},
-                                    {   'target': 'ending_guardian',
-                                        'text': 'Stop. Accept that you cannot read what you cannot read. Go back for '
-                                                'the spectacles.'}],
-                     'ending_type': None,
-                     'era': 'depths',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['shadow_path', 'pride', 'partial_sight', 'hubris'],
-                     'text': 'You find the spectacles. Wire and glass and moonstone, ancient and intricate. Someone '
-                             'made these with great care.\n'
-                             '\n'
-                             'You hold them for a moment. Then you set them down.\n'
-                             '\n'
-                             'You have eyes. You have walked the corridors with your own eyes since you entered and '
-                             'you have not found the exit yet, but that is not a failure of vision -- it is a failure '
-                             'of time, or of direction, or of luck. Your eyes are sufficient for the world you have '
-                             'always lived in. They got you to this mountain. They got you through the forest. They '
-                             'have not failed you.\n'
-                             '\n'
-                             'You continue upward without the spectacles.\n'
-                             '\n'
-                             'The corridor curves. You follow the curve. The murals are dense and complicated and you '
-                             'understand some of them -- more than a stranger would, you tell yourself -- and the ones '
-                             'you do not understand are probably not essential. Some things are decoration. Some '
-                             'things are for other people. You are not obligated to read every painting in a '
-                             'forty-nine-mile labyrinth.\n'
-                             '\n'
-                             'The corridor curves again. You are in a section you have not been in before, or a '
-                             'section you have been in but do not recognize, or the same section presenting itself '
-                             'differently, which you decide is a trick of the lighting.\n'
-                             '\n'
-                             'A junction. Five passages. You stood at this junction before, or one like it. You chose '
-                             'left then. You choose right now.\n'
-                             '\n'
-                             "The fresco at the junction's center shows a figure holding a lamp and walking "
-                             'confidently into a darkness that the fresco, with unusual clarity, has labeled. The '
-                             "label is in a language you do not read. But the figure's posture is unmistakable.\n"
-                             '\n'
-                             'The figure does not know the darkness is labeled.\n'
-                             '\n'
-                             'The passage you have chosen descends.',
-                     'title': 'Sufficient Eyes',
-                     'vocabulary': []},
-    'a19_spectacles': {   'choices': [   {   'target': 'a20_answer',
-                                             'text': 'Ascend toward the gold light. Rough sight is enough -- you will '
-                                                     'find the way.'},
-                                         {   'target': 'a20_refuse',
-                                             'text': 'Turn back. You need to understand the full map before you '
-                                                     'climb.'}],
-                          'ending_type': None,
-                          'era': 'depths',
-                          'figures': [],
-                          'is_ending': False,
-                          'tags': ['center_path', 'spectacles', 'partial_sight', 'ascent'],
-                          'text': 'The spectacles are extraordinary objects.\n'
-                                  '\n'
-                                  'You hold them up in the faint light and examine them: wire frame of dark, ancient '
-                                  'metal, worked with a care that suggests the maker had very little wire and could '
-                                  'afford no mistakes. One lens is sea glass -- pale green, subtly irregular, the '
-                                  'glass ground not by machine but by hand or by patient water. One lens is pale '
-                                  'moonstone, and it carries its own faint **luminescence**, a glow so gentle you '
-                                  'might be imagining it.\n'
-                                  '\n'
-                                  'You put them on.\n'
-                                  '\n'
-                                  'The corridor shifts. Not in the alarming way it has been shifting -- the murals '
-                                  'resolving into new meanings at every glance -- but productively. The fresco to your '
-                                  'left shows a woman at a loom, and through the sea glass lens you can see that the '
-                                  'cloth she is weaving has a pattern, and the pattern is a map, and the map -- you '
-                                  'lean close -- shows corridors. These corridors. There is a route marked on it.\n'
-                                  '\n'
-                                  'Through the moonstone lens, the same fresco shows the cloth finished, the map '
-                                  'complete, the weaver standing back from her work. Where she is standing is where '
-                                  'you need to go.\n'
-                                  '\n'
-                                  'But the sea glass lens has a crack in it. A hairline fracture, old, that does not '
-                                  'ruin the lens but distorts one corner of your vision through it. And there is a '
-                                  'section of the map -- the upper-right portion, where the corridors climb steeply -- '
-                                  'that you cannot quite read.\n'
-                                  '\n'
-                                  'You know roughly where you are going. You know roughly what the ascent requires. '
-                                  'Roughly is not nothing. Roughly has taken pilgrims to remarkable destinations.\n'
-                                  '\n'
-                                  'The Corridor curves upward. The faint gold light beyond its highest point might be '
-                                  'the dawn you have been climbing toward.',
-                          'title': 'One Lens Cracked',
-                          'vocabulary': [   {   'definition': 'The emission of light by a substance that has not been '
-                                                              'heated; a cold glow, as from moonstone, foxfire, or '
-                                                              'bioluminescent creatures.',
-                                                'term': 'luminescence'}]},
-    'a1_barge': {   'choices': [   {'target': 'a2_woods', 'text': 'Follow the lights deeper into the right path.'},
-                                   {   'target': 'a2_lost_start',
-                                       'text': 'Admit the mistake, go back, and try to find your own way through the '
-                                               'forest.'}],
-                    'ending_type': None,
-                    'era': 'forest',
-                    'figures': ['Mr. Lock', 'Mrs. Lock'],
-                    'is_ending': False,
-                    'tags': ['impatience', 'shadow-path', 'refused-help'],
-                    'text': 'One knock. Two. Three.\n'
-                            '\n'
-                            'The door opened immediately, which was somehow worse than if it had taken a moment. Mr. '
-                            'Lock stood there in his purple boots, expression unchanged, as though he had been '
-                            'standing right behind the door the entire time and had simply been waiting for Theo to '
-                            'get impatient enough to knock.\n'
-                            '\n'
-                            '"I\'m sorry to bother you," Theo said, which was at least partially true. "But I\'m '
-                            "trying to get to -- somewhere. I don't exactly know where. I was told the forest leads "
-                            'there, but the path forks and I don\'t know which direction and I figured -- "\n'
-                            '\n'
-                            'Mr. Lock looked at him with an expression that Theo would later describe as "profound '
-                            'patience that had been tested before and expected to be tested again."\n'
-                            '\n'
-                            'Mrs. Lock materialized at his elbow, still knitting. She smiled. The smile was genuinely '
-                            'warm. It did not help.\n'
-                            '\n'
-                            '"You didn\'t wait," she said, pleasantly.\n'
-                            '\n'
-                            '"The sign said visitors wait. You did not wait," Mr. Lock confirmed, with the **laconic** '
-                            'certainty of someone who had given this exact speech many times and saw no reason to add '
-                            'to it.\n'
-                            '\n'
-                            '"But I just need to know which path -- "\n'
-                            '\n'
-                            '"We do not give directions to those who have not observed the waiting period," Mrs. Lock '
-                            'said, cheerfully. "It isn\'t cruelty. It\'s policy. You see, the waiting period is, '
-                            'itself, a kind of direction."\n'
-                            '\n'
-                            'Mr. Lock nodded once, stepped back, and the door closed.\n'
-                            '\n'
-                            'Theo stood on the step, holding nothing, knowing less than he had before he knocked.\n'
-                            '\n'
-                            'The right path with its drifting lights was right there. It looked, honestly, more '
-                            'interesting than the path that followed the stream. And what did a couple of badgers '
-                            'know, anyway?\n'
-                            '\n'
-                            'He turned right. The forest closed around him, and the lights moved on ahead, always just '
-                            'out of reach.',
-                    'title': 'No Time for Waiting',
-                    'vocabulary': [   {   'definition': 'Using very few words; brief to the point of curtness. From '
-                                                        'the ancient Laconians (Spartans), who were famous for their '
-                                                        'terse speech. To say something laconically is to say it as '
-                                                        'though every extra syllable costs money.',
-                                          'term': 'laconic'}]},
-    'a1_forest_enter': {   'choices': [   {   'target': 'a1_listen',
-                                              'text': 'Sit on the bench and wait. The sign said to wait.'},
-                                          {   'target': 'a1_barge',
-                                              'text': "Knock and ask for directions -- you don't have time to sit "
-                                                      'around.'}],
-                           'ending_type': None,
-                           'era': 'forest',
-                           'figures': ['Mr. Lock', 'Mrs. Lock'],
-                           'is_ending': False,
-                           'tags': ['fork', 'badgers', 'waiting', 'patience'],
-                           'text': 'The forest hit him all at once.\n'
-                                   '\n'
-                                   'He had expected green. He had not expected this many greens. Deep emerald '
-                                   'trellises arched overhead where ancient boughs had grown together over decades or '
-                                   'centuries, filtering the light into something liquid and cool. Bright jade leaves '
-                                   'the size of dinner plates hung on vines that spiraled around trunks older than his '
-                                   'country. And everywhere, nestled between the dark elder branches, chartreuse buds '
-                                   '-- a yellow-green so vivid it almost hummed -- caught what light remained and '
-                                   'scattered it like seeds, like living stars.\n'
-                                   '\n'
-                                   'The air smelled of sage and crushed grass and something else, something like the '
-                                   'moment just before a song starts.\n'
-                                   '\n'
-                                   "Theo's feet found a path without him deciding to follow one. Soft moss cushioned "
-                                   "each step. After a while -- he couldn't have said how long -- the path forked.\n"
-                                   '\n'
-                                   'To the left, the trail ran beside what sounded like water. To the right, it '
-                                   'plunged into denser shadow, where lights moved lazily between the far trunks like '
-                                   'slow fireflies.\n'
-                                   '\n'
-                                   'Between the paths, almost at the fork itself, sat a small house. To call it a '
-                                   'shack would be technically accurate and somehow ungrateful -- it had a certain '
-                                   'dignity about it, the dignity of something that has survived longer than it was '
-                                   'built to. A chimney. A window. A door slightly ajar, from which came the rhythmic '
-                                   'click of knitting needles.\n'
-                                   '\n'
-                                   'A badger in enormous purple boots appeared in the doorway.\n'
-                                   '\n'
-                                   'He looked at Theo. He said nothing. He went back inside.\n'
-                                   '\n'
-                                   'Then a second badger appeared -- this one with a wide, warm smile that Theo could '
-                                   'not quite read, knitting needles still going in both paws -- and gestured at the '
-                                   'bench outside the door with a pleasantness that left no room for argument.\n'
-                                   '\n'
-                                   'A small painted sign on the door read: VISITORS WAIT. THE LOCKS WILL ATTEND TO YOU '
-                                   'IN DUE COURSE.\n'
-                                   '\n'
-                                   'Theo checked his phone. No signal, but the clock still worked. He looked at the '
-                                   'bench.\n'
-                                   '\n'
-                                   'The bench was not comfortable. An hour was a long time. The forest was waiting in '
-                                   'both directions, full of its own plans.\n'
-                                   '\n'
-                                   'What did you do when the instructions said to wait, and every instinct said to '
-                                   'move?',
-                           'title': 'The Chartreuse Forest',
-                           'vocabulary': [   {   'definition': 'A vivid yellow-green color, named after the French '
-                                                               'liqueur made by Carthusian monks. The word has come to '
-                                                               'describe anything with that particular electric, '
-                                                               'almost impossible shade that sits exactly between '
-                                                               'yellow and green.',
-                                                 'term': 'chartreuse'}]},
-    'a1_listen': {   'choices': [   {'target': 'a2_stream', 'text': 'Follow the stream, as the Locks directed.'},
-                                    {   'target': 'a2_woods',
-                                        'text': 'Take the right path despite the advice -- the lights look '
-                                                'intriguing.'}],
-                     'ending_type': None,
-                     'era': 'forest',
-                     'figures': ['Mr. Lock', 'Mrs. Lock'],
-                     'is_ending': False,
-                     'tags': ['patience', 'gift', 'directions', 'light-path'],
-                     'text': 'Theo sat.\n'
-                             '\n'
-                             'He tried counting the chartreuse buds overhead. He stopped at two hundred. He watched an '
-                             'ant -- an unusually large one, and one that appeared to be carrying a tiny rolled-up '
-                             'scroll -- cross the path in front of him with great purpose. He thought about his '
-                             'history textbook and the medieval pilgrims who had walked for weeks to reach a single '
-                             'door. They had waited in lines for days.\n'
-                             '\n'
-                             'He could manage an hour.\n'
-                             '\n'
-                             'The knitting needles clicked on. The forest breathed around him. Somewhere to the left, '
-                             'water moved over stones, and the sound of it was almost musical, almost patterned, as '
-                             'though the stream knew a tune it was trying to recall.\n'
-                             '\n'
-                             "When his phone read sixty minutes exactly, the shack's door swung open with a sound like "
-                             'a cleared throat.\n'
-                             '\n'
-                             'Mr. Lock stood in the frame. He was shorter than Theo had expected. The purple boots '
-                             'added some height. He studied Theo for a long moment with dark amber eyes -- the '
-                             'assessment of someone who had seen many visitors and found most of them wanting.\n'
-                             '\n'
-                             'Then he spoke, his voice a low rumble:\n'
-                             '\n'
-                             '"Take the left path."\n'
-                             '\n'
-                             'He went back inside.\n'
-                             '\n'
-                             'Mrs. Lock appeared where he had been standing. She was still smiling -- that particular '
-                             'smile, warm and serene and just slightly too knowing. She held out a small cloth wrapped '
-                             'around something warm.\n'
-                             '\n'
-                             '"Pressed wheat cake," she said. "For the road. The left path follows the stream. The '
-                             'stream knows where it\'s going. The King\'s **providence** works through small things."\n'
-                             '\n'
-                             'She pressed the cake into his hands. She went back inside.\n'
-                             '\n'
-                             'The door clicked shut. The knitting needles resumed.\n'
-                             '\n'
-                             'Theo held the wheat cake in both hands and felt, quite suddenly, like the whole strange '
-                             "morning had been in preparation for exactly this: a gift he hadn't earned, and a clear "
-                             'direction from someone who had made him wait to be sure he was ready to receive it.\n'
-                             '\n'
-                             'He turned left. He followed the sound of the stream.',
-                     'title': 'One Hour',
-                     'vocabulary': [   {   'definition': 'The idea that a higher power guides events toward a good '
-                                                         'end, often through seemingly small or ordinary means. From '
-                                                         'the Latin providentia: foresight. To trust in providence is '
-                                                         "to believe that the stream knows where it's going, even when "
-                                                         "you don't.",
-                                           'term': 'providence'}]},
-    'a20_answer': {   'choices': [   {   'target': 'a21_whole',
-                                         'text': 'Step toward the summit -- the call is real and so are you.'},
-                                     {   'target': 'a20_h_fire_vision',
-                                         'text': 'Ask the bat to show you the visions in the Sacred Fire first.'}],
-                      'ending_type': None,
-                      'era': 'heights',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['a20', 'light', 'porch', 'sacred_fire', 'bat', 'call'],
-                      'text': 'The bronze plateau caught the last light of the descending sun and held it.\n'
-                              '\n'
-                              'Theo stepped out of the highest corridor onto a wide expanse of hammered metal, warm '
-                              'beneath his boots, humming with a frequency he felt in his sternum rather than heard '
-                              "with his ears. Behind him, the corridors of Mt. Nebo's Temple of Memories fell away "
-                              "into the mountain's interior. Before him -- nothing. The edge of the Porch dropped into "
-                              'open sky, and below that sky, impossibly far below, the Chartreuse Forest stretched to '
-                              'every horizon, its canopy blazing in shades of amber and copper and living gold.\n'
-                              '\n'
-                              'The Holy Nuns had named it correctly. This was not merely light. This was Sacred Fire.\n'
-                              '\n'
-                              'Theo stood at the edge and looked down at the whole of the journey he had walked. He '
-                              'could see the Forest Gate, a tiny dark seam in the emerald distance. He could see the '
-                              "three hills where the Maiden's cottage sat, smoke still rising. He could see the "
-                              'ravines where Mack had laughed and tricked and, in the end, told a small and necessary '
-                              'truth. He could see the shimmer of the mirror pool. He could see all of it, the whole '
-                              'kingdom laid out like a text he had been learning to read.\n'
-                              '\n'
-                              'The **parallax** was already beginning. He understood, standing here, that the same '
-                              'landscape would look entirely different from the summit above him, and different again '
-                              'from the forest floor below. The journey had not been a straight line. It had been a '
-                              'slow change of altitude. He had been learning, all this time, how to stand in a new '
-                              'place.\n'
-                              '\n'
-                              'The bat arrived without announcement.\n'
-                              '\n'
-                              "It dropped from somewhere above the Porch's bronze rim and landed on Theo's left "
-                              'shoulder with the careful weight of a walnut. It folded its wings with precise economy, '
-                              'turned its ancient, patient face toward his ear, and began to squeak.\n'
-                              '\n'
-                              'He understood every word.\n'
-                              '\n'
-                              '"Signs," the bat said. "**Portents**. The mountain breathes tonight. The Beings of '
-                              'Light have left their fires burning in the upper spires -- first time in four hundred '
-                              "years they've done that before a pilgrim arrives rather than after. The faeries are "
-                              'restless. The King..."\n'
-                              '\n'
-                              'The bat paused. Squeaked something that was not quite a word.\n'
-                              '\n'
-                              '"The King is expecting you," it said at last. "He has been expecting you since the '
-                              'Forest Gate."\n'
-                              '\n'
-                              "{{#has_pouch}}Theo touched the pouch of Hafthor at his belt. {{/has_pouch}}He touched Gunnin's spectacles, folded "
-                              'in his breast pocket. {{#staff}}He touched the {{staff}} staff in his hand, '
-                              'smooth with use. He thought of Phil the pillbug asking, very seriously, to be helped '
-                              "through a keyhole. He thought of Mr. Lock's slow, approving nod. He thought of Brok "
-                              'opening his chest cavity in the crypt and saying, with absolute simplicity, *this is '
-                              'for you*.\n'
-                              '\n'
-                              "The drop below the Porch's edge was real. The height was real. The call was real.\n"
-                              '\n'
-                              'He had been preparing for this moment since he fell asleep over his textbook. Perhaps '
-                              'longer.\n'
-                              '\n'
-                              '"What\'s up there?" Theo asked the bat.\n'
-                              '\n'
-                              'The bat squeaked once -- a sound that contained, somehow, amusement and affection and '
-                              'immense antiquity.\n'
-                              '\n'
-                              '"Everything you already know," it said. "And one thing you don\'t. Yet."\n'
-                              '\n'
-                              'The Sacred Fire deepened around him. The bronze sang under his feet. Theo looked up at '
-                              'the summit of Mt. Nebo -- the Parallax of Life, its spires lit with distant, patient '
-                              'fire -- and made his choice.',
-                      'title': 'The Porch of Sacred Fire',
-                      'vocabulary': [   {   'definition': 'The apparent shift in position of an object when viewed '
-                                                          'from different vantage points -- used here to suggest that '
-                                                          'truth looks different depending on where you stand.',
-                                            'term': 'parallax'},
-                                        {   'definition': 'A sign or omen of something momentous about to occur.',
-                                            'term': 'portent'}]},
-    'a20_h_fire_vision': {   'choices': [   {   'target': 'a21_whole',
-                                                'text': 'Ascend to the summit -- you have seen the thread.'}],
-                             'ending_type': None,
-                             'era': 'heights',
-                             'figures': [],
-                             'is_ending': False,
-                             'tags': ['a20', 'light', 'horizontal', 'vision', 'sacred_fire', 'thread', 'revelation'],
-                             'text': 'The bat spread its wings once -- not to fly, but as a gesture -- and the Sacred '
-                                     'Fire responded.\n'
-                                     '\n'
-                                     'The bronze of the Porch began to move.\n'
-                                     '\n'
-                                     'Not physically. Not like water or like flame, though it resembled both. The '
-                                     'hammered surface became reflective in a way that metal cannot normally be, and '
-                                     'in its depths Theo saw -- not images exactly, but presences. The quality of '
-                                     'moments. The weight of what had actually happened.\n'
-                                     '\n'
-                                     'He saw Phil the pillbug curled at the Forest Gate, patient and trusting, waiting '
-                                     'for someone to think of a small solution to a small problem. And he understood, '
-                                     'watching the bronze, that Phil had not needed help. Phil had offered Theo the '
-                                     'first lesson -- that **grace** moves through small acts, and that the one who '
-                                     'helps is changed more than the one who is helped.\n'
-                                     '\n'
-                                     "He saw Mrs. Lock's kitchen, the smell of bread, the specific patience of someone "
-                                     'who has welcomed ten thousand pilgrims and welcomes this one as though he is the '
-                                     "first. He saw Mr. Lock's key, and understood that every locked door in the "
-                                     'Kingdom had been locked on purpose -- not to keep him out, but to ask whether he '
-                                     'was willing to wait, to try, to earn the opening.\n'
-                                     '\n'
-                                     "He saw Brok's chest cavity opening in the crypt, the pouch of Hafthor resting in "
-                                     "the drone's metal palm, and he felt something shift behind his eyes. Brok had "
-                                     'served the Temple for centuries. Brok had given away the only personal thing he '
-                                     'owned to a boy who had done nothing yet to deserve it. That was not a '
-                                     'transaction. That was a gift from someone who understood that gifts are how the '
-                                     'Kingdom sustains itself.\n'
-                                     '\n'
-                                     "He saw Mack's thousand faces. He saw the Maiden's cottage light burning in the "
-                                     'gap between three hills. He saw the mirror pool, his own reflection staring '
-                                     'back, neither flattering nor condemning -- simply true. He saw Bartop in the '
-                                     'dark, geological and patient, and the Starstone burning at the bottom of the '
-                                     'pool like a sun that had learned to live underwater.\n'
-                                     '\n'
-                                     "He saw Gunnin's niche. The knight who had spent his life searching and had made, "
-                                     'from the very weapon of his searching, something that let others see clearly. '
-                                     "The spectacles in Theo's pocket felt warm.\n"
-                                     '\n'
-                                     'The bronze showed him everything.\n'
-                                     '\n'
-                                     'And then it showed him one more thing -- a thread. Thin as spider silk, bright '
-                                     "as the Starstone, running through every single scene. Through Phil's patience "
-                                     "and the Locks' bread and Brok's gift and Mack's tricks and the Maiden's rest and "
-                                     "Bartop's waiting and Gunnin's spectacles. The same thread. The same light. The "
-                                     'same presence, unnamed, threading through everything like a hand that had been '
-                                     'guiding without being seen.\n'
-                                     '\n'
-                                     '"Oh," Theo said.\n'
-                                     '\n'
-                                     'The bat squeaked once, quietly, with great satisfaction.\n'
-                                     '\n'
-                                     'The bronze stilled. The Sacred Fire continued to burn across the Chartreuse '
-                                     "Forest below. Theo looked up at the summit. His vision, even without Gunnin's "
-                                     'spectacles, was different now. He could see two things at once: what was, and '
-                                     'what had always been.\n'
-                                     '\n'
-                                     'He walked toward the summit, and the fire walked with him.',
-                             'title': 'The Whole Journey in Bronze Light',
-                             'vocabulary': [   {   'definition': 'Freely given goodness or favor -- a gift extended '
-                                                                 'without condition or calculation.',
-                                                   'term': 'grace'}]},
-    'a20_refuse': {   'choices': [   {   'target': 'a21_fragment',
-                                         'text': 'Summon whatever remains and step toward the summit anyway.'},
-                                     {   'target': 'ending_retreat',
-                                         'text': 'Descend. The mountain is not finished with you, but you are finished '
-                                                 'with the mountain -- for now.'}],
-                      'ending_type': None,
-                      'era': 'heights',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['a20', 'shadow', 'porch', 'sacred_fire', 'bat', 'fear', 'refusal'],
-                      'text': 'The bronze plateau caught the last light of the descending sun and held it, and the '
-                              'light was too much.\n'
-                              '\n'
-                              'Theo stepped out of the highest corridor and stopped. The Porch stretched before him, '
-                              "wide and bright and utterly exposed, and beyond the Porch's edge -- nothing. Open sky. "
-                              'The drop was not gradual. It was absolute. The Chartreuse Forest glowed impossibly far '
-                              'below like a burning map, and the summit of Mt. Nebo rose impossibly far above like an '
-                              'accusation.\n'
-                              '\n'
-                              'The bat arrived.\n'
-                              '\n'
-                              'It landed on his left shoulder and squeaked of signs and portents, of Beings of Light '
-                              'in the upper spires, of the King expecting him since the Forest Gate. It spoke with the '
-                              'casual confidence of something ancient delivering news to someone who has already '
-                              'decided not to receive it.\n'
-                              '\n'
-                              'Theo listened. He heard.\n'
-                              '\n'
-                              'He did not move.\n'
-                              '\n'
-                              'The height was real. The call was real. But so was the voice that said: *you are not '
-                              'ready. You never were. Every lesson you half-learned, every gift you half-received, '
-                              'every chain you let yourself wear a little longer than you should have -- it is all '
-                              'still with you. The summit will see it. The summit will show it to you in light you '
-                              'cannot look away from.*\n'
-                              '\n'
-                              'The fear was not cowardice, exactly. It was something more specific -- the '
-                              '**trepidation** of someone who knows enough to know how much they do not know, but has '
-                              'not yet learned that this knowledge is the beginning of readiness, not the proof of its '
-                              'absence.\n'
-                              '\n'
-                              'The Sacred Fire burned across the forest below. It was beautiful. It was too beautiful. '
-                              'There are beauties that invite and beauties that expose, and Theo could not tell, '
-                              "standing at the Porch's edge with his heart hammering, which kind this was.\n"
-                              '\n'
-                              'The bat waited.\n'
-                              '\n'
-                              'The bat squeaked one more time -- a sound like a small, patient question.\n'
-                              '\n'
-                              'Theo took a step backward.\n'
-                              '\n'
-                              'Then another.',
-                      'title': 'The Porch of Sacred Fire (Shadow)',
-                      'vocabulary': [   {   'definition': 'A feeling of fear or anxiety about something that is about '
-                                                          'to happen -- a trembling at the threshold.',
-                                            'term': 'trepidation'}]},
-    'a21_fragment': {   'choices': [   {'target': 'ending_crossroads', 'text': 'Begin the descent with what you have.'},
-                                       {   'target': 'ending_abyss',
-                                           'text': 'Stay in the light until there is nowhere left to hide.'}],
-                        'ending_type': None,
-                        'era': 'heights',
-                        'figures': [],
-                        'is_ending': False,
-                        'tags': ['a21', 'shadow', 'summit', 'parallax', 'fragment', 'gap', 'incomplete'],
-                        'text': 'The summit was real. Theo reached it.\n'
-                                '\n'
-                                'This was not nothing. He had climbed further than most. He had seen the Porch of '
-                                'Sacred Fire and chosen to keep climbing even when his legs wanted to stop, even when '
-                                'the voice in him said *turn back, you are not ready.* He had climbed through the fear '
-                                'and arrived at the Parallax of Life, and the Elysian Kingdom lay spread below him in '
-                                'every direction, and he could see almost all of it.\n'
-                                '\n'
-                                'Almost.\n'
-                                '\n'
-                                'The light here was different from the light below. It did not merely illuminate -- it '
-                                'revealed. And what it revealed, in Theo, were the gaps. The lessons half-learned. The '
-                                'gifts received with one hand and held loosely. The moments in the mirror pool where '
-                                'he had looked and looked away before the looking was finished. The chains he had worn '
-                                'in the ravines, comfortable enough that he had called them choices. The ways he had '
-                                "used Gunnin's spectacles as a substitute for seeing rather than as a beginning of "
-                                'it.\n'
-                                '\n'
-                                'The Beings of Light were in the spires. They attended, as they attended every '
-                                'pilgrim. But their fires, which might have felt like welcome, felt instead like '
-                                'examination.\n'
-                                '\n'
-                                'The King was present -- Theo could feel it, a warmth at the edge of perception, a '
-                                'light that was almost a voice. But there was something between him and that presence, '
-                                'a residue of every refusal, every half-measure, every moment he had chosen comfort '
-                                'over clarity. The King was not far. The King had never been far. But Theo was not '
-                                'quite transparent enough for the light to pass all the way through.\n'
-                                '\n'
-                                'He stood at the Parallax and could see two things at once: everything he had done, '
-                                'and everything he had not done. The gap between them was not unbridgeable. It was not '
-                                'even very wide. But it was present, and here at the summit, in this light, it was '
-                                'visible in a way it had not been below.\n'
-                                '\n'
-                                'The **theosis** he might have reached -- the slow transformation of a person into '
-                                "something more fully themselves, purified by the journey's furnace -- had not quite "
-                                'completed. The furnace had been real. The transformation had been real. But some '
-                                '**dross** remained.\n'
-                                '\n'
-                                'He was changed. He was not whole.\n'
-                                '\n'
-                                'He stayed at the Parallax until the light began to soften into evening, and then he '
-                                'began the long descent.',
-                        'title': 'Heights Without Wholeness',
-                        'vocabulary': [   {   'definition': 'A process of transformation and purification by which a '
-                                                            'person grows toward their fullest, most essential self -- '
-                                                            'a becoming rather than an arriving.',
-                                              'term': 'theosis'},
-                                          {   'definition': 'The impurities that rise to the surface when metal is '
-                                                            'heated -- used here for the parts of the self that have '
-                                                            'not yet been refined.',
-                                              'term': 'dross'}]},
-    'a21_whole': {   'choices': [{'target': 'ending_theosis', 'text': 'Receive what the King offers.'}],
-                     'ending_type': None,
-                     'era': 'heights',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': [   'a21',
-                                 'light',
-                                 'summit',
-                                 'parallax',
-                                 'king',
-                                 'beings_of_light',
-                                 'spectacles',
-                                 'wholeness'],
-                     'text': 'The path from the Porch to the summit was not long.\n'
-                             '\n'
-                             'Theo could not afterward have said how long it took. He remembered the quality of the '
-                             "stone underfoot -- not bronze now but something older, the mountain's own material, dark "
-                             'and finely grained and warm in a way that stone should not be warm. He remembered the '
-                             'light changing as he climbed, the Sacred Fire below giving way to something quieter and '
-                             'more pervasive, a light that did not come from any direction but seemed to inhabit the '
-                             'air itself.\n'
-                             '\n'
-                             'He remembered the Beings of Light.\n'
-                             '\n'
-                             'They were in the spires, as the bat had said -- tall and still, their fires burning '
-                             'without wood or wind. They did not speak. They did not need to. Their presence was a '
-                             'kind of speech, the way a held door is a kind of speech, the way bread set out for a '
-                             'stranger is a kind of speech. They attended.\n'
-                             '\n'
-                             'The faeries of Sanctified Fires moved between the spires like words between sentences -- '
-                             'small, purposeful, complete.\n'
-                             '\n'
-                             'And then Theo stepped onto the Parallax.\n'
-                             '\n'
-                             'The summit was a flat place of dark stone, windswept and open to every direction. '
-                             'Standing at its center, Theo could see the entire Elysian Kingdom spread below him -- '
-                             'not as a map but as a living thing, all its regions breathing in the late light. The '
-                             'Forest Gate, a seam of shadow and invitation. The Chartreuse Forest, its colors beyond '
-                             'naming. The ravines. The mirror pool, glinting. The three hills. The Temple of Memories, '
-                             'the bulk of Mt. Nebo itself falling away from him in every direction.\n'
-                             '\n'
-                             'He understood the **parallax** now. From down there, the summit had been a destination. '
-                             'From up here, every place he had walked was part of the summit. The whole Kingdom was '
-                             'the summit, seen from a different angle.\n'
-                             '\n'
-                             'The King was there.\n'
-                             '\n'
-                             'Theo had expected a throne. He had expected a crown, a voice, a figure of authority. He '
-                             'had expected an ending that looked like a beginning -- someone waiting for him with an '
-                             'answer that explained everything.\n'
-                             '\n'
-                             'There was no throne.\n'
-                             '\n'
-                             'There was -- presence. The same presence he had seen threading through the bronze '
-                             "visions on the Porch. The same light that had been in Brok's open chest when he gave "
-                             "away the pouch. The same patience that had been in Bartop's limestone silence. The same "
-                             "warmth that had been in Mrs. Lock's bread, in the Maiden's fire, in Gunnin's spectacles "
-                             "made from a broken weapon. The same gentleness that had been in Phil the pillbug's trust "
-                             'at the Forest Gate -- that small, trusting curl, waiting for someone to think of a small '
-                             'and loving solution.\n'
-                             '\n'
-                             '*Praise the King.* Phil had said it as naturally as breathing. The Locks had said it. '
-                             'Brok had said it in the crypt. Even Mack -- even Mack, in his last '
-                             'trick-that-was-a-truth -- had said it. They had all been saying it as a way of pointing, '
-                             'and Theo had been looking for a figure instead of looking for a presence.\n'
-                             '\n'
-                             'The King was not a figure on a throne.\n'
-                             '\n'
-                             'The King was what remained when everything selfish was subtracted from a moment. The '
-                             'King was the act of giving without calculating the return. The King was patience so old '
-                             'it had become the substance of the world. The King was the hand behind every gift Theo '
-                             "had received -- Brok's pouch, Gunnin's spectacles, the Starstone's light, the Maiden's "
-                             "rest, Mr. Lock's key, Mrs. Lock's bread, Phil's trust -- the same hand, the same face, "
-                             'the same love wearing a thousand costumes.\n'
-                             '\n'
-                             '"I didn\'t know," Theo said.\n'
-                             '\n'
-                             'The presence did not answer in words. It answered the way light answers when you open a '
-                             'window -- by being already there, by having always been there, by making visible '
-                             'everything the dark had hidden.\n'
-                             '\n'
-                             "Theo took Gunnin's spectacles from his pocket.\n"
-                             '\n'
-                             'He held them for a moment -- the sea-glass lens that showed what is, the moonstone lens '
-                             'that showed what could be. Gunnin had spent a life searching and had made, from the '
-                             'wreckage of his search, something that helped others see. Theo was grateful. He would '
-                             'always be grateful.\n'
-                             '\n'
-                             'He put the spectacles in his breast pocket and did not put them on.\n'
-                             '\n'
-                             'He did not need them anymore.\n'
-                             '\n'
-                             'He could see.',
-                     'title': 'The Parallax of Life',
-                     'vocabulary': [   {   'definition': 'The apparent shift in position of an object when viewed from '
-                                                         'different vantage points -- used here to suggest that the '
-                                                         'whole journey was always also the destination.',
-                                           'term': 'parallax'},
-                                       {   'definition': 'The highest point of development or achievement; the moment '
-                                                         'when something or someone is revealed in its fullest, most '
-                                                         'essential form.',
-                                           'term': 'apotheosis'}]},
-    'a2_lost_deeper': {   'choices': [   {   'target': 'a3_thorns',
-                                             'text': 'Push toward the thorns. Phil is right. Movement over stillness.'},
-                                         {   'target': 'ending_lost_forest',
-                                             'text': 'Give up. The forest is too vast. Sit and wait for -- whatever '
-                                                     'comes.'}],
-                          'ending_type': None,
-                          'era': 'forest',
-                          'figures': ['Phil'],
-                          'is_ending': False,
-                          'tags': ['truly-lost', 'phil-returns', 'turning-point'],
-                          'text': 'He waited. Nothing came.\n'
-                                  '\n'
-                                  'So he walked. Slowly at first, trying to hold a straight line by fixing his eye on '
-                                  'a distant trunk, walking to it, picking another. The forest defeated this method '
-                                  'with no apparent effort. After an hour -- maybe two; the light through the canopy '
-                                  'was unchanging -- he sat down on a root and admitted, very quietly, that he was '
-                                  'lost in a way that was not merely inconvenient.\n'
-                                  '\n'
-                                  'The green closed in. Not threateningly -- that would have been easier. It simply '
-                                  'continued to be green in every direction, vast and **immutable**, the forest doing '
-                                  'exactly what forests do and not doing it at Theo in particular.\n'
-                                  '\n'
-                                  'He ate two crackers from his backpack. He drank some water. He thought about his '
-                                  "mother, who would be looking for him, except that he wasn't sure time worked here "
-                                  'the same way, and this thought was too large to finish.\n'
-                                  '\n'
-                                  '"Praise the King," said a familiar voice.\n'
-                                  '\n'
-                                  'Phil was sitting on the root beside him. How the pillbug had gotten here -- through '
-                                  'the gate, across the forest, to this exact root -- was not a question Phil seemed '
-                                  'interested in entertaining.\n'
-                                  '\n'
-                                  '"You\'re lost," Phil observed.\n'
-                                  '\n'
-                                  '"Yes."\n'
-                                  '\n'
-                                  '"Mm. Yes." Phil gestured with several legs in what Theo was coming to understand as '
-                                  'his philosophical mode. "The forest has a way of growing around those who have no '
-                                  'particular destination. You must move, young man. Toward the thorns, if you have '
-                                  'to. Movement with a direction, however painful, is better than stillness with '
-                                  'none."\n'
-                                  '\n'
-                                  "He vanished between the roots as suddenly as he'd appeared.\n"
-                                  '\n'
-                                  'The thorns waited.',
-                          'title': 'Hours in the Green',
-                          'vocabulary': [   {   'definition': 'Unchanging; not able to be altered or moved. From the '
-                                                              'Latin immutabilis: in- (not) + mutare (to change). An '
-                                                              'immutable thing does not bend to your circumstances. '
-                                                              'The ancient forest is immutable; only the traveler can '
-                                                              'change.',
-                                                'term': 'immutable'}]},
-    'a2_lost_start': {   'choices': [   {   'target': 'a3_thorns',
-                                            'text': 'Move toward the rhythmic sound in the distance.'},
-                                        {   'target': 'a2_lost_deeper',
-                                            'text': 'Stay still and wait, hoping someone finds you.'}],
-                         'ending_type': None,
-                         'era': 'forest',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['lost', 'fear', 'shadow-path'],
-                         'text': 'There had been a path. He was nearly certain of that. A path, and then a widening, '
-                                 'and then -- nothing. Just trees in every direction, each one identical to the one '
-                                 'before it in some deep botanical way that made compass-points meaningless.\n'
-                                 '\n'
-                                 'Theo turned around. The shack should be back this way -- should be. He had been '
-                                 "walking for maybe fifteen minutes. That wasn't so far. But the forest had a quality "
-                                 'he was only now registering: it did not particularly care about his sense of '
-                                 'distance. The trees were politely indifferent. The undergrowth was not hostile, just '
-                                 'present, just there, just filling every space a path might have occupied.\n'
-                                 '\n'
-                                 "He thought about calling out. He didn't know whose name to call. Phil had gone "
-                                 'through the gate. The Locks were -- somewhere. He was alone in a very large, very '
-                                 'old, very **indifferent** forest, and the difference between indifferent and cruel '
-                                 'was not as comforting as it might have been.\n'
-                                 '\n'
-                                 'The chartreuse buds still twinkled overhead. At least the light was beautiful.\n'
-                                 '\n'
-                                 'Then -- a sound. Far off to the left. Something rhythmic. It might have been a drum, '
-                                 'or a branch knocking, or footsteps.\n'
-                                 '\n'
-                                 'Or knitting needles.\n'
-                                 '\n'
-                                 'The forest was immense and he was small, and somewhere out there was a sound.',
-                         'title': 'No Path at All',
-                         'vocabulary': [   {   'definition': 'Having no particular interest, feeling, or preference '
-                                                             'toward something; neither for it nor against it. The '
-                                                             "forest's indifference is not cruelty -- it simply does "
-                                                             'not notice you, which is its own kind of challenge.',
-                                               'term': 'indifferent'}]},
-    'a2_stream': {   'choices': [   {'target': 'a3_grove', 'text': 'Move toward the golden light in the grove.'},
-                                    {   'target': 'a3_clearing',
-                                        'text': "The stream's path continues; follow it past the grove to open "
-                                                'ground.'}],
-                     'ending_type': None,
-                     'era': 'forest',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['stream', 'music', 'trust', 'crossing'],
-                     'text': 'The stream appeared between two roots like a rumor -- just a glint first, then a sound, '
-                             "then a full ribbon of water running clear over smooth stones in colors Theo couldn't "
-                             'name exactly: the stones were green-gray, the water slightly gold where the light hit, '
-                             'and beneath the surface something moved that was not a fish.\n'
-                             '\n'
-                             'It was music.\n'
-                             '\n'
-                             'Not the sound of music -- the actual thing, somehow made of current instead of air. Each '
-                             'ripple was a note. The stream turned around a root and the key changed. When it ran fast '
-                             'over a cluster of pebbles it was something like a drum passage, and when it slowed in a '
-                             'pool behind a fallen log it held a chord as long as it liked before letting it go.\n'
-                             '\n'
-                             'The stream had a direction. Theo followed it.\n'
-                             '\n'
-                             'For a while, following was easy -- the path ran parallel to the water and the ground was '
-                             'soft and the melody was something his feet could match. But then the path ended at a '
-                             'crossing, and the only way forward was through the stream itself, stepping from stone to '
-                             "stone across water that was deeper than it looked. The stones were wet. He couldn't see "
-                             'the bottom.\n'
-                             '\n'
-                             'He stood at the edge and the stream continued its song beneath him, unhurried and '
-                             'unconcerned, the same way it had been doing this for centuries before he arrived and '
-                             'would do for centuries after.\n'
-                             '\n'
-                             "Mrs. Lock had said: the stream knows where it's going.\n"
-                             '\n'
-                             "He thought of the word **fidelity** -- a word he'd encountered in a poem last semester "
-                             'and not thought about since. Faithfulness to something. Willingness to follow even when '
-                             "you can't see the whole path.\n"
-                             '\n'
-                             'The first stone was solid under his foot. The second. The water rushed between his '
-                             "ankles and he didn't fall. On the far bank the forest opened slightly, and through the "
-                             'gap he could see a grove of trees with a warm golden light sitting among them like a '
-                             'campfire that knew how to be still.',
-                     'title': 'The Enchanted Stream',
-                     'vocabulary': [   {   'definition': 'Faithfulness; the quality of remaining loyal to something or '
-                                                         'someone, even when it is difficult. From the Latin fides, '
-                                                         'meaning faith or trust. A person of fidelity keeps their '
-                                                         'word; a traveler of fidelity trusts the road they chose, '
-                                                         'even in the dark.',
-                                           'term': 'fidelity'}]},
-    'a2_woods': {   'choices': [   {   'target': 'a3_clearing',
-                                       'text': 'Move toward the clearing ahead, where the trees open up.'},
-                                   {   'target': 'a3_thorns',
-                                       'text': 'Push through the thorny undergrowth -- there must be something on the '
-                                               'other side.'}],
-                    'ending_type': None,
-                    'era': 'forest',
-                    'figures': [],
-                    'is_ending': False,
-                    'tags': ['dense-forest', 'carvings', 'threshold-space'],
-                    'text': "The lights didn't slow down.\n"
-                            '\n'
-                            'Theo followed them for twenty minutes before he admitted to himself that he might not be '
-                            'following a path so much as walking in a direction. The trail had thinned to an '
-                            'impression -- a slight parting of the undergrowth, a sequence of clear spaces between '
-                            'roots -- and the lights themselves flickered between the trunks at whatever pace they '
-                            'chose, which was not his pace.\n'
-                            '\n'
-                            'He stopped walking and looked at the trees.\n'
-                            '\n'
-                            "Carvings. Not crude hatchmarks -- careful ones, deliberate, in a script he didn't "
-                            'recognize. Curving characters that ran around the circumference of trunks like the annual '
-                            'rings made visible. Some trees had a single character. Some had long passages that '
-                            'spiraled from root to the first branch. He pressed his palm against one and felt nothing, '
-                            'or felt the tree, which was not nothing.\n'
-                            '\n'
-                            'The forest here was **liminal** in a way that made his skin prickle -- neither the '
-                            'comfortable familiar world nor whatever waited at the end, but the threshold between '
-                            'them, where the rules of both places were negotiable.\n'
-                            '\n'
-                            'A clearing opened ahead. And deeper still, to his left, the undergrowth thickened into a '
-                            'tangle of thorns that seemed to begin and not end, stretching away into shadow and '
-                            'bramble.\n'
-                            '\n'
-                            'The lights had vanished. He was on his own.',
-                    'title': 'The Dense Forest',
-                    'vocabulary': [   {   'definition': 'Relating to a threshold or transitional state -- a place or '
-                                                        'moment between two conditions, belonging fully to neither. '
-                                                        'From the Latin limen, a threshold. Liminal spaces are '
-                                                        'doorways, dawns, and the moments just before things change.',
-                                          'term': 'liminal'}]},
-    'a3_clearing': {   'choices': [   {   'target': 'a4_welcome',
-                                          'text': 'Take the bread. You are hungry, and hunger is honest.'},
-                                      {   'target': 'a4_approach',
-                                          'text': 'Take the key. You are going somewhere, and keys open doors.'},
-                                      {'target': 'a3_h_coin', 'text': 'Take the coin. It might be useful later.'}],
-                       'ending_type': None,
-                       'era': 'forest',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['altar', 'choice', 'three-objects', 'center-node'],
-                       'text': 'The clearing was a perfect circle, as though the trees had agreed to step back from '
-                               'one particular spot and stay back. In the center, an old stone altar rose to waist '
-                               'height, dark gray with age and slightly mossy at the base, the top smoothed flat. On '
-                               'it sat three things.\n'
-                               '\n'
-                               'A round of bread, still warm, wrapped in cloth.\n'
-                               '\n'
-                               "A small coin, old and thick, stamped with a symbol he couldn't read.\n"
-                               '\n'
-                               'A key, iron, shaped with the same care as the silver plate on the Forest Gate -- not a '
-                               'functional key, or not only a functional key. Something intentional.\n'
-                               '\n'
-                               'There was no instruction, no sign. The forest was perfectly quiet. Even the birds had '
-                               'stopped. Theo stood at the edge of the clearing and felt the weight of the choice in '
-                               "his chest before he'd even moved.\n"
-                               '\n'
-                               "Three objects. Three different answers to three different questions he didn't yet know "
-                               'how to ask. The bread meant something. The coin meant something. The key meant '
-                               'something. All three sat in the open air of the Elysian Kingdom, waiting to see what '
-                               'kind of person had come through the gate.\n'
-                               '\n'
-                               'The word **discernment** surfaced from somewhere in his memory -- his grandmother '
-                               'again, telling him that the hardest choices were never between good and evil but '
-                               'between two goods, or three, when only one was right for you.\n'
-                               '\n'
-                               'His hand moved.',
-                       'title': 'The Stone Altar',
-                       'vocabulary': [   {   'definition': 'The ability to judge and understand well; the capacity to '
-                                                           'perceive what is true, right, or fitting. From the Latin '
-                                                           'discernere: to sift, to separate, to distinguish. '
-                                                           'Discernment is not cleverness -- it is the wisdom to know '
-                                                           'which question you are actually being asked.',
-                                             'term': 'discernment'}]},
-    'a3_grove': {   'choices': [   {   'target': 'a3_h_creatures',
-                                       'text': 'Stay in the grove and share what you have with the creatures.'},
-                                   {   'target': 'a4_welcome',
-                                       'text': 'Accept the fruit gratefully and continue toward the temple.'}],
-                    'ending_type': None,
-                    'era': 'forest',
-                    'figures': [],
-                    'is_ending': False,
-                    'tags': ['grove', 'abundance', 'generosity', 'forest-creatures'],
-                    'text': 'The grove was older than the rest of the forest. Theo could feel it the moment he stepped '
-                            'between the two guardian oaks at its entrance -- a shift in pressure, or in the quality '
-                            'of time, or in what the air expected of him.\n'
-                            '\n'
-                            'It was full of good things.\n'
-                            '\n'
-                            "Fruit hung from low branches in colors he didn't have names for -- something between plum "
-                            "and amber, something that was almost certainly a pear but wasn't quite. A spring fed a "
-                            "shallow pool at the grove's center, and the water in the pool was very slightly luminous, "
-                            'the color of honey held up to a candle. Small creatures moved at the edges of the grove: '
-                            'not quite squirrels, not quite birds, something intermediary that watched him with bright '
-                            'interested eyes and did not run.\n'
-                            '\n'
-                            "Theo's stomach rumbled. He'd had a wheat cake and two crackers since waking up in an "
-                            'impossible forest. The fruit was right there. No one had told him not to touch it.\n'
-                            '\n'
-                            'The creatures watched him.\n'
-                            '\n'
-                            'He thought about this: what it meant to arrive somewhere that had things and take those '
-                            'things. About the difference between a guest and a visitor and a pilgrim. About '
-                            '**hospitality**, which his grandmother had taught him was a two-way obligation -- the '
-                            'host must offer, and the guest must wait to be offered.\n'
-                            '\n'
-                            'He sat down near the pool, set his backpack beside him, and looked at the creatures.\n'
-                            '\n'
-                            'After a moment, the smallest one approached with a piece of the amber-plum fruit balanced '
-                            'on its head like an offering.\n'
-                            '\n'
-                            'He took it with both hands. He said, "Thank you." It was the sweetest thing he had ever '
-                            'eaten.',
-                    'title': 'The Hidden Grove',
-                    'vocabulary': [   {   'definition': 'The generous and welcoming reception of guests. In many '
-                                                        'ancient traditions, hospitality was a sacred obligation with '
-                                                        'rules for both host and guest. The Greek concept of xenia '
-                                                        '(guest-friendship) held that Zeus himself protected travelers '
-                                                        'and punished those who broke the laws of hospitality.',
-                                          'term': 'hospitality'}]},
-    'a3_h_coin': {   'choices': [   {   'target': 'a4_approach',
-                                        'text': 'Put the coin back and take the key. The weight has said enough.'},
-                                    {   'target': 'a4_welcome',
-                                        'text': 'Keep the coin and press on. You came this far alone.'}],
-                     'ending_type': None,
-                     'era': 'forest',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['coin', 'weight-of-choice', 'forest-creatures-watching'],
-                     'text': 'The coin was warm.\n'
-                             '\n'
-                             'He had expected metal-cold, the way coins always felt in a pocket. This one sat in his '
-                             "palm like a small sun. He turned it over. The symbol on one side he couldn't read. The "
-                             'other side was blank, except for a faint impression that might have been a face.\n'
-                             '\n'
-                             'He closed his fingers around it and took two steps toward the edge of the clearing.\n'
-                             '\n'
-                             'It grew heavier.\n'
-                             '\n'
-                             "Not a lot. Not enough that he couldn't have kept walking. Just enough that he noticed, "
-                             "the way you notice when a sentence doesn't quite end right. He looked back at the altar. "
-                             'The bread was there. The key was there. Where the coin had been, there was now a small '
-                             'indentation in the stone, a ghost of it.\n'
-                             '\n'
-                             "The creatures were watching him. He hadn't noticed them at the tree line before, but "
-                             'they were there -- a dozen small faces in the shadows, not hostile, not accusing. Just '
-                             'watching. There was something in their expressions that was not quite **reproach** and '
-                             'not quite patience and was very uncomfortable to look at directly.\n'
-                             '\n'
-                             'The coin weighed what it weighed.\n'
-                             '\n'
-                             'He could keep it. Or he could put it back and take the key instead, and be someone '
-                             'slightly different than the person who had just pocketed a coin that was not his to '
-                             'take.',
-                     'title': 'The Heavy Coin',
-                     'vocabulary': [   {   'definition': 'A feeling or expression of disapproval or disappointment. To '
-                                                         'look at someone with reproach is to make them feel they have '
-                                                         'fallen short without saying a word. From the Old French '
-                                                         'reprochier: to bring back close -- to hold someone close to '
-                                                         'their own failure.',
-                                           'term': 'reproach'}]},
-    'a3_h_creatures': {   'choices': [   {   'target': 'a4_welcome',
-                                             'text': 'Follow the illuminated path toward the Forest Temple.'}],
-                          'ending_type': None,
-                          'era': 'forest',
-                          'figures': [],
-                          'is_ending': False,
-                          'tags': ['sharing', 'gratitude', 'forest-creatures', 'revealed-path'],
-                          'text': 'He dug through his backpack. A granola bar, slightly crushed. Half a bag of trail '
-                                  "mix. The remains of the wheat cake Mrs. Lock had given him -- he'd eaten half of it "
-                                  'by the stream. He laid everything out on a flat stone by the pool, portioned as '
-                                  'fairly as he could manage, and stepped back.\n'
-                                  '\n'
-                                  'The creatures considered this for a moment. Then they descended.\n'
-                                  '\n'
-                                  "There were more of them than he'd realized. They came from the branches and the "
-                                  'undergrowth and from between the roots of the guardian oaks, dozens of small quick '
-                                  'beings, and they divided the food with a **scrupulous** fairness that put him to '
-                                  'shame -- he had eaten first, after all, and none of the creatures had.\n'
-                                  '\n'
-                                  'When the food was gone they gathered in a loose half-circle and looked at him.\n'
-                                  '\n'
-                                  'One of them -- the same small one who had brought him the fruit -- walked to the '
-                                  'pool and touched its surface with one paw. The water lit up. In its light, the path '
-                                  'out of the grove was suddenly visible: not a path he had seen before, smoothed and '
-                                  'clear, running straight toward a gap in the trees through which he could see the '
-                                  'distant gray-silver trunks of something much larger.\n'
-                                  '\n'
-                                  "The Forest Temple. He recognized it the way you recognize a face you've only seen "
-                                  'in a photograph: the reality was larger than the idea, but the idea had been '
-                                  'right.\n'
-                                  '\n'
-                                  'The creatures stepped aside. The path was his.',
-                          'title': 'Sharing in the Grove',
-                          'vocabulary': [   {   'definition': 'Careful to be exact and morally correct; taking great '
-                                                              'care to do what is right, especially in matters of '
-                                                              'fairness and honesty. From the Latin scrupulus, a small '
-                                                              'sharp stone -- the nagging discomfort of conscience.',
-                                                'term': 'scrupulous'}]},
-    'a3_thorns': {   'choices': [   {   'target': 'a4_approach',
-                                        'text': 'Approach the Forest Temple along the pale stone path.'},
-                                    {   'target': 'ending_lost_forest',
-                                        'text': "The thorns took too much. Sit down. Don't move. The forest can have "
-                                                'you.'}],
-                     'ending_type': None,
-                     'era': 'forest',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['thorns', 'hardship', 'earned-arrival', 'shadow-path'],
-                     'text': 'The thorns were real.\n'
-                             '\n'
-                             'He had half-expected them to be **metaphorical** -- a challenge that looked like a '
-                             'thorn-wall but revealed itself, upon approach, to be something navigable and symbolic. '
-                             'These were actual thorns: curved and sharp, set on woody canes as thick as his thumb, '
-                             'growing in a tangle that had no obvious seam or gate.\n'
-                             '\n'
-                             'He pushed through. There was no elegant way to do it. He folded his arms over his face '
-                             'and walked and the thorns took their toll -- small red lines along his forearms, a catch '
-                             'on his jacket, a mean one across the back of one hand that stung and bled a little. His '
-                             'backpack snagged three times.\n'
-                             '\n'
-                             'On the other side -- maybe fifteen feet of thorns, though it felt like more -- the '
-                             'forest thinned abruptly into a rough path, pale stone underfoot, running between trees '
-                             'that grew farther apart and let through more sky.\n'
-                             '\n'
-                             "He sat on the ground and ate the last cracker. He looked at his hand. The cut wasn't "
-                             'serious. He wrapped it in a piece of the cloth from the top of his backpack -- the old '
-                             "shirt he'd shoved in there at some point -- and tied it tight.\n"
-                             '\n'
-                             'Ahead the path ran straight, and at its end, just visible between the last trees, '
-                             'something enormous and gray-silver caught the light. Not stone. Trees, grown into the '
-                             'shape of stone. Grown into the shape of purpose.\n'
-                             '\n'
-                             'The Forest Temple. He had reached it the hard way. He was hungry and scratched and the '
-                             "coin -- if he'd taken it -- was heavy in his pocket. But he was here.\n"
-                             '\n'
-                             'He stood up. He kept walking.',
-                     'title': 'The Thorn Passage',
-                     'vocabulary': [   {   'definition': 'Existing as a figure of speech or symbol rather than '
-                                                         'literally. A metaphorical wall is one you face in your mind; '
-                                                         'a literal thorn-wall draws actual blood. The Chartreuse '
-                                                         'Forest has a way of making metaphors physical.',
-                                           'term': 'metaphorical'}]},
-    'a4_approach': {   'choices': [   {   'target': 'a5_labor',
-                                          'text': 'Work to deserve entry -- find something useful to do in the glade '
-                                                  'while you wait.'},
-                                      {   'target': 'a5_explore',
-                                          'text': "Lift the latch and enter. You've earned your way here."},
-                                      {   'target': 'a4_h_standoff',
-                                          'text': 'Wait it out. Sit in the glade until the protocols resume.'}],
-                       'ending_type': None,
-                       'era': 'temple',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['uninvited-arrival', 'glade', 'waiting', 'center-node'],
-                       'text': "The path deposited him at a glade just outside the Temple's outer wall -- a wide flat "
-                               'space of short grass and smooth stones, ringed by young silver-barked trees. The '
-                               'Temple itself rose beyond the wall, its silver trunks visible above the stone, its '
-                               'Starwood arches catching light.\n'
-                               '\n'
-                               "A sign was mounted to the wall's single gate. The gate was closed.\n"
-                               '\n'
-                               'PILGRIMS: Standard arrival protocols active at dawn and dusk. At all other times, '
-                               'please observe waiting in the Glade. A tender will attend you within the hour.\n'
-                               '\n'
-                               'Beneath that, someone had written in smaller letters, with what appeared to be actual '
-                               'ink on actual wood: The protocols for pilgrims are not active at this time. Please '
-                               'wait.\n'
-                               '\n'
-                               'There was no one in the glade. No creatures. No Brok or any Brok equivalent. The '
-                               'late-afternoon sun was long and golden. Somewhere inside the Temple, something that '
-                               'might have been a bell was rung once and not again.\n'
-                               '\n'
-                               'Theo sat on one of the smooth stones. He was tired. His hand, or his jacket, or both, '
-                               'hurt. He looked at the Temple wall and tried to decide whether he was the kind of '
-                               'person who respected a sign that said wait or the kind of person who, having come this '
-                               'far through considerable difficulty, felt **exempt** from ordinary rules.\n'
-                               '\n'
-                               "The gate didn't have a lock. Just a latch.",
-                       'title': "The Pilgrim's Glade",
-                       'vocabulary': [   {   'definition': 'Free from an obligation or rule that applies to others. To '
-                                                           'feel exempt is to believe your circumstances are special '
-                                                           'enough to release you from what is expected. Sometimes '
-                                                           'this is true. Often it is simply comfortable to believe.',
-                                             'term': 'exempt'}]},
-    'a4_h_standoff': {   'choices': [   {   'target': 'a5_labor',
-                                            'text': 'Say yes -- you will tend whatever needs tending. Work first.'},
-                                        {'target': 'a5_explore', 'text': 'Ask if you can explore first, then help.'}],
-                         'ending_type': None,
-                         'era': 'temple',
-                         'figures': ['Brok'],
-                         'is_ending': False,
-                         'tags': ['waiting', 'dawn', 'brok', 'patient-arrival'],
-                         'text': 'He did not mean to fall asleep. He sat on the stone, and the stone was smooth, and '
-                                 'the evening came down through the silver-barked trees with a gentleness that was '
-                                 'almost irresponsible, and the next thing he knew it was the blue hour just before '
-                                 'dawn and he was cold and stiff and the glade was full of light.\n'
-                                 '\n'
-                                 'Not sunlight yet. Something the Temple gave off on its own: a faint silver-gold '
-                                 '**luminescence** rising from the Starwood arches, visible over the wall, pulsing '
-                                 'once, very slowly, like a breath. The Temple breathed. He had not realized until now '
-                                 'that it was alive in that particular sense.\n'
-                                 '\n'
-                                 'He stood and stretched and looked at the gate and was nearly certain he heard, from '
-                                 "somewhere deep in the Temple's living corridors, a sound like knitting needles. He "
-                                 'decided not to think about this.\n'
-                                 '\n'
-                                 'The gate latch lifted on its own at the first real light of dawn. A badger appeared '
-                                 'from the corridor beyond it, broad and cheerful, a sprig of something flowering '
-                                 'behind his ear. He looked at Theo with the expression of someone who had expected to '
-                                 'find either a pilgrim or an empty glade and was satisfied with what he found.\n'
-                                 '\n'
-                                 '"You waited," Brok said, simply. He didn\'t say it like a compliment. He said it '
-                                 'like a fact that had weight. "Come in. The outer courts need tending this morning. '
-                                 'Will you help?"',
-                         'title': 'Dawn in the Glade',
-                         'vocabulary': [   {   'definition': 'The emission of light from something that is not the '
-                                                             'result of heat alone -- the cold light of fireflies, '
-                                                             'deep-sea fish, or very old enchanted wood. From the '
-                                                             'Latin lumen, light. The Starwood arches hold light the '
-                                                             'way a bell holds sound after it has been struck.',
-                                               'term': 'luminescence'}]},
-    'a4_welcome': {   'choices': [   {   'target': 'a5_rites',
-                                         'text': "Ask Brok to teach you the Temple's ways. Learn before you explore."},
-                                     {   'target': 'a5_explore',
-                                         'text': 'Thank Brok and explore freely. You learn better by wandering.'}],
-                      'ending_type': None,
-                      'era': 'temple',
-                      'figures': ['Brok'],
-                      'is_ending': False,
-                      'tags': ['temple-arrival', 'proper-welcome', 'brok', 'light-path'],
-                      'text': 'He heard the Temple before he saw it fully.\n'
-                              '\n'
-                              'Not bells. Not a choir. Something simpler: the sound of very old wood in very slight '
-                              'wind, a deep harmonic that was below hearing and also somehow inside it. The path '
-                              'opened between the last two trees and there it was.\n'
-                              '\n'
-                              'The Forest Temple was built of living trees -- or built by them, or had grown into '
-                              'building itself over centuries, it was impossible to say which. Massive gray-silver '
-                              'trunks rose from the earth in clusters of three and five, forking and re-forking twenty '
-                              'feet up to meet the branches of their neighbors and merge. The resulting walls were not '
-                              'walls exactly but a **confluence** of living wood, breathing and patient, the bark '
-                              'smooth as old stone and pale as birch.\n'
-                              '\n'
-                              'The northwest entrance rose twelve men high. Its arch was made of Starwood -- he could '
-                              'see the reflected moonlight in the grain even in the afternoon, the wood holding light '
-                              "that hadn't been given to it today. The arch framed a corridor of living wood that led "
-                              "inward and upward, lit from sources he couldn't locate.\n"
-                              '\n'
-                              "Standing at the arch's base, arms crossed, wearing an expression of cheerful welcome "
-                              'that contained within it the full history of hospitality in this kingdom, was a badger '
-                              'Theo had not met before. Broader than Mr. Lock. Wearing a deep green tunic. A sprig of '
-                              'something flowering was tucked behind one ear.\n'
-                              '\n'
-                              '"Ah," the badger said. "A proper arrival. The grove sent word." He bowed. "I am Brok. I '
-                              "tend the Temple's outer courts. Welcome, pilgrim. Will you learn the ways of this place "
-                              'first -- or shall I let you wander?"',
-                      'title': 'The Northwest Gate',
-                      'vocabulary': [   {   'definition': 'The meeting and joining of two or more things, especially '
-                                                          'rivers or forces. From the Latin confluere: to flow '
-                                                          'together. A confluence of trees is a place where separate '
-                                                          'lives have grown into something shared and inseparable.',
-                                            'term': 'confluence'}]},
-    'a5_explore': {   'choices': [   {   'target': 'a6_crossroads_eager',
-                                         'text': 'Ask Brok to show you the rest. You want understanding, not just '
-                                                 'beauty.'},
-                                     {   'target': 'a5_h_chapel',
-                                         'text': 'Mention the golden and silver light you noticed in one corner -- is '
-                                                 'that the Chapel?'}],
-                      'ending_type': None,
-                      'era': 'temple',
-                      'figures': ['Brok'],
-                      'is_ending': False,
-                      'tags': ['wandering', 'beauty', 'lost', 'center-node'],
-                      'text': 'The gate was open and no one had told him where to go, which was either a freedom or a '
-                              'test and possibly both.\n'
-                              '\n'
-                              'He went in.\n'
-                              '\n'
-                              'The Temple was magnificent. He had known it would be, in the abstract way you know '
-                              'something before you see it, but the knowing and the seeing were entirely different '
-                              'things. The living palace expanded around him as he walked -- not growing, not '
-                              'changing, just revealing more of what it had always been, the way a coast reveals '
-                              'itself to a ship approaching from sea.\n'
-                              '\n'
-                              'He went left at a fork and found a hall where the silver trunks had grown into columns '
-                              'no architect could have planned. He went right at the next and found a garden within '
-                              'the Temple, open to the sky, where stone-flowers grew in concentric circles around a '
-                              'pool that reflected the sky twice -- once in its surface, once in the ceiling of '
-                              'water-colored bark above it.\n'
-                              '\n'
-                              'He got slightly turned around near what appeared to be the inner courts. The Temple did '
-                              'not help him with this. It was **inscrutable** in the way that very beautiful things '
-                              'are inscrutable: not withholding, just whole, just itself, not organized for his '
-                              'convenience.\n'
-                              '\n'
-                              'Eventually a path brought him, somewhat to his surprise, to a clearing where a broad '
-                              'badger in a green tunic was sitting on a stone bench eating a small lunch and watching '
-                              'him without alarm.\n'
-                              '\n'
-                              '"Lost?" Brok said, pleasantly.\n'
-                              '\n'
-                              '"A little."\n'
-                              '\n'
-                              '"That\'s all right. The Temple lets you get lost exactly as much as you need to. Sit, '
-                              'if you like. Or --" he gestured down two paths, "-- there is more to see. Or there is '
-                              'work, if you want to understand rather than observe."',
-                      'title': 'Free in the Living Palace',
-                      'vocabulary': [   {   'definition': 'Difficult or impossible to understand or interpret; not '
-                                                          'giving away its meaning. From the Latin inscrutabilis: not '
-                                                          'to be searched into. The Temple is inscrutable not because '
-                                                          'it hides itself but because it is simply too large and too '
-                                                          'old to be read quickly.',
-                                            'term': 'inscrutable'}]},
-    'a5_h_chapel': {   'choices': [   {   'target': 'a6_crossroads_clear',
-                                          'text': "Return to Brok, ready for whatever lies beyond the Temple's inner "
-                                                  'gates.'}],
-                       'ending_type': None,
-                       'era': 'temple',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['chapel', 'gold-silver', 'quiet-wonder'],
-                       'text': 'The chapel was small -- smaller than the other spaces, which ran to the vast and the '
-                               "cathedral. It was tucked between two of the great trunks near the outer wall's "
-                               'northeast corner, and it would have been easy to miss if the light coming out of it '
-                               "weren't quite that color.\n"
-                               '\n'
-                               'Golden, at the bottom. Silver, at the top. The two lights did not mix but braided '
-                               'together in the air above the entrance, weaving slowly like the surface of the '
-                               'enchanted stream.\n'
-                               '\n'
-                               'Inside: a floor of pale stone entirely covered in golden dandelion petals, so deep he '
-                               'almost sank in them. Above, the branch-ceiling was open to the sky in a perfect oval, '
-                               'and through the oval the moon was visible even now, in daytime -- or something was '
-                               'visible that was shaped like the moon and performed the same function in this place. '
-                               'Silver light fell through the oval onto the petals and turned them to something he '
-                               "didn't have a name for.\n"
-                               '\n'
-                               'He stood in the chapel for a long time. There was nothing to do there, no ritual Brok '
-                               'had mentioned. He was not sure what it meant. He was sure it meant something.\n'
-                               '\n'
-                               'When he came back out, the light had changed -- not dimmer, but different, the way '
-                               'light changes after a significant conversation. He felt the way he sometimes felt '
-                               'after a very good piece of music: not informed, exactly. **Illuminated**.',
-                       'title': 'The Chapel of Gold and Silver',
-                       'vocabulary': [   {   'definition': 'Lit from within; but also, in an older sense, spiritually '
-                                                           'enlightened -- made clear by an inner light. Illuminated '
-                                                           'manuscripts were decorated with gold leaf that caught the '
-                                                           'light. To be illuminated is to be made visible to '
-                                                           'yourself.',
-                                             'term': 'illuminated'}]},
-    'a5_h_rebellion': {   'choices': [   {   'target': 'a6_crossroads_blind',
-                                             'text': 'Pick up the broom. You can ask questions while you work.'},
-                                         {   'target': 'ending_temple_trapped',
-                                             'text': 'Stay still. You will not pick it up. Not like this.'}],
-                          'ending_type': None,
-                          'era': 'temple',
-                          'figures': ['Brok'],
-                          'is_ending': False,
-                          'tags': ['confrontation', 'brok', 'rebellion', 'shadow-path'],
-                          'text': '"No," Theo said. "I\'m not going to keep doing this until you tell me why."\n'
-                                  '\n'
-                                  "He said it more loudly than he'd intended. His voice bounced between the silver "
-                                  'trunks and came back slightly transformed, as the Temple transformed most things.\n'
-                                  '\n'
-                                  'Brok stopped. He turned. He was, Theo registered, significantly larger than he had '
-                                  'seemed during the tidying -- broader, more substantial, the kind of creature who '
-                                  'had simply been choosing not to take up his full space.\n'
-                                  '\n'
-                                  '"You will not?" Brok said. His voice was not angry. It was something worse than '
-                                  'angry: **inexorable**, like a statement of geography.\n'
-                                  '\n'
-                                  '"I just want to understand what we\'re doing. That\'s not -- I don\'t think that\'s '
-                                  'unreasonable, I just -- "\n'
-                                  '\n'
-                                  '"The Temple does not require your understanding in order to need tending. Leaves '
-                                  'fall regardless of philosophy."\n'
-                                  '\n'
-                                  '"That\'s not an answer."\n'
-                                  '\n'
-                                  '"No," Brok agreed. "It is a prior condition."\n'
-                                  '\n'
-                                  "He was very close now. He did not touch Theo. He didn't need to. He simply stood in "
-                                  'his full size, occupying the corridor, and looked at the boy who had put down his '
-                                  'leaf-broom in a living temple that had been standing for longer than either of '
-                                  'their lineages, and the look said several things at once.\n'
-                                  '\n'
-                                  'Theo was pinned. Not physically. Pinned by the weight of a question he had asked '
-                                  'badly, to something that had more patience than he did and more time than he did '
-                                  'and no particular need for his cooperation.\n'
-                                  '\n'
-                                  '"Pick up the broom," Brok said, "or do not. But understand that the Temple does not '
-                                  'change for those who refuse to serve it."',
-                          'title': 'The Breaking Point',
-                          'vocabulary': [   {   'definition': 'Impossible to stop or change; relentlessly proceeding '
-                                                              'regardless of opposition. From the Latin inexorabilis: '
-                                                              'not to be moved by prayer. An inexorable force does not '
-                                                              'argue with you; it simply continues.',
-                                                'term': 'inexorable'}]},
-    'a5_labor': {   'choices': [   {   'target': 'a6_crossroads_blind',
-                                       'text': 'Keep tidying. Ask nothing more. The Temple must know why it needs '
-                                               'this.'},
-                                   {   'target': 'a5_h_rebellion',
-                                       'text': "Put down the leaf-broom. You need to understand what you're doing and "
-                                               'why.'}],
-                    'ending_type': None,
-                    'era': 'temple',
-                    'figures': ['Brok'],
-                    'is_ending': False,
-                    'tags': ['labor', 'tidying', 'question-of-purpose', 'shadow-path'],
-                    'text': '"We must keep the Temple tidy," Brok said. It was the third time he had said it this '
-                            'morning.\n'
-                            '\n'
-                            'The work was not unpleasant, exactly. It was collecting fallen leaves from the paths '
-                            'before they could decompose into the pale stone. It was clearing the mouths of the small '
-                            'stone channels that carried water from the inner springs to the outer courts. It was '
-                            'arranging the flat stones of the path-borders back to their original positions when some '
-                            'overnight growth had nudged them aside.\n'
-                            '\n'
-                            'The work never ended.\n'
-                            '\n'
-                            "Not because the Temple was dirty -- it wasn't. It was just that the Temple was alive, and "
-                            'living things made mess as a natural consequence of living, and so there was always a '
-                            'leaf to collect, always a stone slightly out of place, always something to tidy. Brok '
-                            'moved through it all with the **diligence** of a creature who had been doing this for so '
-                            'long that the doing had become the meaning, and the meaning had become the doing, and '
-                            'somewhere in that loop the question of why had quietly left.\n'
-                            '\n'
-                            'Theo tidied. He did it well. He was actually fairly good at it.\n'
-                            '\n'
-                            'But by the third hour he found himself wondering what the point was, and then wondering '
-                            'if that question was impatience or wisdom, and then wondering if Brok had ever asked it, '
-                            "and then being afraid that Brok hadn't.\n"
-                            '\n'
-                            '"Brok," he said. "Why are we tidying?"\n'
-                            '\n'
-                            '"We must keep the Temple tidy," Brok said, pleasantly, and moved on to the next leaf. The '
-                            'leaf was very tidy about being collected.\n'
-                            '\n'
-                            'Theo watched him and felt something tightening in his chest.',
-                    'title': 'The Endless Tidying',
-                    'vocabulary': [   {   'definition': 'Careful, persistent effort; steady application to a task. '
-                                                        'From the Latin diligentia: love of what one does. Diligence '
-                                                        'is a virtue -- but diligence without understanding is the '
-                                                        'engine that runs the longest and gets nowhere.',
-                                          'term': 'diligence'}]},
-    'a5_rites': {   'choices': [   {   'target': 'a6_crossroads_clear',
-                                       'text': "Ask Brok where the path leads next -- you're ready for what comes "
-                                               'after the rites.'},
-                                   {   'target': 'a5_h_chapel',
-                                       'text': 'Ask Brok about the Chapel you heard mentioned. Go there before moving '
-                                               'on.'}],
-                    'ending_type': None,
-                    'era': 'temple',
-                    'figures': ['Brok'],
-                    'is_ending': False,
-                    'tags': ['temple-learning', 'rites', 'living-palace', 'light-path'],
-                    'text': 'Brok taught the way a river teaches -- not by explanation, but by moving and letting you '
-                            'notice what it did.\n'
-                            '\n'
-                            'They walked the outer courts, which were not courts in any architectural sense but living '
-                            'rooms: spaces between the great silver trunks where smaller trees had grown up into '
-                            'something almost domestic. Here a bower where flowering vines had formed a canopy. There '
-                            'a path of crushed white stone edged with something that glowed faintly mauve in shadow. '
-                            'The Temple was not a building in any ordinary sense -- it was a living palace, growing, '
-                            'adding chambers and corridors as it felt the need, the trees acting on a plan that was '
-                            'too long-range for any single lifespan to perceive.\n'
-                            '\n'
-                            '"The Temple tends itself," Brok said, pausing to cup a flower in one broad paw -- a bloom '
-                            'Theo had never seen, star-shaped, white at the center and deepening to violet at the tip '
-                            'of each petal. "But it does not object to being tended. The rites are simple: walk the '
-                            'paths each morning. Water the stone-flowers, which need very little. Acknowledge what you '
-                            'pass. The Temple knows when it is acknowledged."\n'
-                            '\n'
-                            '"Acknowledged how?" Theo asked.\n'
-                            '\n'
-                            '"A word. A bow. A touch of the hand to the trunk. The form is less important than the '
-                            '**intention**." Brok looked at him sideways. "The ancient rites are a language. What '
-                            'matters is that you mean what you say in that language."\n'
-                            '\n'
-                            "They walked for an hour, maybe more. Theo's scratches stopped hurting. The living palace "
-                            'grew stranger and more beautiful in every corridor -- halls where the trees had grown '
-                            'into archways that looked exactly like stone ribs, rooms where the interlaced branches '
-                            'above formed a ceiling of such complexity it suggested a text he could not quite read.\n'
-                            '\n'
-                            'He was beginning to understand the place. Not all of it. A corner of it.\n'
-                            '\n'
-                            'That felt, for now, exactly right.',
-                    'title': 'The Ways of the Temple',
-                    'vocabulary': [   {   'definition': 'The purpose or meaning behind an action; what you are trying '
-                                                        'to do or communicate. A ritual performed without intention is '
-                                                        'just movement. A ritual performed with intention -- even a '
-                                                        'small one, even imperfectly -- is communication with '
-                                                        'something larger than yourself.',
-                                          'term': 'intention'}]},
-    'a6_crossroads_blind': {   'choices': [   {   'target': 'a7_struggle',
-                                                  'text': "Go southeast. You know the way, even if you don't feel it."},
-                                              {   'target': 'a7_shadow_force',
-                                                  'text': 'Go north. The Temple owes you. Take something.'}],
-                               'ending_type': None,
-                               'era': 'temple',
-                               'figures': [],
-                               'is_ending': False,
-                               'tags': ['crossroads', 'shadow_path', 'exhaustion', 'resentment'],
-                               'text': 'Brok has sent Theo to the crypt the way he sends Theo everywhere -- with a '
-                                       'two-word instruction and no ceremony. "Crypt. Now." And Theo has gone, because '
-                                       'that is what you do when Brok speaks, if you have learned anything at all from '
-                                       "the Temple's brand of hospitality.\n"
-                                       '\n'
-                                       "The root-stair is steep. Theo's arms are tired. The weeks of forced labor -- "
-                                       'sweeping, hauling, polishing surfaces that did not look like they needed '
-                                       'polishing -- have left him physically capable and spiritually hollow. There is '
-                                       'a word for what Brok has made of him: **rote**. The practice of repetition '
-                                       'without reflection. The body learns; the mind goes somewhere else and does not '
-                                       'always come back.\n'
-                                       '\n'
-                                       'The crypt opens around him. Four passages. Pale stone. Sourceless light.\n'
-                                       '\n'
-                                       'They all look the same.\n'
-                                       '\n'
-                                       'He knows, abstractly, that one of them is supposed to call to him. He has '
-                                       'overheard Brok describe the crossroads to a beetle, once -- "Four paths, each '
-                                       'distinct in character, the southeast passage intended for departing pilgrims" '
-                                       '-- and so he knows where he is supposed to go. But knowing and feeling are not '
-                                       'the same thing. The southeastern passage is just a hole in the wall. It smells '
-                                       'vaguely of cold.\n'
-                                       '\n'
-                                       'An unreasonable anger rises in him. He has been here for weeks and learned '
-                                       "what, exactly? That floors need sweeping? That Brok's maintenance schedule "
-                                       'runs every forty-eight hours? That you can polish a root and it will still '
-                                       'look like a root?\n'
-                                       '\n'
-                                       'He was supposed to be prepared for this moment. He is not prepared. He is '
-                                       'tired.\n'
-                                       '\n'
-                                       'The southeastern passage stands open. It is the correct passage -- he is not '
-                                       'so lost that he doubts that. But correct is a thin kind of motivation. He '
-                                       "stands at the circle's center, trying to feel something, and feels mostly the "
-                                       'weight of his own arms.\n'
-                                       '\n'
-                                       'Another option crystallizes, less noble: there is a passage that goes north, '
-                                       "into the Temple's deeper rooms. There might be things there worth taking. The "
-                                       'Temple owes him something, he thinks. Weeks of labor for a clear conscience '
-                                       'and a two-word send-off.\n'
-                                       '\n'
-                                       'He should go southeast. He knows this. But he is tired and angry and the '
-                                       'knowing is very quiet.',
-                               'title': 'All Paths the Same',
-                               'vocabulary': [   {   'definition': 'Learning or doing something through mechanical '
-                                                                   'repetition, without genuine understanding or '
-                                                                   'engagement.',
-                                                     'term': 'rote'}]},
-    'a6_crossroads_clear': {   'choices': [   {   'target': 'a7_balance',
-                                                  'text': 'Take the southeastern passage -- the road ahead calls.'},
-                                              {   'target': 'a7_struggle',
-                                                  'text': 'Linger one moment longer. There is more to learn here '
-                                                          'before leaving.'}],
-                               'ending_type': None,
-                               'era': 'temple',
-                               'figures': [],
-                               'is_ending': False,
-                               'tags': ['crossroads', 'light_path', 'brok', 'choice'],
-                               'text': 'The crypt of the Forest Temple is not a place of death but of decision.\n'
-                                       '\n'
-                                       'Theo descends the root-stair slowly, one hand brushing the living bark of the '
-                                       'wall. The air is cooler here, fragrant with dark soil and old stone. Brok has '
-                                       'said nothing as they walked -- only the gentle whir of his joints, the soft '
-                                       'rhythm of his six-toed feet on the wooden floor. When they reach the bottom, '
-                                       'Brok stops at the threshold and does not follow. His dinner-plate eyes find '
-                                       "Theo's face, and he blinks -- the full five-second blink -- and then is "
-                                       'still.\n'
-                                       '\n'
-                                       'Theo enters the crypt alone.\n'
-                                       '\n'
-                                       'Four passages open outward from a circle of pale stone. North, south, east, '
-                                       'southeast. Roots curl along every arch. The torchlight -- there are no '
-                                       'torches, and yet there is light, warm and sourceless -- rests differently on '
-                                       'each mouth of path. The northern passage breathes cool and deep, as though it '
-                                       'leads toward something that has waited a long time. The eastern passage smells '
-                                       'of rain. The southeastern passage -- the one Brok gestured toward before '
-                                       'turning back -- carries a smell Theo can only describe as distance. Wind over '
-                                       'open stone.\n'
-                                       '\n'
-                                       "The Temple's weeks of teaching settle into him now like a key finding its "
-                                       'lock.\n'
-                                       '\n'
-                                       'He has learned to tend without possessing. He has learned that the work you do '
-                                       'before the work begins is the real work. He has swept floors and carried water '
-                                       'and listened to Brok recite maintenance schedules in a tone that was somehow '
-                                       'also a kind of prayer. And now, standing at the crossroads with the ground '
-                                       'humming faintly beneath his boots, he finds that the paths are not confusing '
-                                       'at all.\n'
-                                       '\n'
-                                       'They whisper.\n'
-                                       '\n'
-                                       'Not in words -- nothing so blunt as that. Each passage makes a particular '
-                                       'quality of silence. The southeastern passage makes the silence of something '
-                                       'you have not yet become. It calls him with a note so low he feels it more than '
-                                       'hears it: **forward**.\n'
-                                       '\n'
-                                       'But there is another note, too. Closer. Warmer. He has not yet gone to the '
-                                       'Chapel of Gold and Silver high above, where the dandelion petals fall. There '
-                                       'may still be time.\n'
-                                       '\n'
-                                       'A crossroads is a gift, he thinks. It means you have arrived somewhere worth '
-                                       'choosing from.\n'
-                                       '\n'
-                                       'He breathes once, deeply. The roots along the southeastern arch seem to lean, '
-                                       'almost imperceptibly, toward him.\n'
-                                       '\n'
-                                       'There is a clarity in knowing what is yours to do. And there is a different '
-                                       'kind of clarity in admitting when you want more time. Both are honest. Both '
-                                       'are real. The Temple, he suspects, can tell the difference.',
-                               'title': 'The Four Paths',
-                               'vocabulary': [   {   'definition': 'The entrance or beginning of a new space or '
-                                                                   'experience; often used to mark a moment of passage '
-                                                                   'or transition.',
-                                                     'term': 'threshold'},
-                                                 {   'definition': 'In a way so slight or gradual that it is almost '
-                                                                   'impossible to notice.',
-                                                     'term': 'imperceptibly'}]},
-    'a6_crossroads_eager': {   'choices': [   {   'target': 'a7_struggle',
-                                                  'text': 'Take the southeastern passage -- hesitation is just another '
-                                                          'word for fear.'},
-                                              {   'target': 'a7_shadow_force',
-                                                  'text': 'Charge down the northern passage. There has to be something '
-                                                          'more to learn.'},
-                                              {   'target': 'a6_h_meditate',
-                                                  'text': 'Sit in the center of the crossroads. Be still. Listen.'}],
-                               'ending_type': None,
-                               'era': 'temple',
-                               'figures': [],
-                               'is_ending': False,
-                               'tags': ['crossroads', 'center_path', 'choice', 'urgency'],
-                               'text': 'Theo finds the crypt the way he has found most things in the Forest Temple -- '
-                                       'by accident, by instinct, by following the thing that looked most '
-                                       'interesting.\n'
-                                       '\n'
-                                       'The root-stair descends in a spiral he did not expect, and then the crypt '
-                                       'opens around him like a held breath released, and there it is: four passages '
-                                       'radiating outward from a circle of pale stone. His first thought is not wonder '
-                                       'but calculation. Southeast, he remembers -- that was the direction Brok '
-                                       'mentioned when Theo had asked, rather boldly, how long this was all supposed '
-                                       'to take. Brok had blinked his five-second blink, and said: "Southeastern '
-                                       'passage. When ready." And had not elaborated.\n'
-                                       '\n'
-                                       'When ready.\n'
-                                       '\n'
-                                       'The passages do seem different from each other. There is something about the '
-                                       'southeastern one -- a smell, maybe, or a change in the quality of silence. '
-                                       'Distance. Open stone. Something not yet earned.\n'
-                                       '\n'
-                                       'The northern passage smells of rain and deep time. Theo almost walks toward it '
-                                       'before he catches himself. He is not here to collect every experience. He is '
-                                       'here to move forward.\n'
-                                       '\n'
-                                       'But is he ready?\n'
-                                       '\n'
-                                       'The question arrives with uncomfortable **alacrity**. He has been here weeks '
-                                       "-- he has swept, he has watched, he has learned the shape of the Temple's "
-                                       'routines. He has not gone hungry. He has not been turned away. But he is not '
-                                       'sure he has understood any of it the way the Temple perhaps intended. '
-                                       'Understanding, he suspects, is not the same as exposure. You could live in a '
-                                       'library your whole life and never read.\n'
-                                       '\n'
-                                       'The southeastern passage waits. It has no urgency. It simply is.\n'
-                                       '\n'
-                                       'His feet are restless. The crypt is close and cool and the roots press in from '
-                                       'every angle. There is a pressure building in his chest that he associates with '
-                                       'staying too long anywhere. But there is also -- he must be honest -- a small '
-                                       'cold note of doubt. A question he cannot quite name, tugging at his sleeve.\n'
-                                       '\n'
-                                       'He has three options and he knows it. He could go. He could stay and sit still '
-                                       'and see if the doubt resolves. Or he could take the northern passage and see '
-                                       'what deeper learning might still wait for him there.\n'
-                                       '\n'
-                                       'None of these are wrong, exactly. All of them have a cost.',
-                               'title': 'The Crossroads at Speed',
-                               'vocabulary': [   {   'definition': 'Brisk, eager readiness or quickness; sometimes '
-                                                                   'used to suggest that speed arrives before wisdom.',
-                                                     'term': 'alacrity'},
-                                                 {   'definition': 'The state of being in contact with something; '
-                                                                   'distinct from understanding or truly absorbing it.',
-                                                     'term': 'exposure'}]},
-    'a6_h_meditate': {   'choices': [   {   'target': 'a7_balance',
-                                            'text': 'Rise and take the southeastern passage with clear intention.'},
-                                        {   'target': 'a7_struggle',
-                                            'text': 'Rise with some clarity, but still carrying the weight of doubt.'}],
-                         'ending_type': None,
-                         'era': 'temple',
-                         'figures': [],
-                         'is_ending': False,
-                         'tags': ['crossroads', 'horizontal', 'stillness', 'center_path'],
-                         'text': 'Theo sits down in the center of the crossroads circle -- not on a stone, there is no '
-                                 'stone, just on the floor -- and closes his eyes.\n'
-                                 '\n'
-                                 'This is not natural to him. His knees protest. The floor is cold. He is aware of '
-                                 'looking foolish, which is strange, since there is no one to watch him.\n'
-                                 '\n'
-                                 'But after a time -- a minute, or ten, he cannot tell -- the crypt shifts in its '
-                                 'quality. The restlessness in his chest does not vanish, but it quiets, the way a '
-                                 'pool quiets when you stop throwing stones into it. He can feel the four passages now '
-                                 'as distinct presences, not just directions. The southeastern one still carries its '
-                                 'note of distance and open stone. But now it sounds less like a demand and more like '
-                                 'an invitation. There is a difference between those things, he realizes. Demands make '
-                                 'you run to avoid the consequences of not running. Invitations wait.\n'
-                                 '\n'
-                                 '**Contemplation** is not inaction, he thinks. It is action of a quieter kind -- the '
-                                 'action of letting the mind settle until what is true floats to the surface.\n'
-                                 '\n'
-                                 'The southeastern passage is his. Not because it is easiest, not because it is '
-                                 "closest, but because it is the one that asks him to become someone he isn't yet.\n"
-                                 '\n'
-                                 'He opens his eyes.\n'
-                                 '\n'
-                                 'The torchless light is the same. The roots curl the same. But something in him has '
-                                 'rearranged slightly, and when he stands, the crossroads no longer feels like a '
-                                 'riddle. It feels like a room he is ready to leave.',
-                         'title': 'Still Water',
-                         'vocabulary': [   {   'definition': 'Deep, unhurried thinking or reflection; the practice of '
-                                                             'giving full attention to a question or experience.',
-                                               'term': 'contemplation'}]},
-    'a7_balance': {   'choices': [{'target': 'a8_gentle', 'text': 'Walk to Brok with the yew staff. You are ready.', 'set_flags': {'staff': 'yew', 'staff_cracked': False}}],
-                      'ending_type': None,
-                      'era': 'temple',
-                      'figures': [],
-                      'is_ending': False,
-                      'tags': ['staves', 'yew', 'light_path', 'ritual'],
-                      'text': 'The southeastern passage slopes gently upward and then opens, without warning, into a '
-                              'small circular room where the roots do not come.\n'
-                              '\n'
-                              'The walls here are stone -- real stone, cut and laid by hands older than the forest. '
-                              'Three staves lean against the far wall in a way that is too deliberate to be '
-                              "accidental. They are each exactly Theo's height, and he has the irrational certainty "
-                              'that they have been waiting here, specifically, for him.\n'
-                              '\n'
-                              'He approaches slowly.\n'
-                              '\n'
-                              'The first staff is ash -- pale, nearly silver, the wood dense and smooth. It has a '
-                              'weight to it that precedes touching it, a **gravitas** that fills the space around it. '
-                              'This is a staff for someone who stands firm when the world tries to move them.\n'
-                              '\n'
-                              'The second staff is willow -- dark, almost black where the bark has been stripped, '
-                              'flexible in a way you can feel just by looking. It bends without breaking. This is a '
-                              'staff for someone who trusts the path more than the destination.\n'
-                              '\n'
-                              'The third staff is yew. Pale yellow-brown, with a faint spiral grain you have to angle '
-                              'your head to see. Lighter than the ash. More knowing than the willow. There is '
-                              'something about it that Theo cannot name for a full minute, until the word surfaces on '
-                              'its own: **resonance**. The yew staff resonates with something in him. Not loudly -- '
-                              'not like a struck bell. More like a tuning fork placed near a second, sympathetic '
-                              'string. A vibration below hearing.\n'
-                              '\n'
-                              'He knows, without hesitation, that this is his.\n'
-                              '\n'
-                              'He lifts the yew staff from the wall. It settles into his hand as though it has always '
-                              'been there, the grain warm under his palm, the weight exactly right. He stands with it '
-                              'for a long moment, conscious of something ceremonial in the act -- not because anyone '
-                              'has told him it is ceremonial, but because the room itself seems to hold its breath.\n'
-                              '\n'
-                              'The ash and willow remain where they are. He does not feel the urge to take them. They '
-                              'are not his. They belong to other hands, other roads, other stories he will not be part '
-                              'of.\n'
-                              '\n'
-                              'He turns back toward the passage.\n'
-                              '\n'
-                              'Brok is waiting at the entrance to the southeastern passage, blinking.',
-                      'title': 'The Staves Speak',
-                      'vocabulary': [   {   'definition': 'A quality of seriousness, solemnity, or weight; a presence '
-                                                          'that commands attention and respect.',
-                                            'term': 'gravitas'},
-                                        {   'definition': 'A deep, echoing quality of sound or feeling; also used to '
-                                                          'describe how something can connect meaningfully with a '
-                                                          "person's inner life.",
-                                            'term': 'resonance'}]},
-    'a7_shadow_force': {   'choices': [   {   'target': 'a8_rough',
-                                              'text': 'Take one staff -- the ash. Grip what strength remains and '
-                                                      'leave.',
-                                              'set_flags': {'staff': 'ash', 'staff_cracked': True}},
-                                          {   'target': 'ending_temple_trapped',
-                                              'text': 'Stand here until the Temple decides for you.'}],
-                           'ending_type': None,
-                           'era': 'temple',
-                           'figures': [],
-                           'is_ending': False,
-                           'tags': ['staves', 'shadow_path', 'overreach', 'consequence'],
-                           'text': 'The room at the end of the northern passage -- because Theo took the northern '
-                                   'passage, the one he should not have taken, the one that led here anyway, as though '
-                                   'the Temple knew he would come this way -- holds three staves.\n'
-                                   '\n'
-                                   'Three staves and no instructions. No locks. No guardian. They are simply there.\n'
-                                   '\n'
-                                   'Ash, willow, yew. Each exactly his height. Theo stands in the entrance and does '
-                                   'the arithmetic immediately: three staves, one of him. But he has also been in the '
-                                   'Temple long enough to know that the arithmetic of this place does not work the way '
-                                   'he wants it to. There is always a catch. There is always a rule you find out about '
-                                   'by breaking it.\n'
-                                   '\n'
-                                   'The sensible thing would be to pick one.\n'
-                                   '\n'
-                                   'But the sensible thing has not always served him, and he is tired, and he is '
-                                   'angry, and the Temple has taken weeks of his labor without offering him much in '
-                                   'return beyond the word "duty" repeated in various Brok-tones, and so the sensible '
-                                   'thing feels, at this particular moment, like another form of submission.\n'
-                                   '\n'
-                                   'He reaches for all three at once.\n'
-                                   '\n'
-                                   'For a moment, nothing happens.\n'
-                                   '\n'
-                                   'Then something happens.\n'
-                                   '\n'
-                                   "Not violently -- the Forest Temple does not deal in violence. But the room's "
-                                   'quality changes utterly. The sourceless warmth goes out. The roots along the '
-                                   'passage behind him make a sound like a door closing, not with a bang but with the '
-                                   'soft definitive click of something that meant it. The staves do not move, but his '
-                                   'hands suddenly will not close around them. It is not pain. It is more like the '
-                                   'staves have become **immutable** -- not physically different, but categorically '
-                                   'unavailable, the way a promise is unavailable once you have broken the thing that '
-                                   'made it possible.\n'
-                                   '\n'
-                                   'Theo stands with his hands open and empty in a room that has grown very, very '
-                                   'still.\n'
-                                   '\n'
-                                   'He can take one.\n'
-                                   '\n'
-                                   'Just one.\n'
-                                   '\n'
-                                   'Or he can find out what happens when he stands here until the Temple loses '
-                                   'patience entirely.',
-                           'title': 'The Greedy Hand',
-                           'vocabulary': [   {   'definition': 'Unchanging and unchangeable; fixed in a way that '
-                                                               'resists all effort to alter it.',
-                                                 'term': 'immutable'},
-                                             {   'definition': 'The act of accepting or yielding to the will or '
-                                                               'authority of another; sometimes appropriate, sometimes '
-                                                               'a form of defeat.',
-                                                 'term': 'submission'}]},
-    'a7_struggle': {   'choices': [   {   'target': 'a8_steady',
-                                          'text': 'Take the yew staff. It is not certainty, but it is a choice.',
-                                          'set_flags': {'staff': 'yew', 'staff_cracked': False}},
-                                      {   'target': 'a8_rough',
-                                          'text': 'Take the ash staff. Strength first. Think later.',
-                                          'set_flags': {'staff': 'ash', 'staff_cracked': False}}],
-                       'ending_type': None,
-                       'era': 'temple',
-                       'figures': [],
-                       'is_ending': False,
-                       'tags': ['staves', 'center_path', 'hesitation', 'choice'],
-                       'text': 'The room at the end of the southeastern passage is not large. Three staves lean '
-                               'against the far wall -- ash, willow, yew -- and the room offers no instruction, no '
-                               'explanation, no Brok to recite the maintenance schedule of the staves. Just three '
-                               'objects and the necessity of choice.\n'
-                               '\n'
-                               'Theo studies them.\n'
-                               '\n'
-                               'The ash staff is pale and dense and looks like it could crack granite. It is the kind '
-                               'of staff a serious person carries. He is not sure he is serious enough for it, and '
-                               'that uncertainty makes him want to take it, which he recognizes as a bad reason.\n'
-                               '\n'
-                               'The willow staff is dark and supple. There is something melancholy about it -- or '
-                               'maybe that is him projecting. It looks like it would bend rather than break in a '
-                               'storm, which should be comforting. It is not entirely comforting.\n'
-                               '\n'
-                               'The yew staff is pale yellow-brown, lighter than the others, with a spiral grain that '
-                               'catches the light differently depending on where you stand. He has stood in four '
-                               'different positions now trying to understand it. It gives him nothing clear -- only '
-                               'the faint feeling that understanding is available, if he reaches for it correctly.\n'
-                               '\n'
-                               'This is the problem with being somewhat prepared: you know enough to know the stakes, '
-                               'but not enough to feel certain.\n'
-                               '\n'
-                               'A well-prepared traveler, he suspects, would simply know which staff to take. There '
-                               'would be no deliberation, only recognition. He does not have recognition. He has '
-                               '**discernment** -- the slower, harder cousin of recognition, the kind that requires '
-                               'work and can still be wrong.\n'
-                               '\n'
-                               'He reaches for the yew staff, then hesitates.\n'
-                               '\n'
-                               'He reaches for the ash staff, then does not touch it.\n'
-                               '\n'
-                               'He steps back and breathes.\n'
-                               '\n'
-                               'The willow staff is still. The ash staff is still. The yew staff is still. None of '
-                               'them are judging him, which is, in its own way, the most pressure he has felt in '
-                               'weeks.\n'
-                               '\n'
-                               'He has to choose. And then live with it.',
-                       'title': 'Three Choices, One Hand',
-                       'vocabulary': [   {   'definition': 'The ability to judge carefully, to tell apart the subtly '
-                                                           'different; a slower, more effortful form of perception '
-                                                           'than instinct.',
-                                             'term': 'discernment'}]},
-    'a8_gentle': {   'choices': [   {   'target': 'a9_wise_solitude',
-                                        'text': 'Descend with purpose into the ravines. The road is clear.',
-                                        'set_flags': {'has_pouch': True}},
-                                    {'target': 'a9_path', 'text': 'Descend carefully, taking in the new landscape.',
-                                     'set_flags': {'has_pouch': True}}],
-                     'ending_type': None,
-                     'era': 'temple',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['brok', 'farewell', 'pouch', 'hafthor', 'light_path', 'emotional_climax'],
-                     'text': 'The southeastern passage is narrow and long, and Brok walks ahead of Theo without '
-                             'speaking.\n'
-                             '\n'
-                             'This is not unusual. Brok rarely speaks without a purpose, and the purposes he '
-                             'recognizes -- Temple maintenance, procedural guidance, the recitation of schedules -- '
-                             'are all behind them now. What is ahead requires a different language, and Brok does not '
-                             'have it, and he knows he does not have it, and this does not stop him from walking Theo '
-                             "to the passage's end.\n"
-                             '\n'
-                             'The mouth of the passage opens onto a landing of gray stone. Beyond it, the Chartreuse '
-                             'Forest drops away in long slopes toward something vast and rocky that Theo can feel '
-                             'before he can see. The air is different here. Drier. Older. The smell of the forest -- '
-                             'loam and green and living bark -- mingles with the smell of open elevation.\n'
-                             '\n'
-                             "Brok stops at the landing's edge.\n"
-                             '\n'
-                             "He turns to face Theo. His dinner-plate eyes sweep once from Theo's boots to the yew "
-                             "staff to Theo's face, and then they blink -- the full slow blink -- and then he reaches "
-                             'into the cavity in his chest that Theo has never seen opened before.\n'
-                             '\n'
-                             'What he produces is a pouch.\n'
-                             '\n'
-                             'Leather, but leather unlike any leather Theo has touched. It is warm in a way that has '
-                             "nothing to do with Brok's body heat. It is dark brown, almost black at the seams, and "
-                             'lined inside with something pale and impossibly soft -- fur, fine as breath, from some '
-                             'creature Theo cannot name. There is a smell to it: old cold places, high wind, animal '
-                             'warmth.\n'
-                             '\n'
-                             '"Pouch," Brok says. "From the hide of Hafthor the Yak-God. Lining: flying-goat fur. '
-                             'Insulating. Protective. Standard issue for departing pilgrims in good standing."\n'
-                             '\n'
-                             'He holds it out.\n'
-                             '\n'
-                             'Theo takes it. The warmth of the leather settles into his palm.\n'
-                             '\n'
-                             '"Brok," Theo says.\n'
-                             '\n'
-                             '"Southeastern passage to Chartreuse Forest," Brok says, with the smallest alteration in '
-                             'his tone -- something very slightly different, a frequency Theo has not heard from him '
-                             'before. "Down and up to southwest slope of Mount Nebo. Please take care."\n'
-                             '\n'
-                             'Not "please take one." He has never said that before.\n'
-                             '\n'
-                             'Theo looks at him -- at the dinner-plate eyes, at the seven-fingered hands folded now at '
-                             'his sides, at the metal chest that hides gifts and protocols and whatever else Brok '
-                             'keeps in the places no one sees.\n'
-                             '\n'
-                             'There are things that cannot be said in any language Brok possesses, and Theo '
-                             'understands this, and something in the understanding is itself a kind of **grace** -- '
-                             'the ability to receive what is offered in the form it can be offered, and not demand '
-                             'that it come in a different shape.\n'
-                             '\n'
-                             'He attaches the pouch to his belt. He adjusts the {{staff}} staff in his hand. He looks once '
-                             'more at Brok.\n'
-                             '\n'
-                             '"Thank you," he says. "For everything. The sweeping included."\n'
-                             '\n'
-                             'Brok blinks. Five seconds. The eyes return, and something in them is still.\n'
-                             '\n'
-                             '"Temple will remain tidy," Brok says.\n'
-                             '\n'
-                             'Theo turns and walks into the passage.\n'
-                             '\n'
-                             "For a while -- longer than he expects -- he can hear the faint whir of Brok's joints "
-                             'behind him, growing quieter, and then the forest takes over, and then there is only the '
-                             "sound of his own footsteps and the wind coming off Mt. Nebo's slopes and the faint warm "
-                             'weight of the pouch against his hip.',
-                     'title': 'The Pouch of Hafthor',
-                     'vocabulary': [   {   'definition': 'An elegance or ease in accepting what cannot be changed; '
-                                                         'also: the ability to receive a gift in the spirit it was '
-                                                         'given.',
-                                           'term': 'grace'}]},
-    'a8_rough': {   'choices': [   {   'target': 'a9_lonely',
-                                       'text': 'Descend into the ravines. Move forward with what you have.'},
-                                   {   'target': 'a9_bitter',
-                                       'text': 'Descend, but the cracked staff and the empty belt feel like a '
-                                               'verdict.'}],
-                    'ending_type': None,
-                    'era': 'temple',
-                    'figures': [],
-                    'is_ending': False,
-                    'tags': ['expelled', 'shadow_path', 'cracked_staff', 'no_farewell'],
-                    'text': 'There is no ceremony.\n'
-                            '\n'
-                            'The Temple does not throw you out -- it simply makes staying impossible. The rooms close. '
-                            'The passages reroute. The light dims in the places you try to go and brightens only in '
-                            'the one direction left to you, and so Theo walks southeast because there is nowhere else '
-                            'to walk, the ash staff in his hand, the Temple arranging itself behind him like a '
-                            'sentence ending.\n'
-                            '\n'
-                            'The staff is cracked. Not badly -- a hairline fracture along the lower third, the kind '
-                            'you might not notice until you put real weight on it. He put real weight on it. He put '
-                            'real weight on everything and found the limits.\n'
-                            '\n'
-                            'The southeastern passage is dark by the standards of the rest of the Temple. Or maybe it '
-                            'is the same and he is darker. It ends on a landing of gray stone, and Brok is not there, '
-                            'and the pouch is not there, and the Chartreuse Forest drops away below him into long '
-                            'slopes that end, somewhere far below, in a landscape of stone and scrub and thin sky.\n'
-                            '\n'
-                            'Theo stands at the edge and breathes.\n'
-                            '\n'
-                            'He is not defeated. He is clear-eyed, which is its own uncomfortable gift: **lucidity** '
-                            'in a moment of failure is not the same as comfort, but it is better than nothing. He '
-                            'tried to take too much. The Temple held. He is still here, staff in hand, passage behind '
-                            'him, mountain ahead.\n'
-                            '\n'
-                            'Some people would learn nothing from this.\n'
-                            '\n'
-                            'He is not sure, yet, which kind of person he is.\n'
-                            '\n'
-                            'He steps off the landing and descends.',
-                    'title': 'No Ceremony',
-                    'vocabulary': [   {   'definition': 'Clear thinking and awareness, especially in a difficult '
-                                                        'moment; the ability to see things as they truly are.',
-                                          'term': 'lucidity'}]},
-    'a8_steady': {   'choices': [   {'target': 'a9_path', 'text': 'Descend into the ravines. The staff is enough.'},
-                                    {   'target': 'a9_lonely',
-                                        'text': 'Move carefully -- the landscape is unfamiliar and the lack of '
-                                                'provisions worries you.'}],
-                     'ending_type': None,
-                     'era': 'temple',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['passage', 'center_path', 'no_gift', 'solo_departure'],
-                     'text': 'The southeastern passage is lit by that same sourceless Temple light, and Theo walks it '
-                             'alone.\n'
-                             '\n'
-                             'He did not expect Brok to accompany him. He half-hoped for it, which is different. But '
-                             'when he emerged from the stave-room with the {{staff}} staff in hand -- chosen after long '
-                             'hesitation, but chosen -- Brok was not waiting at the passage entrance. The passage '
-                             'simply opened before him, and the logic of the Temple said: this is the way.\n'
-                             '\n'
-                             'So he walked.\n'
-                             '\n'
-                             'The passage ends on a landing of gray stone. The Chartreuse Forest falls away below in '
-                             'long green-shadowed slopes, and beyond, the air changes to something rawer, older. Mt. '
-                             'Nebo. He can feel its **imminence** before he can see it -- a sense of something '
-                             'enormous beginning.\n'
-                             '\n'
-                             "He stands at the landing's edge. No one comes.\n"
-                             '\n'
-                             'He listens. Somewhere behind him, deep in the Temple, he can hear the faint whir of '
-                             'machinery, the sound of Brok going about his routines. Forty-eight hour maintenance '
-                             'schedule. The Temple remains tidy.\n'
-                             '\n'
-                             'Theo wraps his hand around the {{staff}} staff more firmly. It is a good staff. He chose it '
-                             'without full certainty, and it has not punished him for that. Maybe certainty is '
-                             'overrated. Maybe the choosing itself is what matters.\n'
-                             '\n'
-                             'He steps off the landing and into the passage down.\n'
-                             '\n'
-                             'There is no pouch at his belt. He does not know what he has missed. He only knows that '
-                             'he is less provisioned than he might have been, and that the feeling of a gift not given '
-                             'is a particular kind of cold.',
-                     'title': 'The Passage Without Words',
-                     'vocabulary': [   {   'definition': 'The quality of something about to happen or arrive; a '
-                                                         'presence that can be felt before it is seen.',
-                                           'term': 'imminence'}]},
-    'a9_bitter': {   'choices': [   {   'target': 'a10_cling',
-                                        'text': 'Keep walking, keep blaming. At least motion is something.'},
-                                    {   'target': 'a9_h_breakdown',
-                                        'text': 'Sit here until the blaming runs out. Something is underneath it.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['ravines', 'far_shadow', 'blame', 'self_deception', 'bitter'],
-                     'text': 'Theo walks and curses.\n'
-                             '\n'
-                             'Not loudly -- there is no one to perform anger for -- but internally, a running '
-                             'commentary of blame that has been building since the stave-room and is now fully '
-                             'operational. He blames the Temple for its obscurity. He blames Brok for his literalism. '
-                             'He blames the Locks -- the badger couple from weeks ago -- for directing him '
-                             'imprecisely. He blames the forest for its impenetrability. He blames the crossroads for '
-                             'its demands. He blames the staves for existing in a configuration that required '
-                             'choosing.\n'
-                             '\n'
-                             'Mostly he blames himself, which he disguises as blaming other things, which is a very '
-                             'specific kind of dishonesty that he has not yet named.\n'
-                             '\n'
-                             'The ravines are ugly to him right now. He knows, in some abstract part of himself that '
-                             'is not currently in charge, that they are not objectively ugly -- that the stone has a '
-                             '**austere** kind of beauty, the scrub an **tenacity** worth admiring, the streams a '
-                             'purity. But the part of him that knows this has been shouted down by the part of him '
-                             'that is cold and staffed with a cracked ash staff and beltless and walking into a '
-                             'landscape that did not invite him.\n'
-                             '\n'
-                             'He stops and kicks a stone.\n'
-                             '\n'
-                             'The stone moves about two feet and comes to rest against another stone. The ravine does '
-                             'not respond.\n'
-                             '\n'
-                             'He kicks another stone.\n'
-                             '\n'
-                             'Still nothing.\n'
-                             '\n'
-                             'He sits down abruptly on a flat ledge of rock and stares at the darkening sky and feels '
-                             'the full weight of what he has made of the last several weeks -- what he chose, what he '
-                             'did not choose, what he took, what he failed to receive. The cracked staff leans against '
-                             'the rock beside him. The mountain rises in every direction he looks.\n'
-                             '\n'
-                             'He can keep blaming. It is available to him. It will remain available.\n'
-                             '\n'
-                             'Or he can sit here long enough to feel what is actually true, which is harder, and '
-                             'lonelier, and more useful.',
-                     'title': 'Blame on Every Stone',
-                     'vocabulary': [   {   'definition': 'Severely simple; lacking decoration or comfort, in a way '
-                                                         'that can be either harsh or quietly dignified.',
-                                           'term': 'austere'},
-                                       {   'definition': 'The quality of holding on firmly; persisting in the face of '
-                                                         'difficulty or opposition.',
-                                           'term': 'tenacity'}]},
-    'a9_h_breakdown': {   'choices': [   {   'target': 'a10_accept',
-                                             'text': 'Get up. The emptying was necessary. Walk forward into the dark.'},
-                                         {   'target': 'a10_cling',
-                                             'text': 'You are too empty to rise. Stay here until the mountain moves.'}],
-                          'ending_type': None,
-                          'era': 'ravines',
-                          'figures': [],
-                          'is_ending': False,
-                          'tags': ['ravines', 'horizontal', 'breakdown', 'shadow', 'turning_point'],
-                          'text': 'It happens between one step and the next.\n'
-                                  '\n'
-                                  'Theo is walking -- or he was walking, he thought he was still walking -- and then '
-                                  'he is sitting on the ground of the ravine with no memory of deciding to sit, and '
-                                  'something in his chest is doing something that is not crying exactly but is '
-                                  'adjacent to crying, is the thing that exists in the same neighborhood as crying, '
-                                  'and he cannot stop it.\n'
-                                  '\n'
-                                  "He doesn't try to stop it.\n"
-                                  '\n'
-                                  'He has been trying to stop things for weeks. Trying to stop the fear of arriving at '
-                                  "the Temple unprepared. Trying to stop the anger at Brok's routines. Trying to stop "
-                                  'the grief -- and it is grief, he can call it what it is now, down here in the dark '
-                                  "at the bottom of Mt. Nebo's ravines with no one to see -- grief at being so far "
-                                  'from home, so far from everything familiar, so entirely dependent on his own '
-                                  '**resilience**, which has not always been sufficient.\n'
-                                  '\n'
-                                  'The mountain does not comfort him.\n'
-                                  '\n'
-                                  'It does not need to. That is, he discovers slowly, in the minutes that pass with '
-                                  'the stars turning overhead and the stream threading cold over pale stones below '
-                                  'him, the point.\n'
-                                  '\n'
-                                  'He has been looking for the landscape to answer him. For Brok to answer him. For '
-                                  'the crossroads to answer him. And they have all, each in their way, said the same '
-                                  'thing: we are what we are. What you are is up to you.\n'
-                                  '\n'
-                                  '**Catharsis** is not the same as resolution. He is not resolved. He is emptied, '
-                                  'which is different from being repaired, but is perhaps prior to it -- the clearing '
-                                  'that must happen before something can be built.\n'
-                                  '\n'
-                                  'He gets up.\n'
-                                  '\n'
-                                  'Or he does not.\n'
-                                  '\n'
-                                  'Both are possible. The stars do not care. The mountain does not lean either way. '
-                                  'But he is still here, and the ravine still exists, and there is still a staff in '
-                                  'his hand, cracked or whole, and the road does not end at the bottom.',
-                          'title': 'The Lowest Stone',
-                          'vocabulary': [   {   'definition': 'The ability to recover from difficulty; the capacity to '
-                                                              'adapt and keep going after being tested or broken down.',
-                                                'term': 'resilience'},
-                                            {   'definition': 'A release or purging of strong emotions, often through '
-                                                              'reaching a lowest point; associated with the clearing '
-                                                              'that can make room for growth.',
-                                                'term': 'catharsis'}]},
-    'a9_h_fire': {   'choices': [   {   'target': 'a10_accept',
-                                        'text': "Walk into the silver morning with everything you've learned carried "
-                                                'lightly.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['ravines', 'horizontal', 'fire', 'insight', 'yew_staff', 'brok'],
-                     'text': "Theo builds the fire the way the Temple's routines taught him to do almost everything -- "
-                             'not efficiently, not beautifully, but correctly. Stones in a ring. Dry scrub. Tinder '
-                             "from the pouch's outer pocket, which he discovers is full of useful things he did not "
-                             'know were there: a flint, a small coil of cord, a square of folded cloth that smells of '
-                             'pine resin.\n'
-                             '\n'
-                             'Brok packed this pouch himself. Of course he did.\n'
-                             '\n'
-                             'The fire catches. The ravine fills with light that is orange and mortal and much smaller '
-                             'than the stars but warmer in a way the stars cannot be, and Theo sits with his back '
-                             'against the stone and the {{staff}} staff across his knees and watches the flame.\n'
-                             '\n'
-                             'The staff glows.\n'
-                             '\n'
-                             "It is a subtle thing -- the fire's light enters the pale yellow-brown wood and seems to "
-                             'travel along the spiral grain, deepening, as though the staff is less reflecting the '
-                             'light than remembering it. It is not magic, exactly. Or it is exactly magic, but the '
-                             'quiet, unglamorous kind: **numinous** in the oldest sense, the sense before people '
-                             'started needing magic to announce itself.\n'
-                             '\n'
-                             'He thinks about the crossroads. He thinks about the four passages and the silence that '
-                             'called him forward. He thinks about Brok\'s "please take care" and the warmth of the '
-                             'leather in his palm and the five-second blink that said everything that Brok could not '
-                             'say in words.\n'
-                             '\n'
-                             'He thinks about what he is walking toward.\n'
-                             '\n'
-                             'Mt. Nebo is called the Parallax of Life. He does not fully know what that means yet. A '
-                             'parallax is when the same object looks different depending on where you stand. He has '
-                             'stood in several places now. He is curious, for the first time without fear, about what '
-                             'the mountain will look like from the next one.\n'
-                             '\n'
-                             'The fire burns down. He lets it.\n'
-                             '\n'
-                             'In the morning the ravine is silver and cold and full of bird calls he has never heard '
-                             'before, and he shoulders the pouch and takes the staff and walks into it.',
-                     'title': 'The Staff in Firelight',
-                     'vocabulary': [   {   'definition': 'Having a strong quality of the sacred or spiritual; a sense '
-                                                         'of the divine or mysterious, often felt in quiet or natural '
-                                                         'settings rather than announced by spectacle.',
-                                           'term': 'numinous'},
-                                       {   'definition': 'The apparent difference in position of an object when viewed '
-                                                         'from different points; used metaphorically to describe how '
-                                                         'perspective shapes understanding.',
-                                           'term': 'parallax'}]},
-    'a9_lonely': {   'choices': [   {   'target': 'a10_cling',
-                                        'text': 'Stay in the shelter of the rock. Wait for morning and walk again.'},
-                                    {   'target': 'a9_h_breakdown',
-                                        'text': 'The stars make you want to keep moving. Get up and walk.'}],
-                     'ending_type': None,
-                     'era': 'ravines',
-                     'figures': [],
-                     'is_ending': False,
-                     'tags': ['ravines', 'shadow_path', 'cold', 'alone', 'loneliness'],
-                     'text': 'The ravines are stone and scrub and the sound of wind.\n'
-                             '\n'
-                             'That is all they are. Theo has been walking for hours -- or what feels like hours; the '
-                             'ravines have their own relationship with time, which does not appear to include him -- '
-                             'and the landscape has not changed. Rock. Thin plants in the rock cracks. A stream that '
-                             'appears and disappears. Sky above that has gone the color of old iron as the light '
-                             'fails.\n'
-                             '\n'
-                             'He is cold.\n'
-                             '\n'
-                             'He does not have the pouch of Hafthor. He did not earn it, or did not leave the Temple '
-                             'in the way that produced it, and the absence now is a physical thing -- his hands are '
-                             'cold, his pack carries no extra warmth, and the {{staff}} staff '
-                             'is just wood in his hand, useful for walking, nothing more.\n'
-                             '\n'
-                             'He is aware of being **bereft** in a way he has not allowed himself to feel since he '
-                             'arrived in the Elysian Kingdom.\n'
-                             '\n'
-                             'The forest had been full. The Temple, even in its harshness, had been full -- full of '
-                             'Brok, full of routine, full of the presence of something that cared about its own '
-                             '**perpetuation** even if it did not care particularly about Theo. Out here there is '
-                             'nothing that cares about its perpetuation, because everything out here already is what '
-                             'it is. Stone does not need to become stone. It already is. Wind does not need to become '
-                             'wind. Scrub does not need to do anything.\n'
-                             '\n'
-                             'Theo needs things. He is aware of needing things. This awareness is uncomfortable in '
-                             'direct proportion to how little he can do about it.\n'
-                             '\n'
-                             'He finds a depression in the rock out of the wind and sits in it and pulls his knees up '
-                             'and does not call it anything.\n'
-                             '\n'
-                             'Above him, stars are appearing in the iron sky, one by one, as though they are being lit '
-                             'by someone very patient and very far away.',
-                     'title': 'Stone and Scrub',
-                     'vocabulary': [   {   'definition': 'Lacking something essential; experiencing loss or '
-                                                         'deprivation keenly, especially of comfort or companionship.',
-                                           'term': 'bereft'},
-                                       {   'definition': 'The continuation or preservation of something over time; the '
-                                                         'drive to keep existing.',
-                                           'term': 'perpetuation'}]},
-    'a9_path': {   'choices': [   {   'target': 'a10_accept',
-                                      'text': 'Keep walking. The uncertainty is part of the road.'},
-                                  {   'target': 'a10_cling',
-                                      'text': 'Stop. The emptiness of this landscape is pressing in.'}],
+                    'tags': ['horizontal', 'mack', 'question', 'pool', 'trickster'],
+                    'text': 'Mack turns the pocket watch over once in his fingers -- forward, then '
+                            'backward, then forward again -- and sets it face-down on the stone.\n'
+                            '\n'
+                            '*"Good,"* he says. *"The question first. Most people choose the '
+                            'riddle first because riddles have answers, and a riddle with the '
+                            'wrong answer is still a riddle. A question is different. A question '
+                            'you answer wrong stays wrong."*\n'
+                            '\n'
+                            'He looks at Theo for the first time since Theo sat down. The eyes are '
+                            'dark and quick, and there is nothing unkind in them and nothing '
+                            'especially kind either -- the look of someone who is genuinely '
+                            'curious about what you will do next.\n'
+                            '\n'
+                            '*"Here it is: What do you carry that does not belong to you?"*\n'
+                            '\n'
+                            "The pool is very still. In it, Mack's reflection holds the broad "
+                            'lion-brow, then the narrow fox-face, then something between -- and it '
+                            'is watching Theo the way the real Mack is watching him: with '
+                            'interest, without expectation.\n'
+                            '\n'
+                            "Theo's first thought is: nothing. His second thought is: everything. "
+                            'His third thought is longer and harder to name.\n'
+                            '\n'
+                            'There is the **inherited burden** -- the weight that was placed on '
+                            'him before he could choose whether to accept it. The way Brok spoke '
+                            'to him. The way the Temple ran. The version of himself he learned to '
+                            'perform for rooms that required a certain kind of person. None of '
+                            'these were his idea. All of them are in his pack right now.\n'
+                            '\n'
+                            'And then there is the grief. The grief he has been carrying in the '
+                            'name of people who are not here. He holds their sadness for them, has '
+                            'been holding it so long he cannot remember which sorrows are actually '
+                            'his.\n'
+                            '\n'
+                            '*"Take your time,"* Mack says, and he means it. He resettles on the '
+                            'rock, unhurried, like a man prepared to wait through weather. *"Most '
+                            "people answer fast because they're afraid the slow answer will be "
+                            'worse. It usually isn\'t. It\'s usually just truer."*\n'
+                            '\n'
+                            "The **proxy** weight of other people's fear, other people's ambition, "
+                            "other people's stories about who he is and what he is for -- this is "
+                            'what Theo has been carrying, he realizes. Not all of it unwillingly. '
+                            'Some of it he picked up because it felt like love, and some of it '
+                            "because he didn't know yet that he was allowed to put it down. Both "
+                            'are true. Neither cancels the other.\n'
+                            '\n'
+                            'Mack does not press him. The watch lies face-down on the stone. The '
+                            'pool holds its shifting face and waits.',
+                    'title': "Mack's Question",
+                    'vocabulary': [{'definition': 'A weight, responsibility, or expectation passed '
+                                                  'down from others -- family, culture, '
+                                                  'institution -- before one had the knowledge or '
+                                                  'standing to accept or refuse it.',
+                                    'term': 'inherited burden'},
+                                   {'definition': 'Acting or feeling on behalf of another; '
+                                                  'carrying something -- emotion, expectation, or '
+                                                  'identity -- that properly belongs to someone '
+                                                  'else.',
+                                    'term': 'proxy'}]},
+ 'a12_pool': {'choices': [{'target': 'a13_maiden', 'text': 'Ask about the riddle first.'},
+                          {'target': 'a12_h_bargain', 'text': 'Ask about the trade first.'},
+                          {'target': 'a12_h_question',
+                           'text': 'Ask about the question first -- the one Mack said he had.'}],
+              'ending_type': None,
+              'era': 'ravines',
+              'figures': ['Mack'],
+              'is_ending': False,
+              'tags': ['center_path', 'mack', 'pool', 'trickster', 'first_meeting'],
+              'text': "He is sitting on a rock at the pool's edge, and he looks like he has been "
+                      'sitting there since before the mountain was a mountain.\n'
+                      '\n'
+                      'The man -- if man is the right word -- wears a yellow vest over a lime '
+                      'green shirt, and his pants are the color of new grass. He is lean in the '
+                      'way that foxes are lean, with quick dark eyes and hands that are never '
+                      'entirely still. A silver pocket watch sits open on his knee, though he does '
+                      'not appear to be watching the time. He is watching the pool.\n'
+                      '\n'
+                      'In the pool, his reflection shifts. Theo sees it: the narrow fox-face, then '
+                      'the broad lion-brow, then something between the two that is neither and '
+                      'both.\n'
+                      '\n'
+                      '*"Fool or sage, they say,"* the man murmurs, as if continuing a '
+                      'conversation Theo interrupted. *"Serpent or dove. As if you have to pick '
+                      'one and stick with it."* He tilts his head without turning it. *"You found '
+                      'the pool. Not everyone finds the pool. Some people walk right past it and '
+                      'spend years looking for what they already walked past. Sit down, if you '
+                      'like. The water is cold but the light is good."*\n'
+                      '\n'
+                      'Theo sits.\n'
+                      '\n'
+                      '*"I\'m Mack,"* the man says, still watching his shifting reflection. *"And '
+                      "you're the one Brok {{#has_pouch}}sent home with the pouch. I can smell "
+                      "Hafthor's work from here -- good pouch. Older than it "
+                      'looks.{{/has_pouch}}{{^has_pouch}}sent out from the Temple. I can tell from '
+                      "the way you walk -- straight back, careful eyes. Brok's "
+                      'training.{{/has_pouch}}"*\n'
+                      '\n'
+                      'He snaps the pocket watch shut.\n'
+                      '\n'
+                      '*"I have a question for you, and a riddle, and a trade. In that order. Or '
+                      "reversed, if you prefer. I've found most people prefer to know what they're "
+                      "trading before they answer the riddle, though that's not the wisest "
+                      'order."* He grins. The grin is a fox\'s. *"What\'ll it be?"*\n'
+                      '\n'
+                      "The water between them holds both their reflections. Mack's shifts and "
+                      "Theo's does not, and Theo cannot decide which of them is the more "
+                      'unsettling for it.',
+              'title': 'The Trickster at the Water',
+              'vocabulary': [{'definition': 'Charming or enchanting in a way that can deceive; '
+                                            'attracting attention while obscuring something '
+                                            'underneath.',
+                              'term': 'beguiling'}]},
+ 'a12_stubborn': {'choices': [{'target': 'a13_cling',
+                               'text': 'Force forward along the narrowing ledge.'},
+                              {'target': 'ending_illusion_bound',
+                               'text': 'The song grows louder. Something stops. Turn back toward '
+                                       'it.'}],
+                  'ending_type': None,
+                  'era': 'ravines',
+                  'figures': [],
+                  'is_ending': False,
+                  'tags': ['shadow_path', 'refusal', 'pool', 'stubbornness'],
+                  'text': 'The pool is here. He can see it -- a dark oval of water, motionless, '
+                          'tucked against the ravine wall where the stone overhangs like a drawn '
+                          'curtain.\n'
+                          '\n'
+                          'He walks past it.\n'
+                          '\n'
+                          'This is not a conscious decision. It happens the way most refusals '
+                          'happen -- not as a grand act of will but as a series of small '
+                          'redirections, each one so minor it barely registers. He looks at the '
+                          "pool and thinks: *later.* He looks again and thinks: *there's nothing "
+                          'in it.* He glances back once as the ravine curves and the pool passes '
+                          'out of sight, and he thinks: *just a pool.*\n'
+                          '\n'
+                          'He is wrong about the last part, and some part of him knows it, which '
+                          'is why the refusal costs more than it should.\n'
+                          '\n'
+                          'The ravine narrows. This is not metaphor -- the stone walls genuinely '
+                          'close in, the path becomes a ledge, and the ledge becomes a line of '
+                          'handholds cut into the rock face, and Theo moves along them with his '
+                          'jaw set and his eyes fixed on what is directly in front of him and '
+                          'nowhere else.\n'
+                          '\n'
+                          'From somewhere behind him -- from the pool he did not look into -- '
+                          'comes a sound. A voice, low and musical, not singing exactly but not '
+                          'not singing either, the kind of sound that is always almost about to '
+                          'become a song.\n'
+                          '\n'
+                          "*And low he's high, a friend to all...*\n"
+                          '\n'
+                          'He does not turn back.\n'
+                          '\n'
+                          'The mountain receives him in his stubbornness, which is not the same as '
+                          'welcoming him. The path ahead has two alternatives, and both of them '
+                          'will cost something, and neither of them will give back what he left '
+                          'behind at the pool.',
+                  'title': 'The Pool That Shows Nothing',
+                  'vocabulary': [{'definition': 'Stubbornness; the quality of being unyielding, '
+                                                'especially in the face of evidence that one '
+                                                'should reconsider.',
+                                  'term': 'obduracy'}]},
+ 'a12_surrender': {'choices': [{'target': 'a13_transform',
+                                'text': "Walk on toward the mountain's south face, carrying the "
+                                        'new lightness.'},
+                               {'target': 'a13_maiden',
+                                'text': 'Follow the sound of the cottage bells that drift up from '
+                                        'the valley below.'}],
                    'ending_type': None,
                    'era': 'ravines',
                    'figures': [],
                    'is_ending': False,
-                   'tags': ['ravines', 'center_path', 'uncertainty', 'alone'],
-                   'text': 'The ravines are nothing like the forest.\n'
+                   'tags': ['light_path', 'pool', 'inverted_world', 'new_perspective'],
+                   'text': 'The pool Theo finds here is larger than the last -- not still but '
+                           'moving in slow circles, fed by a stream that enters from above and '
+                           'exits through a crack in the stone floor. The water is so clear that '
+                           'for a moment he mistakes the reflected sky for the real one, and the '
+                           'real one for a reflection, and the dislocation is complete before he '
+                           'has time to resist it.\n'
                            '\n'
-                           'Theo had expected the transition to be gradual -- the green deepening into gray, the '
-                           'living wood giving way to stone with some intermediate stage of both. Instead the shift is '
-                           'almost instant: one turn in the passage and the forest is behind him, and ahead is a '
-                           'landscape of bare rock and sky and the sound of water somewhere below he cannot yet '
-                           'locate.\n'
+                           "He is looking up at himself from below the water's surface.\n"
                            '\n'
-                           'He walks.\n'
+                           'Or he is looking down at a stranger who wears his coat.\n'
                            '\n'
-                           'The landscape does not ask anything of him. It does not teach and it does not test and it '
-                           'does not maintain a schedule. It simply exists, the way mountains exist -- with absolute '
-                           "**indifference**, which is its own kind of honesty. The stones don't care about him. The "
-                           "thin scrub growing from the rock cracks doesn't care about him. The mountain itself, "
-                           'rising to heights he cannot see from inside the ravines, cares nothing for him.\n'
+                           'The stranger in the pool is walking -- no, has been walking for a very '
+                           'long time -- through a country that has the same hills as the country '
+                           'above but arranged differently, as if someone shook the landscape like '
+                           'a cloth and let it settle. Everything is the same and precisely wrong. '
+                           'The trees grow down into the earth. The mountain is a valley. The '
+                           'valley is the sky.\n'
                            '\n'
-                           'This is hard to sit with.\n'
+                           'And the stranger -- Theo, not-Theo, the inverted traveler -- seems '
+                           'perfectly at home in this version. Seems, in fact, to be making better '
+                           'progress than the original.\n'
                            '\n'
-                           'At the Temple there were always eyes on him, always routines that shaped his movements, '
-                           "always Brok or the Temple's living architecture giving him a role: pilgrim, laborer, "
-                           'tender, learner. Out here his role is self-assigned, and he is not sure he has assigned it '
-                           'yet.\n'
+                           '*Who taught me,* Theo thinks, *that my version is the right-side-up '
+                           'one?*\n'
                            '\n'
-                           'He has a staff. He has no pouch. He has the food he is carrying in his pack, which will '
-                           'last a week if he is careful, and which he will have to find on his own after that.\n'
+                           'The thought does not frighten him. This is the surprise. He expected '
+                           'to feel unmade by it, and instead he feels -- lighter. As if the self '
+                           'he has been carrying was heavier than he knew, and setting it down, '
+                           'even for a moment, is a relief so large it has the texture of joy.\n'
                            '\n'
-                           'He is careful.\n'
+                           "He stands at the pool's edge until the circles slow. Until the "
+                           'reflection and the real converge.\n'
                            '\n'
-                           'The ravine winds. Crystal water appears in a channel at the bottom -- clear over pale '
-                           'stones, cold when he kneels to drink from it. He does not know the name of this stream. It '
-                           'does not have a name, or if it does, no one has told him.\n'
+                           'Then he walks on, and the mountain ahead looks different than it did '
+                           '-- not smaller, not easier, but more genuinely itself, as if it has '
+                           'stopped performing mountainhood and is simply being what it is.',
+                   'title': 'The Upside-Down Country',
+                   'vocabulary': [{'definition': 'A feeling of disorientation -- of being removed '
+                                                 "from familiar surroundings or from one's usual "
+                                                 'sense of self.',
+                                   'term': 'dislocation'},
+                                  {'definition': 'A reversal of position, order, or relationship; '
+                                                 'seeing the world from an opposite vantage point.',
+                                   'term': 'inversion'}]},
+ 'a13_cling': {'choices': [{'target': 'a14_harsh',
+                            'text': 'Head toward the cottage smoke -- maybe rest will end the '
+                                    'half-life.'},
+                           {'target': 'a13_h_phantom',
+                            'text': 'Stop walking. Turn and look at what is walking beside you.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['shadow_path', 'clinging', 'old_self', 'half_life'],
+               'text': 'He is walking. He knows he is walking because the scenery changes -- the '
+                       'ravine walls shift, a stream crosses his path and he steps over it, the '
+                       'light moves from morning-grey to afternoon-grey -- but it does not feel '
+                       'like walking. It feels like the idea of walking, performed by a body that '
+                       'has forgotten what the purpose is.\n'
+                       '\n'
+                       "The old Theo is still here. That's the problem.\n"
+                       '\n'
+                       'Not dramatically -- not like a ghost or a haunting. More like an old habit '
+                       'that will not stop firing. He reaches for certainties he no longer has. He '
+                       'forms sentences in his head that begin *back home* and *before all this* '
+                       'and *when things were normal.* He runs the old arguments in the background '
+                       "like a fire that won't quite go out and won't quite give warmth.\n"
+                       '\n'
+                       'He is walking toward something -- he knows this in the way you know things '
+                       "you cannot feel. But the knowledge doesn't help much. You can understand "
+                       'perfectly well that you need to move forward and still find your feet '
+                       'pulling toward the last place you felt solid.\n'
+                       '\n'
+                       '*Half-life,* Theo thinks. The word comes from somewhere -- Brok, maybe, or '
+                       'the flat stone, or the howling wind. A half-life: still decaying. Still '
+                       'moving. But at half the rate of the living.\n'
+                       '\n'
+                       'The ravine opens onto a slope. To the south, three hills and the smoke of '
+                       "a cottage chimney. To the west, the mountain's hard face, uncompromising, "
+                       'offering nothing.\n'
+                       '\n'
+                       'Beside him, just at the edge of his vision -- something walks.\n'
+                       '\n'
+                       'He does not turn to look.',
+               'title': 'The Half-Life',
+               'vocabulary': [{'definition': 'Originally a scientific term for decay; here used to '
+                                             'describe a state of existing at reduced vitality -- '
+                                             'still moving, but not fully alive to the present.',
+                               'term': 'half-life'}]},
+ 'a13_h_garden_memory': {'choices': [{'target': 'a14_blend',
+                                      'text': 'Ask the Maiden about the one who visits her.'},
+                                     {'target': 'a14_garden',
+                                      'text': 'Some stories belong to the people who live them. '
+                                              'Return to the garden path.'}],
+                         'ending_type': None,
+                         'era': 'maiden',
+                         'figures': ['The Maiden'],
+                         'is_ending': False,
+                         'tags': ['maiden', 'mack_backstory', 'horizontal', 'pouch'],
+                         'text': 'The cottage held the smell of dried lavender and something older '
+                                 '-- beeswax, perhaps, or the particular warmth of a house that '
+                                 'has been loved for a long time. Theo moved toward the window '
+                                 'while the Maiden poured water from a clay pitcher, and that was '
+                                 'when he saw it.\n'
+                                 '\n'
+                                 '{{#traded_to_mack}}The pouch sat on the sill between two river '
+                                 'stones, its drawstring tied in a careful knot he had not tied. '
+                                 'He recognized the supple leather, the faint smell of old coin '
+                                 "and dried grass -- Hafthor's pouch, which he had placed in "
+                                 "another's hands entirely, on a hillside that already felt like a "
+                                 'different life. He turned to find the Maiden watching him with a '
+                                 'small, unsurprised smile.\n'
+                                 '\n'
+                                 '"He brought it," Theo said. It was not quite a question.\n'
+                                 '\n'
+                                 '"He brings things." She set down the pitcher. "Never himself for '
+                                 'long. But things -- yes. He has a talent for finding what a '
+                                 'person is missing and arriving with it just before they notice '
+                                 'the absence." She looked at the pouch with the expression of '
+                                 'someone reading a letter they have read many times. "I told him '
+                                 "once that I had lost a button from my grandmother's coat. Three "
+                                 'seasons later, he came through the door with seventeen buttons, '
+                                 'none of them matching. He was very proud of himself."\n'
+                                 '\n'
+                                 'Theo did not ask how the pouch had made its way from his own '
+                                 'hands to this windowsill. In the Elysian Kingdom, **provenance** '
+                                 'was less a straight line than a river -- it arrived where it was '
+                                 'meant to, by whatever route the current '
+                                 'chose.{{/traded_to_mack}}{{^traded_to_mack}}Propped against the '
+                                 'wall beside the window was a willow staff, pale and stripped '
+                                 'smooth, with a leather grip worn dark at the center. It was too '
+                                 'long for the Maiden, too elegantly made for a walking stick, and '
+                                 'it had the look of something set down briefly that had somehow '
+                                 'never been picked up again. Beside it, on the cushion of the '
+                                 'window seat, a few amber-colored hairs caught the light -- long, '
+                                 'coarse, neither quite fox nor quite lion.\n'
+                                 '\n'
+                                 'The Maiden followed his gaze without surprise. "A friend," she '
+                                 'said. "He passes through, when the road takes him near enough." '
+                                 'She picked up one of the hairs, turned it between her fingers, '
+                                 'let it fall. "He never stays. But he leaves things behind, which '
+                                 'I suppose is its own kind of staying."\n'
+                                 '\n'
+                                 'Theo looked at the staff. He thought of Mack as he had '
+                                 'encountered him -- all bravado and bright eyes, always moving, '
+                                 'always already half-somewhere-else. He tried to imagine that '
+                                 'creature standing still long enough to forget a staff.\n'
+                                 '\n'
+                                 '"Does he know he left it?" Theo asked.\n'
+                                 '\n'
+                                 'The Maiden\'s mouth curved. "He knows everything he does. He '
+                                 'simply chooses what to acknowledge."{{/traded_to_mack}}\n'
+                                 '\n'
+                                 'She brought him a cup of something warm -- chamomile, maybe, or '
+                                 'whatever the Kingdom called chamomile -- and sat across from him '
+                                 'at the low table. Outside, the garden moved in a small wind. She '
+                                 'was **wistful** in the way that a healed scar is wistful: not '
+                                 'suffering, not pretending it was nothing.\n'
+                                 '\n'
+                                 '"He asked for my blessing once," she said, without Theo asking. '
+                                 '"Before a long journey. I gave it. I asked him to stay." She '
+                                 'looked at her hands, which were the hands of someone who worked '
+                                 'with soil and did not apologize for it. "He could not. That is '
+                                 'not a cruelty. Some people are made of motion the way rivers are '
+                                 'made of motion -- it is not that they do not love the banks. It '
+                                 'is that stopping would make them into something else entirely."\n'
+                                 '\n'
+                                 'Theo thought of the pouch on the sill, or the staff by the door, '
+                                 'and said nothing. Some answers were not for him to give.',
+                         'title': 'The Pouch on the Windowsill',
+                         'vocabulary': [{'definition': 'The origin or history of ownership of an '
+                                                       'object -- and, in wider use, the sense '
+                                                       'that a thing has come from somewhere '
+                                                       'particular and carries that somewhere with '
+                                                       'it.',
+                                         'term': 'provenance'},
+                                        {'definition': 'Marked by longing tinged with tenderness '
+                                                       '-- not the sharp ache of fresh grief, but '
+                                                       'the softer weight of something loved and '
+                                                       'released.',
+                                         'term': 'wistful'}]},
+ 'a13_h_phantom': {'choices': [{'target': 'a14_harsh',
+                                'text': 'Let the phantom walk beside you and keep moving. It will '
+                                        "dissolve when it's ready."},
+                               {'target': 'ending_illusion_bound',
+                                'text': 'Reach toward the phantom -- try to absorb it, to bring it '
+                                        'back into yourself.'}],
+                   'ending_type': None,
+                   'era': 'ravines',
+                   'figures': [],
+                   'is_ending': False,
+                   'tags': ['horizontal', 'shadow_path', 'phantom', 'old_self', 'psychological'],
+                   'text': 'He turns.\n'
                            '\n'
-                           'He drinks and walks and the mountain rises around him, vast and patient, and the sky above '
-                           'is the kind of blue that makes you feel very small and not entirely unhappy about it.',
-                   'title': 'The Uncertain Descent',
-                   'vocabulary': [   {   'definition': 'Lack of interest or concern; a neutrality that neither helps '
-                                                       'nor harms, which can be its own form of freedom.',
-                                         'term': 'indifference'}]},
-    'a9_wise_solitude': {   'choices': [   {   'target': 'a10_accept',
-                                               'text': 'Continue at dawn, moving steadily toward whatever waits '
-                                                       'ahead.'},
-                                           {   'target': 'a9_h_fire',
-                                               'text': 'Build a fire first. Rest here fully before moving on.'}],
-                            'ending_type': None,
-                            'era': 'ravines',
-                            'figures': [],
-                            'is_ending': False,
-                            'tags': ['ravines', 'light_path', 'stars', 'solitude', 'yew_staff'],
-                            'text': 'The ravines of Mt. Nebo are not what Theo expected.\n'
-                                    '\n'
-                                    'He expected desolation. What he finds is something more precise: a landscape '
-                                    'without **embellishment**. No dandelion petals falling from living chapels. No '
-                                    'roots curling artfully through stone. No Brok reciting schedules to make the '
-                                    'silence feel occupied. Just rock and scrub and the thin silver threads of '
-                                    'mountain streams finding their way down through stone channels, and above it all, '
-                                    'a sky so dark and so crowded with stars that he has to stop and stare, once, for '
-                                    'a long time, before he can walk again.\n'
-                                    '\n'
-                                    'The {{staff}} staff fits the terrain naturally. He did not expect that either. It finds '
-                                    'the angles of loose stone before his feet do, pressing lightly against surfaces '
-                                    'that hold and pulling back from surfaces that will not. He could not have '
-                                    'explained how he knows which pressure is which. He just knows.\n'
-                                    '\n'
-                                    'The pouch of Hafthor sits warm at his hip. He has not yet looked inside. There is '
-                                    'a time for that, and this is not it -- this is the time for walking, for the '
-                                    'particular discipline of moving through a landscape that does not care about you '
-                                    'and finding, in that indifference, something like freedom.\n'
-                                    '\n'
-                                    'The forest had been full of meanings. Every tree, every root, every encounter had '
-                                    'the quality of a lesson with a lesson-shape, and Theo had not always been sure '
-                                    'whether he was the student or the subject. The ravines have no lesson-shape. They '
-                                    'are just the ravines -- old and patient and complete without him.\n'
-                                    '\n'
-                                    'He is **solitary** here, and he is discovering that solitary is not the same as '
-                                    'lonely. Lonely is when the absence of others leaves a wound. Solitary is when you '
-                                    'arrive at your own company and find it sufficient.\n'
-                                    '\n'
-                                    'He walks until the first stars fade, and then he sleeps on flat stone with the '
-                                    'pouch under his head and the {{staff}} staff across his chest, and the mountain '
-                                    'breathes around him, and he does not dream of the Temple or of Brok or of the '
-                                    'crossroads.\n'
-                                    '\n'
-                                    'He dreams of where he is going.',
-                            'title': 'Starlight on the Ravines',
-                            'vocabulary': [   {   'definition': 'Detail or decoration added to something to make it '
-                                                                'more attractive or impressive; ornamentation beyond '
-                                                                'the essential.',
-                                                  'term': 'embellishment'},
-                                              {   'definition': 'Alone, but with a quality of chosen or purposeful '
-                                                                'aloneness; distinct from loneliness, which implies '
-                                                                'unwanted absence.',
-                                                  'term': 'solitary'}]},
-    'ending_abyss': {   'choices': [],
-                        'ending_type': 'bad',
-                        'era': 'heights',
-                        'figures': ['Bartop'],
-                        'is_ending': True,
-                        'tags': [   'ending',
-                                    'bad',
-                                    'abyss',
-                                    'light',
-                                    'fresco',
-                                    'bartop',
-                                    'cautionary',
-                                    'waste',
-                                    'beauty'],
-                        'text': 'Theo stayed.\n'
-                                '\n'
-                                'The light at the Parallax of Life was the purest light in the Elysian Kingdom, and '
-                                'Theo had decided, standing at the summit with the evening coming on, that he would '
-                                'not look away from it. He had spent too much of the journey looking away -- from the '
-                                "mirror pool, from Brok's open chest, from Mack's last truth, from his own reflection "
-                                'in the dark pool before the Starstone. Looking away had cost him. He would not look '
-                                'away now.\n'
-                                '\n'
-                                'The light revealed everything.\n'
-                                '\n'
-                                'It revealed the mirror pool and every moment he had looked away before the looking '
-                                'was finished. It revealed the chains in the ravines and every time he had called them '
-                                "choices. It revealed Gunnin's spectacles and the way he had used them as a shield "
-                                'against seeing rather than as a school for it. It revealed every half-gift received, '
-                                "every lesson heard and filed and not lived, every moment the King's presence had been "
-                                "offered to him -- in Phil's trust, in Brok's gift, in the Maiden's fire -- and he had "
-                                'taken the surface and left the depth.\n'
-                                '\n'
-                                'The light did not judge. This was the terrible thing. The light was not cruel, not '
-                                'punishing, not even disappointed. It was simply thorough. It showed everything with '
-                                'equal **clarity** -- the moments of genuine grace and the moments of failure -- and '
-                                'in that thoroughness, for someone who had not prepared for thoroughness, it was '
-                                'unbearable.\n'
-                                '\n'
-                                'The **apotheosis** that comes from light requires someone who has been emptied enough '
-                                'to be filled. Theo had not been emptied enough. He had kept too much of the old '
-                                'weight -- the self-justifications, the comfortable inadequacies, the practiced art of '
-                                'almost. The light poured into him and found that the vessel was not yet clean, and '
-                                'the light and the residue together produced something that could not be sustained.\n'
-                                '\n'
-                                'He felt himself becoming -- not larger, but thinner. Stretched. As if the light were '
-                                'pulling at something in him that would not release, and the pulling was beginning to '
-                                'tear.\n'
-                                '\n'
-                                'The Beings of Light attended. The faeries were still. Even the wind on the summit was '
-                                'still.\n'
-                                '\n'
-                                "Theo sat down on the dark stone of the Parallax and felt the mountain's shadow rise "
-                                'around him -- not the physical shadow of evening, but the other kind, the shadow that '
-                                'is the absence of the self that might have been. He could feel Bartop, far below in '
-                                'the Temple of Memories, already composing the fresco. A new niche, a new figure -- a '
-                                'boy with spectacles in his pocket, sitting on the summit, transparent in the wrong '
-                                'way, the light passing through him rather than illuminating him.\n'
-                                '\n'
-                                'A cautionary tale.\n'
-                                '\n'
-                                'For the next pilgrim.\n'
-                                '\n'
-                                'The last thing Theo felt was not fear and not pain but something quieter -- the '
-                                'specific sorrow of waste, of potential that arrived at the right place at the wrong '
-                                'time, of a seed that reached the summit but had not learned, yet, how to root in '
-                                'stone.\n'
-                                '\n'
-                                'The mountain was patient.\n'
-                                '\n'
-                                'The mountain would tell his story.\n'
-                                '\n'
-                                'The next pilgrim would read it in the fresco and would choose, perhaps, to look in '
-                                'the mirror pool until the looking was finished.\n'
-                                '\n'
-                                '---\n'
-                                '\n'
-                                "Bartop's chisel found the stone.\n"
-                                '\n'
-                                'He worked carefully, as he always worked -- geological patience, millennial '
-                                "precision. The boy's face took shape in the limestone. The spectacles in the pocket. "
-                                '{{#staff}}The {{staff}} staff laid down beside him. {{/staff}}{{#has_pouch}}The pouch of Hafthor at his belt, full of gifts he '
-                                'had received and not yet learned to give away. {{/has_pouch}}\n'
-                                '\n'
-                                'Bartop made him beautiful, as he made all his figures beautiful, because the truth '
-                                'deserved beauty even when -- especially when -- the truth was a warning.\n'
-                                '\n'
-                                'He worked through the night, and the Starstone glowed in its pool below, and '
-                                'somewhere above, the Sacred Fire renewed itself on the bronze plateau, patient and '
-                                'ancient, ready for the next pilgrim who would arrive at the Forest Gate and find a '
-                                "pillbug waiting by the keyhole, trusting and small and full of the King's own "
-                                'patience.\n'
-                                '\n'
-                                '*Praise the King.*\n'
-                                '\n'
-                                'Bartop said it quietly, to the dark and the stone and the small light in the deep '
-                                'pool, and went on working.\n'
-                                '\n'
-                                '**THE END -- THE ABYSS**',
-                        'title': 'What the Light Made Visible',
-                        'vocabulary': [   {   'definition': 'The quality of being perfectly transparent and visible -- '
-                                                            'used here to suggest that complete transparency, before '
-                                                            'one is ready for it, can be destructive rather than '
-                                                            'illuminating.',
-                                              'term': 'clarity'},
-                                          {   'definition': 'The highest point of development -- here, a '
-                                                            'transformation that was attempted but could not be '
-                                                            'completed because the vessel was not yet ready to be '
-                                                            'filled.',
-                                              'term': 'apotheosis'}]},
-    'ending_crossroads': {   'choices': [],
-                             'ending_type': 'neutral',
-                             'era': 'heights',
-                             'figures': [],
-                             'is_ending': True,
-                             'tags': [   'ending',
-                                         'neutral',
-                                         'crossroads',
-                                         'incomplete',
-                                         'glass',
-                                         'persistence',
-                                         'return'],
-                             'text': 'Theo descended from the Parallax as the evening came on.\n'
-                                     '\n'
-                                     'The path down was not the path up -- not exactly. It moved through a different '
-                                     'quality of air, a different angle of light, and there were moments, stepping '
-                                     "from one stone to the next, when he could feel the King's presence like warmth "
-                                     'at the back of his neck. Close. Real. Waiting with the patience of something '
-                                     'that had been waiting long before Theo arrived and would wait long after.\n'
-                                     '\n'
-                                     'But there was a glass between them.\n'
-                                     '\n'
-                                     'Not a barrier built by the King. A barrier built by Theo himself, from every '
-                                     'moment he had chosen the comfortable answer, every chain he had worn because '
-                                     "taking it off would require a kind of effort he had decided he couldn't afford, "
-                                     'every lesson that had arrived and been received with the part of him that was '
-                                     'paying attention while the other part was already looking for the exit.\n'
-                                     '\n'
-                                     'He had learned much. He had changed. He was not the boy who had fallen asleep '
-                                     'over his textbook -- he was something further along, something leaning toward '
-                                     'the light. But leaning was not the same as arriving.\n'
-                                     '\n'
-                                     'He reached the Porch of Sacred Fire as the last of the Sacred Fire guttered into '
-                                     'ordinary evening. The bronze was cooling. The Chartreuse Forest below was dark, '
-                                     'its colors retreated until morning. The bat was gone.\n'
-                                     '\n'
-                                     'Theo stood on the cooling bronze and looked out over the Kingdom he had walked '
-                                     'through, and felt something that was not sadness and not disappointment but was '
-                                     "perhaps the flavor of a word he hadn't learned yet -- the specific weight of "
-                                     'knowing you have been given something enormous and have carried it well but not '
-                                     'completely, that the journey was real and the changing was real and the summit '
-                                     'was real and still, still, there is more.\n'
-                                     '\n'
-                                     'He was changed but mortal. He had seen the light through fog.\n'
-                                     '\n'
-                                     'He would carry this. The spectacles, heavy in his pocket. {{#has_pouch}}The pouch of Hafthor, '
-                                     'still at his belt. {{/has_pouch}}{{#staff}}The {{staff}} staff, still in his hand. {{/staff}}These were real. What he had '
-                                     'learned was real. The King, glimpsed through the glass of his own '
-                                     'incompleteness, was real.\n'
-                                     '\n'
-                                     '---\n'
-                                     '\n'
-                                     'Theo woke in his bed.\n'
-                                     '\n'
-                                     'The textbook was open. The lamp was on. The dream was fading at the edges but '
-                                     "its center held -- a quality of light, a warmth at the back of the neck, a bat's "
-                                     'ancient voice saying *the King is expecting you.*\n'
-                                     '\n'
-                                     'He lay still and let what remained settle.\n'
-                                     '\n'
-                                     'Not everything. Not everything. But something.\n'
-                                     '\n'
-                                     'The Elysian Kingdom was somewhere he had not quite finished visiting. He '
-                                     'understood this without grief. The dream persisted, which meant the door was '
-                                     'still open, which meant the journey had not ended -- only paused, as all '
-                                     'journeys pause, at the boundary between sleeping and waking.\n'
-                                     '\n'
-                                     'He would be back.\n'
-                                     '\n'
-                                     'He closed his eyes once more, just to see if the bronze was still warm.\n'
-                                     '\n'
-                                     'It was.\n'
-                                     '\n'
-                                     '**THE END -- THE CROSSROADS**',
-                             'title': 'The Dream You Almost Finished',
-                             'vocabulary': []},
-    'ending_darkness': {   'choices': [],
-                           'ending_type': 'bad',
-                           'era': 'depths',
-                           'figures': ['Bartop'],
-                           'is_ending': True,
-                           'tags': ['ending', 'bad', 'darkness', 'shadow_path', 'stone'],
-                           'text': 'You stop moving.\n'
-                                   '\n'
-                                   'It is not a decision, exactly. It is the cessation of decision -- the point at '
-                                   'which the accumulation of wrong turns and exhaustion and darkness exceeds the '
-                                   "body's willingness to produce another step. You sit down on the cold marble of "
-                                   'whatever corridor this is. Your back finds the wall. The wall is there.\n'
-                                   '\n'
-                                   'The Temple of Memories breathes around you. The frescoes, which you cannot see, '
-                                   'continue to hold their stories. The Seven Corridors continue their long slow work '
-                                   'of being corridors. Somewhere far below, the Starstone persists in its dark pool, '
-                                   'emitting its small holy light into the water above it, patient and sufficient.\n'
-                                   '\n'
-                                   'The Temple does not notice you. This is not cruelty. It is simply scale.\n'
-                                   '\n'
-                                   'You are very cold, and then less cold, and then the cold is not something you are '
-                                   'experiencing but something you are.\n'
-                                   '\n'
-                                   'The marble is around you.\n'
-                                   '\n'
-                                   'You are, in some sense, comfortable. You have found stillness, at last, though not '
-                                   'by any path you intended. The Temple has received you the way it receives '
-                                   'everything: without judgment, without rescue, without particular interest. You are '
-                                   'part of the stone now. Your story is in the walls with all the other stories.\n'
-                                   '\n'
-                                   'Bartop will find you. In a thousand years, or perhaps two thousand -- time moves '
-                                   'differently for limestone creatures who have walked these corridors since before '
-                                   'the first human painter touched pigment to plaster -- Bartop will pass through '
-                                   'this section of the third Corridor and pause, and look at the new shape in the '
-                                   'wall with his deep recess eyes, and he will understand, because Bartop understands '
-                                   'everything eventually.\n'
-                                   '\n'
-                                   'He will not be sad. But he will remember.\n'
-                                   '\n'
-                                   'Everything in the Temple of Memories is remembered.\n'
-                                   '\n'
-                                   '**THE END -- INTO THE STONE**',
-                           'title': 'Part of the Stone',
-                           'vocabulary': []},
-    'ending_guardian': {   'choices': [],
-                           'ending_type': 'good',
-                           'era': 'depths',
-                           'figures': ['Bartop'],
-                           'is_ending': True,
-                           'tags': ['ending', 'good', 'guardian', 'shadow_path', 'bartop', 'bittersweet'],
-                           'text': 'You go back for the spectacles.\n'
-                                   '\n'
-                                   'This is not a small thing. You have been walking for hours -- or what feels like '
-                                   'hours, time in the Temple of Memories having its own elastic quality -- and going '
-                                   'back requires admitting that the direction you chose was not the right direction, '
-                                   'which requires admitting that your eyes, alone, were not sufficient, which '
-                                   'requires the particular humility of setting down a thing you had decided was '
-                                   'yours.\n'
-                                   '\n'
-                                   'You set it down. You go back.\n'
-                                   '\n'
-                                   'The spectacles are where you left them. You put them on. The corridor becomes '
-                                   'legible. But the corridor to the Porch of Sacred Fire -- you can see it now, '
-                                   'clearly, through the sea glass lens -- is sealed. A door of ancient stone, '
-                                   'smooth-fitted and without handle. The way to the heights is closed.\n'
-                                   '\n'
-                                   'Bartop is beside you. You did not hear him approach, which is somehow appropriate. '
-                                   'He is simply there, enormous and patient, his recess eyes looking at the sealed '
-                                   'door with an expression his face is not built to make but that you read anyway: '
-                                   'not disappointment, not resignation, but a kind of settled understanding.\n'
-                                   '\n'
-                                   'You understand it too.\n'
-                                   '\n'
-                                   'You are not going to the heights. Not this journey.\n'
-                                   '\n'
-                                   "But the Temple needs a guardian. Not Bartop's replacement -- he is irreplaceable, "
-                                   'and he will outlast the mountain -- but his companion. Someone to walk the '
-                                   'corridors beside him. Someone to learn, over centuries, what the frescoes mean in '
-                                   'both directions. Someone to be there when the next pilgrim arrives at the south '
-                                   'face and steps into the marble dark.\n'
-                                   '\n'
-                                   'You stay.\n'
-                                   '\n'
-                                   'The years pass. Your hair goes gray, then white, then you stop counting. The '
-                                   'corridors become known to you the way your own hands are known to you. You develop '
-                                   'a favorite fresco -- the weeping man with his open hands -- and sit with it often. '
-                                   'Bartop visits. You have learned to read his stillness. He has learned, perhaps, '
-                                   'something from your motion.\n'
-                                   '\n'
-                                   'One day, a pilgrim arrives at the entrance, eyes wide in the darkness.\n'
-                                   '\n'
-                                   'You are there. You have the spectacles. You know the way.\n'
-                                   '\n'
-                                   'It is not the heights. But it is not nothing.\n'
-                                   '\n'
-                                   '**THE END -- GUARDIAN OF MEMORIES**',
-                           'title': 'Centuries of Stillness',
-                           'vocabulary': []},
-    'ending_illusion_bound': {   'choices': [],
-                                 'ending_type': 'bad',
-                                 'era': 'ravines',
-                                 'figures': ['Mack'],
-                                 'is_ending': True,
-                                 'tags': ['ending', 'bad', 'illusion', 'mack', 'pool', 'song', 'trapped'],
-                                 'text': 'He turns back.\n'
-                                         '\n'
-                                         'He knows, as he turns, that he is turning back. He is not confused about '
-                                         'this. The choice is clear and he makes it clearly, which is what makes it so '
-                                         'permanent.\n'
-                                         '\n'
-                                         "Mack's song reaches him before Mack does:\n"
-                                         '\n'
-                                         "*And low he's high, a friend to all,*\n"
-                                         '*our hero, protector of the small --*\n'
-                                         '\n'
-                                         'The pool is as it was: dark, circular, fed by its crystal stream. The voice '
-                                         'comes from everywhere and nowhere, which is to say from the pool itself, '
-                                         'which is to say from the water, which is to say from whatever the water is a '
-                                         'reflection of.\n'
-                                         '\n'
-                                         'Theo sits at the edge.\n'
-                                         '\n'
-                                         'The reflection in the pool is no longer his face, and it is no longer the '
-                                         'inverted world. It is a story -- his story, every chapter of it, played in '
-                                         'order from the beginning with all the details he forgot and some he never '
-                                         'knew. He watches himself arrive at the Forest Gate. He watches himself '
-                                         'crouch beside Phil the pillbug. He watches the badgers, Brok rising on its '
-                                         'rotors, the three staves laid out in a row.\n'
-                                         '\n'
-                                         'It is beautiful. He cannot look away.\n'
-                                         '\n'
-                                         'Mack, when he appears beside him, is neither fox nor lion. He is something '
-                                         "older, and his eyes are patient, and he does not touch Theo's shoulder or "
-                                         'speak a word, because there is nothing to say. He sits beside the boy at the '
-                                         "pool's edge and watches the story with him.\n"
-                                         '\n'
-                                         'Days pass. Maybe years. The pool never shows the same moment twice, but it '
-                                         'always shows the journey, and the journey is always interesting, and Theo is '
-                                         'always about to learn something, always on the cusp of understanding -- and '
-                                         'the song comes through the water and the water comes through the song and '
-                                         'there is no longer a difference between the music and the world.\n'
-                                         '\n'
-                                         'He is not unhappy. This is important to say. He is not unhappy -- he is '
-                                         'held, as completely as a thing can be held, in a beauty that leaves no room '
-                                         'for anything else. No longing. No striving. No arrival.\n'
-                                         '\n'
-                                         'No becoming.\n'
-                                         '\n'
-                                         'Mack watches. The pocket watch, sitting open on the stone, has stopped.',
-                                 'title': 'The Song Without End',
-                                 'vocabulary': []},
-    'ending_lost_forest': {   'choices': [],
-                              'ending_type': 'bad',
-                              'era': 'forest',
-                              'figures': [],
-                              'is_ending': True,
-                              'tags': ['bad-ending', 'forest', 'ancient', 'stillness'],
-                              'text': 'There is a version of being lost that is still a story -- where the hero sits '
-                                      'down and thinks hard and finds a path. This was not that version.\n'
-                                      '\n'
-                                      'The Chartreuse Forest was ancient and vast and had been here before anything '
-                                      'else in this world had been named, and it had no particular opinion about '
-                                      "Theodore Ernest O'Hare. It was not hostile. It did not consume him in any dark "
-                                      'or violent way. It simply continued being what it was -- green in every '
-                                      'direction, beautiful, enormous, patient -- and he continued sitting in the '
-                                      'middle of it, and neither of them moved.\n'
-                                      '\n'
-                                      'The chartreuse buds twinkled overhead like living stars, as they had been doing '
-                                      'since before anyone arrived to notice them.\n'
-                                      '\n'
-                                      'Eventually the light changed. Then changed again. The forest breathed in the '
-                                      'long rhythm of things that do not measure time in hours. Theo found, after a '
-                                      'while, that he was not exactly afraid anymore. The fear had exhausted itself, '
-                                      'the way strong emotions do when the situation that prompted them refuses to '
-                                      'resolve.\n'
-                                      '\n'
-                                      'He was simply still. In a very old place. In the middle of a world between '
-                                      'worlds.\n'
-                                      '\n'
-                                      'Perhaps he slept. Perhaps he waited. Perhaps the forest decided, eventually, to '
-                                      'show him a path -- it had always known where they were. The Chartreuse Forest '
-                                      'is not cruel. It simply has a long memory and no particular urgency.\n'
-                                      '\n'
-                                      'In the old stories, those who sat down in **enchanted** places sometimes found, '
-                                      'when they finally stood, that the world outside had moved on without them. And '
-                                      'those who were still inside when the next traveler came through -- well. They '
-                                      "became part of the forest's memory too.\n"
-                                      '\n'
-                                      'And the chartreuse buds went on twinkling, as they always had, as they always '
-                                      'would.\n'
-                                      '\n'
-                                      '--- THE FOREST HAS KEPT YOU. THE STORY IS NOT OVER. ---\n'
-                                      '\n'
-                                      "You have reached one of the forest's early endings. In the Elysian Kingdom, the "
-                                      'worthy are shaped -- but only those who keep moving. Return to the fork in the '
-                                      "road and choose differently. The Locks' bench is still there. The stream still "
-                                      "knows where it's going.",
-                              'title': 'The Forest Keeps You',
-                              'vocabulary': [   {   'definition': 'Under a spell or magical influence; but also, in '
-                                                                  'the older sense, simply filled with more than '
-                                                                  'ordinary significance -- places so charged with '
-                                                                  'meaning that ordinary rules do not apply. The word '
-                                                                  'comes from the Latin incantare: to sing a spell '
-                                                                  'over something.',
-                                                    'term': 'enchanted'}]},
-    'ending_madness': {   'choices': [],
-                          'ending_type': 'bad',
-                          'era': 'depths',
-                          'figures': [],
-                          'is_ending': True,
-                          'tags': ['ending', 'bad', 'madness', 'shadow_path', 'labyrinth'],
-                          'text': 'You are walking the corridors.\n'
-                                  '\n'
-                                  'You have been walking the corridors.\n'
-                                  '\n'
-                                  'The fresco on the left wall shows a man with his hands open, releasing something '
-                                  'dark upward into light. You have seen this fresco before. You have seen it many '
-                                  'times. It is a good fresco -- technically accomplished, emotionally legible, the '
-                                  'kind of image that repays repeated viewing. You have viewed it repeatedly.\n'
-                                  '\n'
-                                  'The corridor curves. You follow the curve.\n'
-                                  '\n'
-                                  'There is a junction. Five passages. You choose the third from the left, which you '
-                                  'have not chosen before, which you are certain you have not chosen before, which you '
-                                  'may have chosen several times without recording the choice in a way that persists '
-                                  'across repetitions.\n'
-                                  '\n'
-                                  'The Temple of Memories remembers you.\n'
-                                  '\n'
-                                  'This is the difficult part -- not that it has forgotten you, but that it remembers '
-                                  'you perfectly: every step, every turn, every moment of fear and determination and '
-                                  'confusion. It holds your whole wandering in its walls with the same **equanimity** '
-                                  "it holds Gunnin's whole life, and Bartop's long centuries, and the stories of "
-                                  'everyone who has ever walked these corridors. You are part of the record now. You '
-                                  'are not lost in the Temple.\n'
-                                  '\n'
-                                  'You are in the Temple.\n'
-                                  '\n'
-                                  'Each step is the first step. Each fresco is new. Each corridor curves away into '
-                                  'possibilities that do not resolve. The Temple is vast -- forty-nine miles -- and '
-                                  'you are walking it, and the walking is not ending, and in the walking there is '
-                                  'something that might be, in its strange way, sufficient.\n'
-                                  '\n'
-                                  'The man in the fresco releases the dark shape from his open hands.\n'
-                                  '\n'
-                                  'You have seen this before.\n'
-                                  '\n'
-                                  'You continue.\n'
-                                  '\n'
-                                  '**THE END -- THE ETERNAL CORRIDOR**',
-                          'title': 'The First Step',
-                          'vocabulary': [   {   'definition': 'Mental calmness and composure, especially in difficult '
-                                                              "situations; from the Latin for 'equal mind.'",
-                                                'term': 'equanimity'}]},
-    'ending_peace_garden': {   'choices': [],
-                               'ending_type': 'good',
-                               'era': 'maiden',
-                               'figures': ['The Maiden'],
-                               'is_ending': True,
-                               'tags': ['ending', 'good', 'maiden', 'garden', 'peace', 'rest', 'bittersweet'],
-                               'text': 'The Maiden sets a second cup and does not ask again.\n'
-                                       '\n'
-                                       'This is how Theo knows she is wise: she asked once, *how are you,* and his '
-                                       'answer -- the silence, the way his shoulders came down when he stepped through '
-                                       'the door -- told her everything, and she has not asked twice, because asking '
-                                       'twice would be a kind of pressure, and she does not pressure.\n'
-                                       '\n'
-                                       'He stays for what he thinks is a few days. It turns out to be longer.\n'
-                                       '\n'
-                                       'The garden teaches him things. Not in the way the temple taught things -- '
-                                       'duty, service, the weight of obligation -- but in the way that gardens teach, '
-                                       'which is through repetition and proximity and the slow discovery that the '
-                                       'thing you are tending is also tending you. He learns the names of the plants. '
-                                       'He learns which hills get morning light and which get afternoon. He learns '
-                                       'that the center hill, the small one, is the best place to watch the mountain '
-                                       'from -- not because you can see the whole mountain but because from there the '
-                                       'mountain looks like what it is: one mountain, among many things, none of them '
-                                       'permanent.\n'
-                                       '\n'
-                                       'The Maiden talks to him sometimes about Mack -- not with sadness, or not only '
-                                       'with sadness, but with the precise affection of someone who has accepted the '
-                                       'full shape of another person, including the parts that will not bend.\n'
-                                       '\n'
-                                       '*"He loves the road,"* she says one evening, watching the mountain\'s shadow '
-                                       'lengthen. *"I love the garden. We were never going to solve that."*\n'
-                                       '\n'
-                                       'Theo tends the garden. The gate is never locked. He knows this because he '
-                                       'checks it, sometimes, in the early morning when the hills are still grey. He '
-                                       'checks it and finds it open, and then he comes inside and makes the tea, '
-                                       'because the Maiden is still asleep and the kettle is cold, and this is '
-                                       'something he can do.\n'
-                                       '\n'
-                                       'The mountain is still there, beyond the hills. On clear days, he can see its '
-                                       'high ridges. He does not know what is up there -- what the Temple of Memories '
-                                       'holds, what the summit looks like, what he might have found.\n'
-                                       '\n'
-                                       'This is not the same as not caring.\n'
-                                       '\n'
-                                       'It is the understanding that some journeys are complete in the middle, that '
-                                       'the middle can be a home, that the garden between three hills is small and is '
-                                       'also infinite, and that the question *is this enough?* has an answer, and the '
-                                       'answer is: *it can be.*\n'
-                                       '\n'
-                                       'He waters the unnamed flower on the center hill. It is pale and persistent and '
-                                       'bends under its own weight and always grows back.\n'
-                                       '\n'
-                                       'He stays.',
-                               'title': 'The Garden Is Enough',
-                               'vocabulary': []},
-    'ending_retreat': {   'choices': [],
-                          'ending_type': 'neutral',
-                          'era': 'depths',
-                          'figures': [],
-                          'is_ending': True,
-                          'tags': ['ending', 'neutral', 'retreat', 'shadow_path', 'transformation'],
-                          'text': 'You turn away from the Temple of Memories.\n'
-                                  '\n'
-                                  'The mountain lets you go. It does not pursue you, does not call after you, does not '
-                                  'make the descent harder than it already is. Mt. Nebo simply remains: ancient, cold, '
-                                  'indifferent in its great and patient way, the south face closing behind you not '
-                                  'with a sound but with the small silence of a door settling back into a frame that '
-                                  'has held it for centuries.\n'
-                                  '\n'
-                                  'You descend the ravines. You pass the place where you met Mack, though Mack is not '
-                                  'there now -- there is only the glint of a golden chain left on a rock, as though he '
-                                  'shed it or forgot it or left it as a marker. You pass through the Chartreuse Forest '
-                                  'and the trees are the same and are not the same, because you are not the same.\n'
-                                  '\n'
-                                  'The Forest Gate opens.\n'
-                                  '\n'
-                                  'You wake in your bed.\n'
-                                  '\n'
-                                  'The morning is ordinary. Dust in the slanted light. The smell of the kitchen below. '
-                                  'Everything in its place.\n'
-                                  '\n'
-                                  'But: the Temple does not leave you. It is there in the way you look at things now '
-                                  '-- the patience in your hands when you fix something broken, the way you wait at a '
-                                  "window and think about what both directions of a story might mean. The Starstone's "
-                                  'warmth, which you never touched, is in you anyway -- carried back through the '
-                                  'simple fact of having turned toward it, even though you turned away.\n'
-                                  '\n'
-                                  'Not divine. But not unchanged.\n'
-                                  '\n'
-                                  'The mountain is still there. You know it is still there. Perhaps one day -- not '
-                                  'today, not tomorrow, but one day -- you will return to the south face and find the '
-                                  'door still unlocked.\n'
-                                  '\n'
-                                  'For now: the ordinary day. The light through the window. The work of becoming, '
-                                  'which does not require a mountain, only a willingness to remember the dream.\n'
-                                  '\n'
-                                  '**THE END -- THE SLOW RETURN**',
-                          'title': 'The Dream That Changes Everything',
-                          'vocabulary': []},
-    'ending_shadow_bound': {   'choices': [],
-                               'ending_type': 'bad',
-                               'era': 'ravines',
-                               'figures': ['Mack'],
-                               'is_ending': True,
-                               'tags': [   'ending',
-                                           'bad',
-                                           'chains',
-                                           'comfortable_prison',
-                                           'unlived_life',
-                                           'beautiful_trap'],
-                               'text': 'The map is good. He was right about that.\n'
-                                       '\n'
-                                       "It takes him home by a route he wouldn't have found on his own -- clean, "
-                                       'clear, without the worst of the ravines -- and when he arrives, everything is '
-                                       'as he left it. The things at home are real. The people were waiting. The '
-                                       'relief on their faces is genuine and so is his relief and the reunion is '
-                                       'everything a reunion is supposed to be.\n'
-                                       '\n'
-                                       'He does not talk about the mountain much. When he does, it comes out strangely '
-                                       '-- distant, as if the journey happened to someone in a story rather than to '
-                                       'him specifically. He knows the names: Brok, the Locks, the flat stone, the '
-                                       'pool. He knows the sequence of events. But the *weight* of it -- the '
-                                       'particular gravity of standing at a pool and seeing your own journey, of '
-                                       'sitting on a center hill and understanding which hill is which -- this does '
-                                       'not translate well into conversation, and after a few attempts he stops '
-                                       'trying.\n'
-                                       '\n'
-                                       'Life arranges itself. This is what life does when you come back to it: it '
-                                       'arranges itself around your return, fills in the shape of you, and after a '
-                                       'while the shape becomes the thing.\n'
-                                       '\n'
-                                       'He is comfortable. This is not a small thing. Comfort is not nothing.\n'
-                                       '\n'
-                                       'But sometimes, at night, when the house is quiet -- he dreams of the pass, and '
-                                       "Mack's face in the moment he held out the map, and the quality of Mack's "
-                                       'expression: not triumphant, not satisfied, but something more complicated, '
-                                       'something that looked almost like sorrow, almost like apology, almost like the '
-                                       'face of someone doing a necessary thing that cost him something too.\n'
-                                       '\n'
-                                       'And in the dream, Theo always looks at the map. He always reads the route '
-                                       'home. He always takes it.\n'
-                                       '\n'
-                                       "And in the dream, he can hear the mountain. Not Mack's song -- not the "
-                                       'beautiful trap of the pool -- but the mountain itself, which does not have a '
-                                       'voice except the one that silence makes when it surrounds something real, when '
-                                       'it points at a thing and says: *here. Here is what you did not do. Here is the '
-                                       'shape of the unlived life.*\n'
-                                       '\n'
-                                       "The chains don't hurt. He knew they wouldn't. Mack told him nothing he didn't "
-                                       "already know, offered him nothing he didn't already want, and charged him "
-                                       "nothing he wasn't already willing to pay.\n"
-                                       '\n'
-                                       'That is the nature of the best chains: you put them on yourself, in full '
-                                       'knowledge, because the alternative was harder, and you told yourself at the '
-                                       'time that the alternative was not worth it, and sometimes, in the morning, you '
-                                       'still believe that.\n'
-                                       '\n'
-                                       'The mountain is very far away.\n'
-                                       '\n'
-                                       'He has a good life.',
-                               'title': 'The Beautiful Chains',
-                               'vocabulary': []},
-    'ending_temple_trapped': {   'choices': [],
-                                 'ending_type': 'bad',
-                                 'era': 'temple',
-                                 'figures': ['Brok'],
-                                 'is_ending': True,
-                                 'tags': ['bad-ending', 'temple', 'mindless-service', 'hubris'],
-                                 'text': 'He did not pick up the broom.\n'
-                                         '\n'
-                                         'Brok looked at him for a long moment -- not angrily, not with '
-                                         'disappointment, but with something that might have been the faintest sorrow, '
-                                         'the way a craftsman looks at material that did not take the shape it needed '
-                                         'to take.\n'
-                                         '\n'
-                                         '"Very well," Brok said.\n'
-                                         '\n'
-                                         'The Temple did not do anything dramatic. The living walls did not close in. '
-                                         'The silver trunks did not move. The stone-flowers along the path continued '
-                                         'to do what stone-flowers did, which was glow faintly and exist with a '
-                                         'patience that made human time feel brief.\n'
-                                         '\n'
-                                         'But Theo found, after a while, that he was holding the leaf-broom.\n'
-                                         '\n'
-                                         "He didn't remember picking it up. He swept a section of path. He moved to "
-                                         'the next section. The leaves were there, as they always were. The path '
-                                         'needed tending. The Temple needed to be kept tidy.\n'
-                                         '\n'
-                                         'We must keep the Temple tidy.\n'
-                                         '\n'
-                                         'It was a good thought. It was a clear thought. It was the kind of thought '
-                                         'that filled a mind very neatly and left no room for questions about why, or '
-                                         'for what, or for the boy who had come through a gate in a wall of alabaster '
-                                         'and lifted a pillbug to a keyhole and stepped through a door of golden '
-                                         'light.\n'
-                                         '\n'
-                                         'Brok walked his rounds. The Temple breathed. The leaf-broom moved with a '
-                                         'rhythm that was almost like music.\n'
-                                         '\n'
-                                         'We must keep the Temple tidy.\n'
-                                         '\n'
-                                         'The chartreuse buds, far away in the outer forest, still twinkled like '
-                                         'living stars. No one inside the Temple could see them anymore. There was too '
-                                         'much work to do.\n'
-                                         '\n'
-                                         '--- THE TEMPLE HAS KEPT YOU. THE STORY IS NOT OVER. ---\n'
-                                         '\n'
-                                         "You have reached the Temple's early ending. **Hubris** is not only pride -- "
-                                         'it is also the stubbornness that mistakes refusal for courage. Return to the '
-                                         'confrontation and consider: is there a question worth asking while you work? '
-                                         'The Temple may yet teach you what Brok could not.',
-                                 'title': 'We Must Keep the Temple Tidy',
-                                 'vocabulary': [   {   'definition': 'Excessive pride or self-confidence; in Greek '
-                                                                     'tragedy, the overreach that brings a hero to '
-                                                                     'ruin. Hubris is not merely arrogance -- it is '
-                                                                     'the refusal to acknowledge that something larger '
-                                                                     'than yourself has a claim on you. The Temple '
-                                                                     'does not punish hubris. It simply has more time '
-                                                                     'than you do.',
-                                                       'term': 'hubris'}]},
-    'ending_theosis': {   'choices': [],
-                          'ending_type': 'best',
-                          'era': 'heights',
-                          'figures': [],
-                          'is_ending': True,
-                          'tags': [   'ending',
-                                      'best',
-                                      'theosis',
-                                      'apotheosis',
-                                      'king_revealed',
-                                      'spectacles',
-                                      'waking',
-                                      'completion'],
-                          'text': 'The presence gathered.\n'
-                                  '\n'
-                                  'Not from above, not from outside, not from any direction a compass could name -- it '
-                                  'gathered the way understanding gathers, from everywhere at once and from somewhere '
-                                  'very specific, from all of the journey and from a single moment in it, and Theo '
-                                  'stood at the Parallax of Life and let it come.\n'
-                                  '\n'
-                                  'He thought of Phil at the Forest Gate -- a pillbug, small enough to fit through a '
-                                  'keyhole, trusting enough to wait. Phil had said *Praise the King!* with the easy '
-                                  'conviction of someone for whom the King was not a distant authority but an '
-                                  'immediate presence, a fact of the air like warmth. Theo had thought Phil meant a '
-                                  'ruler. Phil had meant something else entirely. Phil had been pointing, the whole '
-                                  'time, at the thing that moved through people when they chose to be generous rather '
-                                  'than afraid.\n'
-                                  '\n'
-                                  'He thought of Brok in the crypt, opening his chest cavity. A drone built for '
-                                  "service, capable of love. {{#has_pouch}}The pouch of Hafthor was still at Theo's belt -- he "
-                                  "reached for it, held it. Heavy with Brok's history. Given without calculation. {{/has_pouch}}"
-                                  "*This is for you.* That was the King's voice, speaking through a metal drone in a "
-                                  "stone crypt beneath a mountain. That was the King's hand, extended through Brok's "
-                                  'mechanical palm.\n'
-                                  '\n'
-                                  "He thought of Mrs. Lock's bread. He thought of Gunnin making spectacles from a "
-                                  "broken lance -- taking the instrument of a life's fruitless searching and reshaping "
-                                  'it into something that helped others see. He thought of Bartop waiting in the dark '
-                                  'for millennia, not because he was trapped but because some things are worth waiting '
-                                  "for. He thought of the Maiden's fire, burning for every pilgrim who arrived cold. "
-                                  'He thought of Mack, who had tricked and tested and in his last trick had told the '
-                                  'truth, because even Mack -- especially Mack -- knew what the Kingdom ran on.\n'
-                                  '\n'
-                                  'Every gift. Every act of patience. Every kindness given freely and without '
-                                  'guarantee of return -- it had all been the same thing. The same source. The Kingdom '
-                                  'was not the mountains and the forests and the bronze plateau and the dark pool and '
-                                  'the Seven Corridors. The Kingdom was what happened between people when they chose '
-                                  'to be their fullest selves. The King was not behind the Kingdom. The King was what '
-                                  'the Kingdom was made of.\n'
-                                  '\n'
-                                  '*Praise the King.*\n'
-                                  '\n'
-                                  'Yes. Yes. That was exactly right.\n'
-                                  '\n'
-                                  'Theo felt something loosen in him -- not break, not dissolve, but loosen, the way a '
-                                  'knot loosens when you find the right thread to pull. Everything he had carried -- '
-                                  "{{#staff}}the {{staff}} staff, {{/staff}}the spectacles, {{#has_pouch}}the pouch, {{/has_pouch}}the Starstone's light still warm in his "
-                                  'memory -- had been preparation. The carrying had changed him. The lessons had '
-                                  'changed him. He was not the boy who had fallen asleep over a textbook. That boy had '
-                                  'been complete, too, but in the way a seed is complete -- all the information '
-                                  'present, none of it yet alive.\n'
-                                  '\n'
-                                  'He understood **apotheosis** now, not as an elevation above the human but as a '
-                                  'deepening into it -- becoming more fully what you were always capable of being, '
-                                  'burning away the narrowness and the fear until what remained was something that '
-                                  "could move through the world like light, like Brok's gift, like Phil's trust, like "
-                                  'bread set out for strangers.\n'
-                                  '\n'
-                                  'The **theosis** was complete. Not because Theo had earned it by being perfect -- he '
-                                  'had been far from perfect -- but because he had kept moving. Because he had helped '
-                                  "a pillbug through a keyhole when he didn't have to. Because he had received gifts "
-                                  'with both hands and carried them forward and given them away in turn. Because he '
-                                  'had looked in the mirror pool until the looking was finished. Because he had taken '
-                                  "Gunnin's spectacles and used them until he didn't need them anymore.\n"
-                                  '\n'
-                                  'He took the spectacles out one last time.\n'
-                                  '\n'
-                                  'Sea glass and moonstone. What is and what could be. He held them up to the evening '
-                                  'light -- the Beings of Light still burning in the spires, the faeries of Sanctified '
-                                  'Fires still moving between them like small completed sentences -- and he saw, '
-                                  'through both lenses at once, what they had been teaching him to see all along: that '
-                                  'these two things were not separate. What is and what could be were both real, both '
-                                  'necessary, both the same world seen from different altitudes.\n'
-                                  '\n'
-                                  'He put the spectacles back in his pocket. He did not put them on.\n'
-                                  '\n'
-                                  'He could see.\n'
-                                  '\n'
-                                  'The summit was quiet. The presence was warm. The Kingdom -- all of it, every '
-                                  'region, every being he had met, every lesson he had walked through -- glowed below '
-                                  'him in the last light, alive and patient and, he understood now, not somewhere else '
-                                  'at all.\n'
-                                  '\n'
-                                  '---\n'
-                                  '\n'
-                                  'Theo woke in his bed.\n'
-                                  '\n'
-                                  'His textbook was still open on the desk. The lamp was still on. The window showed a '
-                                  'familiar sky -- the same sky it always showed, the dark and particular sky of his '
-                                  'own life, neither enchanted nor ordinary, or perhaps both at once.\n'
-                                  '\n'
-                                  'He lay still for a long moment.\n'
-                                  '\n'
-                                  'The dream was not fading. Dreams faded. This was doing something else -- it was '
-                                  'settling, the way sediment settles in still water, becoming the floor of something. '
-                                  'It was becoming part of him in the specific way that true things do: not '
-                                  'dramatically, not with announcement, but with the quiet insistence of something '
-                                  'that was always going to be true and has now simply become visible.\n'
-                                  '\n'
-                                  'Phil the pillbug. Mr. and Mrs. Lock. Brok. Mack. The Maiden. Bartop. Gunnin. The '
-                                  'bat.\n'
-                                  '\n'
-                                  'The King.\n'
-                                  '\n'
-                                  'Theo sat up. He looked at his room -- the desk, the lamp, the window, the familiar '
-                                  'geography of his ordinary life -- and saw it, for the first time, in the Sacred '
-                                  'Fire.\n'
-                                  '\n'
-                                  "It had always been burning. He just hadn't known how to look.\n"
-                                  '\n'
-                                  'He reached over and closed the textbook. Then he opened it again, because the work '
-                                  'was real too, and the work was where the King lived as surely as anywhere else -- '
-                                  'in the attention, in the patience, in the willingness to sit with difficulty until '
-                                  'it became legible.\n'
-                                  '\n'
-                                  'He picked up his pen.\n'
-                                  '\n'
-                                  'Praise the King.\n'
-                                  '\n'
-                                  '**THE END -- THEOSIS**',
-                          'title': 'What the Kingdom Always Was',
-                          'vocabulary': [   {   'definition': 'The moment when someone is revealed in their fullest, '
-                                                              'most essential form -- not a transcendence of the human '
-                                                              'but a completion of it.',
-                                                'term': 'apotheosis'},
-                                            {   'definition': 'The transformative process of becoming fully what you '
-                                                              'were always capable of being, purified and deepened by '
-                                                              'everything you have walked through.',
-                                                'term': 'theosis'}]},
-    'ending_wanderer': {   'choices': [],
-                           'ending_type': 'good',
-                           'era': 'ravines',
-                           'figures': [],
-                           'is_ending': True,
-                           'tags': ['ending', 'good', 'wanderer', 'pilgrim', 'freedom', 'bittersweet', 'movement'],
-                           'text': 'He sits, as he intended to -- just for a moment.\n'
-                                   '\n'
-                                   'The moment stretches. This is what moments do when you are very tired and the '
-                                   'thing you are moving toward is genuinely unclear: they expand, they offer '
-                                   'themselves as alternatives to forward motion, they point out, gently and '
-                                   'accurately, that you have been in motion for a very long time and that stillness '
-                                   'is not death.\n'
-                                   '\n'
-                                   'When he stands again, the mountain is still there and he is still heading toward '
-                                   'it. But something has shifted in the heading -- it is no longer urgent. He is no '
-                                   'longer racing the exhaustion. He is walking because walking is what he does, '
-                                   'because the road is good and the ravines are interesting and the scrub pine casts '
-                                   'thin shadows in the afternoon light that are unlike the shadows of any other tree '
-                                   'he knows.\n'
-                                   '\n'
-                                   'He passes through the pass without Mack -- Mack is not there, which means either '
-                                   'Mack was never waiting for him at this particular pass or Mack saw him coming and '
-                                   "decided there was nothing to offer that this person didn't already have. Both "
-                                   'explanations feel right. Neither feels complete.\n'
-                                   '\n'
-                                   'Beyond the pass, the mountain opens into high slopes, and beyond the high slopes, '
-                                   'into higher ones, and somewhere up there is the Temple of Memories, and somewhere '
-                                   'beyond that -- if the legends are true -- the summit, the view, the thing the '
-                                   'journey was for.\n'
-                                   '\n'
-                                   'Theo walks.\n'
-                                   '\n'
-                                   'He has been walking, in some sense, since the Forest Gate. He will be walking, he '
-                                   'understands now, for a very long time after this -- after whatever ending comes, '
-                                   'if endings come. The walking is not a punishment or a penance. It is the thing he '
-                                   'is, the shape his aliveness takes. Some people arrive. Some people tend gardens. '
-                                   'He walks.\n'
-                                   '\n'
-                                   'He passes through villages and does not always stop. He gives good counsel when '
-                                   "it's asked for -- his counsel is worth something, now, because it has been paid "
-                                   'for. He remembers the flat stone and the howling wind and the pool and Brok rising '
-                                   'in the dark. He remembers these things the way you remember dreams: clearly, '
-                                   'specifically, and with the sure knowledge that they happened to someone who was '
-                                   'you and is not you and in some permanent sense always will be.\n'
-                                   '\n'
-                                   'The mountain is ahead. The mountain is also behind. He is on the mountain. He has '
-                                   'always been on the mountain.\n'
-                                   '\n'
-                                   'This is fine.\n'
-                                   '\n'
-                                   'This, he thinks, walking, is actually fine.',
-                           'title': 'The Permanent Pilgrim',
-                           'vocabulary': []},
-    'start': {   'choices': [   {   'target': 'a1_forest_enter',
-                                    'text': 'Step through the Invisible Door into the Chartreuse Forest.'}],
+                           'It is him. Or: it is what he was, assembled from memory into something '
+                           'that walks and breathes and has his face -- the face before the '
+                           'forest, before the temple, before any of this. It wears the coat he '
+                           'left somewhere in the first ravine, the one that got too heavy. It '
+                           'carries nothing. It looks back at him with an expression of mild '
+                           'reproach.\n'
+                           '\n'
+                           '*"I want to go home,"* it says. His voice. Exactly his voice, with the '
+                           'inflection he uses when he is tired but not angry -- the flat, factual '
+                           'tiredness of late nights.\n'
+                           '\n'
+                           '*"I know,"* Theo says.\n'
+                           '\n'
+                           '*"This was supposed to be a short trip. You said a short trip."*\n'
+                           '\n'
+                           '*"I know."*\n'
+                           '\n'
+                           '*"There are things at home. Things that need doing. People who are '
+                           "waiting. You've been walking this mountain for -- for how long? And "
+                           'what have you got to show for it?"*\n'
+                           '\n'
+                           'Theo looks at the phantom for a long time. It looks back. Its eyes are '
+                           'his eyes, which is to say they are genuine -- it is not lying. It '
+                           'really does want to go home. It really does believe the trip was '
+                           'supposed to be short. It really does miss what was left behind.\n'
+                           '\n'
+                           '*"You\'re not wrong,"* Theo says finally. *"About any of it. The '
+                           'things at home are real. The people are real."*\n'
+                           '\n'
+                           '*"Then turn around."*\n'
+                           '\n'
+                           '*"But you\'re not me anymore,"* he says. *"You\'re what I was before I '
+                           "knew what I know now. And I can't un-know it. I can't be you "
+                           'again."*\n'
+                           '\n'
+                           "The phantom's expression does not change. It will not argue. It will "
+                           'simply walk beside him until he either accepts it or lets it go -- and '
+                           'those are the only two options, and both of them will hurt.',
+                   'title': 'The Other Walker',
+                   'vocabulary': [{'definition': 'An apparition; a figure that appears from memory '
+                                                 'or imagination and seems to have its own '
+                                                 'presence and will.',
+                                   'term': 'phantasm'},
+                                  {'definition': 'The act of refusing to claim or acknowledge '
+                                                 "something as one's own; a denial of connection "
+                                                 'or responsibility.',
+                                   'term': 'disavowal'}]},
+ 'a13_maiden': {'choices': [{'target': 'a14_garden',
+                             'text': 'Accept her hospitality and go deeper -- ask about the '
+                                     'mountain.'},
+                            {'target': 'a14_harsh',
+                             'text': 'Decline the hospitality, but gently -- the mountain is '
+                                     'waiting.'},
+                            {'target': 'ending_peace_garden',
+                             'text': 'Accept her hospitality fully. Stay. This is enough.'},
+                            {'target': 'a13_h_garden_memory',
+                             'text': 'Linger inside the cottage. Something on the windowsill '
+                                     'catches your eye.'}],
+                'ending_type': None,
+                'era': 'maiden',
+                'figures': ['The Maiden'],
+                'is_ending': False,
+                'tags': ['center_path', 'maiden', 'cottage', 'arrival', 'rest'],
+                'text': 'The cottage sits in the hollow where three hills converge, and it looks '
+                        'like it grew there rather than being built -- the garden has spread into '
+                        'the slope on the left, the stone wall on the right has moss on it in '
+                        'patterns that suggest decades, and the chimney smoke rises in a column so '
+                        'straight it looks drawn.\n'
+                        '\n'
+                        'The gate is wooden, painted once in a color that has faded to a warm '
+                        'grey. Theo pushes it open -- it swings easily, recently oiled -- and '
+                        'follows the path through the garden to the door.\n'
+                        '\n'
+                        'Before he can knock, the door opens.\n'
+                        '\n'
+                        'The woman who stands in it is perhaps forty or perhaps ageless in the way '
+                        'that certain people are ageless -- not because they look young but '
+                        'because age seems beside the point. She has flour on one hand and a look '
+                        'on her face that is not surprise.\n'
+                        '\n'
+                        '*"Good sir,"* she says. *"How are you?"*\n'
+                        '\n'
+                        'The question is so ordinary and so direct that it stops him completely. '
+                        'Not *where are you going* or *who sent you* or *what do you want* -- but '
+                        '*how are you,* asked as if the answer matters, as if she has time for it, '
+                        'as if she has been waiting for exactly this question to give to exactly '
+                        'this person.\n'
+                        '\n'
+                        'He realizes he has no idea how to answer it honestly.\n'
+                        '\n'
+                        'She steps back from the door.\n'
+                        '\n'
+                        '*"Come in, then. That\'s answer enough."*\n'
+                        '\n'
+                        'Inside: warmth, the smell of bread, a low table with two cups already '
+                        'set. The window looks out on the garden and the hills and the mountain '
+                        'beyond, and the mountain, seen from here, looks manageable.',
+                'title': 'Three Hills',
+                'vocabulary': [{'definition': 'The generous reception of guests; the quality of '
+                                              'making others feel welcomed, fed, and cared for.',
+                                'term': 'hospitality'}]},
+ 'a13_transform': {'choices': [{'target': 'a14_blend',
+                                'text': 'Approach the cottage and knock at the gate.'},
+                               {'target': 'a14_garden',
+                                'text': 'Walk around the cottage -- toward the garden on the far '
+                                        'side.'}],
+                   'ending_type': None,
+                   'era': 'maiden',
+                   'figures': [],
+                   'is_ending': False,
+                   'tags': ['light_path', 'transformation', 'old_self', 'cottage', 'maiden'],
+                   'text': 'It happens somewhere between one step and the next, in the middle of a '
+                           'ravine that looks like every other part of the ravine and is therefore '
+                           'the perfect place for it.\n'
+                           '\n'
+                           'The old Theo falls away.\n'
+                           '\n'
+                           'Not like dying -- nothing so dramatic. More like the moment you '
+                           "realize you've been holding your shoulders up around your ears for so "
+                           "long that when you finally release them, you can't remember what the "
+                           'tension felt like, only the absence of it. It is the subtraction of '
+                           'something that was pretending to be essential.\n'
+                           '\n'
+                           'What was it? He tries to name it as it leaves. Pride dressed as '
+                           'principle. Certainty dressed as clarity. The story he told himself '
+                           'about himself, which was not a lie exactly but was also not the whole '
+                           'map. He had been carrying that story like a stone in his boot -- '
+                           'present at every step, shaping the way he walked, never quite '
+                           'admitting it hurt.\n'
+                           '\n'
+                           'He stands still in the ravine for a moment. The scrub pine moves in a '
+                           'wind he cannot feel at his face. A crystal stream -- one of the many '
+                           "that thread through Mt. Nebo's southwest slopes -- passes over smooth "
+                           'stones to his left, and the sound is the sound of something being '
+                           'washed clean.\n'
+                           '\n'
+                           'Then, to the south, over the last ridge of the ravine: three hills, '
+                           'rounded and green, and between them -- nestled in the hollow where '
+                           'three slopes meet -- a cottage with a garden and a gate and smoke '
+                           'rising from a low chimney.\n'
+                           '\n'
+                           'He did not know he was tired until he sees it.\n'
+                           '\n'
+                           'He goes toward it the way you go toward something that was waiting for '
+                           'you without knowing you were coming -- with the feeling of an arrival '
+                           'that was always going to happen.',
+                   'title': 'The Coat He Outgrew',
+                   'vocabulary': [{'definition': 'The gradual release of something that was once '
+                                                 'necessary but has become a burden -- a habit, an '
+                                                 'identity, a fear.',
+                                   'term': 'shedding'}]},
+ 'a14_blend': {'choices': [{'target': 'a15_recognize',
+                            'text': 'Ask her about Mack -- you sense she knows him.'},
+                           {'target': 'a15_bargain',
+                            'text': 'Ask her about what lies ahead on the mountain.'}],
+               'ending_type': None,
+               'era': 'maiden',
+               'figures': ['The Maiden'],
+               'is_ending': False,
+               'tags': ['light_path', 'maiden', 'teaching', 'fire_water', 'integration', 'pouch'],
+               'text': 'The Maiden pours from a clay pot -- something warm and dark, that smells '
+                       'of bark and dried flowers -- and sets the cup in front of Theo without '
+                       "ceremony, the way you set a cup in front of someone you've known for "
+                       'years.\n'
+                       '\n'
+                       '*"You look like someone who\'s been trying to choose between fire and '
+                       'water,"* she says. *"As if they couldn\'t both be true at once."*\n'
+                       '\n'
+                       'Theo looks at his cup. {{#has_pouch}}The pouch at his belt gives off a '
+                       "warmth that is different from the room's warmth -- older, more precise, "
+                       'like the heat of embers that have been banked for the '
+                       'night.{{/has_pouch}}\n'
+                       '\n'
+                       '*"Brok taught you something about duty,"* she says. Not a question. *"And '
+                       "duty is fire -- it burns clean when it's in proportion and burns "
+                       "everything when it's out of proportion. What did the mountain teach "
+                       'you?"*\n'
+                       '\n'
+                       '*"That consequences are real,"* he says. *"That you can\'t walk '
+                       'backward."*\n'
+                       '\n'
+                       '*"Water. Yes."* She refills his cup before he\'s finished it, a small '
+                       'extravagance. *"Fire knows where it\'s going. Water remembers where it\'s '
+                       'been. Neither one is enough on its own -- fire with no memory burns '
+                       'indiscriminately, water with no direction drowns the very thing it was '
+                       'meant to nourish."*\n'
+                       '\n'
+                       '{{#has_pouch}}The pouch glows. He puts his hand on it without thinking.\n'
+                       '\n'
+                       '*"That\'s Hafthor\'s work,"* she says, glancing at it. *"He always knew '
+                       'how to hold two things at once without breaking either of '
+                       'them."*{{/has_pouch}} She pauses. *"You\'re going higher. The mountain '
+                       'will ask you again -- fire or water. The answer is neither. The answer is '
+                       'the cup."*\n'
+                       '\n'
+                       'She stands, and through the window the three hills are clear against the '
+                       'afternoon sky, and beyond them the mountain waits, and it does not look '
+                       'manageable anymore but it looks real.',
+               'title': 'Fire and Water',
+               'vocabulary': [{'definition': 'The bringing together of separate or opposing '
+                                             'elements into a unified whole; not the elimination '
+                                             'of opposites but their harmony.',
+                               'term': 'integration'},
+                              {'definition': 'The correct or appropriate relationship between '
+                                             'parts; the condition in which nothing is too much or '
+                                             'too little.',
+                               'term': 'proportion'}]},
+ 'a14_garden': {'choices': [{'target': 'a14_h_riddle',
+                             'text': 'Climb the center hill -- the one that seems beside the '
+                                     'point.'},
+                            {'target': 'a15_bargain',
+                             'text': 'Climb the rocky right hill -- the one that costs something.'},
+                            {'target': 'a15_tempted',
+                             'text': 'Climb the tall dark left hill -- the one you want.'},
+                            {'target': 'a14_h_well',
+                             'text': 'Walk down into the bowl between the hills. There is '
+                                     'something there.'}],
+                'ending_type': None,
+                'era': 'maiden',
+                'figures': ['The Maiden'],
+                'is_ending': False,
+                'tags': ['center_path', 'maiden', 'garden', 'three_hills', 'riddle'],
+                'text': 'The garden runs along the south face of the cottage and up the gentle '
+                        'slope of the left-hand hill, and the Maiden walks through it with the '
+                        'ease of someone who knows every plant by name and disposition.\n'
+                        '\n'
+                        '*"Three hills,"* she says, gesturing. *"Left, right, center. They\'ve '
+                        'been here since before the cottage. I didn\'t choose them."*\n'
+                        '\n'
+                        'The left hill is the tallest, green-dark with old growth. The right hill '
+                        'is rocky, sparse, windswept. The center hill is the smallest, but '
+                        'something grows there that does not grow on the others -- a flower Theo '
+                        'cannot name, pale and persistent, the kind of thing you almost overlook.\n'
+                        '\n'
+                        '*"Here is the riddle,"* she says, stopping at the garden gate. *"One hill '
+                        'is what you want. One hill is what you need. One hill is what you fear. '
+                        'You have to climb one of them before you go higher."* She tilts her head. '
+                        '*"Which is which -- that\'s not my puzzle to solve for you. It\'s '
+                        'yours."*\n'
+                        '\n'
+                        'She watches him look at the hills.\n'
+                        '\n'
+                        '*"I\'ll tell you one thing,"* she says, after a while. *"The one you want '
+                        'to climb is never the one that will do you the most good. And the one '
+                        "you're most afraid to climb is never as terrible as it looks from down "
+                        'here."* A pause. *"The useful one is always the one that seems beside the '
+                        'point."*\n'
+                        '\n'
+                        'The center hill with its unnamed flower seems very much beside the '
+                        'point.\n'
+                        '\n'
+                        'He looks at the tall, dark left hill and feels desire.\n'
+                        'He looks at the rocky right hill and feels -- something that resembles '
+                        'what he felt in the ravine when the wind named his failures.\n'
+                        'He looks at the small center hill and feels nothing in particular, which '
+                        'is its own kind of answer.',
+                'title': 'The Riddle of Three Hills',
+                'vocabulary': [{'definition': 'The ability to perceive clearly; to judge '
+                                              'accurately between options, especially when '
+                                              'appearances are misleading.',
+                                'term': 'discernment'}]},
+ 'a14_h_riddle': {'choices': [{'target': 'a15_recognize',
+                               'text': 'Take the path the Maiden points toward -- the north face '
+                                       'of Mt. Nebo.'},
+                              {'target': 'a15_bargain',
+                               'text': 'Ask the Maiden about the fox-lion man you met at the '
+                                       'pool.'}],
+                  'ending_type': None,
+                  'era': 'maiden',
+                  'figures': ['The Maiden'],
+                  'is_ending': False,
+                  'tags': ['horizontal',
+                           'center_path',
+                           'riddle_resolved',
+                           'three_hills',
+                           'fear_path'],
+                  'text': 'From the top of the center hill, Theo can see everything.\n'
+                          '\n'
+                          'Not everything in the broad sense -- not the whole world, not the '
+                          "future, not the answer to any question he hasn't already asked. But he "
+                          'can see the cottage below, and the garden, and the Maiden watching from '
+                          'the gate with something that might be satisfaction. He can see the '
+                          "ravines behind him, the paths he took and the ones he didn't. He can "
+                          'see the mountain ahead, its ridges catching the afternoon light, and '
+                          'there are places on it that he cannot make out clearly and places that '
+                          'are perfectly sharp.\n'
+                          '\n'
+                          'The flower that grows only on this hill is at his feet. Up close it is '
+                          'not beautiful in any dramatic way -- pale, five-petaled, with a stem '
+                          'that bends slightly under its own weight. It smells faintly of rain.\n'
+                          '\n'
+                          'He sits on the hilltop for a long time.\n'
+                          '\n'
+                          'The left hill was desire. He can see that clearly now -- from up here '
+                          "he can see the left hill's shadow side, the part you can't see from the "
+                          'garden, and it is a long shadow. The right hill was necessity, and the '
+                          'rock face was real, and the cost was real, and there was nothing wrong '
+                          'with that path. But the center hill -- the hill that seemed beside the '
+                          'point -- turned out to be the hill of the present moment, the one that '
+                          'asks nothing of you except that you be exactly where you are.\n'
+                          '\n'
+                          'The Maiden calls up from the gate: *"Fear lets you see. Desire lets you '
+                          'move. Necessity keeps you honest. But the center --"* She pauses. *"The '
+                          'center is where you learn which of the other three to trust."*\n'
+                          '\n'
+                          'He comes down from the hill carrying the unnamed flower, and the path '
+                          'to the mountain is clearer than it has been since the Forest Gate.',
+                  'title': 'The Smallest Hill',
+                  'vocabulary': [{'definition': 'Mental calmness and composure in difficult '
+                                                'situations; a balance of mind that does not tip '
+                                                'toward extremes.',
+                                  'term': 'equanimity'}]},
+ 'a14_h_well': {'choices': [{'target': 'a15_recognize',
+                             'text': "Step back from the well. The girl's story is not yours to "
+                                     'finish.'},
+                            {'target': 'a15_bargain', 'text': 'Reach into the well to see more.'}],
+                'ending_type': None,
+                'era': 'maiden',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['well', 'horizontal', 'anamnesis', 'maiden', 'other_travelers'],
+                'text': "The three hills made a natural bowl between them, and at the bowl's "
+                        'lowest point, someone had built a well. Not recently -- the stones were '
+                        'dark with decades of weather, the mortar between them soft as chalk. '
+                        'Whoever had built it had taken care: each stone was placed to fit the one '
+                        'below, and at the rim, a small symbol had been carved that might have '
+                        'been a bird or might have been a flame, or both.\n'
+                        '\n'
+                        'Theo looked in.\n'
+                        '\n'
+                        'There was no water.\n'
+                        '\n'
+                        'There was light -- not reflected light, not the sky, but light moving '
+                        'from inside, the way light moves when it belongs to another hour of the '
+                        'day entirely. In that light, as clearly as if he were watching through a '
+                        'window: a girl, perhaps ten years old, standing at a fork in a road. She '
+                        'wore a brown coat too large for her. She had red hair. At one side of the '
+                        'fork stood a couple -- husband and wife by the way they stood, the woman '
+                        'small and brisk and kind-looking, the man large and deliberate, wearing '
+                        'boots so purple they seemed to generate their own weather. They were '
+                        'pointing down the left path with the patient gestures of people who have '
+                        'given this same direction many times and would give it many more.\n'
+                        '\n'
+                        'The girl chose the downward path. The couple watched her go, and their '
+                        'faces held what Theo could only describe as a difficult happiness -- the '
+                        'pride of watching something leave that was meant to leave.\n'
+                        '\n'
+                        'He straightened up. The light in the well went ordinary.\n'
+                        '\n'
+                        'This was **anamnesis** -- not memory, exactly, because he had not been '
+                        'there, had never seen that fork or those purple boots or that particular '
+                        'shade of difficult happiness. And yet he recognized it. The way a word in '
+                        'a foreign language can feel like something you once knew and forgot. The '
+                        'Kingdom had tested others. The Kingdom had held others in its passages '
+                        'and sent them toward its hills, and those people had chosen, and their '
+                        'choices had become part of the stone, the water, the mortar between the '
+                        'blocks.\n'
+                        '\n'
+                        'He was walking a **palimpsest** -- every path in this Kingdom written '
+                        'over some older path, and that path over an older one still, all the way '
+                        'down to whatever the Kingdom was before any of them arrived to name it.\n'
+                        '\n'
+                        'The girl had chosen the downward path. He did not know what she had found '
+                        'there. The well did not say.\n'
+                        '\n'
+                        'He stood in the bowl between three hills and felt the weight of the '
+                        'question settle over him -- not heavy, exactly. More like a cloak of the '
+                        'right size: it fit, and it was his to wear, and it changed the '
+                        'temperature of things.',
+                'title': 'The Well Between Hills',
+                'vocabulary': [{'definition': 'The recollection of something not personally '
+                                              'experienced -- a recognition so deep it precedes '
+                                              'memory, as though certain knowledge belongs to the '
+                                              'soul before it belongs to the self.',
+                                'term': 'anamnesis'},
+                               {'definition': 'A surface written upon, scraped clean, and written '
+                                              'upon again -- so that traces of every earlier '
+                                              'inscription remain faintly beneath the new, if you '
+                                              'know how to read the grain.',
+                                'term': 'palimpsest'}]},
+ 'a14_harsh': {'choices': [{'target': 'a15_tempted',
+                            'text': 'Keep climbing. The mountain is ahead and exhaustion is not a '
+                                    'reason to stop.'},
+                           {'target': 'ending_wanderer',
+                            'text': 'Find a place to sit -- just for a moment. Not the garden, but '
+                                    'something.'}],
+               'ending_type': None,
+               'era': 'maiden',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['shadow_path', 'exhaustion', 'no_rest', 'harsh_path'],
+               'text': 'The cottage is there -- he can see its chimney smoke from the ridge. He '
+                       'does not go to it.\n'
+                       '\n'
+                       'This is not a decision he makes so much as a direction he maintains. '
+                       'Stopping feels impossible, not because the mountain forbids it but because '
+                       'he has forgotten how. His legs know forward. The rest of him is too tired '
+                       'to argue.\n'
+                       '\n'
+                       'The slope rises. The ravine walls are behind him now and the mountain is '
+                       'in front of him in earnest -- not a suggestion of mountain, not a view '
+                       'from a distance, but the actual bulk of it, its weight pressing down on '
+                       'the air, its stone face offering nothing.\n'
+                       '\n'
+                       "Theo's legs ache. His shoulders ache. He cannot remember the last time he "
+                       'ate something. The pouch, if he still has it, is silent. The staff, if he '
+                       'still has it, is just a stick.\n'
+                       '\n'
+                       'There is a kind of exhaustion that goes past the body into something '
+                       'underneath the body, something that exhaustion is a translation of. He is '
+                       'tired not of walking but of what walking requires -- the constant small '
+                       'decisions, the maintenance of the self, the work of being someone specific '
+                       'moving through specific terrain toward a specific place.\n'
+                       '\n'
+                       'What he wants, he thinks, is to be no one for a little while. To put down '
+                       'the project of himself.\n'
+                       '\n'
+                       'He does not know yet that this is wisdom speaking in the only vocabulary '
+                       'it has left -- the vocabulary of pain. He does not know that the mountain, '
+                       'ahead, will offer exactly this: the opportunity to put himself down. What '
+                       'he cannot yet see is the difference between putting something down because '
+                       "you're done with it and putting it down so you can pick it up again "
+                       'changed.\n'
+                       '\n'
+                       'He walks. The mountain gets closer. Somewhere up ahead, something is '
+                       'waiting for him.',
+               'title': 'No Garden',
+               'vocabulary': [{'definition': 'Gradual wearing down through sustained pressure or '
+                                             'effort; a slow diminishment of strength or will.',
+                               'term': 'attrition'}]},
+ 'a15_bargain': {'choices': [{'target': 'a16_entry',
+                              'text': 'Accept the deal -- safe passage in exchange for the hidden '
+                                      'precious thing.'},
+                             {'target': 'a15_h_counteroffer',
+                              'text': 'Try to out-talk Mack. Negotiate as an equal.'},
+                             {'target': 'a16_collapse',
+                              'text': 'Refuse both options. Find your own way through the pass.'}],
                  'ending_type': None,
-                 'era': 'threshold',
-                 'figures': ['Phil'],
+                 'era': 'ravines',
+                 'figures': ['Mack'],
                  'is_ending': False,
-                 'tags': ['arrival', 'helper', 'gate', 'opening'],
-                 'text': 'The last thing Theo remembered was his history textbook, open to a chapter on medieval '
-                         'pilgrimage routes, and a cup of chamomile tea going cold beside his lamp. Then something '
-                         'shifted -- not a dream-shift, but a deeper one, like a page turning in a very old book -- '
-                         'and now he was standing in front of a gate.\n'
+                 'tags': ['center_path', 'mack', 'fox_aspect', 'deal', 'negotiation'],
+                 'text': 'Mack has the pocket watch out again. He is sitting on a stone at the '
+                         'edge of the pass -- the same loose-limbed posture as the pool, the same '
+                         'quality of having been there for slightly longer than should be possible '
+                         '-- and he is the fox this time: lean, bright-eyed, one hand moving in '
+                         'small precise gestures as he talks.\n'
                          '\n'
-                         'Not a gate like a garden gate. A gate like the idea of a gate made monumental. Two planks of '
-                         'redwood, each one ten stories tall, rose into a sky the color of new copper. Alabaster walls '
-                         'ran away from the gate in both directions without any sign of ending, white and smooth as '
-                         'the inside of a shell. Set into the wood was an ornate silver plate crusted with emeralds '
-                         'the size of his thumbnail, and at its center, a keyhole shaped like nothing he could name.\n'
+                         '*"You came from the garden,"* he says, by way of greeting. *"She feeds '
+                         'everyone, that one. Does she still have the three-hills routine?"* He '
+                         'grins. *"She\'s had that one for years. Still works, I see."*\n'
                          '\n'
-                         'Theo stood with his backpack straps in both fists and did the thing he always did when he '
-                         'had no idea what was happening: he looked for something smaller than him.\n'
+                         '*"She mentioned you,"* Theo says.\n'
                          '\n'
-                         "He found it almost immediately. On the lowest stone of the wall's foundation, sitting "
-                         'upright on four of its fourteen legs with the remaining ten gesturing at the sky, was a '
-                         'pillbug.\n'
+                         '*"She always does."* Mack\'s voice carries a particular texture when he '
+                         'says this -- not quite pride, not quite sorrow, something that lives at '
+                         'the intersection of both. *"We have an arrangement. She rests people; I '
+                         'move them. Different jobs, same mountain."*\n'
                          '\n'
-                         'Not just any pillbug. This one was approximately the size of his thumb, wore an expression '
-                         'of profound relief, and was in the middle of a speech.\n'
+                         'He stands, brushing stone-dust from his green pants.\n'
                          '\n'
-                         '"-- and I said to myself, Phil, the King provides. And lo! He has provided. Young man!" The '
-                         'pillbug turned. Its tiny eyes were bright as drops of ink. "You there. Are you by any chance '
-                         'going through?"\n'
+                         '*"Here is the deal I\'m offering, and I\'ll be straight with you because '
+                         "you've earned it: safe passage through the pass. No illusions, no "
+                         'riddles, no looking sideways at things. Just: you walk through, you '
+                         'arrive at the Temple of Memories, and whatever happens there, '
+                         'happens."*\n'
                          '\n'
-                         '"Through -- through the gate?" Theo crouched down. The pillbug, Phil, bowed with '
-                         'considerable ceremony.\n'
+                         'He tilts his head.\n'
                          '\n'
-                         '"Through the gate, yes. The Invisible Door. I\'ve been trying to reach the keyhole for the '
-                         'better part of the morning. My legs are not what they were. Not," Phil added pointedly, '
-                         '"that they were ever designed for vertical surfaces."\n'
+                         '*"The price: something precious. Not the staff, not the pouch -- I '
+                         "already made that offer. Something you're still carrying that you don't "
+                         'know you\'re carrying. I\'ll know it when I see it. You might not."*\n'
                          '\n'
-                         'Theo looked at the keyhole, ten feet up. He looked at Phil. He felt the peculiar '
-                         '**equanimity** of someone who has already decided that the strangest thing has already '
-                         'happened and everything else is just details.\n'
+                         'The watch ticks in the right direction this time.\n'
                          '\n'
-                         '"I could lift you," he said.\n'
+                         '*"Or,"* he says, and his eyes sharpen, *"you could try to out-talk me. '
+                         "First time anyone's managed it, but I'm always interested in a first "
+                         'time."*',
+                 'title': 'The Fox at the Gate',
+                 'vocabulary': [{'definition': 'A guarantee of being allowed to travel without '
+                                               'interference or harm; often offered as a bargain, '
+                                               'with conditions.',
+                                 'term': 'safe passage'}]},
+ 'a15_h_counteroffer': {'choices': [{'target': 'a16_rebuild',
+                                     'text': 'Shake his hand and take the information -- use it to '
+                                             'rebuild your approach to the mountain.'},
+                                    {'target': 'a16_entry',
+                                     'text': 'Shake his hand and take the passage -- move forward '
+                                             'without the extra knowledge.'}],
+                        'ending_type': None,
+                        'era': 'ravines',
+                        'figures': ['Mack'],
+                        'is_ending': False,
+                        'tags': ['horizontal', 'mack', 'negotiation', 'equals', 'counteroffer'],
+                        'text': 'They go back and forth for what might be an hour.\n'
+                                '\n'
+                                'It begins with Theo declining the terms and Mack recalibrating, '
+                                'and then Theo proposing an alternative and Mack finding the flaw '
+                                'in it -- not unkindly, actually with something approaching '
+                                'delight -- and then a silence, and then Theo finds a different '
+                                "angle, and Mack's eyes sharpen, and they are off again.\n"
+                                '\n'
+                                'At some point, Mack puts the pocket watch away.\n'
+                                '\n'
+                                'At some point, Theo realizes that Mack is not performing '
+                                'negotiation but actually engaged in it -- genuinely working, '
+                                'leaning into the problem of this particular person at this '
+                                'particular pass with all the same care he would bring to any '
+                                'problem worth his time.\n'
+                                '\n'
+                                '*"You\'re doing the thing,"* Mack says at one point.\n'
+                                '\n'
+                                '*"What thing?"*\n'
+                                '\n'
+                                '*"The thing where you listen to what I\'m not saying. Most people '
+                                'only hear the words."* He studies Theo with the fox-eyes, quick '
+                                'and clear. *"Where did you learn that?"*\n'
+                                '\n'
+                                '*"The flat stone,"* Theo says, without quite knowing why.\n'
+                                '\n'
+                                'Mack nods slowly, as if this is an answer he has encountered '
+                                'before and respects.\n'
+                                '\n'
+                                'The counteroffer they arrive at is this: Theo will carry '
+                                "something of Mack's through the pass -- not the chain, not the "
+                                'watch, something else, something small -- and Mack will give Theo '
+                                'free passage and one piece of information about what lies ahead. '
+                                'Neither of them is entirely satisfied with this. Both of them '
+                                'find it acceptable, which is the definition of a genuine '
+                                'negotiation.\n'
+                                '\n'
+                                '*"Hm,"* Mack says, when it\'s settled. He holds out his hand. His '
+                                'expression is one Theo has not seen on him before -- open, '
+                                'undefended, almost young. *"You know, I\'ve been running these '
+                                'passes for a long time, and almost no one --"* He stops. Starts '
+                                'again. *"Almost no one makes me work for it."*\n'
+                                '\n'
+                                'He seems, for one unguarded moment, genuinely glad.',
+                        'title': 'Two Talkers at a Pass',
+                        'vocabulary': [{'definition': 'A conference between opposing or different '
+                                                      'parties; a genuine negotiation between two '
+                                                      'people who take each other seriously.',
+                                        'term': 'parley'}]},
+ 'a15_recognize': {'choices': [{'target': 'a16_rebuild',
+                                'text': 'Ask Mack what lies beyond the pass -- earn the '
+                                        'information outright.'},
+                               {'target': 'a16_entry',
+                                'text': 'Walk past Mack without asking anything. The pass is '
+                                        'open.'}],
+                   'ending_type': None,
+                   'era': 'ravines',
+                   'figures': ['Mack'],
+                   'is_ending': False,
+                   'tags': ['light_path', 'mack', 'lion_aspect', 'golden_chain', 'recognition'],
+                   'text': 'He is standing at the pass -- a narrow cut between two outcroppings, '
+                           "the last obstacle before the mountain's middle slopes -- and he is "
+                           'magnificent.\n'
+                           '\n'
+                           'Not the fox-Mack that Theo met at the pool, all quicksilver and pocket '
+                           'watches. This is the lion aspect: broad-shouldered, still, with a '
+                           'quality of contained power that makes the air around him feel denser. '
+                           'He wears a purple tunic and green pants, and there is something in his '
+                           "bearing that would be entirely ridiculous except that it isn't, that "
+                           'transforms the garish colors into something regal through sheer force '
+                           'of conviction.\n'
+                           '\n'
+                           'In his hands: a chain. Golden, finely wrought, each link precisely '
+                           'sized. It catches the light and multiplies it.\n'
+                           '\n'
+                           '*"I\'ve been watching you since the pool,"* Mack says. His voice in '
+                           'this aspect is lower, steadier -- not the quick-river voice from '
+                           'before but something more like weather. *"You\'ve come a long way. '
+                           "You've given up things that were hard to give up. You've kept things "
+                           'that were harder to keep."*\n'
+                           '\n'
+                           'He holds the chain out.\n'
+                           '\n'
+                           '*"This is for you. A reward, if you want. Comfort. Certainty. Every '
+                           "morning knowing what the day will ask and knowing you're equal to it. "
+                           'No more climbing. No more not-knowing. An end to the whole exhausting '
+                           'project of becoming."*\n'
+                           '\n'
+                           'The chain is beautiful. This is important -- it is genuinely, '
+                           "objectively beautiful, and the offer is genuine, and Mack's face holds "
+                           'no malice whatsoever.\n'
+                           '\n'
+                           "Theo looks at the chain. He looks at Mack's eyes, which are the lion's "
+                           'eyes -- ancient, patient, neither kind nor cruel.\n'
+                           '\n'
+                           'He looks at his own hands.\n'
+                           '\n'
+                           '*"No,"* he says.\n'
+                           '\n'
+                           "Mack's expression doesn't change. But something in it does -- some "
+                           'internal weather. And then, for just a moment, he looks pleased.',
+                   'title': 'The Lion at the Pass',
+                   'vocabulary': [{'definition': 'A position or condition requiring little effort '
+                                                 'but offering comfort and security; a comfortable '
+                                                 'trap.',
+                                   'term': 'sinecure'},
+                                  {'definition': 'The state of ceasing to develop or progress; '
+                                                 'comfortable stillness that masks the absence of '
+                                                 'growth.',
+                                   'term': 'stagnation'}]},
+ 'a15_tempted': {'choices': [{'target': 'ending_shadow_bound',
+                              'text': 'Take the map. Stop climbing. This is not the time.'},
+                             {'target': 'a16_collapse',
+                              'text': 'Leave everything on the stone. Stand up. Keep going.'}],
+                 'ending_type': None,
+                 'era': 'ravines',
+                 'figures': ['Mack'],
+                 'is_ending': False,
+                 'tags': ['shadow_path', 'mack', 'temptation', 'exhaustion', 'everything_offered'],
+                 'text': 'Mack is waiting at the pass in neither aspect -- not fox, not lion -- '
+                         'just a man in a yellow vest and lime green pants, leaning against the '
+                         'stone wall with his arms crossed, watching Theo come up the slope with '
+                         'the appraising look of someone who has been watching for a long time.\n'
                          '\n'
-                         '"I was hoping you\'d say that. Praise the King!"\n'
+                         '*"You look terrible,"* he says.\n'
                          '\n'
-                         'Getting a pillbug to a keyhole was, it turned out, a matter of patience and steadiness. Phil '
-                         "was lighter than a grape. He walked up Theo's palm, up his forearm, and onto his index "
-                         'finger with the dignity of a diplomat. Theo raised him to the keyhole. Phil inserted the tip '
-                         'of his foremost leg -- it clicked -- and stepped back.\n'
+                         '*"I know."*\n'
                          '\n'
-                         'Nothing happened for a moment. Then the air around the silver plate began to shimmer, and a '
-                         "frame of golden light appeared in the wood: a door-shape that hadn't been visible before, "
-                         'now undeniable. The great planks groaned, just slightly, and a gap appeared: wide enough for '
-                         'one person, or one very grateful pillbug.\n'
+                         '*"Sit down."* Not unkind. Direct.\n'
                          '\n'
-                         '"After you," Phil said, and gestured grandly with four legs at once. "The Chartreuse Forest '
-                         'awaits. May the King\'s road be kind."\n'
+                         'Theo sits on the nearest stone and the exhaustion comes in like a tide '
+                         '-- the kind that has been waiting behind a wall and gets released all at '
+                         'once when you finally stop moving.\n'
                          '\n'
-                         'Theo looked at the gap. Green light poured through it, warm as afternoon.\n'
+                         'Mack reaches into his vest and produces things, one by one, and sets '
+                         'them on the stone beside Theo.\n'
                          '\n'
-                         'He stepped through.',
-                 'title': 'The Forest Gate',
-                 'vocabulary': [   {   'definition': 'A calm, composed state of mind, especially in difficult or '
-                                                     'surprising circumstances. From the Latin aequus (equal) and '
-                                                     'animus (mind): literally, an even mind. A person with equanimity '
-                                                     'is not rattled by what they cannot control.',
-                                       'term': 'equanimity'}]}}
+                         'The pouch of Hafthor, if Theo gave it away. Warm, glowing, exactly as it '
+                         'was.\n'
+                         'The staff, if it cracked or was traded. Whole again, the grain of the '
+                         'ash wood clean and straight.\n'
+                         "A map, hand-drawn, showing paths that Theo hasn't taken but recognizes "
+                         '-- the ones that might have been easier.\n'
+                         "A meal, warm, the kind you don't think about the specifics of when "
+                         "you're hungry enough.\n"
+                         'And last: a direction. A clear, unambiguous direction home.\n'
+                         '\n'
+                         '*"I\'m not keeping you here,"* Mack says. *"The mountain is still there. '
+                         'You can still go up. But you have to want to, and right now --"* He '
+                         'tilts his head. *"Right now you\'re running on obligation, and '
+                         'obligation without will is just a longer way to the same stopping '
+                         'point."*\n'
+                         '\n'
+                         'He holds out the map.\n'
+                         '\n'
+                         '*"The price is simple. You stop climbing. Not forever. Just: stop '
+                         'climbing this mountain, this time."*\n'
+                         '\n'
+                         'Theo looks at the map. The direction home is very clear. It is a good '
+                         'map.',
+                 'title': 'Everything He Lost',
+                 'vocabulary': [{'definition': 'The act of giving in; surrender, especially to '
+                                               'something that has been resisted for a long time.',
+                                 'term': 'capitulation'}]},
+ 'a16_collapse': {'choices': [{'target': 'a17_dark',
+                               'text': 'Go in. Whatever is waiting in the darkness, face it.'},
+                              {'target': 'ending_retreat',
+                               'text': 'Turn back. The mountain has defeated you. There is no '
+                                       'shame in retreat -- only truth.'}],
+                  'ending_type': None,
+                  'era': 'depths',
+                  'figures': [],
+                  'is_ending': False,
+                  'tags': ['shadow_path', 'temple_entry', 'despair'],
+                  'text': 'Everything has come apart.\n'
+                          '\n'
+                          'You stand before the south face of Mt. Nebo and you cannot remember, '
+                          'precisely, what you came here for. The journey has taken too long. The '
+                          'things you lost along the way -- you are not sure anymore whether you '
+                          'lost them or threw them away or whether you ever had them.\n'
+                          '\n'
+                          "The mountain's entrance opens before you and it looks nothing like a "
+                          'door. It looks like a mouth. It looks like the end of something.\n'
+                          '\n'
+                          'Your hands are empty. Your feet are tired. The cold air from within the '
+                          'Temple breathes against your face and it does not feel welcoming -- it '
+                          'feels like the breath of a thing that does not distinguish between the '
+                          'living and the dead, that receives all things with the same '
+                          '**impassive** patience.\n'
+                          '\n'
+                          'You have two choices and they are both the same choice in different '
+                          'clothing.\n'
+                          '\n'
+                          'You can go in.\n'
+                          '\n'
+                          'Or you can stop moving entirely, here, on this threshold, and let the '
+                          'mountain decide what to do with you.\n'
+                          '\n'
+                          'Somewhere inside, the Seven Corridors wait. You cannot see them. You '
+                          'cannot see anything except the darkness and, at its far edge, something '
+                          'that might be the absence of something that might have been light.',
+                  'title': 'The Yawning Gate',
+                  'vocabulary': [{'definition': 'Not showing or feeling emotion; unmoved by what '
+                                                'would stir ordinary creatures to response.',
+                                  'term': 'impassive'}]},
+ 'a16_entry': {'choices': [{'target': 'a16_h_bartop',
+                            'text': 'Move toward the shape in the darkness.'},
+                           {'target': 'a17_pool',
+                            'text': 'Approach the nearest of the Seven Corridors and peer into its '
+                                    'depth.'},
+                           {'target': 'a17_dark',
+                            'text': 'Stand still and let your eyes adjust. Let the Temple come to '
+                                    'you.'}],
+               'ending_type': None,
+               'era': 'depths',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['center_path', 'temple_entry', 'seven_corridors'],
+               'text': 'The south face of Mt. Nebo opens and you enter because there is nowhere '
+                       'else to go.\n'
+                       '\n'
+                       'The walls are marble -- smooth and white as a closed eye. The darkness '
+                       'ahead is absolute beyond the first twenty paces, where the last gray light '
+                       'from outside gives out entirely. The air is cold. It carries the smell of '
+                       'old stone and older silence.\n'
+                       '\n'
+                       'The Seven Corridors stretch before you, their mouths opening like '
+                       'questions you cannot yet read. Each is the same width, the same height. '
+                       'Each exhales a breath of slightly different temperature. Between them, '
+                       'smaller passages thread away into deeper darkness.\n'
+                       '\n'
+                       'The **frescoes** begin almost at once. On the wall to your left, a painted '
+                       'figure in faded ochre stands at the edge of a cliff that may be a mountain '
+                       "or may be something else -- the painter's meaning is not clear. On your "
+                       'right, a knight in chipped silver paint kneels before a woman who may be '
+                       'praying or may be weeping. You cannot tell which.\n'
+                       '\n'
+                       'You stand in the entrance hall and feel the size of this place. Not just '
+                       'the physical size, though that is considerable. The size that comes from '
+                       'years. Centuries poured into stone and paint and cool air.\n'
+                       '\n'
+                       'Something moves in the darkness at the edge of sight -- or seems to. You '
+                       'cannot be sure.',
+               'title': 'The Temple of Memories',
+               'vocabulary': [{'definition': 'A method of painting on freshly laid plaster, '
+                                             'allowing pigment to bond with the wall itself; the '
+                                             'resulting work endures for centuries.',
+                               'term': 'fresco'}]},
+ 'a16_h_bartop': {'choices': [{'target': 'a17_star',
+                               'text': "Follow the direction of Bartop's gaze into the deepest "
+                                       'corridor.'},
+                              {'target': 'a17_pool',
+                               'text': 'Move past him carefully and approach the dark pool at the '
+                                       "Temple's heart."}],
+                  'ending_type': None,
+                  'era': 'depths',
+                  'figures': ['Bartop'],
+                  'is_ending': False,
+                  'tags': ['center_path', 'bartop', 'deep_time', 'horizontal'],
+                  'text': 'You move toward the shape and understand, after a long moment, that it '
+                          'is not a shadow.\n'
+                          '\n'
+                          'It is a figure. Or a formation. Or both.\n'
+                          '\n'
+                          'He stands perhaps eight feet tall, composed of something that is '
+                          'clearly limestone -- banded and layered, gray-cream-gray, faintly '
+                          'luminous in the dark. His surface is not rough like raw rock but worn '
+                          'smooth over what must have been an enormous span of time, the way river '
+                          'stones are smooth: not shaped by intention but by the patient, '
+                          'indifferent work of years beyond counting.\n'
+                          '\n'
+                          'His face has features. Eyes that are recesses in the stone -- deep, '
+                          'shadow-filled, not reflecting light but somehow seeing. A mouth that is '
+                          'a horizontal seam, slightly open. Hands at his sides, each finger as '
+                          'thick as your wrist.\n'
+                          '\n'
+                          'He does not move. But he is not stone.\n'
+                          '\n'
+                          'You are not certain how you know this. Perhaps it is the faint warmth '
+                          'that comes from him -- barely more than the ambient temperature of the '
+                          'rock around you, but present. Perhaps it is the quality of stillness, '
+                          'which is different from the stillness of a statue. A statue has never '
+                          'moved. This creature has moved, and simply is not moving now, and will '
+                          'move again, in time.\n'
+                          '\n'
+                          'The time in question may be considerable.\n'
+                          '\n'
+                          'A millennium passes in his gaze. It passes slowly, and you are in it, '
+                          'and somehow you do not feel crushed by it. You feel located. You feel '
+                          'as though, in the presence of something this ancient, your own '
+                          'smallness is not a flaw but a fact, and facts can be rested in.\n'
+                          '\n'
+                          'Bartop the Rock **Sentinel** does not speak. He has, perhaps, already '
+                          'said hello -- hours ago, or decades ago, or in a language that operates '
+                          'in geological time and that your bones are only beginning to learn.\n'
+                          '\n'
+                          'You wait with him for a moment that feels like more than a moment.',
+                  'title': 'The Rock Sentinel',
+                  'vocabulary': [{'definition': 'A guard or watchman stationed to keep watch and '
+                                                'warn of danger or mark a boundary; from the Latin '
+                                                "for 'the one who watches.'",
+                                  'term': 'sentinel'}]},
+ 'a16_rebuild': {'choices': [{'target': 'a17_star',
+                              'text': 'Follow the hum of the staff deeper, toward the sound of '
+                                      'distant water.'},
+                             {'target': 'a17_pool',
+                              'text': 'Pause on the threshold and let your eyes adjust to the '
+                                      'darkness.'}],
+                 'ending_type': None,
+                 'era': 'depths',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['light_path', 'temple_entry', 'transformation'],
+                 'text': 'The south face of Mt. Nebo opens before you -- not with thunder, not '
+                         'with ceremony, but the way a door opens that has always been unlocked. '
+                         'You only had to stop pushing against it.\n'
+                         '\n'
+                         'The marble is pale as old bone. The air that breathes outward is cool '
+                         'and carries the smell of deep stone and something older than fire. '
+                         'Inside, darkness waits. Not the darkness of threat but the darkness of '
+                         'depth -- the darkness at the bottom of a well where the water runs '
+                         'cleanest.\n'
+                         '\n'
+                         'Something shifts inside your chest.\n'
+                         '\n'
+                         'It is not a breaking, exactly. Or not the kind of breaking you have '
+                         'dreaded. The {{staff}} staff hums faintly in your palm, '
+                         "{{#has_pouch}}and Hafthor's pouch rests warm at your hip, "
+                         '{{/has_pouch}}and you understand -- standing here on the **threshold** '
+                         '-- that everything you have carried to this point has been preparation '
+                         'for a threshold you could not have recognized until you stood before '
+                         'it.\n'
+                         '\n'
+                         'An egg cracks from the inside. That is the difference. A wall cracks '
+                         'under assault; an egg cracks because the creature within is ready, and '
+                         'the shell was never the creature.\n'
+                         '\n'
+                         'You are not losing yourself. You are meeting yourself for the first '
+                         'time.\n'
+                         '\n'
+                         'The Temple of Memories breathes. You step inside.',
+                 'title': 'The Cracking of the Shell',
+                 'vocabulary': [{'definition': 'The strip of stone or wood beneath a doorway; by '
+                                               'extension, any moment of crossing from one state '
+                                               'into another.',
+                                 'term': 'threshold'}]},
+ 'a17_dark': {'choices': [{'target': 'a18_shadow',
+                           'text': 'Feel your way downward toward what might be water. Follow the '
+                                   'sound into the deep.'},
+                          {'target': 'ending_darkness',
+                           'text': 'Stop. Sit down on the cold marble. Accept that you are lost, '
+                                   'and wait.'}],
+              'ending_type': None,
+              'era': 'depths',
+              'figures': [],
+              'is_ending': False,
+              'tags': ['shadow_path', 'darkness', 'lost'],
+              'text': 'There is no light.\n'
+                      '\n'
+                      'You have gone far enough into the Temple of Memories that the gray outside '
+                      'light has completely failed, and the darkness here is a substance -- not '
+                      'the absence of something but a presence, thick and patient. The Seven '
+                      'Corridors breathe around you. You can hear them: faint air movement, the '
+                      'occasional soft sound of settling stone, something that might be water '
+                      'somewhere far below.\n'
+                      '\n'
+                      'You move your hand before your face and see nothing.\n'
+                      '\n'
+                      'The frescoes are here. You know they are here because you brush against '
+                      'them sometimes -- paint under your fingertips, rough plaster, the raised '
+                      'edges of carved stone. Stories you cannot read. Lessons you cannot see. The '
+                      'Temple is full of everything it has always been full of, and none of it '
+                      'reaches you.\n'
+                      '\n'
+                      'You call out once. The corridors return your voice in fragments, slightly '
+                      'altered -- your own word coming back to you in a different key, as though '
+                      'the Temple is offering a gentle correction.\n'
+                      '\n'
+                      'You are not sure which way is forward. You are not sure, in this darkness, '
+                      'that forward is a direction that still applies.\n'
+                      '\n'
+                      'Somewhere -- perhaps far below, perhaps unreachably far -- there might be '
+                      'light. You have heard stories. You have heard nothing at all. In this '
+                      'darkness, the two are equivalent.',
+              'title': 'Corridors Echoing',
+              'vocabulary': []},
+ 'a17_h_dive': {'choices': [{'target': 'a18_navigate',
+                             'text': 'Climb out of the pool and walk the Seven Corridors -- you '
+                                     'carry a light they cannot take.'},
+                            {'target': 'a18_shadow',
+                             'text': 'The darkness rushes back in. Panic. Surface. The light '
+                                     'recedes below.'}],
+                'ending_type': None,
+                'era': 'depths',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['center_path', 'starstone', 'dive', 'baptism', 'horizontal'],
+                'text': 'You enter the water and it is cold.\n'
+                        '\n'
+                        'Not the cold of a mountain stream, which is bracing and present and over '
+                        'quickly. The cold of this water is patient. It takes you in slowly, the '
+                        'way a thought takes over a mind: first the hands, then the arms, then the '
+                        'chest, and finally the head -- and then there is only the cold, and the '
+                        'dark, and the pressure of depth building against your ears.\n'
+                        '\n'
+                        'You cannot see the surface. You cannot see the bottom. You can see the '
+                        'light.\n'
+                        '\n'
+                        'It is below you, steady and small, and you swim toward it the way you '
+                        'have swum toward certain things in your life without knowing why -- not '
+                        'because you were told to, not because you reasoned your way to it, but '
+                        'because the body sometimes knows before the mind arrives.\n'
+                        '\n'
+                        'The pressure builds. Your lungs have begun their slow campaign of '
+                        'complaint.\n'
+                        '\n'
+                        'And then the light is no longer below you. It is before you. It is a '
+                        'sphere of pale starstone the size of a closed fist, resting on the grotto '
+                        'floor in a cone of its own radiance, absolutely serene in the absolute '
+                        'dark. Around it, the rock is smooth and ancient and unbothered.\n'
+                        '\n'
+                        'You reach out.\n'
+                        '\n'
+                        'The light touches your fingers and you feel something pass through you '
+                        'that is not warmth exactly and not electricity exactly and not relief '
+                        'exactly but contains elements of all three -- a recognition, as though '
+                        'the light has been waiting, not urgently, not impatiently, but simply '
+                        'waiting, in the way that things wait which have nowhere else to be.\n'
+                        '\n'
+                        'You do not take the stone. You do not need to. What the Starstone gives, '
+                        'it gives by contact. The light enters you through your palm and travels '
+                        'upward through the dark water and deposits you, gasping, at the surface.\n'
+                        '\n'
+                        'You are changed. You carry the light now. Not in your hands. In whatever '
+                        'part of you was most in darkness.',
+                'title': 'The Deep Plunge',
+                'vocabulary': [{'definition': 'The recollection of things from a past existence; '
+                                              'in philosophy, the idea that learning is a form of '
+                                              'remembering what the soul already knows.',
+                                'term': 'anamnesis'}]},
+ 'a17_pool': {'choices': [{'target': 'a17_h_dive',
+                           'text': 'Dive into the black water toward the light.'},
+                          {'target': 'a18_corridors',
+                           'text': 'Walk the Seven Corridors first. Return to the pool when you '
+                                   'understand more.'},
+                          {'target': 'a18_shadow',
+                           'text': "Stand at the pool's edge and wait. Perhaps the light will rise "
+                                   'to meet you.'}],
+              'ending_type': None,
+              'era': 'depths',
+              'figures': [],
+              'is_ending': False,
+              'tags': ['center_path', 'starstone', 'pool', 'choice'],
+              'text': 'You find the pool without quite meaning to. A passage between two of the '
+                      'Seven Corridors descends gradually, then steeply, and deposits you in a '
+                      'chamber that is too dark to see clearly.\n'
+                      '\n'
+                      'But you can see the water. You can see the water because there is something '
+                      'in the water.\n'
+                      '\n'
+                      'Far below the surface -- impossibly far, it seems, though the pool cannot '
+                      'be more than twenty or thirty feet across -- there is a glow. Pale and '
+                      'steady. The color of something between starlight and the light that comes '
+                      'through the skin of a closed hand held up to the sun.\n'
+                      '\n'
+                      "You crouch at the pool's edge. The water is cold even without touching it. "
+                      'You cannot see the bottom. The light seems to come from the bottom, or from '
+                      'beneath the bottom, or from some distance that does not correspond to the '
+                      'physical dimensions of the pool.\n'
+                      '\n'
+                      'The water is absolutely still.\n'
+                      '\n'
+                      'You have been in motion for a long time. You are tired in a way that sleep '
+                      'does not entirely address. And the light below asks nothing of you -- it '
+                      'does not beckon, does not command. It simply exists, down there in its '
+                      'darkness, doing what light does: persisting.\n'
+                      '\n'
+                      'A choice arrives, as choices do, without ceremony.\n'
+                      '\n'
+                      'Dive. Or do not dive.',
+              'title': 'Something Glows Below',
+              'vocabulary': []},
+ 'a17_star': {'choices': [{'target': 'a18_navigate',
+                           'text': 'Descend into the black water toward the light.'},
+                          {'target': 'a18_corridors',
+                           'text': 'Study the grotto from its edge. Walk the Seven Corridors '
+                                   'first, with this light in your memory.'}],
+              'ending_type': None,
+              'era': 'depths',
+              'figures': ['Bartop'],
+              'is_ending': False,
+              'tags': ['light_path', 'starstone', 'bartop', 'grotto'],
+              'text': '{{#has_met_Bartop}}Bartop has been here before. Twelve times in each '
+                      'direction across the Seven Corridors, you somehow know -- or perhaps you do '
+                      'not know but your body knows, the way it knows certain things about the '
+                      'people who have walked the same ground for centuries before you.\n'
+                      '\n'
+                      'He leads you -- or you follow the direction of his stillness, which amounts '
+                      'to the same thing -- into a passage that '
+                      'descends.{{/has_met_Bartop}}{{^has_met_Bartop}}Something has been here '
+                      'before you. You find the marks in the deepest corridor -- faint grooves in '
+                      'the stone floor, too wide to be human feet, too deliberate to be natural. '
+                      'Whatever made them walked this passage twelve times in each direction. You '
+                      'know this the way you know certain things about the people who have walked '
+                      'the same ground for centuries before you.\n'
+                      '\n'
+                      'You follow the grooves into a passage that descends.{{/has_met_Bartop}}\n'
+                      '\n'
+                      'The descent is long. The marble gives way to rougher stone, then to '
+                      'something older: dark and glassy, volcanic, formed in fires that predate '
+                      'the Temple by orders of magnitude no number could usefully represent. The '
+                      'passage narrows. You are holding the {{staff}} staff before you now, not '
+                      'for support but because it hums more clearly here, and the hum is a kind of '
+                      'company.\n'
+                      '\n'
+                      'Then the passage opens.\n'
+                      '\n'
+                      'The **grotto** is small and absolute. The ceiling is perhaps fifteen feet '
+                      'above. The floor is a pool -- black water so still it might be obsidian.\n'
+                      '\n'
+                      'And at the bottom of that pool, far below, there is light.\n'
+                      '\n'
+                      'It is not a large light. It is the size of a closed fist. But in the '
+                      'absolute darkness of this deep place, it is -- there is no other word -- '
+                      'holy. It is a sphere of pale radiance, the color of starlight seen from a '
+                      "great distance, and it rests on the grotto's floor beneath the black water "
+                      'as though it has always rested there and will rest there always.\n'
+                      '\n'
+                      'The Starstone.\n'
+                      '\n'
+                      'You understand, looking at it, what '
+                      '{{#has_met_Bartop}}Bartop{{/has_met_Bartop}}{{^has_met_Bartop}}something '
+                      'ancient{{/has_met_Bartop}} spent a century **contemplating** from this '
+                      'exact spot. Not the stone itself -- though the stone is wondrous. The fact '
+                      'of it. The fact that light exists in the deepest darkness. Not despite the '
+                      'darkness. Within it. Chosen by it, or choosing it, or simply present there, '
+                      'unbothered by what surrounds it, sufficient to itself.\n'
+                      '\n'
+                      'The Temple above has forty-nine miles of corridors. You have a long way to '
+                      'travel. But first: this.',
+              'title': 'Light in the Deepest Place',
+              'vocabulary': [{'definition': 'A small cave or cavern, especially a picturesque one; '
+                                            'often associated with sacred or sheltered places.',
+                              'term': 'grotto'},
+                             {'definition': 'Thinking deeply and at length about something; from '
+                                            "the Latin for 'to observe,' originally a word for "
+                                            'divination by gazing at the sky.',
+                              'term': 'contemplating'}]},
+ 'a18_corridors': {'choices': [{'target': 'a18_h_gunnin',
+                                'text': 'Turn into the side passage toward the sound.'},
+                               {'target': 'a19_spectacles',
+                                'text': 'Ignore it. Push deeper into the corridors, looking for '
+                                        'the way up.'},
+                               {'target': 'a19_pride',
+                                'text': 'Stop walking. Stand completely still and wait for the '
+                                        'murals to resolve.'}],
+                   'ending_type': None,
+                   'era': 'depths',
+                   'figures': [],
+                   'is_ending': False,
+                   'tags': ['center_path', 'seven_corridors', 'murals', 'labyrinth'],
+                   'text': 'The Seven Corridors are numbered, but you cannot find the numbers. Or '
+                           'rather, you find what might be numbers -- symbols carved at the '
+                           'entrance to each passage, worn smooth by centuries of fingers tracing '
+                           'them -- but you cannot read what they say.\n'
+                           '\n'
+                           'You choose a corridor and walk it. The frescoes move.\n'
+                           '\n'
+                           'Not physically -- they do not animate, nothing lurches -- but their '
+                           'meaning shifts as you walk. A painted woman who seemed to be weeping '
+                           'at the entrance seems to be laughing halfway through. A painted king '
+                           'who seemed triumphant at the far end seems, from closer, to be '
+                           'falling. You cannot tell if you are reading the story correctly or if '
+                           'the story has more than one correct reading or if there is no correct '
+                           'reading and the Temple is simply watching to see what you project onto '
+                           'it.\n'
+                           '\n'
+                           'You walk another corridor. You are not sure if it is the same one.\n'
+                           '\n'
+                           'The **murals** are extraordinary. Even uncertain, even lost, you can '
+                           'see that. A painter or painters of staggering skill worked these walls '
+                           'over what must have been generations -- each fresco connects to the '
+                           'one beside it, which connects to the one above, which connects through '
+                           'an arch to the one in the adjacent corridor, the whole system of '
+                           'images a single vast picture that you are standing inside of and can '
+                           'therefore not stand back far enough to see.\n'
+                           '\n'
+                           'You hear something. In a side passage, to your left. Something that '
+                           'sounds like it might be the faint scratch of stone on stone, which '
+                           'might mean Bartop, which might mean you are not entirely alone in this '
+                           'labyrinth.',
+                   'title': 'The Shifting Murals',
+                   'vocabulary': [{'definition': 'A painting applied directly to a wall or '
+                                                 'ceiling, often large in scale; from the Latin '
+                                                 "for 'wall.'",
+                                   'term': 'mural'}]},
+ 'a18_h_gunnin': {'choices': [{'target': 'a19_spectacles',
+                               'text': "Take the spectacles from the Maiden's feet. Gunnin made "
+                                       'them to be used.'},
+                              {'target': 'a19_clarity',
+                               'text': 'Kneel a moment in the chamber as Gunnin knelt. Then rise, '
+                                       'and take the spectacles, and go up.'}],
+                  'ending_type': None,
+                  'era': 'depths',
+                  'figures': ['Bartop'],
+                  'is_ending': False,
+                  'tags': ['center_path', 'gunnin', 'spectacles', 'maiden', 'bartop', 'horizontal'],
+                  'text': 'The side passage is short. It ends in a chamber no larger than a modest '
+                          'room, and the chamber is a story.\n'
+                          '\n'
+                          'You read it the way you read a room someone has just left: by what '
+                          'remains.\n'
+                          '\n'
+                          'On the far wall, a painting. A woman kneeling in prayer -- or perhaps '
+                          '**supplication** -- her head bowed, her hands folded, her robes a deep '
+                          'blue that the centuries have faded to the color of winter sky. The '
+                          'painter gave her a quality of stillness that is not resignation. It is '
+                          'the stillness of someone who has waited long enough to know that '
+                          'waiting is itself a form of action.\n'
+                          '\n'
+                          'On the wall to the right: a long series of frescoes, clearly older than '
+                          'the painting but occupying the same chamber by design, or by accident, '
+                          "or by the Temple's own inscrutable intentions. A knight in silver "
+                          "armor, young, with a falcon's claw at his throat and a **pentacle** of "
+                          'dark wire at his breast, entering the Temple. The same knight, somewhat '
+                          'older, walking a corridor. The same knight, older still, sitting '
+                          "against a wall surrounded by open books. The knight's hair going gray "
+                          'across panel after panel -- not in a rush but in the slow ordinary way '
+                          'of years. Lines appearing around his eyes. The set of his shoulders '
+                          'changing, gradually, from the shoulders of a man looking for something '
+                          'to the shoulders of a man who has found something he did not expect to '
+                          'find.\n'
+                          '\n'
+                          'In the final panel: the knight kneeling before the painting of the '
+                          'woman. His hand extended toward it. His eyes closed. His face -- the '
+                          'painter caught it exactly -- at peace.\n'
+                          '\n'
+                          'On the wall to the left: a single flat stretch of stone, worn and '
+                          'scratched. Scratched with the small repeated marks of something slow '
+                          "and blunt that has rested against it for a very long time. Bartop's "
+                          'watching post. Centuries of waiting made visible in the stone.\n'
+                          '\n'
+                          'At the base of the painting of the woman, placed there with '
+                          'deliberation: a pair of spectacles. Wire frame of dark, ancient metal, '
+                          'twisted into careful curves. One lens the pale green of sea glass. One '
+                          'lens the quiet glow of pale moonstone.\n'
+                          '\n'
+                          'You stand in this chamber for a long time.\n'
+                          '\n'
+                          'Gunnin came here looking for a Great Beast. He spent his life in these '
+                          'corridors. He found a painting and he fashioned his weapon into '
+                          'spectacles so that he could see it clearly. He died reaching toward '
+                          'something beautiful. And Bartop -- ancient, slow, moving in geological '
+                          'time -- carried him to his rest, and placed these spectacles at the '
+                          "Maiden's feet, and waited.\n"
+                          '\n'
+                          'You do not speak. There is nothing to say that the chamber has not '
+                          'already said.',
+                  'title': "The Knight's Whole Life",
+                  'vocabulary': [{'definition': 'A five-pointed star used as a magical or '
+                                                'protective symbol, often worn as an amulet; from '
+                                                "the Greek for 'five.'",
+                                  'term': 'pentacle'},
+                                 {'definition': 'The act of humble entreaty or prayer; asking '
+                                                'earnestly for something from a position of '
+                                                'acknowledged need.',
+                                  'term': 'supplication'}]},
+ 'a18_navigate': {'choices': [{'target': 'a19_clarity',
+                               'text': 'Put on the spectacles and continue upward toward the Porch '
+                                       'of Sacred Fire.'},
+                              {'target': 'a19_spectacles',
+                               'text': 'Study the spectacles first, and the niche that contained '
+                                       'them, before moving on.'}],
+                  'ending_type': None,
+                  'era': 'depths',
+                  'figures': [],
+                  'is_ending': False,
+                  'tags': ['light_path', 'seven_corridors', 'spectacles', 'navigation'],
+                  'text': 'The Seven Corridors are not a maze if you carry a light.\n'
+                          '\n'
+                          'This is not a simple fact. It took you the full depth of the pool, the '
+                          'full cold of that black water, the full weight of the dark pressing '
+                          'against your closed eyes, to learn it. But it is a fact now, lodged '
+                          'somewhere beneath your ribs alongside the steady warmth that came up '
+                          "through your palm from the Starstone's surface.\n"
+                          '\n'
+                          'You walk the first Corridor ascending. The frescoes tell a story about '
+                          'a man who planted seeds in what appeared to be dead ground and spent '
+                          'his whole life waiting for harvest and died before it came -- and in '
+                          'the fresco immediately to the right, the harvest. Enormous. Ridiculous. '
+                          'Overflowing. The man is not in it. But the man is in it.\n'
+                          '\n'
+                          'You walk the second Corridor descending. The same images, read in '
+                          'reverse, tell a different story: the harvest first, then the planting, '
+                          'then the planting again -- a cycle rather than a line.\n'
+                          '\n'
+                          'This is what Bartop walked twelve times in each direction. This is what '
+                          'takes a geological patience to fully read: that every story in the '
+                          'Temple of Memories is two stories, depending on whether you are '
+                          'ascending or descending, and that neither story is the complete story, '
+                          'and that completeness requires the willingness to walk the same ground '
+                          'in both directions.\n'
+                          '\n'
+                          'In the fifth Corridor, in a small **niche** set into the wall at eye '
+                          'level, you find a pair of spectacles. The frame is dark wire -- ancient '
+                          'and intricate. One lens is sea glass, pale green, catching the light. '
+                          'One lens is pale moonstone, luminous with its own faint glow.\n'
+                          '\n'
+                          'You have seen this niche before, somehow. In the way you have seen '
+                          'Bartop before. In the way the Temple contains, if you carry the light, '
+                          'everything you need to recognize.',
+                  'title': 'The Corridors Made Legible',
+                  'vocabulary': [{'definition': 'A shallow recess in a wall, especially one used '
+                                                'to display a statue or object; from the French '
+                                                "for 'nest.'",
+                                  'term': 'niche'}]},
+ 'a18_shadow': {'choices': [{'target': 'a19_pride',
+                             'text': 'Walk toward the glint. Whatever it is, it is something.'},
+                            {'target': 'ending_madness',
+                             'text': 'Ignore it. Choose a direction at random and walk until you '
+                                     'find something or cannot walk anymore.'}],
+                'ending_type': None,
+                'era': 'depths',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['shadow_path', 'lost', 'labyrinth', 'indifference'],
+                'text': 'The corridors shift.\n'
+                        '\n'
+                        'This is not a figure of speech. Or it may be a figure of speech but it is '
+                        'also literal. You have walked what you believe is a straight line for '
+                        'what you believe is twenty minutes and you have arrived somewhere you '
+                        'have been before -- the same crack in the plaster, the same water stain, '
+                        'the same fragment of fresco showing a hand reaching toward something '
+                        'outside the frame.\n'
+                        '\n'
+                        'You chose a direction. You walked in it. You are back.\n'
+                        '\n'
+                        'The Temple of Memories is not malicious. It is not trying to trap you. It '
+                        'is simply vast, and old, and **indifferent** in the way that very old '
+                        'things are indifferent -- not unkind, but without interest in whether you '
+                        'succeed or fail. It has held these corridors for longer than human '
+                        'civilization has been accumulating stories, and it will hold them '
+                        'afterward, and the question of whether one small figure navigating its '
+                        'halls finds the exit is not a question it is capable of caring about.\n'
+                        '\n'
+                        'You understand this. The understanding does not help.\n'
+                        '\n'
+                        'Your feet are aching. The darkness presses. The frescoes -- everywhere, '
+                        'inescapable, elaborate -- seem to be watching you with the calm attention '
+                        'of things that have watched many pilgrims walk these halls and none of '
+                        'them could see what the pictures were saying.\n'
+                        '\n'
+                        'A new corridor opens to your left. You do not remember it being there.\n'
+                        '\n'
+                        'At its entrance, barely visible, something glints. Metal. A wire frame. A '
+                        'pair of lenses.\n'
+                        '\n'
+                        'Or your eyes are inventing comfort in the dark, which they have done '
+                        'before.',
+                'title': 'The Temple Does Not Care',
+                'vocabulary': [{'definition': 'Having no particular interest or sympathy; in older '
+                                              'usage, impartial rather than uncaring -- the sun is '
+                                              'indifferent to whom it shines upon.',
+                                'term': 'indifferent'}]},
+ 'a19_clarity': {'choices': [{'target': 'a20_answer',
+                              'text': 'Ascend to the Porch of Sacred Fire.'}],
+                 'ending_type': None,
+                 'era': 'depths',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['light_path', 'spectacles', 'revelation', 'ascent'],
+                 'text': 'You put on the spectacles.\n'
+                         '\n'
+                         'Through the sea glass lens -- the left -- the fresco on the wall before '
+                         'you resolves into what it is. Not what it seemed. What it is. The '
+                         'painted man who seemed to be weeping is weeping -- but not with grief. '
+                         'His hands are open. The thing he is releasing is visible now, a dark '
+                         'shape departing from his palm upward, and his face is not grief but '
+                         'relief, which can look identical until you have the right lens.\n'
+                         '\n'
+                         'Through the pale moonstone lens -- the right -- the same fresco opens '
+                         'into what it could become. The space above his open hands extends into '
+                         'light. The dark shape ascending becomes something unnamed, something the '
+                         'painter left unlabeled on purpose, something you are invited to supply '
+                         'from your own understanding.\n'
+                         '\n'
+                         'Together: the full picture. The man in the fresco is you, and is not '
+                         'you, and is everyone who has ever stood at the edge of something they '
+                         'needed to release, and the painting has been here for centuries waiting '
+                         'for someone to read it whole.\n'
+                         '\n'
+                         "You walk the Corridor with Gunnin's spectacles and the Temple becomes a "
+                         'book.\n'
+                         '\n'
+                         'Not a simple book. Not a book that tells you what to do. A book that '
+                         'shows you what is, and beside it what could be, and leaves the distance '
+                         'between them as your responsibility. The corridor that confused you '
+                         'curves upward and you see now that it has always curved upward, that the '
+                         'geometry of the Temple is not a puzzle to be solved but an architecture '
+                         'to be inhabited, and that you have been inhabiting it wrong by trying to '
+                         'solve it.\n'
+                         '\n'
+                         'The seventh Corridor ascends steeply. At its top, a door. Through the '
+                         'door, faint gold light.\n'
+                         '\n'
+                         'Dawn. Or something that functions as dawn in this deep, vast, '
+                         'marble-walled place.\n'
+                         '\n'
+                         "The Porch of Sacred Fire waits above. You climb toward it with Gunnin's "
+                         "spectacles on your face and Bartop's patience in your chest and the "
+                         "Starstone's warmth in your hands, and the climb is long, and every step "
+                         'is clear.',
+                 'title': 'Oh. That Is What It Means.',
+                 'vocabulary': [{'definition': "The apparent shift in an object's position when "
+                                               'viewed from different angles; in broader use, the '
+                                               'way the same thing can look entirely different '
+                                               'depending on where you stand.',
+                                 'term': 'parallax'}]},
+ 'a19_pride': {'choices': [{'target': 'a20_refuse',
+                            'text': 'Continue descending. There must be another way up on the far '
+                                    'side.'},
+                           {'target': 'ending_guardian',
+                            'text': 'Stop. Accept that you cannot read what you cannot read. Go '
+                                    'back for the spectacles.'}],
+               'ending_type': None,
+               'era': 'depths',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['shadow_path', 'pride', 'partial_sight', 'hubris'],
+               'text': 'You find the spectacles. Wire and glass and moonstone, ancient and '
+                       'intricate. Someone made these with great care.\n'
+                       '\n'
+                       'You hold them for a moment. Then you set them down.\n'
+                       '\n'
+                       'You have eyes. You have walked the corridors with your own eyes since you '
+                       'entered and you have not found the exit yet, but that is not a failure of '
+                       'vision -- it is a failure of time, or of direction, or of luck. Your eyes '
+                       'are sufficient for the world you have always lived in. They got you to '
+                       'this mountain. They got you through the forest. They have not failed you.\n'
+                       '\n'
+                       'You continue upward without the spectacles.\n'
+                       '\n'
+                       'The corridor curves. You follow the curve. The murals are dense and '
+                       'complicated and you understand some of them -- more than a stranger would, '
+                       'you tell yourself -- and the ones you do not understand are probably not '
+                       'essential. Some things are decoration. Some things are for other people. '
+                       'You are not obligated to read every painting in a forty-nine-mile '
+                       'labyrinth.\n'
+                       '\n'
+                       'The corridor curves again. You are in a section you have not been in '
+                       'before, or a section you have been in but do not recognize, or the same '
+                       'section presenting itself differently, which you decide is a trick of the '
+                       'lighting.\n'
+                       '\n'
+                       'A junction. Five passages. You stood at this junction before, or one like '
+                       'it. You chose left then. You choose right now.\n'
+                       '\n'
+                       "The fresco at the junction's center shows a figure holding a lamp and "
+                       'walking confidently into a darkness that the fresco, with unusual clarity, '
+                       "has labeled. The label is in a language you do not read. But the figure's "
+                       'posture is unmistakable.\n'
+                       '\n'
+                       'The figure does not know the darkness is labeled.\n'
+                       '\n'
+                       'The passage you have chosen descends.',
+               'title': 'Sufficient Eyes',
+               'vocabulary': []},
+ 'a19_spectacles': {'choices': [{'target': 'a20_answer',
+                                 'text': 'Ascend toward the gold light. Rough sight is enough -- '
+                                         'you will find the way.'},
+                                {'target': 'a20_refuse',
+                                 'text': 'Turn back. You need to understand the full map before '
+                                         'you climb.'}],
+                    'ending_type': None,
+                    'era': 'depths',
+                    'figures': [],
+                    'is_ending': False,
+                    'tags': ['center_path', 'spectacles', 'partial_sight', 'ascent'],
+                    'text': 'The spectacles are extraordinary objects.\n'
+                            '\n'
+                            'You hold them up in the faint light and examine them: wire frame of '
+                            'dark, ancient metal, worked with a care that suggests the maker had '
+                            'very little wire and could afford no mistakes. One lens is sea glass '
+                            '-- pale green, subtly irregular, the glass ground not by machine but '
+                            'by hand or by patient water. One lens is pale moonstone, and it '
+                            'carries its own faint **luminescence**, a glow so gentle you might be '
+                            'imagining it.\n'
+                            '\n'
+                            'You put them on.\n'
+                            '\n'
+                            'The corridor shifts. Not in the alarming way it has been shifting -- '
+                            'the murals resolving into new meanings at every glance -- but '
+                            'productively. The fresco to your left shows a woman at a loom, and '
+                            'through the sea glass lens you can see that the cloth she is weaving '
+                            'has a pattern, and the pattern is a map, and the map -- you lean '
+                            'close -- shows corridors. These corridors. There is a route marked on '
+                            'it.\n'
+                            '\n'
+                            'Through the moonstone lens, the same fresco shows the cloth finished, '
+                            'the map complete, the weaver standing back from her work. Where she '
+                            'is standing is where you need to go.\n'
+                            '\n'
+                            'But the sea glass lens has a crack in it. A hairline fracture, old, '
+                            'that does not ruin the lens but distorts one corner of your vision '
+                            'through it. And there is a section of the map -- the upper-right '
+                            'portion, where the corridors climb steeply -- that you cannot quite '
+                            'read.\n'
+                            '\n'
+                            'You know roughly where you are going. You know roughly what the '
+                            'ascent requires. Roughly is not nothing. Roughly has taken pilgrims '
+                            'to remarkable destinations.\n'
+                            '\n'
+                            'The Corridor curves upward. The faint gold light beyond its highest '
+                            'point might be the dawn you have been climbing toward.',
+                    'title': 'One Lens Cracked',
+                    'vocabulary': [{'definition': 'The emission of light by a substance that has '
+                                                  'not been heated; a cold glow, as from '
+                                                  'moonstone, foxfire, or bioluminescent '
+                                                  'creatures.',
+                                    'term': 'luminescence'}]},
+ 'a1_barge': {'choices': [{'target': 'a2_woods',
+                           'text': 'Follow the lights deeper into the right path.'},
+                          {'target': 'a2_lost_start',
+                           'text': 'Admit the mistake, go back, and try to find your own way '
+                                   'through the forest.'}],
+              'ending_type': None,
+              'era': 'forest',
+              'figures': ['Mr. Lock', 'Mrs. Lock'],
+              'is_ending': False,
+              'tags': ['impatience', 'shadow-path', 'refused-help'],
+              'text': 'One knock. Two. Three.\n'
+                      '\n'
+                      'The door opened immediately, which was somehow worse than if it had taken a '
+                      'moment. Mr. Lock stood there in his purple boots, expression unchanged, as '
+                      'though he had been standing right behind the door the entire time and had '
+                      'simply been waiting for Theo to get impatient enough to knock.\n'
+                      '\n'
+                      '"I\'m sorry to bother you," Theo said, which was at least partially true. '
+                      '"But I\'m trying to get to -- somewhere. I don\'t exactly know where. I was '
+                      "told the forest leads there, but the path forks and I don't know which "
+                      'direction and I figured -- "\n'
+                      '\n'
+                      'Mr. Lock looked at him with an expression that Theo would later describe as '
+                      '"profound patience that had been tested before and expected to be tested '
+                      'again."\n'
+                      '\n'
+                      'Mrs. Lock materialized at his elbow, still knitting. She smiled. The smile '
+                      'was genuinely warm. It did not help.\n'
+                      '\n'
+                      '"You didn\'t wait," she said, pleasantly.\n'
+                      '\n'
+                      '"The sign said visitors wait. You did not wait," Mr. Lock confirmed, with '
+                      'the **laconic** certainty of someone who had given this exact speech many '
+                      'times and saw no reason to add to it.\n'
+                      '\n'
+                      '"But I just need to know which path -- "\n'
+                      '\n'
+                      '"We do not give directions to those who have not observed the waiting '
+                      'period," Mrs. Lock said, cheerfully. "It isn\'t cruelty. It\'s policy. You '
+                      'see, the waiting period is, itself, a kind of direction."\n'
+                      '\n'
+                      'Mr. Lock nodded once, stepped back, and the door closed.\n'
+                      '\n'
+                      'Theo stood on the step, holding nothing, knowing less than he had before he '
+                      'knocked.\n'
+                      '\n'
+                      'The right path with its drifting lights was right there. It looked, '
+                      'honestly, more interesting than the path that followed the stream. And what '
+                      'did a couple of badgers know, anyway?\n'
+                      '\n'
+                      'He turned right. The forest closed around him, and the lights moved on '
+                      'ahead, always just out of reach.',
+              'title': 'No Time for Waiting',
+              'vocabulary': [{'definition': 'Using very few words; brief to the point of curtness. '
+                                            'From the ancient Laconians (Spartans), who were '
+                                            'famous for their terse speech. To say something '
+                                            'laconically is to say it as though every extra '
+                                            'syllable costs money.',
+                              'term': 'laconic'}]},
+ 'a1_forest_enter': {'choices': [{'target': 'a1_listen',
+                                  'text': 'Sit on the bench and wait. The sign said to wait.'},
+                                 {'target': 'a1_barge',
+                                  'text': "Knock and ask for directions -- you don't have time to "
+                                          'sit around.'}],
+                     'ending_type': None,
+                     'era': 'forest',
+                     'figures': ['Mr. Lock', 'Mrs. Lock'],
+                     'is_ending': False,
+                     'tags': ['fork', 'badgers', 'waiting', 'patience'],
+                     'text': 'The forest hit him all at once.\n'
+                             '\n'
+                             'He had expected green. He had not expected this many greens. Deep '
+                             'emerald trellises arched overhead where ancient boughs had grown '
+                             'together over decades or centuries, filtering the light into '
+                             'something liquid and cool. Bright jade leaves the size of dinner '
+                             'plates hung on vines that spiraled around trunks older than his '
+                             'country. And everywhere, nestled between the dark elder branches, '
+                             'chartreuse buds -- a yellow-green so vivid it almost hummed -- '
+                             'caught what light remained and scattered it like seeds, like living '
+                             'stars.\n'
+                             '\n'
+                             'The air smelled of sage and crushed grass and something else, '
+                             'something like the moment just before a song starts.\n'
+                             '\n'
+                             "Theo's feet found a path without him deciding to follow one. Soft "
+                             "moss cushioned each step. After a while -- he couldn't have said how "
+                             'long -- the path forked.\n'
+                             '\n'
+                             'To the left, the trail ran beside what sounded like water. To the '
+                             'right, it plunged into denser shadow, where lights moved lazily '
+                             'between the far trunks like slow fireflies.\n'
+                             '\n'
+                             'Between the paths, almost at the fork itself, sat a small house. To '
+                             'call it a shack would be technically accurate and somehow ungrateful '
+                             '-- it had a certain dignity about it, the dignity of something that '
+                             'has survived longer than it was built to. A chimney. A window. A '
+                             'door slightly ajar, from which came the rhythmic click of knitting '
+                             'needles.\n'
+                             '\n'
+                             'A badger in enormous purple boots appeared in the doorway.\n'
+                             '\n'
+                             'He looked at Theo. He said nothing. He went back inside.\n'
+                             '\n'
+                             'Then a second badger appeared -- this one with a wide, warm smile '
+                             'that Theo could not quite read, knitting needles still going in both '
+                             'paws -- and gestured at the bench outside the door with a '
+                             'pleasantness that left no room for argument.\n'
+                             '\n'
+                             'A small painted sign on the door read: VISITORS WAIT. THE LOCKS WILL '
+                             'ATTEND TO YOU IN DUE COURSE.\n'
+                             '\n'
+                             'Theo checked his phone. No signal, but the clock still worked. He '
+                             'looked at the bench.\n'
+                             '\n'
+                             'The bench was not comfortable. An hour was a long time. The forest '
+                             'was waiting in both directions, full of its own plans.\n'
+                             '\n'
+                             'What did you do when the instructions said to wait, and every '
+                             'instinct said to move?',
+                     'title': 'The Chartreuse Forest',
+                     'vocabulary': [{'definition': 'A vivid yellow-green color, named after the '
+                                                   'French liqueur made by Carthusian monks. The '
+                                                   'word has come to describe anything with that '
+                                                   'particular electric, almost impossible shade '
+                                                   'that sits exactly between yellow and green.',
+                                     'term': 'chartreuse'}]},
+ 'a1_listen': {'choices': [{'target': 'a2_stream',
+                            'text': 'Follow the stream, as the Locks directed.'},
+                           {'target': 'a2_woods',
+                            'text': 'Take the right path despite the advice -- the lights look '
+                                    'intriguing.'}],
+               'ending_type': None,
+               'era': 'forest',
+               'figures': ['Mr. Lock', 'Mrs. Lock'],
+               'is_ending': False,
+               'tags': ['patience', 'gift', 'directions', 'light-path'],
+               'text': 'Theo sat.\n'
+                       '\n'
+                       'He tried counting the chartreuse buds overhead. He stopped at two hundred. '
+                       'He watched an ant -- an unusually large one, and one that appeared to be '
+                       'carrying a tiny rolled-up scroll -- cross the path in front of him with '
+                       'great purpose. He thought about his history textbook and the medieval '
+                       'pilgrims who had walked for weeks to reach a single door. They had waited '
+                       'in lines for days.\n'
+                       '\n'
+                       'He could manage an hour.\n'
+                       '\n'
+                       'The knitting needles clicked on. The forest breathed around him. Somewhere '
+                       'to the left, water moved over stones, and the sound of it was almost '
+                       'musical, almost patterned, as though the stream knew a tune it was trying '
+                       'to recall.\n'
+                       '\n'
+                       "When his phone read sixty minutes exactly, the shack's door swung open "
+                       'with a sound like a cleared throat.\n'
+                       '\n'
+                       'Mr. Lock stood in the frame. He was shorter than Theo had expected. The '
+                       'purple boots added some height. He studied Theo for a long moment with '
+                       'dark amber eyes -- the assessment of someone who had seen many visitors '
+                       'and found most of them wanting.\n'
+                       '\n'
+                       'Then he spoke, his voice a low rumble:\n'
+                       '\n'
+                       '"Take the left path."\n'
+                       '\n'
+                       'He went back inside.\n'
+                       '\n'
+                       'Mrs. Lock appeared where he had been standing. She was still smiling -- '
+                       'that particular smile, warm and serene and just slightly too knowing. She '
+                       'held out a small cloth wrapped around something warm.\n'
+                       '\n'
+                       '"Pressed wheat cake," she said. "For the road. The left path follows the '
+                       "stream. The stream knows where it's going. The King's **providence** works "
+                       'through small things."\n'
+                       '\n'
+                       'She pressed the cake into his hands. She went back inside.\n'
+                       '\n'
+                       'The door clicked shut. The knitting needles resumed.\n'
+                       '\n'
+                       'Theo held the wheat cake in both hands and felt, quite suddenly, like the '
+                       'whole strange morning had been in preparation for exactly this: a gift he '
+                       "hadn't earned, and a clear direction from someone who had made him wait to "
+                       'be sure he was ready to receive it.\n'
+                       '\n'
+                       'He turned left. He followed the sound of the stream.',
+               'title': 'One Hour',
+               'vocabulary': [{'definition': 'The idea that a higher power guides events toward a '
+                                             'good end, often through seemingly small or ordinary '
+                                             'means. From the Latin providentia: foresight. To '
+                                             'trust in providence is to believe that the stream '
+                                             "knows where it's going, even when you don't.",
+                               'term': 'providence'}]},
+ 'a20_answer': {'choices': [{'target': 'a21_whole',
+                             'text': 'Step toward the summit -- the call is real and so are you.'},
+                            {'target': 'a20_h_fire_vision',
+                             'text': 'Ask the bat to show you the visions in the Sacred Fire '
+                                     'first.'},
+                            {'target': 'a20_h_bartop_summit',
+                             'text': 'Take the narrower path along the ridge -- someone is waiting '
+                                     'there.'}],
+                'ending_type': None,
+                'era': 'heights',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['a20', 'light', 'porch', 'sacred_fire', 'bat', 'call'],
+                'text': 'The bronze plateau caught the last light of the descending sun and held '
+                        'it.\n'
+                        '\n'
+                        'Theo stepped out of the highest corridor onto a wide expanse of hammered '
+                        'metal, warm beneath his boots, humming with a frequency he felt in his '
+                        'sternum rather than heard with his ears. Behind him, the corridors of Mt. '
+                        "Nebo's Temple of Memories fell away into the mountain's interior. Before "
+                        'him -- nothing. The edge of the Porch dropped into open sky, and below '
+                        'that sky, impossibly far below, the Chartreuse Forest stretched to every '
+                        'horizon, its canopy blazing in shades of amber and copper and living '
+                        'gold.\n'
+                        '\n'
+                        'The Holy Nuns had named it correctly. This was not merely light. This was '
+                        'Sacred Fire.\n'
+                        '\n'
+                        'Theo stood at the edge and looked down at the whole of the journey he had '
+                        'walked. He could see the Forest Gate, a tiny dark seam in the emerald '
+                        "distance. He could see the three hills where the Maiden's cottage sat, "
+                        'smoke still rising. He could see the ravines where Mack had laughed and '
+                        'tricked and, in the end, told a small and necessary truth. He could see '
+                        'the shimmer of the mirror pool. He could see all of it, the whole kingdom '
+                        'laid out like a text he had been learning to read.\n'
+                        '\n'
+                        'The **parallax** was already beginning. He understood, standing here, '
+                        'that the same landscape would look entirely different from the summit '
+                        'above him, and different again from the forest floor below. The journey '
+                        'had not been a straight line. It had been a slow change of altitude. He '
+                        'had been learning, all this time, how to stand in a new place.\n'
+                        '\n'
+                        'The bat arrived without announcement.\n'
+                        '\n'
+                        "It dropped from somewhere above the Porch's bronze rim and landed on "
+                        "Theo's left shoulder with the careful weight of a walnut. It folded its "
+                        'wings with precise economy, turned its ancient, patient face toward his '
+                        'ear, and began to squeak.\n'
+                        '\n'
+                        'He understood every word.\n'
+                        '\n'
+                        '"Signs," the bat said. "**Portents**. The mountain breathes tonight. The '
+                        'Beings of Light have left their fires burning in the upper spires -- '
+                        "first time in four hundred years they've done that before a pilgrim "
+                        'arrives rather than after. The faeries are restless. The King..."\n'
+                        '\n'
+                        'The bat paused. Squeaked something that was not quite a word.\n'
+                        '\n'
+                        '"The King is expecting you," it said at last. "He has been expecting you '
+                        'since the Forest Gate."\n'
+                        '\n'
+                        '{{#has_pouch}}Theo touched the pouch of Hafthor at his belt. '
+                        "{{/has_pouch}}He touched Gunnin's spectacles, folded in his breast "
+                        'pocket. {{#staff}}He touched the {{staff}} staff in his hand, smooth with '
+                        'use. {{/staff}}He thought of Phil the pillbug asking, very seriously, to '
+                        "be helped through a keyhole. He thought of Mr. Lock's slow, approving "
+                        'nod. He thought of Brok opening his chest cavity in the crypt and saying, '
+                        'with absolute simplicity, *this is for you*.\n'
+                        '\n'
+                        "The drop below the Porch's edge was real. The height was real. The call "
+                        'was real.\n'
+                        '\n'
+                        'He had been preparing for this moment since he fell asleep over his '
+                        'textbook. Perhaps longer.\n'
+                        '\n'
+                        '"What\'s up there?" Theo asked the bat.\n'
+                        '\n'
+                        'The bat squeaked once -- a sound that contained, somehow, amusement and '
+                        'affection and immense antiquity.\n'
+                        '\n'
+                        '"Everything you already know," it said. "And one thing you don\'t. Yet."\n'
+                        '\n'
+                        'The Sacred Fire deepened around him. The bronze sang under his feet. Theo '
+                        'looked up at the summit of Mt. Nebo -- the Parallax of Life, its spires '
+                        'lit with distant, patient fire -- and made his choice.',
+                'title': 'The Porch of Sacred Fire',
+                'vocabulary': [{'definition': 'The apparent shift in position of an object when '
+                                              'viewed from different vantage points -- used here '
+                                              'to suggest that truth looks different depending on '
+                                              'where you stand.',
+                                'term': 'parallax'},
+                               {'definition': 'A sign or omen of something momentous about to '
+                                              'occur.',
+                                'term': 'portent'}]},
+ 'a20_h_bartop_summit': {'choices': [{'target': 'a21_whole',
+                                      'text': 'Rise and walk the last slope to the summit.'}],
+                         'ending_type': None,
+                         'era': 'heights',
+                         'figures': ['Bartop'],
+                         'is_ending': False,
+                         'tags': ['bartop', 'farewell', 'memory', 'summit', 'witness', 'stone'],
+                         'text': "The path narrows here, where the mountain's shoulder meets the "
+                                 'sky. Wind moves through everything -- your hair, your cloak, the '
+                                 'thin grasses clinging between the stones. And then you see him.\n'
+                                 '\n'
+                                 '{{#has_met_Bartop}}He is unmistakable. Bartop. The Rock Sentinel '
+                                 'who stood in the Temple of Memories like a column of the earth '
+                                 'itself, patient as geology. He is here now, somehow, at the last '
+                                 "turning before the summit -- seated at the path's edge, watching "
+                                 'the horizon with eyes like polished obsidian.\n'
+                                 '\n'
+                                 '"I know these stones," you say, because it is true.\n'
+                                 '\n'
+                                 'He turns toward you, and the motion takes a long time, unhurried '
+                                 'as a season. "And they know '
+                                 'you."{{/has_met_Bartop}}{{^has_met_Bartop}}He is made of stone, '
+                                 'but he breathes. You can feel it -- the slow exhalation of '
+                                 'something ancient, something that was here before the path '
+                                 'existed. He sits at the edge of the trail as though he grew '
+                                 'there, his face carved by time into an expression of absolute, '
+                                 'unhurried attention.\n'
+                                 '\n'
+                                 '"I am Bartop," he says, and the sound is a millstone finding its '
+                                 'groove. "I witness."{{/has_met_Bartop}}\n'
+                                 '\n'
+                                 'You sit beside him. There seems no reason not to.\n'
+                                 '\n'
+                                 '"Others came this way," Bartop says, after a silence that might '
+                                 'have been a minute or an hour. "I do not count years. But -- '
+                                 'others." He pauses. "Some turned back at the Porch. The fire was '
+                                 'too honest for them." Another pause. "Some were consumed. They '
+                                 'mistook the fire for the destination." The **obsidian** eyes do '
+                                 'not move from the horizon. "A very few arrived."\n'
+                                 '\n'
+                                 '"How few?"\n'
+                                 '\n'
+                                 '"Enough," he says, "to mean it is possible."\n'
+                                 '\n'
+                                 '{{#staff}}You shift your {{staff}} staff from one hand to the '
+                                 'other. It feels lighter here, near the top. Or perhaps you are '
+                                 'stronger.{{/staff}}\n'
+                                 '\n'
+                                 'Bartop does not say farewell. Stone does not say farewell. But '
+                                 'as you rise to go, one massive hand lifts -- just slightly -- in '
+                                 'something that is not a wave, exactly, but is not nothing.\n'
+                                 '\n'
+                                 'You carry it with you up the last slope.',
+                         'title': 'The Witness at the Last Turn',
+                         'vocabulary': [{'definition': 'A guard or watcher stationed to keep watch '
+                                                       'and warn of danger or mark a boundary; one '
+                                                       'who stands vigil over a place or passage.',
+                                         'term': 'sentinel'},
+                                        {'definition': 'A naturally occurring volcanic glass, '
+                                                       'typically jet-black, formed from rapidly '
+                                                       'cooling lava; prized since antiquity for '
+                                                       'its sharp edges and dark, reflective '
+                                                       'surface.',
+                                         'term': 'obsidian'}]},
+ 'a20_h_descent_voice': {'choices': [{'target': 'a21_fragment',
+                                      'text': 'The pillbug had no railing and no reason. Step '
+                                              'forward into the fire.'},
+                                     {'target': 'ending_retreat',
+                                      'text': "The pillbug's faith is his own. You cannot borrow "
+                                              'it. Turn back down.'}],
+                         'ending_type': None,
+                         'era': 'heights',
+                         'figures': [],
+                         'is_ending': False,
+                         'tags': ['shadow_path',
+                                  'memory',
+                                  'faith',
+                                  'horizontal_exploration',
+                                  'phil'],
+                         'text': 'The wind rises from the valley in a long, slow exhale, and Theo '
+                                 'grips the stone railing and does not move.\n'
+                                 '\n'
+                                 'He has been standing here too long. The Sacred Fire blazes at '
+                                 'his back, indifferent to whether he steps forward or turns and '
+                                 'walks away. The drop below is real. The fear is real. And '
+                                 'somewhere in the fear, woven through it like a thread of a '
+                                 'different color, is pride -- the old companion. The voice that '
+                                 'says: *not yet, not like this, not until you are ready.*\n'
+                                 '\n'
+                                 'Then, from far below, something reaches him on the wind.\n'
+                                 '\n'
+                                 "{{#has_met_Phil}}It is not Phil's voice -- Phil is nowhere near "
+                                 'this height, could not be. And yet it carries his particular '
+                                 'quality: small, unhurried, absolutely certain. Theo remembers '
+                                 'the pillbug in the dark of the Forest Gate, how he had spoken '
+                                 'those three words -- *Praise the King* -- the way a man states a '
+                                 'fact about the weather. No argument. No evidence offered. Just '
+                                 'the thing itself, set down like a stone.\n'
+                                 '\n'
+                                 'Phil had never seen the King. Phil had never been promised '
+                                 'anything. Phil had simply decided, somewhere in his small '
+                                 'rolling life, that trust was worth the cost of carrying it.\n'
+                                 '\n'
+                                 '{{/has_met_Phil}}{{^has_met_Phil}}It is not a voice at all, not '
+                                 'exactly. It is a quality carried on the wind -- something small '
+                                 'and unhurried and absolutely certain, the way a stone is certain '
+                                 'of the ground beneath it. Someone, somewhere in this Kingdom, '
+                                 'had learned to trust without being given a reason. The echo of '
+                                 'that trust rises now to meet him at the height of his fear.\n'
+                                 '\n'
+                                 '{{/has_met_Phil}}Theo thinks: a pillbug trusts. A pillbug does '
+                                 'not wait until he is ready.\n'
+                                 '\n'
+                                 'He thinks: neither did he have a railing to grip, nor a fire at '
+                                 'his back, nor any Porch at all. He simply praised.\n'
+                                 '\n'
+                                 'The wind settles. The fire waits. The drop is still real.\n'
+                                 '\n'
+                                 'But so is the thread.',
+                         'title': 'The Voice from Below',
+                         'vocabulary': [{'definition': 'Complete confidence or assurance; the '
+                                                       'quality of being absolutely certain, '
+                                                       'especially as an act of will rather than '
+                                                       'proof.',
+                                         'term': 'certitude'}]},
+ 'a20_h_fire_vision': {'choices': [{'target': 'a21_whole',
+                                    'text': 'Ascend to the summit -- you have seen the thread.'}],
+                       'ending_type': None,
+                       'era': 'heights',
+                       'figures': [],
+                       'is_ending': False,
+                       'tags': ['a20',
+                                'light',
+                                'horizontal',
+                                'vision',
+                                'sacred_fire',
+                                'thread',
+                                'revelation'],
+                       'text': 'The bat spread its wings once -- not to fly, but as a gesture -- '
+                               'and the Sacred Fire responded.\n'
+                               '\n'
+                               'The bronze of the Porch began to move.\n'
+                               '\n'
+                               'Not physically. Not like water or like flame, though it resembled '
+                               'both. The hammered surface became reflective in a way that metal '
+                               'cannot normally be, and in its depths Theo saw -- not images '
+                               'exactly, but presences. The quality of moments. The weight of what '
+                               'had actually happened.\n'
+                               '\n'
+                               'He saw Phil the pillbug curled at the Forest Gate, patient and '
+                               'trusting, waiting for someone to think of a small solution to a '
+                               'small problem. And he understood, watching the bronze, that Phil '
+                               'had not needed help. Phil had offered Theo the first lesson -- '
+                               'that **grace** moves through small acts, and that the one who '
+                               'helps is changed more than the one who is helped.\n'
+                               '\n'
+                               "He saw Mrs. Lock's kitchen, the smell of bread, the specific "
+                               'patience of someone who has welcomed ten thousand pilgrims and '
+                               "welcomes this one as though he is the first. He saw Mr. Lock's "
+                               'key, and understood that every locked door in the Kingdom had been '
+                               'locked on purpose -- not to keep him out, but to ask whether he '
+                               'was willing to wait, to try, to earn the opening.\n'
+                               '\n'
+                               "He saw Brok's chest cavity opening in the crypt, the pouch of "
+                               "Hafthor resting in the drone's metal palm, and he felt something "
+                               'shift behind his eyes. Brok had served the Temple for centuries. '
+                               'Brok had given away the only personal thing he owned to a boy who '
+                               'had done nothing yet to deserve it. That was not a transaction. '
+                               'That was a gift from someone who understood that gifts are how the '
+                               'Kingdom sustains itself.\n'
+                               '\n'
+                               "He saw Mack's thousand faces. He saw the Maiden's cottage light "
+                               'burning in the gap between three hills. He saw the mirror pool, '
+                               'his own reflection staring back, neither flattering nor condemning '
+                               '-- simply true. He saw Bartop in the dark, geological and patient, '
+                               'and the Starstone burning at the bottom of the pool like a sun '
+                               'that had learned to live underwater.\n'
+                               '\n'
+                               "He saw Gunnin's niche. The knight who had spent his life searching "
+                               'and had made, from the very weapon of his searching, something '
+                               "that let others see clearly. The spectacles in Theo's pocket felt "
+                               'warm.\n'
+                               '\n'
+                               'The bronze showed him everything.\n'
+                               '\n'
+                               'And then it showed him one more thing -- a thread. Thin as spider '
+                               'silk, bright as the Starstone, running through every single scene. '
+                               "Through Phil's patience and the Locks' bread and Brok's gift and "
+                               "Mack's tricks and the Maiden's rest and Bartop's waiting and "
+                               "Gunnin's spectacles. The same thread. The same light. The same "
+                               'presence, unnamed, threading through everything like a hand that '
+                               'had been guiding without being seen.\n'
+                               '\n'
+                               '"Oh," Theo said.\n'
+                               '\n'
+                               'The bat squeaked once, quietly, with great satisfaction.\n'
+                               '\n'
+                               'The bronze stilled. The Sacred Fire continued to burn across the '
+                               'Chartreuse Forest below. Theo looked up at the summit. His vision, '
+                               "even without Gunnin's spectacles, was different now. He could see "
+                               'two things at once: what was, and what had always been.\n'
+                               '\n'
+                               'He walked toward the summit, and the fire walked with him.',
+                       'title': 'The Whole Journey in Bronze Light',
+                       'vocabulary': [{'definition': 'Freely given goodness or favor -- a gift '
+                                                     'extended without condition or calculation.',
+                                       'term': 'grace'}]},
+ 'a20_refuse': {'choices': [{'target': 'a21_fragment',
+                             'text': 'Summon whatever remains and step toward the summit anyway.'},
+                            {'target': 'ending_retreat',
+                             'text': 'Descend. The mountain is not finished with you, but you are '
+                                     'finished with the mountain -- for now.'},
+                            {'target': 'a20_h_descent_voice',
+                             'text': 'Wait. Listen. Something is rising on the wind.'}],
+                'ending_type': None,
+                'era': 'heights',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['a20', 'shadow', 'porch', 'sacred_fire', 'bat', 'fear', 'refusal'],
+                'text': 'The bronze plateau caught the last light of the descending sun and held '
+                        'it, and the light was too much.\n'
+                        '\n'
+                        'Theo stepped out of the highest corridor and stopped. The Porch stretched '
+                        "before him, wide and bright and utterly exposed, and beyond the Porch's "
+                        'edge -- nothing. Open sky. The drop was not gradual. It was absolute. The '
+                        'Chartreuse Forest glowed impossibly far below like a burning map, and the '
+                        'summit of Mt. Nebo rose impossibly far above like an accusation.\n'
+                        '\n'
+                        'The bat arrived.\n'
+                        '\n'
+                        'It landed on his left shoulder and squeaked of signs and portents, of '
+                        'Beings of Light in the upper spires, of the King expecting him since the '
+                        'Forest Gate. It spoke with the casual confidence of something ancient '
+                        'delivering news to someone who has already decided not to receive it.\n'
+                        '\n'
+                        'Theo listened. He heard.\n'
+                        '\n'
+                        'He did not move.\n'
+                        '\n'
+                        'The height was real. The call was real. But so was the voice that said: '
+                        '*you are not ready. You never were. Every lesson you half-learned, every '
+                        'gift you half-received, every chain you let yourself wear a little longer '
+                        'than you should have -- it is all still with you. The summit will see it. '
+                        'The summit will show it to you in light you cannot look away from.*\n'
+                        '\n'
+                        'The fear was not cowardice, exactly. It was something more specific -- '
+                        'the **trepidation** of someone who knows enough to know how much they do '
+                        'not know, but has not yet learned that this knowledge is the beginning of '
+                        'readiness, not the proof of its absence.\n'
+                        '\n'
+                        'The Sacred Fire burned across the forest below. It was beautiful. It was '
+                        'too beautiful. There are beauties that invite and beauties that expose, '
+                        "and Theo could not tell, standing at the Porch's edge with his heart "
+                        'hammering, which kind this was.\n'
+                        '\n'
+                        'The bat waited.\n'
+                        '\n'
+                        'The bat squeaked one more time -- a sound like a small, patient '
+                        'question.\n'
+                        '\n'
+                        'Theo took a step backward.\n'
+                        '\n'
+                        'Then another.',
+                'title': 'The Porch of Sacred Fire (Shadow)',
+                'vocabulary': [{'definition': 'A feeling of fear or anxiety about something that '
+                                              'is about to happen -- a trembling at the threshold.',
+                                'term': 'trepidation'}]},
+ 'a21_fragment': {'choices': [{'target': 'ending_crossroads',
+                               'text': 'Begin the descent with what you have.'},
+                              {'target': 'ending_abyss',
+                               'text': 'Stay in the light until there is nowhere left to hide.'}],
+                  'ending_type': None,
+                  'era': 'heights',
+                  'figures': [],
+                  'is_ending': False,
+                  'tags': ['a21', 'shadow', 'summit', 'parallax', 'fragment', 'gap', 'incomplete'],
+                  'text': 'The summit was real. Theo reached it.\n'
+                          '\n'
+                          'This was not nothing. He had climbed further than most. He had seen the '
+                          'Porch of Sacred Fire and chosen to keep climbing even when his legs '
+                          'wanted to stop, even when the voice in him said *turn back, you are not '
+                          'ready.* He had climbed through the fear and arrived at the Parallax of '
+                          'Life, and the Elysian Kingdom lay spread below him in every direction, '
+                          'and he could see almost all of it.\n'
+                          '\n'
+                          'Almost.\n'
+                          '\n'
+                          'The light here was different from the light below. It did not merely '
+                          'illuminate -- it revealed. And what it revealed, in Theo, were the '
+                          'gaps. The lessons half-learned. The gifts received with one hand and '
+                          'held loosely. The moments in the mirror pool where he had looked and '
+                          'looked away before the looking was finished. The chains he had worn in '
+                          'the ravines, comfortable enough that he had called them choices. The '
+                          "ways he had used Gunnin's spectacles as a substitute for seeing rather "
+                          'than as a beginning of it.\n'
+                          '\n'
+                          'The Beings of Light were in the spires. They attended, as they attended '
+                          'every pilgrim. But their fires, which might have felt like welcome, '
+                          'felt instead like examination.\n'
+                          '\n'
+                          'The King was present -- Theo could feel it, a warmth at the edge of '
+                          'perception, a light that was almost a voice. But there was something '
+                          'between him and that presence, a residue of every refusal, every '
+                          'half-measure, every moment he had chosen comfort over clarity. The King '
+                          'was not far. The King had never been far. But Theo was not quite '
+                          'transparent enough for the light to pass all the way through.\n'
+                          '\n'
+                          'He stood at the Parallax and could see two things at once: everything '
+                          'he had done, and everything he had not done. The gap between them was '
+                          'not unbridgeable. It was not even very wide. But it was present, and '
+                          'here at the summit, in this light, it was visible in a way it had not '
+                          'been below.\n'
+                          '\n'
+                          'The **theosis** he might have reached -- the slow transformation of a '
+                          "person into something more fully themselves, purified by the journey's "
+                          'furnace -- had not quite completed. The furnace had been real. The '
+                          'transformation had been real. But some **dross** remained.\n'
+                          '\n'
+                          'He was changed. He was not whole.\n'
+                          '\n'
+                          'He stayed at the Parallax until the light began to soften into evening, '
+                          'and then he began the long descent.',
+                  'title': 'Heights Without Wholeness',
+                  'vocabulary': [{'definition': 'A process of transformation and purification by '
+                                                'which a person grows toward their fullest, most '
+                                                'essential self -- a becoming rather than an '
+                                                'arriving.',
+                                  'term': 'theosis'},
+                                 {'definition': 'The impurities that rise to the surface when '
+                                                'metal is heated -- used here for the parts of the '
+                                                'self that have not yet been refined.',
+                                  'term': 'dross'}]},
+ 'a21_h_gate': {'choices': [{'target': 'ending_theosis', 'text': 'Step through the light.'}],
+                'ending_type': None,
+                'era': 'heights',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['threshold', 'kenosis', 'self-emptying', 'summit', 'light', 'letting-go'],
+                'text': 'There is no gate. No arch of stone, no warden, no lock. And yet Theo '
+                        'stops.\n'
+                        '\n'
+                        'The air ahead is different -- not darker, not brighter, but other. A seam '
+                        'runs through the light itself, the way a river marks the edge between two '
+                        'countries. On this side: the world he has crossed. On the other: '
+                        'something that has no name yet, only a warmth that asks a question '
+                        'without speaking it.\n'
+                        '\n'
+                        'He understands the question. He has understood it for some time, perhaps '
+                        'since the Forest Temple, perhaps before that. To cross, he must arrive '
+                        'with nothing. Not because what he carries is wrong -- because where he is '
+                        'going, nothing can be carried in.\n'
+                        '\n'
+                        '{{#staff}}He looks at his {{staff}} staff. He remembers the weight of it, '
+                        'the way it found his palm that morning at the Forest Temple as though it '
+                        'had always been waiting. He leans it against the air, and it stays '
+                        'upright, as if the mountain itself will keep it.\n'
+                        '{{/staff}}{{#has_pouch}}He unslings the Pouch of Hafthor from his '
+                        "shoulder -- Brok's gift, given with that enormous, quiet generosity. He "
+                        'sets it on the ground. It lands soft, like a sigh.\n'
+                        "{{/has_pouch}}{{#has_spectacles}}Last, he lifts Gunnin's spectacles from "
+                        'his face. The world goes slightly softer. He folds them closed and places '
+                        'them beside the rest, as gently as a man setting down something he has '
+                        'borrowed and now returns.\n'
+                        '{{/has_spectacles}}{{^staff}}{{^has_pouch}}{{^has_spectacles}}His hands '
+                        'are already empty. Everything he once carried -- traded, lost, given '
+                        'away, used up on the long road -- is gone. He arrived at the threshold '
+                        'the way pilgrims sometimes arrive at the sea: with nothing left to '
+                        'surrender. He discovers that this, too, is a kind of readiness.\n'
+                        '{{/has_spectacles}}{{/has_pouch}}{{/staff}}\n'
+                        'This is **kenosis**: the deliberate emptying of oneself, not as defeat '
+                        'but as opening. The mystics knew it. You cannot be filled while you are '
+                        'full. You cannot arrive while you are still carrying the road.\n'
+                        '\n'
+                        'Theo stands at the seam. On the other side, the light gathers -- not '
+                        'blindingly, but with the quality of someone who has been waiting a long '
+                        'time and does not mind waiting a little longer. He breathes. He steps.',
+                'title': 'The Door That Is Not a Door',
+                'vocabulary': [{'definition': 'A Greek word meaning "emptying." In mystical and '
+                                              'theological traditions, kenosis is the act of '
+                                              'emptying oneself of self-will, ego, or possessions '
+                                              'so that something greater may enter. It is not loss '
+                                              '-- it is preparation.',
+                                'term': 'kenosis'},
+                               {'definition': 'A boundary between one state and another -- '
+                                              'originally the strip of wood at a doorway, but used '
+                                              'metaphorically for any crossing-point where what '
+                                              'lies ahead is fundamentally different from what '
+                                              'lies behind.',
+                                'term': 'threshold'}]},
+ 'a21_whole': {'choices': [{'target': 'ending_theosis', 'text': 'Receive what the King offers.'},
+                           {'target': 'a21_h_gate',
+                            'text': 'Set down what you carry. Arrive empty.'}],
+               'ending_type': None,
+               'era': 'heights',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['a21',
+                        'light',
+                        'summit',
+                        'parallax',
+                        'king',
+                        'beings_of_light',
+                        'spectacles',
+                        'wholeness'],
+               'text': 'The path from the Porch to the summit was not long.\n'
+                       '\n'
+                       'Theo could not afterward have said how long it took. He remembered the '
+                       'quality of the stone underfoot -- not bronze now but something older, the '
+                       "mountain's own material, dark and finely grained and warm in a way that "
+                       'stone should not be warm. He remembered the light changing as he climbed, '
+                       'the Sacred Fire below giving way to something quieter and more pervasive, '
+                       'a light that did not come from any direction but seemed to inhabit the air '
+                       'itself.\n'
+                       '\n'
+                       'He remembered the Beings of Light.\n'
+                       '\n'
+                       'They were in the spires, as the bat had said -- tall and still, their '
+                       'fires burning without wood or wind. They did not speak. They did not need '
+                       'to. Their presence was a kind of speech, the way a held door is a kind of '
+                       'speech, the way bread set out for a stranger is a kind of speech. They '
+                       'attended.\n'
+                       '\n'
+                       'The faeries of Sanctified Fires moved between the spires like words '
+                       'between sentences -- small, purposeful, complete.\n'
+                       '\n'
+                       'And then Theo stepped onto the Parallax.\n'
+                       '\n'
+                       'The summit was a flat place of dark stone, windswept and open to every '
+                       'direction. Standing at its center, Theo could see the entire Elysian '
+                       'Kingdom spread below him -- not as a map but as a living thing, all its '
+                       'regions breathing in the late light. The Forest Gate, a seam of shadow and '
+                       'invitation. The Chartreuse Forest, its colors beyond naming. The ravines. '
+                       'The mirror pool, glinting. The three hills. The Temple of Memories, the '
+                       'bulk of Mt. Nebo itself falling away from him in every direction.\n'
+                       '\n'
+                       'He understood the **parallax** now. From down there, the summit had been a '
+                       'destination. From up here, every place he had walked was part of the '
+                       'summit. The whole Kingdom was the summit, seen from a different angle.\n'
+                       '\n'
+                       'The King was there.\n'
+                       '\n'
+                       'Theo had expected a throne. He had expected a crown, a voice, a figure of '
+                       'authority. He had expected an ending that looked like a beginning -- '
+                       'someone waiting for him with an answer that explained everything.\n'
+                       '\n'
+                       'There was no throne.\n'
+                       '\n'
+                       'There was -- presence. The same presence he had seen threading through the '
+                       "bronze visions on the Porch. The same light that had been in Brok's open "
+                       'chest when he gave away the pouch. The same patience that had been in '
+                       "Bartop's limestone silence. The same warmth that had been in Mrs. Lock's "
+                       "bread, in the Maiden's fire, in Gunnin's spectacles made from a broken "
+                       "weapon. The same gentleness that had been in Phil the pillbug's trust at "
+                       'the Forest Gate -- that small, trusting curl, waiting for someone to think '
+                       'of a small and loving solution.\n'
+                       '\n'
+                       '*Praise the King.* Phil had said it as naturally as breathing. The Locks '
+                       'had said it. Brok had said it in the crypt. Even Mack -- even Mack, in his '
+                       'last trick-that-was-a-truth -- had said it. They had all been saying it as '
+                       'a way of pointing, and Theo had been looking for a figure instead of '
+                       'looking for a presence.\n'
+                       '\n'
+                       'The King was not a figure on a throne.\n'
+                       '\n'
+                       'The King was what remained when everything selfish was subtracted from a '
+                       'moment. The King was the act of giving without calculating the return. The '
+                       'King was patience so old it had become the substance of the world. The '
+                       "King was the hand behind every gift Theo had received -- Brok's pouch, "
+                       "Gunnin's spectacles, the Starstone's light, the Maiden's rest, Mr. Lock's "
+                       "key, Mrs. Lock's bread, Phil's trust -- the same hand, the same face, the "
+                       'same love wearing a thousand costumes.\n'
+                       '\n'
+                       '"I didn\'t know," Theo said.\n'
+                       '\n'
+                       'The presence did not answer in words. It answered the way light answers '
+                       'when you open a window -- by being already there, by having always been '
+                       'there, by making visible everything the dark had hidden.\n'
+                       '\n'
+                       "Theo took Gunnin's spectacles from his pocket.\n"
+                       '\n'
+                       'He held them for a moment -- the sea-glass lens that showed what is, the '
+                       'moonstone lens that showed what could be. Gunnin had spent a life '
+                       'searching and had made, from the wreckage of his search, something that '
+                       'helped others see. Theo was grateful. He would always be grateful.\n'
+                       '\n'
+                       'He put the spectacles in his breast pocket and did not put them on.\n'
+                       '\n'
+                       'He did not need them anymore.\n'
+                       '\n'
+                       'He could see.',
+               'title': 'The Parallax of Life',
+               'vocabulary': [{'definition': 'The apparent shift in position of an object when '
+                                             'viewed from different vantage points -- used here to '
+                                             'suggest that the whole journey was always also the '
+                                             'destination.',
+                               'term': 'parallax'},
+                              {'definition': 'The highest point of development or achievement; the '
+                                             'moment when something or someone is revealed in its '
+                                             'fullest, most essential form.',
+                               'term': 'apotheosis'}]},
+ 'a2_lost_deeper': {'choices': [{'target': 'a3_thorns',
+                                 'text': 'Push toward the thorns. Phil is right. Movement over '
+                                         'stillness.'},
+                                {'target': 'ending_lost_forest',
+                                 'text': 'Give up. The forest is too vast. Sit and wait for -- '
+                                         'whatever comes.'}],
+                    'ending_type': None,
+                    'era': 'forest',
+                    'figures': ['Phil'],
+                    'is_ending': False,
+                    'tags': ['truly-lost', 'phil-returns', 'turning-point'],
+                    'text': 'He waited. Nothing came.\n'
+                            '\n'
+                            'So he walked. Slowly at first, trying to hold a straight line by '
+                            'fixing his eye on a distant trunk, walking to it, picking another. '
+                            'The forest defeated this method with no apparent effort. After an '
+                            'hour -- maybe two; the light through the canopy was unchanging -- he '
+                            'sat down on a root and admitted, very quietly, that he was lost in a '
+                            'way that was not merely inconvenient.\n'
+                            '\n'
+                            'The green closed in. Not threateningly -- that would have been '
+                            'easier. It simply continued to be green in every direction, vast and '
+                            '**immutable**, the forest doing exactly what forests do and not doing '
+                            'it at Theo in particular.\n'
+                            '\n'
+                            'He ate two crackers from his backpack. He drank some water. He '
+                            'thought about his mother, who would be looking for him, except that '
+                            "he wasn't sure time worked here the same way, and this thought was "
+                            'too large to finish.\n'
+                            '\n'
+                            '"Praise the King," said a familiar voice.\n'
+                            '\n'
+                            'Phil was sitting on the root beside him. How the pillbug had gotten '
+                            'here -- through the gate, across the forest, to this exact root -- '
+                            'was not a question Phil seemed interested in entertaining.\n'
+                            '\n'
+                            '"You\'re lost," Phil observed.\n'
+                            '\n'
+                            '"Yes."\n'
+                            '\n'
+                            '"Mm. Yes." Phil gestured with several legs in what Theo was coming to '
+                            'understand as his philosophical mode. "The forest has a way of '
+                            'growing around those who have no particular destination. You must '
+                            'move, young man. Toward the thorns, if you have to. Movement with a '
+                            'direction, however painful, is better than stillness with none."\n'
+                            '\n'
+                            "He vanished between the roots as suddenly as he'd appeared.\n"
+                            '\n'
+                            'The thorns waited.',
+                    'title': 'Hours in the Green',
+                    'vocabulary': [{'definition': 'Unchanging; not able to be altered or moved. '
+                                                  'From the Latin immutabilis: in- (not) + mutare '
+                                                  '(to change). An immutable thing does not bend '
+                                                  'to your circumstances. The ancient forest is '
+                                                  'immutable; only the traveler can change.',
+                                    'term': 'immutable'}]},
+ 'a2_lost_start': {'choices': [{'target': 'a3_thorns',
+                                'text': 'Move toward the rhythmic sound in the distance.'},
+                               {'target': 'a2_lost_deeper',
+                                'text': 'Stay still and wait, hoping someone finds you.'}],
+                   'ending_type': None,
+                   'era': 'forest',
+                   'figures': [],
+                   'is_ending': False,
+                   'tags': ['lost', 'fear', 'shadow-path'],
+                   'text': 'There had been a path. He was nearly certain of that. A path, and then '
+                           'a widening, and then -- nothing. Just trees in every direction, each '
+                           'one identical to the one before it in some deep botanical way that '
+                           'made compass-points meaningless.\n'
+                           '\n'
+                           'Theo turned around. The shack should be back this way -- should be. He '
+                           "had been walking for maybe fifteen minutes. That wasn't so far. But "
+                           'the forest had a quality he was only now registering: it did not '
+                           'particularly care about his sense of distance. The trees were politely '
+                           'indifferent. The undergrowth was not hostile, just present, just '
+                           'there, just filling every space a path might have occupied.\n'
+                           '\n'
+                           "He thought about calling out. He didn't know whose name to call. Phil "
+                           'had gone through the gate. The Locks were -- somewhere. He was alone '
+                           'in a very large, very old, very **indifferent** forest, and the '
+                           'difference between indifferent and cruel was not as comforting as it '
+                           'might have been.\n'
+                           '\n'
+                           'The chartreuse buds still twinkled overhead. At least the light was '
+                           'beautiful.\n'
+                           '\n'
+                           'Then -- a sound. Far off to the left. Something rhythmic. It might '
+                           'have been a drum, or a branch knocking, or footsteps.\n'
+                           '\n'
+                           'Or knitting needles.\n'
+                           '\n'
+                           'The forest was immense and he was small, and somewhere out there was a '
+                           'sound.',
+                   'title': 'No Path at All',
+                   'vocabulary': [{'definition': 'Having no particular interest, feeling, or '
+                                                 'preference toward something; neither for it nor '
+                                                 "against it. The forest's indifference is not "
+                                                 'cruelty -- it simply does not notice you, which '
+                                                 'is its own kind of challenge.',
+                                   'term': 'indifferent'}]},
+ 'a2_stream': {'choices': [{'target': 'a3_grove',
+                            'text': 'Move toward the golden light in the grove.'},
+                           {'target': 'a3_clearing',
+                            'text': "The stream's path continues; follow it past the grove to open "
+                                    'ground.'}],
+               'ending_type': None,
+               'era': 'forest',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['stream', 'music', 'trust', 'crossing'],
+               'text': 'The stream appeared between two roots like a rumor -- just a glint first, '
+                       'then a sound, then a full ribbon of water running clear over smooth stones '
+                       "in colors Theo couldn't name exactly: the stones were green-gray, the "
+                       'water slightly gold where the light hit, and beneath the surface something '
+                       'moved that was not a fish.\n'
+                       '\n'
+                       'It was music.\n'
+                       '\n'
+                       'Not the sound of music -- the actual thing, somehow made of current '
+                       'instead of air. Each ripple was a note. The stream turned around a root '
+                       'and the key changed. When it ran fast over a cluster of pebbles it was '
+                       'something like a drum passage, and when it slowed in a pool behind a '
+                       'fallen log it held a chord as long as it liked before letting it go.\n'
+                       '\n'
+                       'The stream had a direction. Theo followed it.\n'
+                       '\n'
+                       'For a while, following was easy -- the path ran parallel to the water and '
+                       'the ground was soft and the melody was something his feet could match. But '
+                       'then the path ended at a crossing, and the only way forward was through '
+                       'the stream itself, stepping from stone to stone across water that was '
+                       "deeper than it looked. The stones were wet. He couldn't see the bottom.\n"
+                       '\n'
+                       'He stood at the edge and the stream continued its song beneath him, '
+                       'unhurried and unconcerned, the same way it had been doing this for '
+                       'centuries before he arrived and would do for centuries after.\n'
+                       '\n'
+                       "Mrs. Lock had said: the stream knows where it's going.\n"
+                       '\n'
+                       "He thought of the word **fidelity** -- a word he'd encountered in a poem "
+                       'last semester and not thought about since. Faithfulness to something. '
+                       "Willingness to follow even when you can't see the whole path.\n"
+                       '\n'
+                       'The first stone was solid under his foot. The second. The water rushed '
+                       "between his ankles and he didn't fall. On the far bank the forest opened "
+                       'slightly, and through the gap he could see a grove of trees with a warm '
+                       'golden light sitting among them like a campfire that knew how to be still.',
+               'title': 'The Enchanted Stream',
+               'vocabulary': [{'definition': 'Faithfulness; the quality of remaining loyal to '
+                                             'something or someone, even when it is difficult. '
+                                             'From the Latin fides, meaning faith or trust. A '
+                                             'person of fidelity keeps their word; a traveler of '
+                                             'fidelity trusts the road they chose, even in the '
+                                             'dark.',
+                               'term': 'fidelity'}]},
+ 'a2_woods': {'choices': [{'target': 'a3_clearing',
+                           'text': 'Move toward the clearing ahead, where the trees open up.'},
+                          {'target': 'a3_thorns',
+                           'text': 'Push through the thorny undergrowth -- there must be something '
+                                   'on the other side.'}],
+              'ending_type': None,
+              'era': 'forest',
+              'figures': [],
+              'is_ending': False,
+              'tags': ['dense-forest', 'carvings', 'threshold-space'],
+              'text': "The lights didn't slow down.\n"
+                      '\n'
+                      'Theo followed them for twenty minutes before he admitted to himself that he '
+                      'might not be following a path so much as walking in a direction. The trail '
+                      'had thinned to an impression -- a slight parting of the undergrowth, a '
+                      'sequence of clear spaces between roots -- and the lights themselves '
+                      'flickered between the trunks at whatever pace they chose, which was not his '
+                      'pace.\n'
+                      '\n'
+                      'He stopped walking and looked at the trees.\n'
+                      '\n'
+                      'Carvings. Not crude hatchmarks -- careful ones, deliberate, in a script he '
+                      "didn't recognize. Curving characters that ran around the circumference of "
+                      'trunks like the annual rings made visible. Some trees had a single '
+                      'character. Some had long passages that spiraled from root to the first '
+                      'branch. He pressed his palm against one and felt nothing, or felt the tree, '
+                      'which was not nothing.\n'
+                      '\n'
+                      'The forest here was **liminal** in a way that made his skin prickle -- '
+                      'neither the comfortable familiar world nor whatever waited at the end, but '
+                      'the threshold between them, where the rules of both places were '
+                      'negotiable.\n'
+                      '\n'
+                      'A clearing opened ahead. And deeper still, to his left, the undergrowth '
+                      'thickened into a tangle of thorns that seemed to begin and not end, '
+                      'stretching away into shadow and bramble.\n'
+                      '\n'
+                      'The lights had vanished. He was on his own.',
+              'title': 'The Dense Forest',
+              'vocabulary': [{'definition': 'Relating to a threshold or transitional state -- a '
+                                            'place or moment between two conditions, belonging '
+                                            'fully to neither. From the Latin limen, a threshold. '
+                                            'Liminal spaces are doorways, dawns, and the moments '
+                                            'just before things change.',
+                              'term': 'liminal'}]},
+ 'a3_clearing': {'choices': [{'target': 'a4_welcome',
+                              'text': 'Take the bread. You are hungry, and hunger is honest.'},
+                             {'target': 'a4_approach',
+                              'text': 'Take the key. You are going somewhere, and keys open '
+                                      'doors.'},
+                             {'target': 'a3_h_coin',
+                              'text': 'Take the coin. It might be useful later.'}],
+                 'ending_type': None,
+                 'era': 'forest',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['altar', 'choice', 'three-objects', 'center-node'],
+                 'text': 'The clearing was a perfect circle, as though the trees had agreed to '
+                         'step back from one particular spot and stay back. In the center, an old '
+                         'stone altar rose to waist height, dark gray with age and slightly mossy '
+                         'at the base, the top smoothed flat. On it sat three things.\n'
+                         '\n'
+                         'A round of bread, still warm, wrapped in cloth.\n'
+                         '\n'
+                         "A small coin, old and thick, stamped with a symbol he couldn't read.\n"
+                         '\n'
+                         'A key, iron, shaped with the same care as the silver plate on the Forest '
+                         'Gate -- not a functional key, or not only a functional key. Something '
+                         'intentional.\n'
+                         '\n'
+                         'There was no instruction, no sign. The forest was perfectly quiet. Even '
+                         'the birds had stopped. Theo stood at the edge of the clearing and felt '
+                         "the weight of the choice in his chest before he'd even moved.\n"
+                         '\n'
+                         'Three objects. Three different answers to three different questions he '
+                         "didn't yet know how to ask. The bread meant something. The coin meant "
+                         'something. The key meant something. All three sat in the open air of the '
+                         'Elysian Kingdom, waiting to see what kind of person had come through the '
+                         'gate.\n'
+                         '\n'
+                         'The word **discernment** surfaced from somewhere in his memory -- his '
+                         'grandmother again, telling him that the hardest choices were never '
+                         'between good and evil but between two goods, or three, when only one was '
+                         'right for you.\n'
+                         '\n'
+                         'His hand moved.',
+                 'title': 'The Stone Altar',
+                 'vocabulary': [{'definition': 'The ability to judge and understand well; the '
+                                               'capacity to perceive what is true, right, or '
+                                               'fitting. From the Latin discernere: to sift, to '
+                                               'separate, to distinguish. Discernment is not '
+                                               'cleverness -- it is the wisdom to know which '
+                                               'question you are actually being asked.',
+                                 'term': 'discernment'}]},
+ 'a3_grove': {'choices': [{'target': 'a3_h_creatures',
+                           'text': 'Stay in the grove and share what you have with the creatures.'},
+                          {'target': 'a4_welcome',
+                           'text': 'Accept the fruit gratefully and continue toward the temple.'}],
+              'ending_type': None,
+              'era': 'forest',
+              'figures': [],
+              'is_ending': False,
+              'tags': ['grove', 'abundance', 'generosity', 'forest-creatures'],
+              'text': 'The grove was older than the rest of the forest. Theo could feel it the '
+                      'moment he stepped between the two guardian oaks at its entrance -- a shift '
+                      'in pressure, or in the quality of time, or in what the air expected of '
+                      'him.\n'
+                      '\n'
+                      'It was full of good things.\n'
+                      '\n'
+                      "Fruit hung from low branches in colors he didn't have names for -- "
+                      'something between plum and amber, something that was almost certainly a '
+                      "pear but wasn't quite. A spring fed a shallow pool at the grove's center, "
+                      'and the water in the pool was very slightly luminous, the color of honey '
+                      'held up to a candle. Small creatures moved at the edges of the grove: not '
+                      'quite squirrels, not quite birds, something intermediary that watched him '
+                      'with bright interested eyes and did not run.\n'
+                      '\n'
+                      "Theo's stomach rumbled. He'd had a wheat cake and two crackers since waking "
+                      'up in an impossible forest. The fruit was right there. No one had told him '
+                      'not to touch it.\n'
+                      '\n'
+                      'The creatures watched him.\n'
+                      '\n'
+                      'He thought about this: what it meant to arrive somewhere that had things '
+                      'and take those things. About the difference between a guest and a visitor '
+                      'and a pilgrim. About **hospitality**, which his grandmother had taught him '
+                      'was a two-way obligation -- the host must offer, and the guest must wait to '
+                      'be offered.\n'
+                      '\n'
+                      'He sat down near the pool, set his backpack beside him, and looked at the '
+                      'creatures.\n'
+                      '\n'
+                      'After a moment, the smallest one approached with a piece of the amber-plum '
+                      'fruit balanced on its head like an offering.\n'
+                      '\n'
+                      'He took it with both hands. He said, "Thank you." It was the sweetest thing '
+                      'he had ever eaten.',
+              'title': 'The Hidden Grove',
+              'vocabulary': [{'definition': 'The generous and welcoming reception of guests. In '
+                                            'many ancient traditions, hospitality was a sacred '
+                                            'obligation with rules for both host and guest. The '
+                                            'Greek concept of xenia (guest-friendship) held that '
+                                            'Zeus himself protected travelers and punished those '
+                                            'who broke the laws of hospitality.',
+                              'term': 'hospitality'}]},
+ 'a3_h_coin': {'choices': [{'target': 'a4_approach',
+                            'text': 'Put the coin back and take the key. The weight has said '
+                                    'enough.'},
+                           {'target': 'a4_welcome',
+                            'text': 'Keep the coin and press on. You came this far alone.'}],
+               'ending_type': None,
+               'era': 'forest',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['coin', 'weight-of-choice', 'forest-creatures-watching'],
+               'text': 'The coin was warm.\n'
+                       '\n'
+                       'He had expected metal-cold, the way coins always felt in a pocket. This '
+                       'one sat in his palm like a small sun. He turned it over. The symbol on one '
+                       "side he couldn't read. The other side was blank, except for a faint "
+                       'impression that might have been a face.\n'
+                       '\n'
+                       'He closed his fingers around it and took two steps toward the edge of the '
+                       'clearing.\n'
+                       '\n'
+                       'It grew heavier.\n'
+                       '\n'
+                       "Not a lot. Not enough that he couldn't have kept walking. Just enough that "
+                       "he noticed, the way you notice when a sentence doesn't quite end right. He "
+                       'looked back at the altar. The bread was there. The key was there. Where '
+                       'the coin had been, there was now a small indentation in the stone, a ghost '
+                       'of it.\n'
+                       '\n'
+                       "The creatures were watching him. He hadn't noticed them at the tree line "
+                       'before, but they were there -- a dozen small faces in the shadows, not '
+                       'hostile, not accusing. Just watching. There was something in their '
+                       'expressions that was not quite **reproach** and not quite patience and was '
+                       'very uncomfortable to look at directly.\n'
+                       '\n'
+                       'The coin weighed what it weighed.\n'
+                       '\n'
+                       'He could keep it. Or he could put it back and take the key instead, and be '
+                       'someone slightly different than the person who had just pocketed a coin '
+                       'that was not his to take.',
+               'title': 'The Heavy Coin',
+               'vocabulary': [{'definition': 'A feeling or expression of disapproval or '
+                                             'disappointment. To look at someone with reproach is '
+                                             'to make them feel they have fallen short without '
+                                             'saying a word. From the Old French reprochier: to '
+                                             'bring back close -- to hold someone close to their '
+                                             'own failure.',
+                               'term': 'reproach'}]},
+ 'a3_h_creatures': {'choices': [{'target': 'a4_welcome',
+                                 'text': 'Follow the illuminated path toward the Forest Temple.'}],
+                    'ending_type': None,
+                    'era': 'forest',
+                    'figures': [],
+                    'is_ending': False,
+                    'tags': ['sharing', 'gratitude', 'forest-creatures', 'revealed-path'],
+                    'text': 'He dug through his backpack. A granola bar, slightly crushed. Half a '
+                            'bag of trail mix. The remains of the wheat cake Mrs. Lock had given '
+                            "him -- he'd eaten half of it by the stream. He laid everything out on "
+                            'a flat stone by the pool, portioned as fairly as he could manage, and '
+                            'stepped back.\n'
+                            '\n'
+                            'The creatures considered this for a moment. Then they descended.\n'
+                            '\n'
+                            "There were more of them than he'd realized. They came from the "
+                            'branches and the undergrowth and from between the roots of the '
+                            'guardian oaks, dozens of small quick beings, and they divided the '
+                            'food with a **scrupulous** fairness that put him to shame -- he had '
+                            'eaten first, after all, and none of the creatures had.\n'
+                            '\n'
+                            'When the food was gone they gathered in a loose half-circle and '
+                            'looked at him.\n'
+                            '\n'
+                            'One of them -- the same small one who had brought him the fruit -- '
+                            'walked to the pool and touched its surface with one paw. The water '
+                            'lit up. In its light, the path out of the grove was suddenly visible: '
+                            'not a path he had seen before, smoothed and clear, running straight '
+                            'toward a gap in the trees through which he could see the distant '
+                            'gray-silver trunks of something much larger.\n'
+                            '\n'
+                            'The Forest Temple. He recognized it the way you recognize a face '
+                            "you've only seen in a photograph: the reality was larger than the "
+                            'idea, but the idea had been right.\n'
+                            '\n'
+                            'The creatures stepped aside. The path was his.',
+                    'title': 'Sharing in the Grove',
+                    'vocabulary': [{'definition': 'Careful to be exact and morally correct; taking '
+                                                  'great care to do what is right, especially in '
+                                                  'matters of fairness and honesty. From the Latin '
+                                                  'scrupulus, a small sharp stone -- the nagging '
+                                                  'discomfort of conscience.',
+                                    'term': 'scrupulous'}]},
+ 'a3_thorns': {'choices': [{'target': 'a4_approach',
+                            'text': 'Approach the Forest Temple along the pale stone path.'},
+                           {'target': 'ending_lost_forest',
+                            'text': "The thorns took too much. Sit down. Don't move. The forest "
+                                    'can have you.'}],
+               'ending_type': None,
+               'era': 'forest',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['thorns', 'hardship', 'earned-arrival', 'shadow-path'],
+               'text': 'The thorns were real.\n'
+                       '\n'
+                       'He had half-expected them to be **metaphorical** -- a challenge that '
+                       'looked like a thorn-wall but revealed itself, upon approach, to be '
+                       'something navigable and symbolic. These were actual thorns: curved and '
+                       'sharp, set on woody canes as thick as his thumb, growing in a tangle that '
+                       'had no obvious seam or gate.\n'
+                       '\n'
+                       'He pushed through. There was no elegant way to do it. He folded his arms '
+                       'over his face and walked and the thorns took their toll -- small red lines '
+                       'along his forearms, a catch on his jacket, a mean one across the back of '
+                       'one hand that stung and bled a little. His backpack snagged three times.\n'
+                       '\n'
+                       'On the other side -- maybe fifteen feet of thorns, though it felt like '
+                       'more -- the forest thinned abruptly into a rough path, pale stone '
+                       'underfoot, running between trees that grew farther apart and let through '
+                       'more sky.\n'
+                       '\n'
+                       'He sat on the ground and ate the last cracker. He looked at his hand. The '
+                       "cut wasn't serious. He wrapped it in a piece of the cloth from the top of "
+                       "his backpack -- the old shirt he'd shoved in there at some point -- and "
+                       'tied it tight.\n'
+                       '\n'
+                       'Ahead the path ran straight, and at its end, just visible between the last '
+                       'trees, something enormous and gray-silver caught the light. Not stone. '
+                       'Trees, grown into the shape of stone. Grown into the shape of purpose.\n'
+                       '\n'
+                       'The Forest Temple. He had reached it the hard way. He was hungry and '
+                       "scratched and the coin -- if he'd taken it -- was heavy in his pocket. But "
+                       'he was here.\n'
+                       '\n'
+                       'He stood up. He kept walking.',
+               'title': 'The Thorn Passage',
+               'vocabulary': [{'definition': 'Existing as a figure of speech or symbol rather than '
+                                             'literally. A metaphorical wall is one you face in '
+                                             'your mind; a literal thorn-wall draws actual blood. '
+                                             'The Chartreuse Forest has a way of making metaphors '
+                                             'physical.',
+                               'term': 'metaphorical'}]},
+ 'a4_approach': {'choices': [{'target': 'a5_labor',
+                              'text': 'Work to deserve entry -- find something useful to do in the '
+                                      'glade while you wait.'},
+                             {'target': 'a5_explore',
+                              'text': "Lift the latch and enter. You've earned your way here."},
+                             {'target': 'a4_h_standoff',
+                              'text': 'Wait it out. Sit in the glade until the protocols resume.'}],
+                 'ending_type': None,
+                 'era': 'temple',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['uninvited-arrival', 'glade', 'waiting', 'center-node'],
+                 'text': "The path deposited him at a glade just outside the Temple's outer wall "
+                         '-- a wide flat space of short grass and smooth stones, ringed by young '
+                         'silver-barked trees. The Temple itself rose beyond the wall, its silver '
+                         'trunks visible above the stone, its Starwood arches catching light.\n'
+                         '\n'
+                         "A sign was mounted to the wall's single gate. The gate was closed.\n"
+                         '\n'
+                         'PILGRIMS: Standard arrival protocols active at dawn and dusk. At all '
+                         'other times, please observe waiting in the Glade. A tender will attend '
+                         'you within the hour.\n'
+                         '\n'
+                         'Beneath that, someone had written in smaller letters, with what appeared '
+                         'to be actual ink on actual wood: The protocols for pilgrims are not '
+                         'active at this time. Please wait.\n'
+                         '\n'
+                         'There was no one in the glade. No creatures. No Brok or any Brok '
+                         'equivalent. The late-afternoon sun was long and golden. Somewhere inside '
+                         'the Temple, something that might have been a bell was rung once and not '
+                         'again.\n'
+                         '\n'
+                         'Theo sat on one of the smooth stones. He was tired. His hand, or his '
+                         'jacket, or both, hurt. He looked at the Temple wall and tried to decide '
+                         'whether he was the kind of person who respected a sign that said wait or '
+                         'the kind of person who, having come this far through considerable '
+                         'difficulty, felt **exempt** from ordinary rules.\n'
+                         '\n'
+                         "The gate didn't have a lock. Just a latch.",
+                 'title': "The Pilgrim's Glade",
+                 'vocabulary': [{'definition': 'Free from an obligation or rule that applies to '
+                                               'others. To feel exempt is to believe your '
+                                               'circumstances are special enough to release you '
+                                               'from what is expected. Sometimes this is true. '
+                                               'Often it is simply comfortable to believe.',
+                                 'term': 'exempt'}]},
+ 'a4_h_standoff': {'choices': [{'target': 'a5_labor',
+                                'text': 'Say yes -- you will tend whatever needs tending. Work '
+                                        'first.'},
+                               {'target': 'a5_explore',
+                                'text': 'Ask if you can explore first, then help.'}],
+                   'ending_type': None,
+                   'era': 'temple',
+                   'figures': ['Brok'],
+                   'is_ending': False,
+                   'tags': ['waiting', 'dawn', 'brok', 'patient-arrival'],
+                   'text': 'He did not mean to fall asleep. He sat on the stone, and the stone was '
+                           'smooth, and the evening came down through the silver-barked trees with '
+                           'a gentleness that was almost irresponsible, and the next thing he knew '
+                           'it was the blue hour just before dawn and he was cold and stiff and '
+                           'the glade was full of light.\n'
+                           '\n'
+                           'Not sunlight yet. Something the Temple gave off on its own: a faint '
+                           'silver-gold **luminescence** rising from the Starwood arches, visible '
+                           'over the wall, pulsing once, very slowly, like a breath. The Temple '
+                           'breathed. He had not realized until now that it was alive in that '
+                           'particular sense.\n'
+                           '\n'
+                           'He stood and stretched and looked at the gate and was nearly certain '
+                           "he heard, from somewhere deep in the Temple's living corridors, a "
+                           'sound like knitting needles. He decided not to think about this.\n'
+                           '\n'
+                           'The gate latch lifted on its own at the first real light of dawn. A '
+                           'badger appeared from the corridor beyond it, broad and cheerful, a '
+                           'sprig of something flowering behind his ear. He looked at Theo with '
+                           'the expression of someone who had expected to find either a pilgrim or '
+                           'an empty glade and was satisfied with what he found.\n'
+                           '\n'
+                           '"You waited," Brok said, simply. He didn\'t say it like a compliment. '
+                           'He said it like a fact that had weight. "Come in. The outer courts '
+                           'need tending this morning. Will you help?"',
+                   'title': 'Dawn in the Glade',
+                   'vocabulary': [{'definition': 'The emission of light from something that is not '
+                                                 'the result of heat alone -- the cold light of '
+                                                 'fireflies, deep-sea fish, or very old enchanted '
+                                                 'wood. From the Latin lumen, light. The Starwood '
+                                                 'arches hold light the way a bell holds sound '
+                                                 'after it has been struck.',
+                                   'term': 'luminescence'}]},
+ 'a4_welcome': {'choices': [{'target': 'a5_rites',
+                             'text': "Ask Brok to teach you the Temple's ways. Learn before you "
+                                     'explore.'},
+                            {'target': 'a5_explore',
+                             'text': 'Thank Brok and explore freely. You learn better by '
+                                     'wandering.'}],
+                'ending_type': None,
+                'era': 'temple',
+                'figures': ['Brok'],
+                'is_ending': False,
+                'tags': ['temple-arrival', 'proper-welcome', 'brok', 'light-path'],
+                'text': 'He heard the Temple before he saw it fully.\n'
+                        '\n'
+                        'Not bells. Not a choir. Something simpler: the sound of very old wood in '
+                        'very slight wind, a deep harmonic that was below hearing and also somehow '
+                        'inside it. The path opened between the last two trees and there it was.\n'
+                        '\n'
+                        'The Forest Temple was built of living trees -- or built by them, or had '
+                        'grown into building itself over centuries, it was impossible to say '
+                        'which. Massive gray-silver trunks rose from the earth in clusters of '
+                        'three and five, forking and re-forking twenty feet up to meet the '
+                        'branches of their neighbors and merge. The resulting walls were not walls '
+                        'exactly but a **confluence** of living wood, breathing and patient, the '
+                        'bark smooth as old stone and pale as birch.\n'
+                        '\n'
+                        'The northwest entrance rose twelve men high. Its arch was made of '
+                        'Starwood -- he could see the reflected moonlight in the grain even in the '
+                        "afternoon, the wood holding light that hadn't been given to it today. The "
+                        'arch framed a corridor of living wood that led inward and upward, lit '
+                        "from sources he couldn't locate.\n"
+                        '\n'
+                        "Standing at the arch's base, arms crossed, wearing an expression of "
+                        'cheerful welcome that contained within it the full history of hospitality '
+                        'in this kingdom, was a badger Theo had not met before. Broader than Mr. '
+                        'Lock. Wearing a deep green tunic. A sprig of something flowering was '
+                        'tucked behind one ear.\n'
+                        '\n'
+                        '"Ah," the badger said. "A proper arrival. The grove sent word." He bowed. '
+                        '"I am Brok. I tend the Temple\'s outer courts. Welcome, pilgrim. Will you '
+                        'learn the ways of this place first -- or shall I let you wander?"',
+                'title': 'The Northwest Gate',
+                'vocabulary': [{'definition': 'The meeting and joining of two or more things, '
+                                              'especially rivers or forces. From the Latin '
+                                              'confluere: to flow together. A confluence of trees '
+                                              'is a place where separate lives have grown into '
+                                              'something shared and inseparable.',
+                                'term': 'confluence'}]},
+ 'a5_explore': {'choices': [{'target': 'a6_crossroads_eager',
+                             'text': 'Ask Brok to show you the rest. You want understanding, not '
+                                     'just beauty.'},
+                            {'target': 'a5_h_chapel',
+                             'text': 'Mention the golden and silver light you noticed in one '
+                                     'corner -- is that the Chapel?'}],
+                'ending_type': None,
+                'era': 'temple',
+                'figures': ['Brok'],
+                'is_ending': False,
+                'tags': ['wandering', 'beauty', 'lost', 'center-node'],
+                'text': 'The gate was open and no one had told him where to go, which was either a '
+                        'freedom or a test and possibly both.\n'
+                        '\n'
+                        'He went in.\n'
+                        '\n'
+                        'The Temple was magnificent. He had known it would be, in the abstract way '
+                        'you know something before you see it, but the knowing and the seeing were '
+                        'entirely different things. The living palace expanded around him as he '
+                        'walked -- not growing, not changing, just revealing more of what it had '
+                        'always been, the way a coast reveals itself to a ship approaching from '
+                        'sea.\n'
+                        '\n'
+                        'He went left at a fork and found a hall where the silver trunks had grown '
+                        'into columns no architect could have planned. He went right at the next '
+                        'and found a garden within the Temple, open to the sky, where '
+                        'stone-flowers grew in concentric circles around a pool that reflected the '
+                        'sky twice -- once in its surface, once in the ceiling of water-colored '
+                        'bark above it.\n'
+                        '\n'
+                        'He got slightly turned around near what appeared to be the inner courts. '
+                        'The Temple did not help him with this. It was **inscrutable** in the way '
+                        'that very beautiful things are inscrutable: not withholding, just whole, '
+                        'just itself, not organized for his convenience.\n'
+                        '\n'
+                        'Eventually a path brought him, somewhat to his surprise, to a clearing '
+                        'where a broad badger in a green tunic was sitting on a stone bench eating '
+                        'a small lunch and watching him without alarm.\n'
+                        '\n'
+                        '"Lost?" Brok said, pleasantly.\n'
+                        '\n'
+                        '"A little."\n'
+                        '\n'
+                        '"That\'s all right. The Temple lets you get lost exactly as much as you '
+                        'need to. Sit, if you like. Or --" he gestured down two paths, "-- there '
+                        'is more to see. Or there is work, if you want to understand rather than '
+                        'observe."',
+                'title': 'Free in the Living Palace',
+                'vocabulary': [{'definition': 'Difficult or impossible to understand or interpret; '
+                                              'not giving away its meaning. From the Latin '
+                                              'inscrutabilis: not to be searched into. The Temple '
+                                              'is inscrutable not because it hides itself but '
+                                              'because it is simply too large and too old to be '
+                                              'read quickly.',
+                                'term': 'inscrutable'}]},
+ 'a5_h_chapel': {'choices': [{'target': 'a6_crossroads_clear',
+                              'text': "Return to Brok, ready for whatever lies beyond the Temple's "
+                                      'inner gates.'}],
+                 'ending_type': None,
+                 'era': 'temple',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['chapel', 'gold-silver', 'quiet-wonder'],
+                 'text': 'The chapel was small -- smaller than the other spaces, which ran to the '
+                         'vast and the cathedral. It was tucked between two of the great trunks '
+                         "near the outer wall's northeast corner, and it would have been easy to "
+                         "miss if the light coming out of it weren't quite that color.\n"
+                         '\n'
+                         'Golden, at the bottom. Silver, at the top. The two lights did not mix '
+                         'but braided together in the air above the entrance, weaving slowly like '
+                         'the surface of the enchanted stream.\n'
+                         '\n'
+                         'Inside: a floor of pale stone entirely covered in golden dandelion '
+                         'petals, so deep he almost sank in them. Above, the branch-ceiling was '
+                         'open to the sky in a perfect oval, and through the oval the moon was '
+                         'visible even now, in daytime -- or something was visible that was shaped '
+                         'like the moon and performed the same function in this place. Silver '
+                         'light fell through the oval onto the petals and turned them to something '
+                         "he didn't have a name for.\n"
+                         '\n'
+                         'He stood in the chapel for a long time. There was nothing to do there, '
+                         'no ritual Brok had mentioned. He was not sure what it meant. He was sure '
+                         'it meant something.\n'
+                         '\n'
+                         'When he came back out, the light had changed -- not dimmer, but '
+                         'different, the way light changes after a significant conversation. He '
+                         'felt the way he sometimes felt after a very good piece of music: not '
+                         'informed, exactly. **Illuminated**.',
+                 'title': 'The Chapel of Gold and Silver',
+                 'vocabulary': [{'definition': 'Lit from within; but also, in an older sense, '
+                                               'spiritually enlightened -- made clear by an inner '
+                                               'light. Illuminated manuscripts were decorated with '
+                                               'gold leaf that caught the light. To be illuminated '
+                                               'is to be made visible to yourself.',
+                                 'term': 'illuminated'}]},
+ 'a5_h_rebellion': {'choices': [{'target': 'a6_crossroads_blind',
+                                 'text': 'Pick up the broom. You can ask questions while you '
+                                         'work.'},
+                                {'target': 'ending_temple_trapped',
+                                 'text': 'Stay still. You will not pick it up. Not like this.'}],
+                    'ending_type': None,
+                    'era': 'temple',
+                    'figures': ['Brok'],
+                    'is_ending': False,
+                    'tags': ['confrontation', 'brok', 'rebellion', 'shadow-path'],
+                    'text': '"No," Theo said. "I\'m not going to keep doing this until you tell me '
+                            'why."\n'
+                            '\n'
+                            "He said it more loudly than he'd intended. His voice bounced between "
+                            'the silver trunks and came back slightly transformed, as the Temple '
+                            'transformed most things.\n'
+                            '\n'
+                            'Brok stopped. He turned. He was, Theo registered, significantly '
+                            'larger than he had seemed during the tidying -- broader, more '
+                            'substantial, the kind of creature who had simply been choosing not to '
+                            'take up his full space.\n'
+                            '\n'
+                            '"You will not?" Brok said. His voice was not angry. It was something '
+                            'worse than angry: **inexorable**, like a statement of geography.\n'
+                            '\n'
+                            '"I just want to understand what we\'re doing. That\'s not -- I don\'t '
+                            'think that\'s unreasonable, I just -- "\n'
+                            '\n'
+                            '"The Temple does not require your understanding in order to need '
+                            'tending. Leaves fall regardless of philosophy."\n'
+                            '\n'
+                            '"That\'s not an answer."\n'
+                            '\n'
+                            '"No," Brok agreed. "It is a prior condition."\n'
+                            '\n'
+                            "He was very close now. He did not touch Theo. He didn't need to. He "
+                            'simply stood in his full size, occupying the corridor, and looked at '
+                            'the boy who had put down his leaf-broom in a living temple that had '
+                            'been standing for longer than either of their lineages, and the look '
+                            'said several things at once.\n'
+                            '\n'
+                            'Theo was pinned. Not physically. Pinned by the weight of a question '
+                            'he had asked badly, to something that had more patience than he did '
+                            'and more time than he did and no particular need for his '
+                            'cooperation.\n'
+                            '\n'
+                            '"Pick up the broom," Brok said, "or do not. But understand that the '
+                            'Temple does not change for those who refuse to serve it."',
+                    'title': 'The Breaking Point',
+                    'vocabulary': [{'definition': 'Impossible to stop or change; relentlessly '
+                                                  'proceeding regardless of opposition. From the '
+                                                  'Latin inexorabilis: not to be moved by prayer. '
+                                                  'An inexorable force does not argue with you; it '
+                                                  'simply continues.',
+                                    'term': 'inexorable'}]},
+ 'a5_labor': {'choices': [{'target': 'a6_crossroads_blind',
+                           'text': 'Keep tidying. Ask nothing more. The Temple must know why it '
+                                   'needs this.'},
+                          {'target': 'a5_h_rebellion',
+                           'text': "Put down the leaf-broom. You need to understand what you're "
+                                   'doing and why.'}],
+              'ending_type': None,
+              'era': 'temple',
+              'figures': ['Brok'],
+              'is_ending': False,
+              'tags': ['labor', 'tidying', 'question-of-purpose', 'shadow-path'],
+              'text': '"We must keep the Temple tidy," Brok said. It was the third time he had '
+                      'said it this morning.\n'
+                      '\n'
+                      'The work was not unpleasant, exactly. It was collecting fallen leaves from '
+                      'the paths before they could decompose into the pale stone. It was clearing '
+                      'the mouths of the small stone channels that carried water from the inner '
+                      'springs to the outer courts. It was arranging the flat stones of the '
+                      'path-borders back to their original positions when some overnight growth '
+                      'had nudged them aside.\n'
+                      '\n'
+                      'The work never ended.\n'
+                      '\n'
+                      "Not because the Temple was dirty -- it wasn't. It was just that the Temple "
+                      'was alive, and living things made mess as a natural consequence of living, '
+                      'and so there was always a leaf to collect, always a stone slightly out of '
+                      'place, always something to tidy. Brok moved through it all with the '
+                      '**diligence** of a creature who had been doing this for so long that the '
+                      'doing had become the meaning, and the meaning had become the doing, and '
+                      'somewhere in that loop the question of why had quietly left.\n'
+                      '\n'
+                      'Theo tidied. He did it well. He was actually fairly good at it.\n'
+                      '\n'
+                      'But by the third hour he found himself wondering what the point was, and '
+                      'then wondering if that question was impatience or wisdom, and then '
+                      'wondering if Brok had ever asked it, and then being afraid that Brok '
+                      "hadn't.\n"
+                      '\n'
+                      '"Brok," he said. "Why are we tidying?"\n'
+                      '\n'
+                      '"We must keep the Temple tidy," Brok said, pleasantly, and moved on to the '
+                      'next leaf. The leaf was very tidy about being collected.\n'
+                      '\n'
+                      'Theo watched him and felt something tightening in his chest.',
+              'title': 'The Endless Tidying',
+              'vocabulary': [{'definition': 'Careful, persistent effort; steady application to a '
+                                            'task. From the Latin diligentia: love of what one '
+                                            'does. Diligence is a virtue -- but diligence without '
+                                            'understanding is the engine that runs the longest and '
+                                            'gets nowhere.',
+                              'term': 'diligence'}]},
+ 'a5_rites': {'choices': [{'target': 'a6_crossroads_clear',
+                           'text': "Ask Brok where the path leads next -- you're ready for what "
+                                   'comes after the rites.'},
+                          {'target': 'a5_h_chapel',
+                           'text': 'Ask Brok about the Chapel you heard mentioned. Go there before '
+                                   'moving on.'}],
+              'ending_type': None,
+              'era': 'temple',
+              'figures': ['Brok'],
+              'is_ending': False,
+              'tags': ['temple-learning', 'rites', 'living-palace', 'light-path'],
+              'text': 'Brok taught the way a river teaches -- not by explanation, but by moving '
+                      'and letting you notice what it did.\n'
+                      '\n'
+                      'They walked the outer courts, which were not courts in any architectural '
+                      'sense but living rooms: spaces between the great silver trunks where '
+                      'smaller trees had grown up into something almost domestic. Here a bower '
+                      'where flowering vines had formed a canopy. There a path of crushed white '
+                      'stone edged with something that glowed faintly mauve in shadow. The Temple '
+                      'was not a building in any ordinary sense -- it was a living palace, '
+                      'growing, adding chambers and corridors as it felt the need, the trees '
+                      'acting on a plan that was too long-range for any single lifespan to '
+                      'perceive.\n'
+                      '\n'
+                      '"The Temple tends itself," Brok said, pausing to cup a flower in one broad '
+                      'paw -- a bloom Theo had never seen, star-shaped, white at the center and '
+                      'deepening to violet at the tip of each petal. "But it does not object to '
+                      'being tended. The rites are simple: walk the paths each morning. Water the '
+                      'stone-flowers, which need very little. Acknowledge what you pass. The '
+                      'Temple knows when it is acknowledged."\n'
+                      '\n'
+                      '"Acknowledged how?" Theo asked.\n'
+                      '\n'
+                      '"A word. A bow. A touch of the hand to the trunk. The form is less '
+                      'important than the **intention**." Brok looked at him sideways. "The '
+                      'ancient rites are a language. What matters is that you mean what you say in '
+                      'that language."\n'
+                      '\n'
+                      "They walked for an hour, maybe more. Theo's scratches stopped hurting. The "
+                      'living palace grew stranger and more beautiful in every corridor -- halls '
+                      'where the trees had grown into archways that looked exactly like stone '
+                      'ribs, rooms where the interlaced branches above formed a ceiling of such '
+                      'complexity it suggested a text he could not quite read.\n'
+                      '\n'
+                      'He was beginning to understand the place. Not all of it. A corner of it.\n'
+                      '\n'
+                      'That felt, for now, exactly right.',
+              'title': 'The Ways of the Temple',
+              'vocabulary': [{'definition': 'The purpose or meaning behind an action; what you are '
+                                            'trying to do or communicate. A ritual performed '
+                                            'without intention is just movement. A ritual '
+                                            'performed with intention -- even a small one, even '
+                                            'imperfectly -- is communication with something larger '
+                                            'than yourself.',
+                              'term': 'intention'}]},
+ 'a6_crossroads_blind': {'choices': [{'target': 'a7_struggle',
+                                      'text': "Go southeast. You know the way, even if you don't "
+                                              'feel it.'},
+                                     {'target': 'a7_shadow_force',
+                                      'text': 'Go north. The Temple owes you. Take something.'}],
+                         'ending_type': None,
+                         'era': 'temple',
+                         'figures': [],
+                         'is_ending': False,
+                         'tags': ['crossroads', 'shadow_path', 'exhaustion', 'resentment'],
+                         'text': 'Brok has sent Theo to the crypt the way he sends Theo everywhere '
+                                 '-- with a two-word instruction and no ceremony. "Crypt. Now." '
+                                 'And Theo has gone, because that is what you do when Brok speaks, '
+                                 "if you have learned anything at all from the Temple's brand of "
+                                 'hospitality.\n'
+                                 '\n'
+                                 "The root-stair is steep. Theo's arms are tired. The weeks of "
+                                 'forced labor -- sweeping, hauling, polishing surfaces that did '
+                                 'not look like they needed polishing -- have left him physically '
+                                 'capable and spiritually hollow. There is a word for what Brok '
+                                 'has made of him: **rote**. The practice of repetition without '
+                                 'reflection. The body learns; the mind goes somewhere else and '
+                                 'does not always come back.\n'
+                                 '\n'
+                                 'The crypt opens around him. Four passages. Pale stone. '
+                                 'Sourceless light.\n'
+                                 '\n'
+                                 'They all look the same.\n'
+                                 '\n'
+                                 'He knows, abstractly, that one of them is supposed to call to '
+                                 'him. He has overheard Brok describe the crossroads to a beetle, '
+                                 'once -- "Four paths, each distinct in character, the southeast '
+                                 'passage intended for departing pilgrims" -- and so he knows '
+                                 'where he is supposed to go. But knowing and feeling are not the '
+                                 'same thing. The southeastern passage is just a hole in the wall. '
+                                 'It smells vaguely of cold.\n'
+                                 '\n'
+                                 'An unreasonable anger rises in him. He has been here for weeks '
+                                 'and learned what, exactly? That floors need sweeping? That '
+                                 "Brok's maintenance schedule runs every forty-eight hours? That "
+                                 'you can polish a root and it will still look like a root?\n'
+                                 '\n'
+                                 'He was supposed to be prepared for this moment. He is not '
+                                 'prepared. He is tired.\n'
+                                 '\n'
+                                 'The southeastern passage stands open. It is the correct passage '
+                                 '-- he is not so lost that he doubts that. But correct is a thin '
+                                 "kind of motivation. He stands at the circle's center, trying to "
+                                 'feel something, and feels mostly the weight of his own arms.\n'
+                                 '\n'
+                                 'Another option crystallizes, less noble: there is a passage that '
+                                 "goes north, into the Temple's deeper rooms. There might be "
+                                 'things there worth taking. The Temple owes him something, he '
+                                 'thinks. Weeks of labor for a clear conscience and a two-word '
+                                 'send-off.\n'
+                                 '\n'
+                                 'He should go southeast. He knows this. But he is tired and angry '
+                                 'and the knowing is very quiet.',
+                         'title': 'All Paths the Same',
+                         'vocabulary': [{'definition': 'Learning or doing something through '
+                                                       'mechanical repetition, without genuine '
+                                                       'understanding or engagement.',
+                                         'term': 'rote'}]},
+ 'a6_crossroads_clear': {'choices': [{'target': 'a7_balance',
+                                      'text': 'Take the southeastern passage -- the road ahead '
+                                              'calls.'},
+                                     {'target': 'a7_struggle',
+                                      'text': 'Linger one moment longer. There is more to learn '
+                                              'here before leaving.'}],
+                         'ending_type': None,
+                         'era': 'temple',
+                         'figures': [],
+                         'is_ending': False,
+                         'tags': ['crossroads', 'light_path', 'brok', 'choice'],
+                         'text': 'The crypt of the Forest Temple is not a place of death but of '
+                                 'decision.\n'
+                                 '\n'
+                                 'Theo descends the root-stair slowly, one hand brushing the '
+                                 'living bark of the wall. The air is cooler here, fragrant with '
+                                 'dark soil and old stone. Brok has said nothing as they walked -- '
+                                 'only the gentle whir of his joints, the soft rhythm of his '
+                                 'six-toed feet on the wooden floor. When they reach the bottom, '
+                                 'Brok stops at the threshold and does not follow. His '
+                                 "dinner-plate eyes find Theo's face, and he blinks -- the full "
+                                 'five-second blink -- and then is still.\n'
+                                 '\n'
+                                 'Theo enters the crypt alone.\n'
+                                 '\n'
+                                 'Four passages open outward from a circle of pale stone. North, '
+                                 'south, east, southeast. Roots curl along every arch. The '
+                                 'torchlight -- there are no torches, and yet there is light, warm '
+                                 'and sourceless -- rests differently on each mouth of path. The '
+                                 'northern passage breathes cool and deep, as though it leads '
+                                 'toward something that has waited a long time. The eastern '
+                                 'passage smells of rain. The southeastern passage -- the one Brok '
+                                 'gestured toward before turning back -- carries a smell Theo can '
+                                 'only describe as distance. Wind over open stone.\n'
+                                 '\n'
+                                 "The Temple's weeks of teaching settle into him now like a key "
+                                 'finding its lock.\n'
+                                 '\n'
+                                 'He has learned to tend without possessing. He has learned that '
+                                 'the work you do before the work begins is the real work. He has '
+                                 'swept floors and carried water and listened to Brok recite '
+                                 'maintenance schedules in a tone that was somehow also a kind of '
+                                 'prayer. And now, standing at the crossroads with the ground '
+                                 'humming faintly beneath his boots, he finds that the paths are '
+                                 'not confusing at all.\n'
+                                 '\n'
+                                 'They whisper.\n'
+                                 '\n'
+                                 'Not in words -- nothing so blunt as that. Each passage makes a '
+                                 'particular quality of silence. The southeastern passage makes '
+                                 'the silence of something you have not yet become. It calls him '
+                                 'with a note so low he feels it more than hears it: **forward**.\n'
+                                 '\n'
+                                 'But there is another note, too. Closer. Warmer. He has not yet '
+                                 'gone to the Chapel of Gold and Silver high above, where the '
+                                 'dandelion petals fall. There may still be time.\n'
+                                 '\n'
+                                 'A crossroads is a gift, he thinks. It means you have arrived '
+                                 'somewhere worth choosing from.\n'
+                                 '\n'
+                                 'He breathes once, deeply. The roots along the southeastern arch '
+                                 'seem to lean, almost imperceptibly, toward him.\n'
+                                 '\n'
+                                 'There is a clarity in knowing what is yours to do. And there is '
+                                 'a different kind of clarity in admitting when you want more '
+                                 'time. Both are honest. Both are real. The Temple, he suspects, '
+                                 'can tell the difference.',
+                         'title': 'The Four Paths',
+                         'vocabulary': [{'definition': 'The entrance or beginning of a new space '
+                                                       'or experience; often used to mark a moment '
+                                                       'of passage or transition.',
+                                         'term': 'threshold'},
+                                        {'definition': 'In a way so slight or gradual that it is '
+                                                       'almost impossible to notice.',
+                                         'term': 'imperceptibly'}]},
+ 'a6_crossroads_eager': {'choices': [{'target': 'a7_struggle',
+                                      'text': 'Take the southeastern passage -- hesitation is just '
+                                              'another word for fear.'},
+                                     {'target': 'a7_shadow_force',
+                                      'text': 'Charge down the northern passage. There has to be '
+                                              'something more to learn.'},
+                                     {'target': 'a6_h_meditate',
+                                      'text': 'Sit in the center of the crossroads. Be still. '
+                                              'Listen.'}],
+                         'ending_type': None,
+                         'era': 'temple',
+                         'figures': [],
+                         'is_ending': False,
+                         'tags': ['crossroads', 'center_path', 'choice', 'urgency'],
+                         'text': 'Theo finds the crypt the way he has found most things in the '
+                                 'Forest Temple -- by accident, by instinct, by following the '
+                                 'thing that looked most interesting.\n'
+                                 '\n'
+                                 'The root-stair descends in a spiral he did not expect, and then '
+                                 'the crypt opens around him like a held breath released, and '
+                                 'there it is: four passages radiating outward from a circle of '
+                                 'pale stone. His first thought is not wonder but calculation. '
+                                 'Southeast, he remembers -- that was the direction Brok mentioned '
+                                 'when Theo had asked, rather boldly, how long this was all '
+                                 'supposed to take. Brok had blinked his five-second blink, and '
+                                 'said: "Southeastern passage. When ready." And had not '
+                                 'elaborated.\n'
+                                 '\n'
+                                 'When ready.\n'
+                                 '\n'
+                                 'The passages do seem different from each other. There is '
+                                 'something about the southeastern one -- a smell, maybe, or a '
+                                 'change in the quality of silence. Distance. Open stone. '
+                                 'Something not yet earned.\n'
+                                 '\n'
+                                 'The northern passage smells of rain and deep time. Theo almost '
+                                 'walks toward it before he catches himself. He is not here to '
+                                 'collect every experience. He is here to move forward.\n'
+                                 '\n'
+                                 'But is he ready?\n'
+                                 '\n'
+                                 'The question arrives with uncomfortable **alacrity**. He has '
+                                 'been here weeks -- he has swept, he has watched, he has learned '
+                                 "the shape of the Temple's routines. He has not gone hungry. He "
+                                 'has not been turned away. But he is not sure he has understood '
+                                 'any of it the way the Temple perhaps intended. Understanding, he '
+                                 'suspects, is not the same as exposure. You could live in a '
+                                 'library your whole life and never read.\n'
+                                 '\n'
+                                 'The southeastern passage waits. It has no urgency. It simply '
+                                 'is.\n'
+                                 '\n'
+                                 'His feet are restless. The crypt is close and cool and the roots '
+                                 'press in from every angle. There is a pressure building in his '
+                                 'chest that he associates with staying too long anywhere. But '
+                                 'there is also -- he must be honest -- a small cold note of '
+                                 'doubt. A question he cannot quite name, tugging at his sleeve.\n'
+                                 '\n'
+                                 'He has three options and he knows it. He could go. He could stay '
+                                 'and sit still and see if the doubt resolves. Or he could take '
+                                 'the northern passage and see what deeper learning might still '
+                                 'wait for him there.\n'
+                                 '\n'
+                                 'None of these are wrong, exactly. All of them have a cost.',
+                         'title': 'The Crossroads at Speed',
+                         'vocabulary': [{'definition': 'Brisk, eager readiness or quickness; '
+                                                       'sometimes used to suggest that speed '
+                                                       'arrives before wisdom.',
+                                         'term': 'alacrity'},
+                                        {'definition': 'The state of being in contact with '
+                                                       'something; distinct from understanding or '
+                                                       'truly absorbing it.',
+                                         'term': 'exposure'}]},
+ 'a6_h_meditate': {'choices': [{'target': 'a7_balance',
+                                'text': 'Rise and take the southeastern passage with clear '
+                                        'intention.'},
+                               {'target': 'a7_struggle',
+                                'text': 'Rise with some clarity, but still carrying the weight of '
+                                        'doubt.'}],
+                   'ending_type': None,
+                   'era': 'temple',
+                   'figures': [],
+                   'is_ending': False,
+                   'tags': ['crossroads', 'horizontal', 'stillness', 'center_path'],
+                   'text': 'Theo sits down in the center of the crossroads circle -- not on a '
+                           'stone, there is no stone, just on the floor -- and closes his eyes.\n'
+                           '\n'
+                           'This is not natural to him. His knees protest. The floor is cold. He '
+                           'is aware of looking foolish, which is strange, since there is no one '
+                           'to watch him.\n'
+                           '\n'
+                           'But after a time -- a minute, or ten, he cannot tell -- the crypt '
+                           'shifts in its quality. The restlessness in his chest does not vanish, '
+                           'but it quiets, the way a pool quiets when you stop throwing stones '
+                           'into it. He can feel the four passages now as distinct presences, not '
+                           'just directions. The southeastern one still carries its note of '
+                           'distance and open stone. But now it sounds less like a demand and more '
+                           'like an invitation. There is a difference between those things, he '
+                           'realizes. Demands make you run to avoid the consequences of not '
+                           'running. Invitations wait.\n'
+                           '\n'
+                           '**Contemplation** is not inaction, he thinks. It is action of a '
+                           'quieter kind -- the action of letting the mind settle until what is '
+                           'true floats to the surface.\n'
+                           '\n'
+                           'The southeastern passage is his. Not because it is easiest, not '
+                           'because it is closest, but because it is the one that asks him to '
+                           "become someone he isn't yet.\n"
+                           '\n'
+                           'He opens his eyes.\n'
+                           '\n'
+                           'The torchless light is the same. The roots curl the same. But '
+                           'something in him has rearranged slightly, and when he stands, the '
+                           'crossroads no longer feels like a riddle. It feels like a room he is '
+                           'ready to leave.',
+                   'title': 'Still Water',
+                   'vocabulary': [{'definition': 'Deep, unhurried thinking or reflection; the '
+                                                 'practice of giving full attention to a question '
+                                                 'or experience.',
+                                   'term': 'contemplation'}]},
+ 'a7_balance': {'choices': [{'set_flags': {'staff': 'yew', 'staff_cracked': False},
+                             'target': 'a8_gentle',
+                             'text': 'Walk to Brok with the yew staff. You are ready.'},
+                            {'set_flags': {'staff': 'yew', 'staff_cracked': False},
+                             'target': 'a7_h_brok_stream',
+                             'text': 'Follow the sound of water. Something is moving on the '
+                                     'stream.'}],
+                'ending_type': None,
+                'era': 'temple',
+                'figures': [],
+                'is_ending': False,
+                'tags': ['staves', 'yew', 'light_path', 'ritual'],
+                'text': 'The southeastern passage slopes gently upward and then opens, without '
+                        'warning, into a small circular room where the roots do not come.\n'
+                        '\n'
+                        'The walls here are stone -- real stone, cut and laid by hands older than '
+                        'the forest. Three staves lean against the far wall in a way that is too '
+                        "deliberate to be accidental. They are each exactly Theo's height, and he "
+                        'has the irrational certainty that they have been waiting here, '
+                        'specifically, for him.\n'
+                        '\n'
+                        'He approaches slowly.\n'
+                        '\n'
+                        'The first staff is ash -- pale, nearly silver, the wood dense and smooth. '
+                        'It has a weight to it that precedes touching it, a **gravitas** that '
+                        'fills the space around it. This is a staff for someone who stands firm '
+                        'when the world tries to move them.\n'
+                        '\n'
+                        'The second staff is willow -- dark, almost black where the bark has been '
+                        'stripped, flexible in a way you can feel just by looking. It bends '
+                        'without breaking. This is a staff for someone who trusts the path more '
+                        'than the destination.\n'
+                        '\n'
+                        'The third staff is yew. Pale yellow-brown, with a faint spiral grain you '
+                        'have to angle your head to see. Lighter than the ash. More knowing than '
+                        'the willow. There is something about it that Theo cannot name for a full '
+                        'minute, until the word surfaces on its own: **resonance**. The yew staff '
+                        'resonates with something in him. Not loudly -- not like a struck bell. '
+                        'More like a tuning fork placed near a second, sympathetic string. A '
+                        'vibration below hearing.\n'
+                        '\n'
+                        'He knows, without hesitation, that this is his.\n'
+                        '\n'
+                        'He lifts the yew staff from the wall. It settles into his hand as though '
+                        'it has always been there, the grain warm under his palm, the weight '
+                        'exactly right. He stands with it for a long moment, conscious of '
+                        'something ceremonial in the act -- not because anyone has told him it is '
+                        'ceremonial, but because the room itself seems to hold its breath.\n'
+                        '\n'
+                        'The ash and willow remain where they are. He does not feel the urge to '
+                        'take them. They are not his. They belong to other hands, other roads, '
+                        'other stories he will not be part of.\n'
+                        '\n'
+                        'He turns back toward the passage.\n'
+                        '\n'
+                        'Brok is waiting at the entrance to the southeastern passage, blinking.',
+                'title': 'The Staves Speak',
+                'vocabulary': [{'definition': 'A quality of seriousness, solemnity, or weight; a '
+                                              'presence that commands attention and respect.',
+                                'term': 'gravitas'},
+                               {'definition': 'A deep, echoing quality of sound or feeling; also '
+                                              'used to describe how something can connect '
+                                              "meaningfully with a person's inner life.",
+                                'term': 'resonance'}]},
+ 'a7_h_brok_stream': {'choices': [{'target': 'a8_gentle',
+                                   'text': "Rise, and go find Brok properly -- though you've "
+                                           'already found him.'}],
+                      'ending_type': None,
+                      'era': 'temple',
+                      'figures': ['Brok'],
+                      'is_ending': False,
+                      'tags': ['horizontal', 'brok', 'stream', 'leaf-boat', 'temple', 'tenderness'],
+                      'text': 'Theo meant to go straight to Brok. Then he heard the water.\n'
+                              '\n'
+                              "The stream ran along the Temple's eastern wall, narrow enough to "
+                              'step across, clear enough to count the stones beneath. Theo had '
+                              'passed it a dozen times without stopping. Now he stopped. Something '
+                              'was moving on the surface -- small, folded, riding the current with '
+                              "the calm dignity of a thing that knows exactly where it's going.\n"
+                              '\n'
+                              'A leaf-boat.\n'
+                              '\n'
+                              'Brok crouched at the bank with his back to Theo, seven fingers '
+                              'working a second leaf with a concentration Theo had only seen him '
+                              "give to duty rosters and door-seals. The drone's dinner-plate eyes "
+                              'caught the light off the water. He was not tidy about it -- there '
+                              'were failed attempts scattered beside him, leaves that had not held '
+                              'their crease. He tried again. The fold held. He set it on the '
+                              'surface with a gentleness that surprised Theo, the way a careful '
+                              'person handles something they did not make but love anyway, and '
+                              'watched it go.\n'
+                              '\n'
+                              'Theo stood in **reverie** for longer than he meant to.\n'
+                              '\n'
+                              'Then a dandelion petal drifted down from somewhere impossibly high '
+                              "and landed on Brok's head, and Brok turned, and saw Theo.\n"
+                              '\n'
+                              'A pause. The kind that has a shape.\n'
+                              '\n'
+                              '"The stream collects debris," Brok said. "I am removing it."\n'
+                              '\n'
+                              '"I see," Theo said.\n'
+                              '\n'
+                              '"The leaf-forms are a byproduct of the removal process."\n'
+                              '\n'
+                              '"Of course."\n'
+                              '\n'
+                              'Brok straightened. "We must keep the Temple tidy."\n'
+                              '\n'
+                              '"We must," Theo agreed, and sat down on the bank.\n'
+                              '\n'
+                              'He picked up a fallen leaf -- broad, still supple -- and folded it '
+                              'the way he had watched Brok fold his, crease by crease, until it '
+                              'cupped. He was not sure he had done it right. He set it on the '
+                              'water anyway. It wobbled, steadied, and moved. Brok watched it go. '
+                              'Then, after a moment, sat back down beside him.\n'
+                              '\n'
+                              'Neither of them said anything for a while. The yew staff rested '
+                              "across Theo's knees, pale and warm, alive in the way living things "
+                              'are alive -- not loudly. He thought about what it meant to choose '
+                              'something flexible over something rigid, something that bends '
+                              'rather than breaks. He thought the Kingdom might be teaching him '
+                              'this in more than one language.\n'
+                              '\n'
+                              '"Brok," Theo said finally. "How long have you been doing this?"\n'
+                              '\n'
+                              'Brok considered the question with his usual precision. "Since the '
+                              'third year of my service. I observed that the stream moved things. '
+                              'I found this -- " he paused -- "informative."\n'
+                              '\n'
+                              '"Me too," Theo said.',
+                      'title': 'The Leaf-Boat and the Stream',
+                      'vocabulary': [{'definition': 'A waking dream -- not sleep, not quite '
+                                                    'presence, but the soft country between them, '
+                                                    'where something beautiful holds you still '
+                                                    'without asking permission.',
+                                      'term': 'reverie'}]},
+ 'a7_shadow_force': {'choices': [{'set_flags': {'staff': 'ash', 'staff_cracked': True},
+                                  'target': 'a8_rough',
+                                  'text': 'Take one staff -- the ash. Grip what strength remains '
+                                          'and leave.'},
+                                 {'target': 'ending_temple_trapped',
+                                  'text': 'Stand here until the Temple decides for you.'}],
+                     'ending_type': None,
+                     'era': 'temple',
+                     'figures': [],
+                     'is_ending': False,
+                     'tags': ['staves', 'shadow_path', 'overreach', 'consequence'],
+                     'text': 'The room at the end of the northern passage -- because Theo took the '
+                             'northern passage, the one he should not have taken, the one that led '
+                             'here anyway, as though the Temple knew he would come this way -- '
+                             'holds three staves.\n'
+                             '\n'
+                             'Three staves and no instructions. No locks. No guardian. They are '
+                             'simply there.\n'
+                             '\n'
+                             'Ash, willow, yew. Each exactly his height. Theo stands in the '
+                             'entrance and does the arithmetic immediately: three staves, one of '
+                             'him. But he has also been in the Temple long enough to know that the '
+                             'arithmetic of this place does not work the way he wants it to. There '
+                             'is always a catch. There is always a rule you find out about by '
+                             'breaking it.\n'
+                             '\n'
+                             'The sensible thing would be to pick one.\n'
+                             '\n'
+                             'But the sensible thing has not always served him, and he is tired, '
+                             'and he is angry, and the Temple has taken weeks of his labor without '
+                             'offering him much in return beyond the word "duty" repeated in '
+                             'various Brok-tones, and so the sensible thing feels, at this '
+                             'particular moment, like another form of submission.\n'
+                             '\n'
+                             'He reaches for all three at once.\n'
+                             '\n'
+                             'For a moment, nothing happens.\n'
+                             '\n'
+                             'Then something happens.\n'
+                             '\n'
+                             'Not violently -- the Forest Temple does not deal in violence. But '
+                             "the room's quality changes utterly. The sourceless warmth goes out. "
+                             'The roots along the passage behind him make a sound like a door '
+                             'closing, not with a bang but with the soft definitive click of '
+                             'something that meant it. The staves do not move, but his hands '
+                             'suddenly will not close around them. It is not pain. It is more like '
+                             'the staves have become **immutable** -- not physically different, '
+                             'but categorically unavailable, the way a promise is unavailable once '
+                             'you have broken the thing that made it possible.\n'
+                             '\n'
+                             'Theo stands with his hands open and empty in a room that has grown '
+                             'very, very still.\n'
+                             '\n'
+                             'He can take one.\n'
+                             '\n'
+                             'Just one.\n'
+                             '\n'
+                             'Or he can find out what happens when he stands here until the Temple '
+                             'loses patience entirely.',
+                     'title': 'The Greedy Hand',
+                     'vocabulary': [{'definition': 'Unchanging and unchangeable; fixed in a way '
+                                                   'that resists all effort to alter it.',
+                                     'term': 'immutable'},
+                                    {'definition': 'The act of accepting or yielding to the will '
+                                                   'or authority of another; sometimes '
+                                                   'appropriate, sometimes a form of defeat.',
+                                     'term': 'submission'}]},
+ 'a7_struggle': {'choices': [{'set_flags': {'staff': 'yew', 'staff_cracked': False},
+                              'target': 'a8_steady',
+                              'text': 'Take the yew staff. It is not certainty, but it is a '
+                                      'choice.'},
+                             {'set_flags': {'staff': 'ash', 'staff_cracked': False},
+                              'target': 'a8_rough',
+                              'text': 'Take the ash staff. Strength first. Think later.'}],
+                 'ending_type': None,
+                 'era': 'temple',
+                 'figures': [],
+                 'is_ending': False,
+                 'tags': ['staves', 'center_path', 'hesitation', 'choice'],
+                 'text': 'The room at the end of the southeastern passage is not large. Three '
+                         'staves lean against the far wall -- ash, willow, yew -- and the room '
+                         'offers no instruction, no explanation, no Brok to recite the maintenance '
+                         'schedule of the staves. Just three objects and the necessity of choice.\n'
+                         '\n'
+                         'Theo studies them.\n'
+                         '\n'
+                         'The ash staff is pale and dense and looks like it could crack granite. '
+                         'It is the kind of staff a serious person carries. He is not sure he is '
+                         'serious enough for it, and that uncertainty makes him want to take it, '
+                         'which he recognizes as a bad reason.\n'
+                         '\n'
+                         'The willow staff is dark and supple. There is something melancholy about '
+                         'it -- or maybe that is him projecting. It looks like it would bend '
+                         'rather than break in a storm, which should be comforting. It is not '
+                         'entirely comforting.\n'
+                         '\n'
+                         'The yew staff is pale yellow-brown, lighter than the others, with a '
+                         'spiral grain that catches the light differently depending on where you '
+                         'stand. He has stood in four different positions now trying to understand '
+                         'it. It gives him nothing clear -- only the faint feeling that '
+                         'understanding is available, if he reaches for it correctly.\n'
+                         '\n'
+                         'This is the problem with being somewhat prepared: you know enough to '
+                         'know the stakes, but not enough to feel certain.\n'
+                         '\n'
+                         'A well-prepared traveler, he suspects, would simply know which staff to '
+                         'take. There would be no deliberation, only recognition. He does not have '
+                         'recognition. He has **discernment** -- the slower, harder cousin of '
+                         'recognition, the kind that requires work and can still be wrong.\n'
+                         '\n'
+                         'He reaches for the yew staff, then hesitates.\n'
+                         '\n'
+                         'He reaches for the ash staff, then does not touch it.\n'
+                         '\n'
+                         'He steps back and breathes.\n'
+                         '\n'
+                         'The willow staff is still. The ash staff is still. The yew staff is '
+                         'still. None of them are judging him, which is, in its own way, the most '
+                         'pressure he has felt in weeks.\n'
+                         '\n'
+                         'He has to choose. And then live with it.',
+                 'title': 'Three Choices, One Hand',
+                 'vocabulary': [{'definition': 'The ability to judge carefully, to tell apart the '
+                                               'subtly different; a slower, more effortful form of '
+                                               'perception than instinct.',
+                                 'term': 'discernment'}]},
+ 'a8_gentle': {'choices': [{'set_flags': {'has_pouch': True},
+                            'target': 'a9_wise_solitude',
+                            'text': 'Descend with purpose into the ravines. The road is clear.'},
+                           {'set_flags': {'has_pouch': True},
+                            'target': 'a9_path',
+                            'text': 'Descend carefully, taking in the new landscape.'}],
+               'ending_type': None,
+               'era': 'temple',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['brok', 'farewell', 'pouch', 'hafthor', 'light_path', 'emotional_climax'],
+               'text': 'The southeastern passage is narrow and long, and Brok walks ahead of Theo '
+                       'without speaking.\n'
+                       '\n'
+                       'This is not unusual. Brok rarely speaks without a purpose, and the '
+                       'purposes he recognizes -- Temple maintenance, procedural guidance, the '
+                       'recitation of schedules -- are all behind them now. What is ahead requires '
+                       'a different language, and Brok does not have it, and he knows he does not '
+                       "have it, and this does not stop him from walking Theo to the passage's "
+                       'end.\n'
+                       '\n'
+                       'The mouth of the passage opens onto a landing of gray stone. Beyond it, '
+                       'the Chartreuse Forest drops away in long slopes toward something vast and '
+                       'rocky that Theo can feel before he can see. The air is different here. '
+                       'Drier. Older. The smell of the forest -- loam and green and living bark -- '
+                       'mingles with the smell of open elevation.\n'
+                       '\n'
+                       "Brok stops at the landing's edge.\n"
+                       '\n'
+                       "He turns to face Theo. His dinner-plate eyes sweep once from Theo's boots "
+                       "to the yew staff to Theo's face, and then they blink -- the full slow "
+                       'blink -- and then he reaches into the cavity in his chest that Theo has '
+                       'never seen opened before.\n'
+                       '\n'
+                       'What he produces is a pouch.\n'
+                       '\n'
+                       'Leather, but leather unlike any leather Theo has touched. It is warm in a '
+                       "way that has nothing to do with Brok's body heat. It is dark brown, almost "
+                       'black at the seams, and lined inside with something pale and impossibly '
+                       'soft -- fur, fine as breath, from some creature Theo cannot name. There is '
+                       'a smell to it: old cold places, high wind, animal warmth.\n'
+                       '\n'
+                       '"Pouch," Brok says. "From the hide of Hafthor the Yak-God. Lining: '
+                       'flying-goat fur. Insulating. Protective. Standard issue for departing '
+                       'pilgrims in good standing."\n'
+                       '\n'
+                       'He holds it out.\n'
+                       '\n'
+                       'Theo takes it. The warmth of the leather settles into his palm.\n'
+                       '\n'
+                       '"Brok," Theo says.\n'
+                       '\n'
+                       '"Southeastern passage to Chartreuse Forest," Brok says, with the smallest '
+                       'alteration in his tone -- something very slightly different, a frequency '
+                       'Theo has not heard from him before. "Down and up to southwest slope of '
+                       'Mount Nebo. Please take care."\n'
+                       '\n'
+                       'Not "please take one." He has never said that before.\n'
+                       '\n'
+                       'Theo looks at him -- at the dinner-plate eyes, at the seven-fingered hands '
+                       'folded now at his sides, at the metal chest that hides gifts and protocols '
+                       'and whatever else Brok keeps in the places no one sees.\n'
+                       '\n'
+                       'There are things that cannot be said in any language Brok possesses, and '
+                       'Theo understands this, and something in the understanding is itself a kind '
+                       'of **grace** -- the ability to receive what is offered in the form it can '
+                       'be offered, and not demand that it come in a different shape.\n'
+                       '\n'
+                       'He attaches the pouch to his belt. He adjusts the {{staff}} staff in his '
+                       'hand. He looks once more at Brok.\n'
+                       '\n'
+                       '"Thank you," he says. "For everything. The sweeping included."\n'
+                       '\n'
+                       'Brok blinks. Five seconds. The eyes return, and something in them is '
+                       'still.\n'
+                       '\n'
+                       '"Temple will remain tidy," Brok says.\n'
+                       '\n'
+                       'Theo turns and walks into the passage.\n'
+                       '\n'
+                       'For a while -- longer than he expects -- he can hear the faint whir of '
+                       "Brok's joints behind him, growing quieter, and then the forest takes over, "
+                       'and then there is only the sound of his own footsteps and the wind coming '
+                       "off Mt. Nebo's slopes and the faint warm weight of the pouch against his "
+                       'hip.',
+               'title': 'The Pouch of Hafthor',
+               'vocabulary': [{'definition': 'An elegance or ease in accepting what cannot be '
+                                             'changed; also: the ability to receive a gift in the '
+                                             'spirit it was given.',
+                               'term': 'grace'}]},
+ 'a8_rough': {'choices': [{'target': 'a9_lonely',
+                           'text': 'Descend into the ravines. Move forward with what you have.'},
+                          {'target': 'a9_bitter',
+                           'text': 'Descend, but the cracked staff and the empty belt feel like a '
+                                   'verdict.'}],
+              'ending_type': None,
+              'era': 'temple',
+              'figures': [],
+              'is_ending': False,
+              'tags': ['expelled', 'shadow_path', 'cracked_staff', 'no_farewell'],
+              'text': 'There is no ceremony.\n'
+                      '\n'
+                      'The Temple does not throw you out -- it simply makes staying impossible. '
+                      'The rooms close. The passages reroute. The light dims in the places you try '
+                      'to go and brightens only in the one direction left to you, and so Theo '
+                      'walks southeast because there is nowhere else to walk, the ash staff in his '
+                      'hand, the Temple arranging itself behind him like a sentence ending.\n'
+                      '\n'
+                      'The staff is cracked. Not badly -- a hairline fracture along the lower '
+                      'third, the kind you might not notice until you put real weight on it. He '
+                      'put real weight on it. He put real weight on everything and found the '
+                      'limits.\n'
+                      '\n'
+                      'The southeastern passage is dark by the standards of the rest of the '
+                      'Temple. Or maybe it is the same and he is darker. It ends on a landing of '
+                      'gray stone, and Brok is not there, and the pouch is not there, and the '
+                      'Chartreuse Forest drops away below him into long slopes that end, somewhere '
+                      'far below, in a landscape of stone and scrub and thin sky.\n'
+                      '\n'
+                      'Theo stands at the edge and breathes.\n'
+                      '\n'
+                      'He is not defeated. He is clear-eyed, which is its own uncomfortable gift: '
+                      '**lucidity** in a moment of failure is not the same as comfort, but it is '
+                      'better than nothing. He tried to take too much. The Temple held. He is '
+                      'still here, staff in hand, passage behind him, mountain ahead.\n'
+                      '\n'
+                      'Some people would learn nothing from this.\n'
+                      '\n'
+                      'He is not sure, yet, which kind of person he is.\n'
+                      '\n'
+                      'He steps off the landing and descends.',
+              'title': 'No Ceremony',
+              'vocabulary': [{'definition': 'Clear thinking and awareness, especially in a '
+                                            'difficult moment; the ability to see things as they '
+                                            'truly are.',
+                              'term': 'lucidity'}]},
+ 'a8_steady': {'choices': [{'target': 'a9_path',
+                            'text': 'Descend into the ravines. The staff is enough.'},
+                           {'target': 'a9_lonely',
+                            'text': 'Move carefully -- the landscape is unfamiliar and the lack of '
+                                    'provisions worries you.'}],
+               'ending_type': None,
+               'era': 'temple',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['passage', 'center_path', 'no_gift', 'solo_departure'],
+               'text': 'The southeastern passage is lit by that same sourceless Temple light, and '
+                       'Theo walks it alone.\n'
+                       '\n'
+                       'He did not expect Brok to accompany him. He half-hoped for it, which is '
+                       'different. But when he emerged from the stave-room with the {{staff}} '
+                       'staff in hand -- chosen after long hesitation, but chosen -- Brok was not '
+                       'waiting at the passage entrance. The passage simply opened before him, and '
+                       'the logic of the Temple said: this is the way.\n'
+                       '\n'
+                       'So he walked.\n'
+                       '\n'
+                       'The passage ends on a landing of gray stone. The Chartreuse Forest falls '
+                       'away below in long green-shadowed slopes, and beyond, the air changes to '
+                       'something rawer, older. Mt. Nebo. He can feel its **imminence** before he '
+                       'can see it -- a sense of something enormous beginning.\n'
+                       '\n'
+                       "He stands at the landing's edge. No one comes.\n"
+                       '\n'
+                       'He listens. Somewhere behind him, deep in the Temple, he can hear the '
+                       'faint whir of machinery, the sound of Brok going about his routines. '
+                       'Forty-eight hour maintenance schedule. The Temple remains tidy.\n'
+                       '\n'
+                       'Theo wraps his hand around the {{staff}} staff more firmly. It is a good '
+                       'staff. He chose it without full certainty, and it has not punished him for '
+                       'that. Maybe certainty is overrated. Maybe the choosing itself is what '
+                       'matters.\n'
+                       '\n'
+                       'He steps off the landing and into the passage down.\n'
+                       '\n'
+                       'There is no pouch at his belt. He does not know what he has missed. He '
+                       'only knows that he is less provisioned than he might have been, and that '
+                       'the feeling of a gift not given is a particular kind of cold.',
+               'title': 'The Passage Without Words',
+               'vocabulary': [{'definition': 'The quality of something about to happen or arrive; '
+                                             'a presence that can be felt before it is seen.',
+                               'term': 'imminence'}]},
+ 'a9_bitter': {'choices': [{'target': 'a10_cling',
+                            'text': 'Keep walking, keep blaming. At least motion is something.'},
+                           {'target': 'a9_h_breakdown',
+                            'text': 'Sit here until the blaming runs out. Something is underneath '
+                                    'it.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['ravines', 'far_shadow', 'blame', 'self_deception', 'bitter'],
+               'text': 'Theo walks and curses.\n'
+                       '\n'
+                       'Not loudly -- there is no one to perform anger for -- but internally, a '
+                       'running commentary of blame that has been building since the stave-room '
+                       'and is now fully operational. He blames the Temple for its obscurity. He '
+                       'blames Brok for his literalism. He blames the Locks -- the badger couple '
+                       'from weeks ago -- for directing him imprecisely. He blames the forest for '
+                       'its impenetrability. He blames the crossroads for its demands. He blames '
+                       'the staves for existing in a configuration that required choosing.\n'
+                       '\n'
+                       'Mostly he blames himself, which he disguises as blaming other things, '
+                       'which is a very specific kind of dishonesty that he has not yet named.\n'
+                       '\n'
+                       'The ravines are ugly to him right now. He knows, in some abstract part of '
+                       'himself that is not currently in charge, that they are not objectively '
+                       'ugly -- that the stone has a **austere** kind of beauty, the scrub an '
+                       '**tenacity** worth admiring, the streams a purity. But the part of him '
+                       'that knows this has been shouted down by the part of him that is cold and '
+                       'staffed with a cracked ash staff and beltless and walking into a landscape '
+                       'that did not invite him.\n'
+                       '\n'
+                       'He stops and kicks a stone.\n'
+                       '\n'
+                       'The stone moves about two feet and comes to rest against another stone. '
+                       'The ravine does not respond.\n'
+                       '\n'
+                       'He kicks another stone.\n'
+                       '\n'
+                       'Still nothing.\n'
+                       '\n'
+                       'He sits down abruptly on a flat ledge of rock and stares at the darkening '
+                       'sky and feels the full weight of what he has made of the last several '
+                       'weeks -- what he chose, what he did not choose, what he took, what he '
+                       'failed to receive. The cracked staff leans against the rock beside him. '
+                       'The mountain rises in every direction he looks.\n'
+                       '\n'
+                       'He can keep blaming. It is available to him. It will remain available.\n'
+                       '\n'
+                       'Or he can sit here long enough to feel what is actually true, which is '
+                       'harder, and lonelier, and more useful.',
+               'title': 'Blame on Every Stone',
+               'vocabulary': [{'definition': 'Severely simple; lacking decoration or comfort, in a '
+                                             'way that can be either harsh or quietly dignified.',
+                               'term': 'austere'},
+                              {'definition': 'The quality of holding on firmly; persisting in the '
+                                             'face of difficulty or opposition.',
+                               'term': 'tenacity'}]},
+ 'a9_h_breakdown': {'choices': [{'target': 'a10_accept',
+                                 'text': 'Get up. The emptying was necessary. Walk forward into '
+                                         'the dark.'},
+                                {'target': 'a10_cling',
+                                 'text': 'You are too empty to rise. Stay here until the mountain '
+                                         'moves.'}],
+                    'ending_type': None,
+                    'era': 'ravines',
+                    'figures': [],
+                    'is_ending': False,
+                    'tags': ['ravines', 'horizontal', 'breakdown', 'shadow', 'turning_point'],
+                    'text': 'It happens between one step and the next.\n'
+                            '\n'
+                            'Theo is walking -- or he was walking, he thought he was still walking '
+                            '-- and then he is sitting on the ground of the ravine with no memory '
+                            'of deciding to sit, and something in his chest is doing something '
+                            'that is not crying exactly but is adjacent to crying, is the thing '
+                            'that exists in the same neighborhood as crying, and he cannot stop '
+                            'it.\n'
+                            '\n'
+                            "He doesn't try to stop it.\n"
+                            '\n'
+                            'He has been trying to stop things for weeks. Trying to stop the fear '
+                            'of arriving at the Temple unprepared. Trying to stop the anger at '
+                            "Brok's routines. Trying to stop the grief -- and it is grief, he can "
+                            'call it what it is now, down here in the dark at the bottom of Mt. '
+                            "Nebo's ravines with no one to see -- grief at being so far from home, "
+                            'so far from everything familiar, so entirely dependent on his own '
+                            '**resilience**, which has not always been sufficient.\n'
+                            '\n'
+                            'The mountain does not comfort him.\n'
+                            '\n'
+                            'It does not need to. That is, he discovers slowly, in the minutes '
+                            'that pass with the stars turning overhead and the stream threading '
+                            'cold over pale stones below him, the point.\n'
+                            '\n'
+                            'He has been looking for the landscape to answer him. For Brok to '
+                            'answer him. For the crossroads to answer him. And they have all, each '
+                            'in their way, said the same thing: we are what we are. What you are '
+                            'is up to you.\n'
+                            '\n'
+                            '**Catharsis** is not the same as resolution. He is not resolved. He '
+                            'is emptied, which is different from being repaired, but is perhaps '
+                            'prior to it -- the clearing that must happen before something can be '
+                            'built.\n'
+                            '\n'
+                            'He gets up.\n'
+                            '\n'
+                            'Or he does not.\n'
+                            '\n'
+                            'Both are possible. The stars do not care. The mountain does not lean '
+                            'either way. But he is still here, and the ravine still exists, and '
+                            'there is still a staff in his hand, cracked or whole, and the road '
+                            'does not end at the bottom.',
+                    'title': 'The Lowest Stone',
+                    'vocabulary': [{'definition': 'The ability to recover from difficulty; the '
+                                                  'capacity to adapt and keep going after being '
+                                                  'tested or broken down.',
+                                    'term': 'resilience'},
+                                   {'definition': 'A release or purging of strong emotions, often '
+                                                  'through reaching a lowest point; associated '
+                                                  'with the clearing that can make room for '
+                                                  'growth.',
+                                    'term': 'catharsis'}]},
+ 'a9_h_fire': {'choices': [{'target': 'a10_accept',
+                            'text': "Walk into the silver morning with everything you've learned "
+                                    'carried lightly.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['ravines', 'horizontal', 'fire', 'insight', 'yew_staff', 'brok'],
+               'text': "Theo builds the fire the way the Temple's routines taught him to do almost "
+                       'everything -- not efficiently, not beautifully, but correctly. Stones in a '
+                       "ring. Dry scrub. Tinder from the pouch's outer pocket, which he discovers "
+                       'is full of useful things he did not know were there: a flint, a small coil '
+                       'of cord, a square of folded cloth that smells of pine resin.\n'
+                       '\n'
+                       'Brok packed this pouch himself. Of course he did.\n'
+                       '\n'
+                       'The fire catches. The ravine fills with light that is orange and mortal '
+                       'and much smaller than the stars but warmer in a way the stars cannot be, '
+                       'and Theo sits with his back against the stone and the {{staff}} staff '
+                       'across his knees and watches the flame.\n'
+                       '\n'
+                       'The staff glows.\n'
+                       '\n'
+                       "It is a subtle thing -- the fire's light enters the pale yellow-brown wood "
+                       'and seems to travel along the spiral grain, deepening, as though the staff '
+                       'is less reflecting the light than remembering it. It is not magic, '
+                       'exactly. Or it is exactly magic, but the quiet, unglamorous kind: '
+                       '**numinous** in the oldest sense, the sense before people started needing '
+                       'magic to announce itself.\n'
+                       '\n'
+                       'He thinks about the crossroads. He thinks about the four passages and the '
+                       'silence that called him forward. He thinks about Brok\'s "please take '
+                       'care" and the warmth of the leather in his palm and the five-second blink '
+                       'that said everything that Brok could not say in words.\n'
+                       '\n'
+                       'He thinks about what he is walking toward.\n'
+                       '\n'
+                       'Mt. Nebo is called the Parallax of Life. He does not fully know what that '
+                       'means yet. A parallax is when the same object looks different depending on '
+                       'where you stand. He has stood in several places now. He is curious, for '
+                       'the first time without fear, about what the mountain will look like from '
+                       'the next one.\n'
+                       '\n'
+                       'The fire burns down. He lets it.\n'
+                       '\n'
+                       'In the morning the ravine is silver and cold and full of bird calls he has '
+                       'never heard before, and he shoulders the pouch and takes the staff and '
+                       'walks into it.',
+               'title': 'The Staff in Firelight',
+               'vocabulary': [{'definition': 'Having a strong quality of the sacred or spiritual; '
+                                             'a sense of the divine or mysterious, often felt in '
+                                             'quiet or natural settings rather than announced by '
+                                             'spectacle.',
+                               'term': 'numinous'},
+                              {'definition': 'The apparent difference in position of an object '
+                                             'when viewed from different points; used '
+                                             'metaphorically to describe how perspective shapes '
+                                             'understanding.',
+                               'term': 'parallax'}]},
+ 'a9_h_phil': {'choices': [{'target': 'a10_accept',
+                            'text': 'Watch Phil disappear down the ravine, smiling for the first '
+                                    'time in days.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': ['Phil'],
+               'is_ending': False,
+               'tags': ['phil', 'horizontal', 'comfort', 'ravines'],
+               'text': 'He heard Phil before he saw him: a small, certain voice delivering what '
+                       'sounded like a formal address to no one in particular.\n'
+                       '\n'
+                       '"-- and furthermore, let it be recorded that the King\'s provision extends '
+                       'even unto the third ravine, as demonstrated by the presence of this '
+                       'perfectly serviceable basalt shelf on which a messenger of moderate size '
+                       'may rest his materials without fear of --"\n'
+                       '\n'
+                       'Theo stepped around a limestone outcrop and found Phil the pillbug '
+                       'standing on a flat rock, consulting a map made from a broad leaf on which '
+                       'someone -- Phil, presumably -- had drawn careful lines in what appeared to '
+                       'be berry juice. The map was nearly as large as Phil himself. He was using '
+                       'a twig as a pointer.\n'
+                       '\n'
+                       '{{#has_met_Phil}}Phil looked up. His many eyes widened with what Theo had '
+                       'come to recognize as genuine delight barely contained inside genuine '
+                       'decorum.\n'
+                       '\n'
+                       '"You! The tall one! From the Gate!" He straightened, which involved his '
+                       'entire body. "Praise the King -- what a **providence**! I had wondered, '
+                       'when you passed through, whether the road would treat you fairly. I see '
+                       'you are still vertical, which I count as favorable."\n'
+                       '\n'
+                       '"Mostly," Theo said.\n'
+                       '\n'
+                       '"Mostly is sufficient for this terrain."{{/has_met_Phil}}\n'
+                       '\n'
+                       'Phil refolded his leaf map with the gravity of a diplomat securing a '
+                       'treaty and tucked it beneath one of his middle legs. He was, Theo '
+                       'gathered, in the middle of delivering something -- a small parcel no '
+                       'larger than a thimble, wrapped in grass and tied with a fiber of root, sat '
+                       'beside him on the rock.\n'
+                       '\n'
+                       '"A commission from the King," Phil said, following Theo\'s gaze. "A seed. '
+                       'There is a gardener in the lower valleys who has been waiting three '
+                       'seasons. These things cannot be hurried. Only carried."\n'
+                       '\n'
+                       'He said it without drama, as though this were the most natural thing in '
+                       'the world -- a pillbug crossing ravines to deliver a single seed to a '
+                       'waiting gardener -- and perhaps, Theo thought, in this Kingdom, it was.\n'
+                       '\n'
+                       'They sat together for a few minutes in the easy silence of fellow '
+                       'travelers who have no particular debt to explain themselves. The ravine '
+                       'stretched below, patient and indifferent. Phil hummed something brief and '
+                       'satisfied. Theo ate the last of his bread without tasting it and felt, for '
+                       'the first time in what seemed like a very long descent, that the world was '
+                       'not entirely composed of fog and difficult questions.\n'
+                       '\n'
+                       '"Courage is not the absence of uncertainty," Phil said, as he prepared to '
+                       'leave. He said it the way people say things they mean to say to themselves '
+                       'and forget are audible. "It is the decision to carry the seed anyway. '
+                       'Praise the King."\n'
+                       '\n'
+                       'He tucked the parcel more securely under his leg and disappeared down the '
+                       'ravine, moving with the calm certainty of something that knows exactly '
+                       'where it is going.',
+               'title': 'The Herald Returns',
+               'vocabulary': [{'definition': 'The guiding care of a force greater than oneself -- '
+                                             'not luck, but the sense that what arrives has been, '
+                                             'in some way, arranged.',
+                               'term': 'providence'}]},
+ 'a9_lonely': {'choices': [{'target': 'a10_cling',
+                            'text': 'Stay in the shelter of the rock. Wait for morning and walk '
+                                    'again.'},
+                           {'target': 'a9_h_breakdown',
+                            'text': 'The stars make you want to keep moving. Get up and walk.'}],
+               'ending_type': None,
+               'era': 'ravines',
+               'figures': [],
+               'is_ending': False,
+               'tags': ['ravines', 'shadow_path', 'cold', 'alone', 'loneliness'],
+               'text': 'The ravines are stone and scrub and the sound of wind.\n'
+                       '\n'
+                       'That is all they are. Theo has been walking for hours -- or what feels '
+                       'like hours; the ravines have their own relationship with time, which does '
+                       'not appear to include him -- and the landscape has not changed. Rock. Thin '
+                       'plants in the rock cracks. A stream that appears and disappears. Sky above '
+                       'that has gone the color of old iron as the light fails.\n'
+                       '\n'
+                       'He is cold.\n'
+                       '\n'
+                       'He does not have the pouch of Hafthor. He did not earn it, or did not '
+                       'leave the Temple in the way that produced it, and the absence now is a '
+                       'physical thing -- his hands are cold, his pack carries no extra warmth, '
+                       'and the {{staff}} staff is just wood in his hand, useful for walking, '
+                       'nothing more.\n'
+                       '\n'
+                       'He is aware of being **bereft** in a way he has not allowed himself to '
+                       'feel since he arrived in the Elysian Kingdom.\n'
+                       '\n'
+                       'The forest had been full. The Temple, even in its harshness, had been full '
+                       '-- full of Brok, full of routine, full of the presence of something that '
+                       'cared about its own **perpetuation** even if it did not care particularly '
+                       'about Theo. Out here there is nothing that cares about its perpetuation, '
+                       'because everything out here already is what it is. Stone does not need to '
+                       'become stone. It already is. Wind does not need to become wind. Scrub does '
+                       'not need to do anything.\n'
+                       '\n'
+                       'Theo needs things. He is aware of needing things. This awareness is '
+                       'uncomfortable in direct proportion to how little he can do about it.\n'
+                       '\n'
+                       'He finds a depression in the rock out of the wind and sits in it and pulls '
+                       'his knees up and does not call it anything.\n'
+                       '\n'
+                       'Above him, stars are appearing in the iron sky, one by one, as though they '
+                       'are being lit by someone very patient and very far away.',
+               'title': 'Stone and Scrub',
+               'vocabulary': [{'definition': 'Lacking something essential; experiencing loss or '
+                                             'deprivation keenly, especially of comfort or '
+                                             'companionship.',
+                               'term': 'bereft'},
+                              {'definition': 'The continuation or preservation of something over '
+                                             'time; the drive to keep existing.',
+                               'term': 'perpetuation'}]},
+ 'a9_path': {'choices': [{'target': 'a10_accept',
+                          'text': 'Keep walking. The uncertainty is part of the road.'},
+                         {'target': 'a10_cling',
+                          'text': 'Stop. The emptiness of this landscape is pressing in.'},
+                         {'target': 'a9_h_phil',
+                          'text': 'A small, certain voice is coming from somewhere ahead.'}],
+             'ending_type': None,
+             'era': 'ravines',
+             'figures': [],
+             'is_ending': False,
+             'tags': ['ravines', 'center_path', 'uncertainty', 'alone'],
+             'text': 'The ravines are nothing like the forest.\n'
+                     '\n'
+                     'Theo had expected the transition to be gradual -- the green deepening into '
+                     'gray, the living wood giving way to stone with some intermediate stage of '
+                     'both. Instead the shift is almost instant: one turn in the passage and the '
+                     'forest is behind him, and ahead is a landscape of bare rock and sky and the '
+                     'sound of water somewhere below he cannot yet locate.\n'
+                     '\n'
+                     'He walks.\n'
+                     '\n'
+                     'The landscape does not ask anything of him. It does not teach and it does '
+                     'not test and it does not maintain a schedule. It simply exists, the way '
+                     'mountains exist -- with absolute **indifference**, which is its own kind of '
+                     "honesty. The stones don't care about him. The thin scrub growing from the "
+                     "rock cracks doesn't care about him. The mountain itself, rising to heights "
+                     'he cannot see from inside the ravines, cares nothing for him.\n'
+                     '\n'
+                     'This is hard to sit with.\n'
+                     '\n'
+                     'At the Temple there were always eyes on him, always routines that shaped his '
+                     "movements, always Brok or the Temple's living architecture giving him a "
+                     'role: pilgrim, laborer, tender, learner. Out here his role is self-assigned, '
+                     'and he is not sure he has assigned it yet.\n'
+                     '\n'
+                     'He has a staff. He has no pouch. He has the food he is carrying in his pack, '
+                     'which will last a week if he is careful, and which he will have to find on '
+                     'his own after that.\n'
+                     '\n'
+                     'He is careful.\n'
+                     '\n'
+                     'The ravine winds. Crystal water appears in a channel at the bottom -- clear '
+                     'over pale stones, cold when he kneels to drink from it. He does not know the '
+                     'name of this stream. It does not have a name, or if it does, no one has told '
+                     'him.\n'
+                     '\n'
+                     'He drinks and walks and the mountain rises around him, vast and patient, and '
+                     'the sky above is the kind of blue that makes you feel very small and not '
+                     'entirely unhappy about it.',
+             'title': 'The Uncertain Descent',
+             'vocabulary': [{'definition': 'Lack of interest or concern; a neutrality that neither '
+                                           'helps nor harms, which can be its own form of freedom.',
+                             'term': 'indifference'}]},
+ 'a9_wise_solitude': {'choices': [{'target': 'a10_accept',
+                                   'text': 'Continue at dawn, moving steadily toward whatever '
+                                           'waits ahead.'},
+                                  {'target': 'a9_h_fire',
+                                   'text': 'Build a fire first. Rest here fully before moving '
+                                           'on.'}],
+                      'ending_type': None,
+                      'era': 'ravines',
+                      'figures': [],
+                      'is_ending': False,
+                      'tags': ['ravines', 'light_path', 'stars', 'solitude', 'yew_staff'],
+                      'text': 'The ravines of Mt. Nebo are not what Theo expected.\n'
+                              '\n'
+                              'He expected desolation. What he finds is something more precise: a '
+                              'landscape without **embellishment**. No dandelion petals falling '
+                              'from living chapels. No roots curling artfully through stone. No '
+                              'Brok reciting schedules to make the silence feel occupied. Just '
+                              'rock and scrub and the thin silver threads of mountain streams '
+                              'finding their way down through stone channels, and above it all, a '
+                              'sky so dark and so crowded with stars that he has to stop and '
+                              'stare, once, for a long time, before he can walk again.\n'
+                              '\n'
+                              'The {{staff}} staff fits the terrain naturally. He did not expect '
+                              'that either. It finds the angles of loose stone before his feet do, '
+                              'pressing lightly against surfaces that hold and pulling back from '
+                              'surfaces that will not. He could not have explained how he knows '
+                              'which pressure is which. He just knows.\n'
+                              '\n'
+                              'The pouch of Hafthor sits warm at his hip. He has not yet looked '
+                              'inside. There is a time for that, and this is not it -- this is the '
+                              'time for walking, for the particular discipline of moving through a '
+                              'landscape that does not care about you and finding, in that '
+                              'indifference, something like freedom.\n'
+                              '\n'
+                              'The forest had been full of meanings. Every tree, every root, every '
+                              'encounter had the quality of a lesson with a lesson-shape, and Theo '
+                              'had not always been sure whether he was the student or the subject. '
+                              'The ravines have no lesson-shape. They are just the ravines -- old '
+                              'and patient and complete without him.\n'
+                              '\n'
+                              'He is **solitary** here, and he is discovering that solitary is not '
+                              'the same as lonely. Lonely is when the absence of others leaves a '
+                              'wound. Solitary is when you arrive at your own company and find it '
+                              'sufficient.\n'
+                              '\n'
+                              'He walks until the first stars fade, and then he sleeps on flat '
+                              'stone with the pouch under his head and the {{staff}} staff across '
+                              'his chest, and the mountain breathes around him, and he does not '
+                              'dream of the Temple or of Brok or of the crossroads.\n'
+                              '\n'
+                              'He dreams of where he is going.',
+                      'title': 'Starlight on the Ravines',
+                      'vocabulary': [{'definition': 'Detail or decoration added to something to '
+                                                    'make it more attractive or impressive; '
+                                                    'ornamentation beyond the essential.',
+                                      'term': 'embellishment'},
+                                     {'definition': 'Alone, but with a quality of chosen or '
+                                                    'purposeful aloneness; distinct from '
+                                                    'loneliness, which implies unwanted absence.',
+                                      'term': 'solitary'}]},
+ 'ending_abyss': {'choices': [],
+                  'ending_type': 'bad',
+                  'era': 'heights',
+                  'figures': ['Bartop'],
+                  'is_ending': True,
+                  'tags': ['ending',
+                           'bad',
+                           'abyss',
+                           'light',
+                           'fresco',
+                           'bartop',
+                           'cautionary',
+                           'waste',
+                           'beauty'],
+                  'text': 'Theo stayed.\n'
+                          '\n'
+                          'The light at the Parallax of Life was the purest light in the Elysian '
+                          'Kingdom, and Theo had decided, standing at the summit with the evening '
+                          'coming on, that he would not look away from it. He had spent too much '
+                          "of the journey looking away -- from the mirror pool, from Brok's open "
+                          "chest, from Mack's last truth, from his own reflection in the dark pool "
+                          'before the Starstone. Looking away had cost him. He would not look away '
+                          'now.\n'
+                          '\n'
+                          'The light revealed everything.\n'
+                          '\n'
+                          'It revealed the mirror pool and every moment he had looked away before '
+                          'the looking was finished. It revealed the chains in the ravines and '
+                          "every time he had called them choices. It revealed Gunnin's spectacles "
+                          'and the way he had used them as a shield against seeing rather than as '
+                          'a school for it. It revealed every half-gift received, every lesson '
+                          "heard and filed and not lived, every moment the King's presence had "
+                          "been offered to him -- in Phil's trust, in Brok's gift, in the Maiden's "
+                          'fire -- and he had taken the surface and left the depth.\n'
+                          '\n'
+                          'The light did not judge. This was the terrible thing. The light was not '
+                          'cruel, not punishing, not even disappointed. It was simply thorough. It '
+                          'showed everything with equal **clarity** -- the moments of genuine '
+                          'grace and the moments of failure -- and in that thoroughness, for '
+                          'someone who had not prepared for thoroughness, it was unbearable.\n'
+                          '\n'
+                          'The **apotheosis** that comes from light requires someone who has been '
+                          'emptied enough to be filled. Theo had not been emptied enough. He had '
+                          'kept too much of the old weight -- the self-justifications, the '
+                          'comfortable inadequacies, the practiced art of almost. The light poured '
+                          'into him and found that the vessel was not yet clean, and the light and '
+                          'the residue together produced something that could not be sustained.\n'
+                          '\n'
+                          'He felt himself becoming -- not larger, but thinner. Stretched. As if '
+                          'the light were pulling at something in him that would not release, and '
+                          'the pulling was beginning to tear.\n'
+                          '\n'
+                          'The Beings of Light attended. The faeries were still. Even the wind on '
+                          'the summit was still.\n'
+                          '\n'
+                          "Theo sat down on the dark stone of the Parallax and felt the mountain's "
+                          'shadow rise around him -- not the physical shadow of evening, but the '
+                          'other kind, the shadow that is the absence of the self that might have '
+                          'been. He could feel Bartop, far below in the Temple of Memories, '
+                          'already composing the fresco. A new niche, a new figure -- a boy with '
+                          'spectacles in his pocket, sitting on the summit, transparent in the '
+                          'wrong way, the light passing through him rather than illuminating him.\n'
+                          '\n'
+                          'A cautionary tale.\n'
+                          '\n'
+                          'For the next pilgrim.\n'
+                          '\n'
+                          'The last thing Theo felt was not fear and not pain but something '
+                          'quieter -- the specific sorrow of waste, of potential that arrived at '
+                          'the right place at the wrong time, of a seed that reached the summit '
+                          'but had not learned, yet, how to root in stone.\n'
+                          '\n'
+                          'The mountain was patient.\n'
+                          '\n'
+                          'The mountain would tell his story.\n'
+                          '\n'
+                          'The next pilgrim would read it in the fresco and would choose, perhaps, '
+                          'to look in the mirror pool until the looking was finished.\n'
+                          '\n'
+                          '---\n'
+                          '\n'
+                          "Bartop's chisel found the stone.\n"
+                          '\n'
+                          'He worked carefully, as he always worked -- geological patience, '
+                          "millennial precision. The boy's face took shape in the limestone. The "
+                          'spectacles in the pocket. {{#staff}}The {{staff}} staff laid down '
+                          'beside him. {{/staff}}{{#has_pouch}}The pouch of Hafthor at his belt, '
+                          'full of gifts he had received and not yet learned to give away. '
+                          '{{/has_pouch}}{{^has_pouch}}The belt where the pouch had been, empty '
+                          'now -- given to a trickster who gave it to a maiden who would keep it '
+                          'on a windowsill forever, which was the best thing that could have '
+                          'happened to it, and the saddest. {{/has_pouch}}\n'
+                          '\n'
+                          'Bartop made him beautiful, as he made all his figures beautiful, '
+                          'because the truth deserved beauty even when -- especially when -- the '
+                          'truth was a warning.\n'
+                          '\n'
+                          'He worked through the night, and the Starstone glowed in its pool '
+                          'below, and somewhere above, the Sacred Fire renewed itself on the '
+                          'bronze plateau, patient and ancient, ready for the next pilgrim who '
+                          'would arrive at the Forest Gate and find a pillbug waiting by the '
+                          "keyhole, trusting and small and full of the King's own patience.\n"
+                          '\n'
+                          '*Praise the King.*\n'
+                          '\n'
+                          'Bartop said it quietly, to the dark and the stone and the small light '
+                          'in the deep pool, and went on working.\n'
+                          '\n'
+                          '**THE END -- THE ABYSS**',
+                  'title': 'What the Light Made Visible',
+                  'vocabulary': [{'definition': 'The quality of being perfectly transparent and '
+                                                'visible -- used here to suggest that complete '
+                                                'transparency, before one is ready for it, can be '
+                                                'destructive rather than illuminating.',
+                                  'term': 'clarity'},
+                                 {'definition': 'The highest point of development -- here, a '
+                                                'transformation that was attempted but could not '
+                                                'be completed because the vessel was not yet ready '
+                                                'to be filled.',
+                                  'term': 'apotheosis'}]},
+ 'ending_crossroads': {'choices': [],
+                       'ending_type': 'neutral',
+                       'era': 'heights',
+                       'figures': [],
+                       'is_ending': True,
+                       'tags': ['ending',
+                                'neutral',
+                                'crossroads',
+                                'incomplete',
+                                'glass',
+                                'persistence',
+                                'return'],
+                       'text': 'Theo descended from the Parallax as the evening came on.\n'
+                               '\n'
+                               'The path down was not the path up -- not exactly. It moved through '
+                               'a different quality of air, a different angle of light, and there '
+                               'were moments, stepping from one stone to the next, when he could '
+                               "feel the King's presence like warmth at the back of his neck. "
+                               'Close. Real. Waiting with the patience of something that had been '
+                               'waiting long before Theo arrived and would wait long after.\n'
+                               '\n'
+                               'But there was a glass between them.\n'
+                               '\n'
+                               'Not a barrier built by the King. A barrier built by Theo himself, '
+                               'from every moment he had chosen the comfortable answer, every '
+                               'chain he had worn because taking it off would require a kind of '
+                               "effort he had decided he couldn't afford, every lesson that had "
+                               'arrived and been received with the part of him that was paying '
+                               'attention while the other part was already looking for the exit.\n'
+                               '\n'
+                               'He had learned much. He had changed. He was not the boy who had '
+                               'fallen asleep over his textbook -- he was something further along, '
+                               'something leaning toward the light. But leaning was not the same '
+                               'as arriving.\n'
+                               '\n'
+                               'He reached the Porch of Sacred Fire as the last of the Sacred Fire '
+                               'guttered into ordinary evening. The bronze was cooling. The '
+                               'Chartreuse Forest below was dark, its colors retreated until '
+                               'morning. The bat was gone.\n'
+                               '\n'
+                               'Theo stood on the cooling bronze and looked out over the Kingdom '
+                               'he had walked through, and felt something that was not sadness and '
+                               "not disappointment but was perhaps the flavor of a word he hadn't "
+                               'learned yet -- the specific weight of knowing you have been given '
+                               'something enormous and have carried it well but not completely, '
+                               'that the journey was real and the changing was real and the summit '
+                               'was real and still, still, there is more.\n'
+                               '\n'
+                               'He was changed but mortal. He had seen the light through fog.\n'
+                               '\n'
+                               'He would carry this. The spectacles, heavy in his pocket. '
+                               '{{#has_pouch}}The pouch of Hafthor, still at his belt. '
+                               '{{/has_pouch}}{{^has_pouch}}The absence of the pouch, which had '
+                               'found its way to the Maiden and was, perhaps, more useful there. '
+                               '{{/has_pouch}}{{#staff}}The {{staff}} staff, still in his hand. '
+                               '{{/staff}}These were real. What he had learned was real. The King, '
+                               'glimpsed through the glass of his own incompleteness, was real.\n'
+                               '\n'
+                               '---\n'
+                               '\n'
+                               'Theo woke in his bed.\n'
+                               '\n'
+                               'The textbook was open. The lamp was on. The dream was fading at '
+                               'the edges but its center held -- a quality of light, a warmth at '
+                               "the back of the neck, a bat's ancient voice saying *the King is "
+                               'expecting you.*\n'
+                               '\n'
+                               'He lay still and let what remained settle.\n'
+                               '\n'
+                               'Not everything. Not everything. But something.\n'
+                               '\n'
+                               'The Elysian Kingdom was somewhere he had not quite finished '
+                               'visiting. He understood this without grief. The dream persisted, '
+                               'which meant the door was still open, which meant the journey had '
+                               'not ended -- only paused, as all journeys pause, at the boundary '
+                               'between sleeping and waking.\n'
+                               '\n'
+                               'He would be back.\n'
+                               '\n'
+                               'He closed his eyes once more, just to see if the bronze was still '
+                               'warm.\n'
+                               '\n'
+                               'It was.\n'
+                               '\n'
+                               '**THE END -- THE CROSSROADS**',
+                       'title': 'The Dream You Almost Finished',
+                       'vocabulary': []},
+ 'ending_darkness': {'choices': [],
+                     'ending_type': 'bad',
+                     'era': 'depths',
+                     'figures': ['Bartop'],
+                     'is_ending': True,
+                     'tags': ['ending', 'bad', 'darkness', 'shadow_path', 'stone'],
+                     'text': 'You stop moving.\n'
+                             '\n'
+                             'It is not a decision, exactly. It is the cessation of decision -- '
+                             'the point at which the accumulation of wrong turns and exhaustion '
+                             "and darkness exceeds the body's willingness to produce another step. "
+                             'You sit down on the cold marble of whatever corridor this is. Your '
+                             'back finds the wall. The wall is there.\n'
+                             '\n'
+                             'The Temple of Memories breathes around you. The frescoes, which you '
+                             'cannot see, continue to hold their stories. The Seven Corridors '
+                             'continue their long slow work of being corridors. Somewhere far '
+                             'below, the Starstone persists in its dark pool, emitting its small '
+                             'holy light into the water above it, patient and sufficient.\n'
+                             '\n'
+                             'The Temple does not notice you. This is not cruelty. It is simply '
+                             'scale.\n'
+                             '\n'
+                             'You are very cold, and then less cold, and then the cold is not '
+                             'something you are experiencing but something you are.\n'
+                             '\n'
+                             'The marble is around you.\n'
+                             '\n'
+                             'You are, in some sense, comfortable. You have found stillness, at '
+                             'last, though not by any path you intended. The Temple has received '
+                             'you the way it receives everything: without judgment, without '
+                             'rescue, without particular interest. You are part of the stone now. '
+                             'Your story is in the walls with all the other stories.\n'
+                             '\n'
+                             'Bartop will find you. In a thousand years, or perhaps two thousand '
+                             '-- time moves differently for limestone creatures who have walked '
+                             'these corridors since before the first human painter touched pigment '
+                             'to plaster -- Bartop will pass through this section of the third '
+                             'Corridor and pause, and look at the new shape in the wall with his '
+                             'deep recess eyes, and he will understand, because Bartop understands '
+                             'everything eventually.\n'
+                             '\n'
+                             'He will not be sad. But he will remember.\n'
+                             '\n'
+                             'Everything in the Temple of Memories is remembered.\n'
+                             '\n'
+                             '**THE END -- INTO THE STONE**',
+                     'title': 'Part of the Stone',
+                     'vocabulary': []},
+ 'ending_guardian': {'choices': [],
+                     'ending_type': 'good',
+                     'era': 'depths',
+                     'figures': ['Bartop'],
+                     'is_ending': True,
+                     'tags': ['ending', 'good', 'guardian', 'shadow_path', 'bartop', 'bittersweet'],
+                     'text': 'You go back for the spectacles.\n'
+                             '\n'
+                             'This is not a small thing. You have been walking for hours -- or '
+                             'what feels like hours, time in the Temple of Memories having its own '
+                             'elastic quality -- and going back requires admitting that the '
+                             'direction you chose was not the right direction, which requires '
+                             'admitting that your eyes, alone, were not sufficient, which requires '
+                             'the particular humility of setting down a thing you had decided was '
+                             'yours.\n'
+                             '\n'
+                             'You set it down. You go back.\n'
+                             '\n'
+                             'The spectacles are where you left them. You put them on. The '
+                             'corridor becomes legible. But the corridor to the Porch of Sacred '
+                             'Fire -- you can see it now, clearly, through the sea glass lens -- '
+                             'is sealed. A door of ancient stone, smooth-fitted and without '
+                             'handle. The way to the heights is closed.\n'
+                             '\n'
+                             'Bartop is beside you. You did not hear him approach, which is '
+                             'somehow appropriate. He is simply there, enormous and patient, his '
+                             'recess eyes looking at the sealed door with an expression his face '
+                             'is not built to make but that you read anyway: not disappointment, '
+                             'not resignation, but a kind of settled understanding.\n'
+                             '\n'
+                             'You understand it too.\n'
+                             '\n'
+                             'You are not going to the heights. Not this journey.\n'
+                             '\n'
+                             "But the Temple needs a guardian. Not Bartop's replacement -- he is "
+                             'irreplaceable, and he will outlast the mountain -- but his '
+                             'companion. Someone to walk the corridors beside him. Someone to '
+                             'learn, over centuries, what the frescoes mean in both directions. '
+                             'Someone to be there when the next pilgrim arrives at the south face '
+                             'and steps into the marble dark.\n'
+                             '\n'
+                             'You stay.\n'
+                             '\n'
+                             'The years pass. Your hair goes gray, then white, then you stop '
+                             'counting. The corridors become known to you the way your own hands '
+                             'are known to you. You develop a favorite fresco -- the weeping man '
+                             'with his open hands -- and sit with it often. Bartop visits. You '
+                             'have learned to read his stillness. He has learned, perhaps, '
+                             'something from your motion.\n'
+                             '\n'
+                             'One day, a pilgrim arrives at the entrance, eyes wide in the '
+                             'darkness.\n'
+                             '\n'
+                             'You are there. You have the spectacles. You know the way.\n'
+                             '\n'
+                             'It is not the heights. But it is not nothing.\n'
+                             '\n'
+                             '**THE END -- GUARDIAN OF MEMORIES**',
+                     'title': 'Centuries of Stillness',
+                     'vocabulary': []},
+ 'ending_illusion_bound': {'choices': [],
+                           'ending_type': 'bad',
+                           'era': 'ravines',
+                           'figures': ['Mack'],
+                           'is_ending': True,
+                           'tags': ['ending', 'bad', 'illusion', 'mack', 'pool', 'song', 'trapped'],
+                           'text': 'He turns back.\n'
+                                   '\n'
+                                   'He knows, as he turns, that he is turning back. He is not '
+                                   'confused about this. The choice is clear and he makes it '
+                                   'clearly, which is what makes it so permanent.\n'
+                                   '\n'
+                                   "Mack's song reaches him before Mack does:\n"
+                                   '\n'
+                                   "*And low he's high, a friend to all,*\n"
+                                   '*our hero, protector of the small --*\n'
+                                   '\n'
+                                   'The pool is as it was: dark, circular, fed by its crystal '
+                                   'stream. The voice comes from everywhere and nowhere, which is '
+                                   'to say from the pool itself, which is to say from the water, '
+                                   'which is to say from whatever the water is a reflection of.\n'
+                                   '\n'
+                                   'Theo sits at the edge.\n'
+                                   '\n'
+                                   'The reflection in the pool is no longer his face, and it is no '
+                                   'longer the inverted world. It is a story -- his story, every '
+                                   'chapter of it, played in order from the beginning with all the '
+                                   'details he forgot and some he never knew. He watches himself '
+                                   'arrive at the Forest Gate. He watches himself crouch beside '
+                                   'Phil the pillbug. He watches the badgers, Brok rising on its '
+                                   'rotors, the three staves laid out in a row.\n'
+                                   '\n'
+                                   'It is beautiful. He cannot look away.\n'
+                                   '\n'
+                                   'Mack, when he appears beside him, is neither fox nor lion. He '
+                                   'is something older, and his eyes are patient, and he does not '
+                                   "touch Theo's shoulder or speak a word, because there is "
+                                   "nothing to say. He sits beside the boy at the pool's edge and "
+                                   'watches the story with him.\n'
+                                   '\n'
+                                   'Days pass. Maybe years. The pool never shows the same moment '
+                                   'twice, but it always shows the journey, and the journey is '
+                                   'always interesting, and Theo is always about to learn '
+                                   'something, always on the cusp of understanding -- and the song '
+                                   'comes through the water and the water comes through the song '
+                                   'and there is no longer a difference between the music and the '
+                                   'world.\n'
+                                   '\n'
+                                   'He is not unhappy. This is important to say. He is not unhappy '
+                                   '-- he is held, as completely as a thing can be held, in a '
+                                   'beauty that leaves no room for anything else. No longing. No '
+                                   'striving. No arrival.\n'
+                                   '\n'
+                                   'No becoming.\n'
+                                   '\n'
+                                   'Mack watches. The pocket watch, sitting open on the stone, has '
+                                   'stopped.',
+                           'title': 'The Song Without End',
+                           'vocabulary': []},
+ 'ending_lost_forest': {'choices': [],
+                        'ending_type': 'bad',
+                        'era': 'forest',
+                        'figures': [],
+                        'is_ending': True,
+                        'tags': ['bad-ending', 'forest', 'ancient', 'stillness'],
+                        'text': 'There is a version of being lost that is still a story -- where '
+                                'the hero sits down and thinks hard and finds a path. This was not '
+                                'that version.\n'
+                                '\n'
+                                'The Chartreuse Forest was ancient and vast and had been here '
+                                'before anything else in this world had been named, and it had no '
+                                "particular opinion about Theodore Ernest O'Hare. It was not "
+                                'hostile. It did not consume him in any dark or violent way. It '
+                                'simply continued being what it was -- green in every direction, '
+                                'beautiful, enormous, patient -- and he continued sitting in the '
+                                'middle of it, and neither of them moved.\n'
+                                '\n'
+                                'The chartreuse buds twinkled overhead like living stars, as they '
+                                'had been doing since before anyone arrived to notice them.\n'
+                                '\n'
+                                'Eventually the light changed. Then changed again. The forest '
+                                'breathed in the long rhythm of things that do not measure time in '
+                                'hours. Theo found, after a while, that he was not exactly afraid '
+                                'anymore. The fear had exhausted itself, the way strong emotions '
+                                'do when the situation that prompted them refuses to resolve.\n'
+                                '\n'
+                                'He was simply still. In a very old place. In the middle of a '
+                                'world between worlds.\n'
+                                '\n'
+                                'Perhaps he slept. Perhaps he waited. Perhaps the forest decided, '
+                                'eventually, to show him a path -- it had always known where they '
+                                'were. The Chartreuse Forest is not cruel. It simply has a long '
+                                'memory and no particular urgency.\n'
+                                '\n'
+                                'In the old stories, those who sat down in **enchanted** places '
+                                'sometimes found, when they finally stood, that the world outside '
+                                'had moved on without them. And those who were still inside when '
+                                'the next traveler came through -- well. They became part of the '
+                                "forest's memory too.\n"
+                                '\n'
+                                'And the chartreuse buds went on twinkling, as they always had, as '
+                                'they always would.\n'
+                                '\n'
+                                '--- THE FOREST HAS KEPT YOU. THE STORY IS NOT OVER. ---\n'
+                                '\n'
+                                "You have reached one of the forest's early endings. In the "
+                                'Elysian Kingdom, the worthy are shaped -- but only those who keep '
+                                'moving. Return to the fork in the road and choose differently. '
+                                "The Locks' bench is still there. The stream still knows where "
+                                "it's going.",
+                        'title': 'The Forest Keeps You',
+                        'vocabulary': [{'definition': 'Under a spell or magical influence; but '
+                                                      'also, in the older sense, simply filled '
+                                                      'with more than ordinary significance -- '
+                                                      'places so charged with meaning that '
+                                                      'ordinary rules do not apply. The word comes '
+                                                      'from the Latin incantare: to sing a spell '
+                                                      'over something.',
+                                        'term': 'enchanted'}]},
+ 'ending_madness': {'choices': [],
+                    'ending_type': 'bad',
+                    'era': 'depths',
+                    'figures': [],
+                    'is_ending': True,
+                    'tags': ['ending', 'bad', 'madness', 'shadow_path', 'labyrinth'],
+                    'text': 'You are walking the corridors.\n'
+                            '\n'
+                            'You have been walking the corridors.\n'
+                            '\n'
+                            'The fresco on the left wall shows a man with his hands open, '
+                            'releasing something dark upward into light. You have seen this fresco '
+                            'before. You have seen it many times. It is a good fresco -- '
+                            'technically accomplished, emotionally legible, the kind of image that '
+                            'repays repeated viewing. You have viewed it repeatedly.\n'
+                            '\n'
+                            'The corridor curves. You follow the curve.\n'
+                            '\n'
+                            'There is a junction. Five passages. You choose the third from the '
+                            'left, which you have not chosen before, which you are certain you '
+                            'have not chosen before, which you may have chosen several times '
+                            'without recording the choice in a way that persists across '
+                            'repetitions.\n'
+                            '\n'
+                            'The Temple of Memories remembers you.\n'
+                            '\n'
+                            'This is the difficult part -- not that it has forgotten you, but that '
+                            'it remembers you perfectly: every step, every turn, every moment of '
+                            'fear and determination and confusion. It holds your whole wandering '
+                            "in its walls with the same **equanimity** it holds Gunnin's whole "
+                            "life, and Bartop's long centuries, and the stories of everyone who "
+                            'has ever walked these corridors. You are part of the record now. You '
+                            'are not lost in the Temple.\n'
+                            '\n'
+                            'You are in the Temple.\n'
+                            '\n'
+                            'Each step is the first step. Each fresco is new. Each corridor curves '
+                            'away into possibilities that do not resolve. The Temple is vast -- '
+                            'forty-nine miles -- and you are walking it, and the walking is not '
+                            'ending, and in the walking there is something that might be, in its '
+                            'strange way, sufficient.\n'
+                            '\n'
+                            'The man in the fresco releases the dark shape from his open hands.\n'
+                            '\n'
+                            'You have seen this before.\n'
+                            '\n'
+                            'You continue.\n'
+                            '\n'
+                            '**THE END -- THE ETERNAL CORRIDOR**',
+                    'title': 'The First Step',
+                    'vocabulary': [{'definition': 'Mental calmness and composure, especially in '
+                                                  "difficult situations; from the Latin for 'equal "
+                                                  "mind.'",
+                                    'term': 'equanimity'}]},
+ 'ending_peace_garden': {'choices': [],
+                         'ending_type': 'good',
+                         'era': 'maiden',
+                         'figures': ['The Maiden'],
+                         'is_ending': True,
+                         'tags': ['ending',
+                                  'good',
+                                  'maiden',
+                                  'garden',
+                                  'peace',
+                                  'rest',
+                                  'bittersweet'],
+                         'text': 'The Maiden sets a second cup and does not ask again.\n'
+                                 '\n'
+                                 'This is how Theo knows she is wise: she asked once, *how are '
+                                 'you,* and his answer -- the silence, the way his shoulders came '
+                                 'down when he stepped through the door -- told her everything, '
+                                 'and she has not asked twice, because asking twice would be a '
+                                 'kind of pressure, and she does not pressure.\n'
+                                 '\n'
+                                 'He stays for what he thinks is a few days. It turns out to be '
+                                 'longer.\n'
+                                 '\n'
+                                 'The garden teaches him things. Not in the way the temple taught '
+                                 'things -- duty, service, the weight of obligation -- but in the '
+                                 'way that gardens teach, which is through repetition and '
+                                 'proximity and the slow discovery that the thing you are tending '
+                                 'is also tending you. He learns the names of the plants. He '
+                                 'learns which hills get morning light and which get afternoon. He '
+                                 'learns that the center hill, the small one, is the best place to '
+                                 'watch the mountain from -- not because you can see the whole '
+                                 'mountain but because from there the mountain looks like what it '
+                                 'is: one mountain, among many things, none of them permanent.\n'
+                                 '\n'
+                                 'The Maiden talks to him sometimes about Mack -- not with '
+                                 'sadness, or not only with sadness, but with the precise '
+                                 'affection of someone who has accepted the full shape of another '
+                                 'person, including the parts that will not bend.\n'
+                                 '\n'
+                                 '*"He loves the road,"* she says one evening, watching the '
+                                 'mountain\'s shadow lengthen. *"I love the garden. We were never '
+                                 'going to solve that."*\n'
+                                 '\n'
+                                 'Theo tends the garden. The gate is never locked. He knows this '
+                                 'because he checks it, sometimes, in the early morning when the '
+                                 'hills are still grey. He checks it and finds it open, and then '
+                                 'he comes inside and makes the tea, because the Maiden is still '
+                                 'asleep and the kettle is cold, and this is something he can do.\n'
+                                 '\n'
+                                 'The mountain is still there, beyond the hills. On clear days, he '
+                                 'can see its high ridges. He does not know what is up there -- '
+                                 'what the Temple of Memories holds, what the summit looks like, '
+                                 'what he might have found.\n'
+                                 '\n'
+                                 'This is not the same as not caring.\n'
+                                 '\n'
+                                 'It is the understanding that some journeys are complete in the '
+                                 'middle, that the middle can be a home, that the garden between '
+                                 'three hills is small and is also infinite, and that the question '
+                                 '*is this enough?* has an answer, and the answer is: *it can '
+                                 'be.*\n'
+                                 '\n'
+                                 'He waters the unnamed flower on the center hill. It is pale and '
+                                 'persistent and bends under its own weight and always grows '
+                                 'back.\n'
+                                 '\n'
+                                 'He stays.',
+                         'title': 'The Garden Is Enough',
+                         'vocabulary': []},
+ 'ending_retreat': {'choices': [],
+                    'ending_type': 'neutral',
+                    'era': 'depths',
+                    'figures': [],
+                    'is_ending': True,
+                    'tags': ['ending', 'neutral', 'retreat', 'shadow_path', 'transformation'],
+                    'text': 'You turn away from the Temple of Memories.\n'
+                            '\n'
+                            'The mountain lets you go. It does not pursue you, does not call after '
+                            'you, does not make the descent harder than it already is. Mt. Nebo '
+                            'simply remains: ancient, cold, indifferent in its great and patient '
+                            'way, the south face closing behind you not with a sound but with the '
+                            'small silence of a door settling back into a frame that has held it '
+                            'for centuries.\n'
+                            '\n'
+                            'You descend the ravines. You pass the place where you met Mack, '
+                            'though Mack is not there now -- there is only the glint of a golden '
+                            'chain left on a rock, as though he shed it or forgot it or left it as '
+                            'a marker. You pass through the Chartreuse Forest and the trees are '
+                            'the same and are not the same, because you are not the same.\n'
+                            '\n'
+                            'The Forest Gate opens.\n'
+                            '\n'
+                            'You wake in your bed.\n'
+                            '\n'
+                            'The morning is ordinary. Dust in the slanted light. The smell of the '
+                            'kitchen below. Everything in its place.\n'
+                            '\n'
+                            'But: the Temple does not leave you. It is there in the way you look '
+                            'at things now -- the patience in your hands when you fix something '
+                            'broken, the way you wait at a window and think about what both '
+                            "directions of a story might mean. The Starstone's warmth, which you "
+                            'never touched, is in you anyway -- carried back through the simple '
+                            'fact of having turned toward it, even though you turned away.\n'
+                            '\n'
+                            'Not divine. But not unchanged.\n'
+                            '\n'
+                            'The mountain is still there. You know it is still there. Perhaps one '
+                            'day -- not today, not tomorrow, but one day -- you will return to the '
+                            'south face and find the door still unlocked.\n'
+                            '\n'
+                            'For now: the ordinary day. The light through the window. The work of '
+                            'becoming, which does not require a mountain, only a willingness to '
+                            'remember the dream.\n'
+                            '\n'
+                            '**THE END -- THE SLOW RETURN**',
+                    'title': 'The Dream That Changes Everything',
+                    'vocabulary': []},
+ 'ending_shadow_bound': {'choices': [],
+                         'ending_type': 'bad',
+                         'era': 'ravines',
+                         'figures': ['Mack'],
+                         'is_ending': True,
+                         'tags': ['ending',
+                                  'bad',
+                                  'chains',
+                                  'comfortable_prison',
+                                  'unlived_life',
+                                  'beautiful_trap'],
+                         'text': 'The map is good. He was right about that.\n'
+                                 '\n'
+                                 "It takes him home by a route he wouldn't have found on his own "
+                                 '-- clean, clear, without the worst of the ravines -- and when he '
+                                 'arrives, everything is as he left it. The things at home are '
+                                 'real. The people were waiting. The relief on their faces is '
+                                 'genuine and so is his relief and the reunion is everything a '
+                                 'reunion is supposed to be.\n'
+                                 '\n'
+                                 'He does not talk about the mountain much. When he does, it comes '
+                                 'out strangely -- distant, as if the journey happened to someone '
+                                 'in a story rather than to him specifically. He knows the names: '
+                                 'Brok, the Locks, the flat stone, the pool. He knows the sequence '
+                                 'of events. But the *weight* of it -- the particular gravity of '
+                                 'standing at a pool and seeing your own journey, of sitting on a '
+                                 'center hill and understanding which hill is which -- this does '
+                                 'not translate well into conversation, and after a few attempts '
+                                 'he stops trying.\n'
+                                 '\n'
+                                 'Life arranges itself. This is what life does when you come back '
+                                 'to it: it arranges itself around your return, fills in the shape '
+                                 'of you, and after a while the shape becomes the thing.\n'
+                                 '\n'
+                                 'He is comfortable. This is not a small thing. Comfort is not '
+                                 'nothing.\n'
+                                 '\n'
+                                 'But sometimes, at night, when the house is quiet -- he dreams of '
+                                 "the pass, and Mack's face in the moment he held out the map, and "
+                                 "the quality of Mack's expression: not triumphant, not satisfied, "
+                                 'but something more complicated, something that looked almost '
+                                 'like sorrow, almost like apology, almost like the face of '
+                                 'someone doing a necessary thing that cost him something too.\n'
+                                 '\n'
+                                 'And in the dream, Theo always looks at the map. He always reads '
+                                 'the route home. He always takes it.\n'
+                                 '\n'
+                                 "And in the dream, he can hear the mountain. Not Mack's song -- "
+                                 'not the beautiful trap of the pool -- but the mountain itself, '
+                                 'which does not have a voice except the one that silence makes '
+                                 'when it surrounds something real, when it points at a thing and '
+                                 'says: *here. Here is what you did not do. Here is the shape of '
+                                 'the unlived life.*\n'
+                                 '\n'
+                                 "The chains don't hurt. He knew they wouldn't. Mack told him "
+                                 "nothing he didn't already know, offered him nothing he didn't "
+                                 "already want, and charged him nothing he wasn't already willing "
+                                 'to pay.\n'
+                                 '\n'
+                                 'That is the nature of the best chains: you put them on yourself, '
+                                 'in full knowledge, because the alternative was harder, and you '
+                                 'told yourself at the time that the alternative was not worth it, '
+                                 'and sometimes, in the morning, you still believe that.\n'
+                                 '\n'
+                                 'The mountain is very far away.\n'
+                                 '\n'
+                                 'He has a good life.',
+                         'title': 'The Beautiful Chains',
+                         'vocabulary': []},
+ 'ending_temple_trapped': {'choices': [],
+                           'ending_type': 'bad',
+                           'era': 'temple',
+                           'figures': ['Brok'],
+                           'is_ending': True,
+                           'tags': ['bad-ending', 'temple', 'mindless-service', 'hubris'],
+                           'text': 'He did not pick up the broom.\n'
+                                   '\n'
+                                   'Brok looked at him for a long moment -- not angrily, not with '
+                                   'disappointment, but with something that might have been the '
+                                   'faintest sorrow, the way a craftsman looks at material that '
+                                   'did not take the shape it needed to take.\n'
+                                   '\n'
+                                   '"Very well," Brok said.\n'
+                                   '\n'
+                                   'The Temple did not do anything dramatic. The living walls did '
+                                   'not close in. The silver trunks did not move. The '
+                                   'stone-flowers along the path continued to do what '
+                                   'stone-flowers did, which was glow faintly and exist with a '
+                                   'patience that made human time feel brief.\n'
+                                   '\n'
+                                   'But Theo found, after a while, that he was holding the '
+                                   'leaf-broom.\n'
+                                   '\n'
+                                   "He didn't remember picking it up. He swept a section of path. "
+                                   'He moved to the next section. The leaves were there, as they '
+                                   'always were. The path needed tending. The Temple needed to be '
+                                   'kept tidy.\n'
+                                   '\n'
+                                   'We must keep the Temple tidy.\n'
+                                   '\n'
+                                   'It was a good thought. It was a clear thought. It was the kind '
+                                   'of thought that filled a mind very neatly and left no room for '
+                                   'questions about why, or for what, or for the boy who had come '
+                                   'through a gate in a wall of alabaster and lifted a pillbug to '
+                                   'a keyhole and stepped through a door of golden light.\n'
+                                   '\n'
+                                   'Brok walked his rounds. The Temple breathed. The leaf-broom '
+                                   'moved with a rhythm that was almost like music.\n'
+                                   '\n'
+                                   'We must keep the Temple tidy.\n'
+                                   '\n'
+                                   'The chartreuse buds, far away in the outer forest, still '
+                                   'twinkled like living stars. No one inside the Temple could see '
+                                   'them anymore. There was too much work to do.\n'
+                                   '\n'
+                                   '--- THE TEMPLE HAS KEPT YOU. THE STORY IS NOT OVER. ---\n'
+                                   '\n'
+                                   "You have reached the Temple's early ending. **Hubris** is not "
+                                   'only pride -- it is also the stubbornness that mistakes '
+                                   'refusal for courage. Return to the confrontation and consider: '
+                                   'is there a question worth asking while you work? The Temple '
+                                   'may yet teach you what Brok could not.',
+                           'title': 'We Must Keep the Temple Tidy',
+                           'vocabulary': [{'definition': 'Excessive pride or self-confidence; in '
+                                                         'Greek tragedy, the overreach that brings '
+                                                         'a hero to ruin. Hubris is not merely '
+                                                         'arrogance -- it is the refusal to '
+                                                         'acknowledge that something larger than '
+                                                         'yourself has a claim on you. The Temple '
+                                                         'does not punish hubris. It simply has '
+                                                         'more time than you do.',
+                                           'term': 'hubris'}]},
+ 'ending_theosis': {'choices': [],
+                    'ending_type': 'best',
+                    'era': 'heights',
+                    'figures': [],
+                    'is_ending': True,
+                    'tags': ['ending',
+                             'best',
+                             'theosis',
+                             'apotheosis',
+                             'king_revealed',
+                             'spectacles',
+                             'waking',
+                             'completion'],
+                    'text': 'The presence gathered.\n'
+                            '\n'
+                            'Not from above, not from outside, not from any direction a compass '
+                            'could name -- it gathered the way understanding gathers, from '
+                            'everywhere at once and from somewhere very specific, from all of the '
+                            'journey and from a single moment in it, and Theo stood at the '
+                            'Parallax of Life and let it come.\n'
+                            '\n'
+                            'He thought of Phil at the Forest Gate -- a pillbug, small enough to '
+                            'fit through a keyhole, trusting enough to wait. Phil had said *Praise '
+                            'the King!* with the easy conviction of someone for whom the King was '
+                            'not a distant authority but an immediate presence, a fact of the air '
+                            'like warmth. Theo had thought Phil meant a ruler. Phil had meant '
+                            'something else entirely. Phil had been pointing, the whole time, at '
+                            'the thing that moved through people when they chose to be generous '
+                            'rather than afraid.\n'
+                            '\n'
+                            'He thought of Brok in the crypt, opening his chest cavity. A drone '
+                            'built for service, capable of love. {{#has_pouch}}The pouch of '
+                            "Hafthor was still at Theo's belt -- he reached for it, held it. Heavy "
+                            "with Brok's history. Given without calculation. "
+                            '{{/has_pouch}}{{^has_pouch}}The pouch of Hafthor was gone -- traded '
+                            'away on a hillside, carried by other hands to a windowsill in a '
+                            "cottage between three hills. And that, too, was the King's design: a "
+                            'gift given, given again, still traveling. {{/has_pouch}}*This is for '
+                            "you.* That was the King's voice, speaking through a metal drone in a "
+                            "stone crypt beneath a mountain. That was the King's hand, extended "
+                            "through Brok's mechanical palm.\n"
+                            '\n'
+                            "He thought of Mrs. Lock's bread. He thought of Gunnin making "
+                            "spectacles from a broken lance -- taking the instrument of a life's "
+                            'fruitless searching and reshaping it into something that helped '
+                            'others see. He thought of Bartop waiting in the dark for millennia, '
+                            'not because he was trapped but because some things are worth waiting '
+                            "for. He thought of the Maiden's fire, burning for every pilgrim who "
+                            'arrived cold. He thought of Mack, who had tricked and tested and in '
+                            'his last trick had told the truth, because even Mack -- especially '
+                            'Mack -- knew what the Kingdom ran on.\n'
+                            '\n'
+                            'Every gift. Every act of patience. Every kindness given freely and '
+                            'without guarantee of return -- it had all been the same thing. The '
+                            'same source. The Kingdom was not the mountains and the forests and '
+                            'the bronze plateau and the dark pool and the Seven Corridors. The '
+                            'Kingdom was what happened between people when they chose to be their '
+                            'fullest selves. The King was not behind the Kingdom. The King was '
+                            'what the Kingdom was made of.\n'
+                            '\n'
+                            '*Praise the King.*\n'
+                            '\n'
+                            'Yes. Yes. That was exactly right.\n'
+                            '\n'
+                            'Theo felt something loosen in him -- not break, not dissolve, but '
+                            'loosen, the way a knot loosens when you find the right thread to '
+                            'pull. Everything he had carried -- {{#staff}}the {{staff}} staff, '
+                            '{{/staff}}the spectacles, {{#has_pouch}}the pouch, '
+                            '{{/has_pouch}}{{^has_pouch}}the memory of what he had given away, '
+                            "{{/has_pouch}}the Starstone's light still warm in his memory -- had "
+                            'been preparation. The carrying had changed him. The lessons had '
+                            'changed him. He was not the boy who had fallen asleep over a '
+                            'textbook. That boy had been complete, too, but in the way a seed is '
+                            'complete -- all the information present, none of it yet alive.\n'
+                            '\n'
+                            'He understood **apotheosis** now, not as an elevation above the human '
+                            'but as a deepening into it -- becoming more fully what you were '
+                            'always capable of being, burning away the narrowness and the fear '
+                            'until what remained was something that could move through the world '
+                            "like light, like Brok's gift, like Phil's trust, like bread set out "
+                            'for strangers.\n'
+                            '\n'
+                            'The **theosis** was complete. Not because Theo had earned it by being '
+                            'perfect -- he had been far from perfect -- but because he had kept '
+                            'moving. Because he had helped a pillbug through a keyhole when he '
+                            "didn't have to. Because he had received gifts with both hands and "
+                            'carried them forward and given them away in turn. Because he had '
+                            'looked in the mirror pool until the looking was finished. Because he '
+                            "had taken Gunnin's spectacles and used them until he didn't need them "
+                            'anymore.\n'
+                            '\n'
+                            'He took the spectacles out one last time.\n'
+                            '\n'
+                            'Sea glass and moonstone. What is and what could be. He held them up '
+                            'to the evening light -- the Beings of Light still burning in the '
+                            'spires, the faeries of Sanctified Fires still moving between them '
+                            'like small completed sentences -- and he saw, through both lenses at '
+                            'once, what they had been teaching him to see all along: that these '
+                            'two things were not separate. What is and what could be were both '
+                            'real, both necessary, both the same world seen from different '
+                            'altitudes.\n'
+                            '\n'
+                            'He put the spectacles back in his pocket. He did not put them on.\n'
+                            '\n'
+                            'He could see.\n'
+                            '\n'
+                            'The summit was quiet. The presence was warm. The Kingdom -- all of '
+                            'it, every region, every being he had met, every lesson he had walked '
+                            'through -- glowed below him in the last light, alive and patient and, '
+                            'he understood now, not somewhere else at all.\n'
+                            '\n'
+                            '---\n'
+                            '\n'
+                            'Theo woke in his bed.\n'
+                            '\n'
+                            'His textbook was still open on the desk. The lamp was still on. The '
+                            'window showed a familiar sky -- the same sky it always showed, the '
+                            'dark and particular sky of his own life, neither enchanted nor '
+                            'ordinary, or perhaps both at once.\n'
+                            '\n'
+                            'He lay still for a long moment.\n'
+                            '\n'
+                            'The dream was not fading. Dreams faded. This was doing something else '
+                            '-- it was settling, the way sediment settles in still water, becoming '
+                            'the floor of something. It was becoming part of him in the specific '
+                            'way that true things do: not dramatically, not with announcement, but '
+                            'with the quiet insistence of something that was always going to be '
+                            'true and has now simply become visible.\n'
+                            '\n'
+                            'Phil the pillbug. Mr. and Mrs. Lock. Brok. Mack. The Maiden. Bartop. '
+                            'Gunnin. The bat.\n'
+                            '\n'
+                            'The King.\n'
+                            '\n'
+                            'Theo sat up. He looked at his room -- the desk, the lamp, the window, '
+                            'the familiar geography of his ordinary life -- and saw it, for the '
+                            'first time, in the Sacred Fire.\n'
+                            '\n'
+                            "It had always been burning. He just hadn't known how to look.\n"
+                            '\n'
+                            'He reached over and closed the textbook. Then he opened it again, '
+                            'because the work was real too, and the work was where the King lived '
+                            'as surely as anywhere else -- in the attention, in the patience, in '
+                            'the willingness to sit with difficulty until it became legible.\n'
+                            '\n'
+                            'He picked up his pen.\n'
+                            '\n'
+                            'Praise the King.\n'
+                            '\n'
+                            '**THE END -- THEOSIS**',
+                    'title': 'What the Kingdom Always Was',
+                    'vocabulary': [{'definition': 'The moment when someone is revealed in their '
+                                                  'fullest, most essential form -- not a '
+                                                  'transcendence of the human but a completion of '
+                                                  'it.',
+                                    'term': 'apotheosis'},
+                                   {'definition': 'The transformative process of becoming fully '
+                                                  'what you were always capable of being, purified '
+                                                  'and deepened by everything you have walked '
+                                                  'through.',
+                                    'term': 'theosis'}]},
+ 'ending_wanderer': {'choices': [],
+                     'ending_type': 'good',
+                     'era': 'ravines',
+                     'figures': [],
+                     'is_ending': True,
+                     'tags': ['ending',
+                              'good',
+                              'wanderer',
+                              'pilgrim',
+                              'freedom',
+                              'bittersweet',
+                              'movement'],
+                     'text': 'He sits, as he intended to -- just for a moment.\n'
+                             '\n'
+                             'The moment stretches. This is what moments do when you are very '
+                             'tired and the thing you are moving toward is genuinely unclear: they '
+                             'expand, they offer themselves as alternatives to forward motion, '
+                             'they point out, gently and accurately, that you have been in motion '
+                             'for a very long time and that stillness is not death.\n'
+                             '\n'
+                             'When he stands again, the mountain is still there and he is still '
+                             'heading toward it. But something has shifted in the heading -- it is '
+                             'no longer urgent. He is no longer racing the exhaustion. He is '
+                             'walking because walking is what he does, because the road is good '
+                             'and the ravines are interesting and the scrub pine casts thin '
+                             'shadows in the afternoon light that are unlike the shadows of any '
+                             'other tree he knows.\n'
+                             '\n'
+                             'He passes through the pass without Mack -- Mack is not there, which '
+                             'means either Mack was never waiting for him at this particular pass '
+                             'or Mack saw him coming and decided there was nothing to offer that '
+                             "this person didn't already have. Both explanations feel right. "
+                             'Neither feels complete.\n'
+                             '\n'
+                             'Beyond the pass, the mountain opens into high slopes, and beyond the '
+                             'high slopes, into higher ones, and somewhere up there is the Temple '
+                             'of Memories, and somewhere beyond that -- if the legends are true -- '
+                             'the summit, the view, the thing the journey was for.\n'
+                             '\n'
+                             'Theo walks.\n'
+                             '\n'
+                             'He has been walking, in some sense, since the Forest Gate. He will '
+                             'be walking, he understands now, for a very long time after this -- '
+                             'after whatever ending comes, if endings come. The walking is not a '
+                             'punishment or a penance. It is the thing he is, the shape his '
+                             'aliveness takes. Some people arrive. Some people tend gardens. He '
+                             'walks.\n'
+                             '\n'
+                             'He passes through villages and does not always stop. He gives good '
+                             "counsel when it's asked for -- his counsel is worth something, now, "
+                             'because it has been paid for. He remembers the flat stone and the '
+                             'howling wind and the pool and Brok rising in the dark. He remembers '
+                             'these things the way you remember dreams: clearly, specifically, and '
+                             'with the sure knowledge that they happened to someone who was you '
+                             'and is not you and in some permanent sense always will be.\n'
+                             '\n'
+                             'The mountain is ahead. The mountain is also behind. He is on the '
+                             'mountain. He has always been on the mountain.\n'
+                             '\n'
+                             'This is fine.\n'
+                             '\n'
+                             'This, he thinks, walking, is actually fine.',
+                     'title': 'The Permanent Pilgrim',
+                     'vocabulary': []},
+ 'start': {'choices': [{'target': 'a1_forest_enter',
+                        'text': 'Step through the Invisible Door into the Chartreuse Forest.'}],
+           'ending_type': None,
+           'era': 'threshold',
+           'figures': ['Phil'],
+           'is_ending': False,
+           'tags': ['arrival', 'helper', 'gate', 'opening'],
+           'text': 'The last thing Theo remembered was his history textbook, open to a chapter on '
+                   'medieval pilgrimage routes, and a cup of chamomile tea going cold beside his '
+                   'lamp. Then something shifted -- not a dream-shift, but a deeper one, like a '
+                   'page turning in a very old book -- and now he was standing in front of a '
+                   'gate.\n'
+                   '\n'
+                   'Not a gate like a garden gate. A gate like the idea of a gate made monumental. '
+                   'Two planks of redwood, each one ten stories tall, rose into a sky the color of '
+                   'new copper. Alabaster walls ran away from the gate in both directions without '
+                   'any sign of ending, white and smooth as the inside of a shell. Set into the '
+                   'wood was an ornate silver plate crusted with emeralds the size of his '
+                   'thumbnail, and at its center, a keyhole shaped like nothing he could name.\n'
+                   '\n'
+                   'Theo stood with his backpack straps in both fists and did the thing he always '
+                   'did when he had no idea what was happening: he looked for something smaller '
+                   'than him.\n'
+                   '\n'
+                   "He found it almost immediately. On the lowest stone of the wall's foundation, "
+                   'sitting upright on four of its fourteen legs with the remaining ten gesturing '
+                   'at the sky, was a pillbug.\n'
+                   '\n'
+                   'Not just any pillbug. This one was approximately the size of his thumb, wore '
+                   'an expression of profound relief, and was in the middle of a speech.\n'
+                   '\n'
+                   '"-- and I said to myself, Phil, the King provides. And lo! He has provided. '
+                   'Young man!" The pillbug turned. Its tiny eyes were bright as drops of ink. '
+                   '"You there. Are you by any chance going through?"\n'
+                   '\n'
+                   '"Through -- through the gate?" Theo crouched down. The pillbug, Phil, bowed '
+                   'with considerable ceremony.\n'
+                   '\n'
+                   '"Through the gate, yes. The Invisible Door. I\'ve been trying to reach the '
+                   'keyhole for the better part of the morning. My legs are not what they were. '
+                   'Not," Phil added pointedly, "that they were ever designed for vertical '
+                   'surfaces."\n'
+                   '\n'
+                   'Theo looked at the keyhole, ten feet up. He looked at Phil. He felt the '
+                   'peculiar **equanimity** of someone who has already decided that the strangest '
+                   'thing has already happened and everything else is just details.\n'
+                   '\n'
+                   '"I could lift you," he said.\n'
+                   '\n'
+                   '"I was hoping you\'d say that. Praise the King!"\n'
+                   '\n'
+                   'Getting a pillbug to a keyhole was, it turned out, a matter of patience and '
+                   "steadiness. Phil was lighter than a grape. He walked up Theo's palm, up his "
+                   'forearm, and onto his index finger with the dignity of a diplomat. Theo raised '
+                   'him to the keyhole. Phil inserted the tip of his foremost leg -- it clicked -- '
+                   'and stepped back.\n'
+                   '\n'
+                   'Nothing happened for a moment. Then the air around the silver plate began to '
+                   'shimmer, and a frame of golden light appeared in the wood: a door-shape that '
+                   "hadn't been visible before, now undeniable. The great planks groaned, just "
+                   'slightly, and a gap appeared: wide enough for one person, or one very grateful '
+                   'pillbug.\n'
+                   '\n'
+                   '"After you," Phil said, and gestured grandly with four legs at once. "The '
+                   'Chartreuse Forest awaits. May the King\'s road be kind."\n'
+                   '\n'
+                   'Theo looked at the gap. Green light poured through it, warm as afternoon.\n'
+                   '\n'
+                   'He stepped through.',
+           'title': 'The Forest Gate',
+           'vocabulary': [{'definition': 'A calm, composed state of mind, especially in difficult '
+                                         'or surprising circumstances. From the Latin aequus '
+                                         '(equal) and animus (mind): literally, an even mind. A '
+                                         'person with equanimity is not rattled by what they '
+                                         'cannot control.',
+                           'term': 'equanimity'}]}}
