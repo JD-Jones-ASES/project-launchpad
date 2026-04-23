@@ -125,7 +125,11 @@ function renderCourseGrid(data) {
             if (course.has_playlist) badges.push('videos');
             if (course.has_cyoa) badges.push('CYOA');
 
-            html += '<a href="courses/' + course.project_id + '.html" class="catalog-card">';
+            var cardClass = course.is_guest ? 'catalog-card guest' : 'catalog-card';
+            html += '<a href="courses/' + course.project_id + '.html" class="' + cardClass + '">';
+            if (course.is_guest) {
+                html += '<span class="guest-badge">Guest Creator</span>';
+            }
             html += '<span class="catalog-badge">' + escapeHtml(course.level) + '</span>';
             html += '<h3 class="catalog-title">' + escapeHtml(course.title) + '</h3>';
             html += '<p class="catalog-desc">' + escapeHtml(course.desc) + '</p>';
