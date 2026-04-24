@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 6, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Why does the text say the personification of nature may be a 'feature of human cognition rather than a cultural invention'?", "back": "The assignment of names, faces, intentions, and personalities to impersonal forces is so ancient and universal that it appears to be a default mode of mind — the brain experiences the world as populated by agents rather than governed by impersonal forces. This is the cognitive basis of religion across cultures.", "id": "fc01"}, {"front": "What is the central claim of Durkheim's The Elementary Forms of Religious Life (1912)?", "back": "When people worship God, they are — in a sense they do not recognize — worshipping society. The sacred is the social. The awe, submission, and moral obligation directed toward the divine is the awe, submission, and moral obligation owed to the collective. God is society experienced as transcendent.", "id": "fc02"}, {"front": "What evidence did Durkheim use to support his claim, and what concept did it generate?", "back": "Analysis of totemic rituals among Australian Aboriginal peoples. These rituals produced 'collective effervescence' — a state of heightened emotional intensity in which individuals felt merged into something larger than themselves. Durkheim argued the force experienced as divine was the force of the collective.", "id": "fc03"}, {"front": "Is Durkheim's argument a claim that religion is a lie or manipulation? Explain.", "back": "No. Durkheim's point is structural: the experience of the sacred and the experience of moral obligation to the community are the same experience, accessed through ritual. The experience is real; what Durkheim identifies is its social source. The text says he 'had no interest in dismissing it.'", "id": "fc04"}, {"front": "What is the 'intentional stance' as described by Daniel Dennett?", "back": "The strategy of explaining and predicting the behavior of complex systems by treating them as if they had beliefs, desires, and intentions — even when we know they do not. We take it toward thermostats, computers, pets, hurricanes, economies, and stock markets.", "id": "fc05"}, {"front": "How does the intentional stance connect to the genesis of gods?", "back": "The same cognitive operation — attributing intentions to complex, consequence-generating systems — produces both market thinking (the invisible hand) and religious thinking (the will of Zeus). The underlying mental operation is identical; what differs is the historical and cultural context that determines which fictions are institutionally maintained.", "id": "fc06"}, {"front": "Why are human agent-detection circuits described as 'hyperactive'?", "back": "Because natural selection created an asymmetric bias: mistaking a rock for a predator costs seconds of running; mistaking a predator for a rock costs your life. Selection favored brains that see agents everywhere — producing false positives readily (faces in clouds, malice in weather, plots behind coincidences).", "id": "fc07"}, {"front": "What is the Big God hypothesis, and who developed it?", "back": "Proposed by evolutionary anthropologist Ara Norenzayan and colleagues: the transition from small-scale local spirit religions to world religions was driven by the coordination problem of large-scale societies. Moralistic gods who know your thoughts and punish vice extend cooperative enforcement to anonymous strangers beyond the reach of direct reputation networks.", "id": "fc08"}, {"front": "What is Dunbar's number, and why is it important to the Big God hypothesis?", "back": "The cognitive limit of roughly 150 close relationships the human brain can track. Beyond this, direct reputation enforcement breaks down — you cannot personally monitor the behavior of ten thousand strangers. The Big God hypothesis proposes that omniscient moralistic gods solve this scale problem.", "id": "fc09"}, {"front": "What does the text mean by calling the Big God 'a bureaucratic technology'?", "back": "He maintains the ledger that human memory cannot hold. The omniscient moral god who monitors all behavior, rewards virtue, and punishes vice provides credible universal surveillance — extending the reach of social enforcement to the private mind of every individual in a large anonymous society.", "id": "fc10"}, {"front": "What four functions does the Specimen box identify for gods as social technology?", "back": "(1) Personifies cosmic or social forces. (2) Provides moral authority. (3) Enforces norms through the fiction of omniscient surveillance. (4) Creates community through shared ritual.", "id": "fc11"}, {"front": "What does the cognitive science research cited in the text suggest about our brains and agent-detection?", "back": "The human brain has specialized circuits for detecting and modeling agents — entities with intentions that can help or harm you. These circuits are hyperactive: they produce false positives readily, detecting agency where there is none. This is the cognitive basis for perceiving faces in clouds, malice in weather, and gods in natural forces.", "id": "fc12"}, {"front": "What does the text mean by saying 'the function is separable from the metaphysical claim'?", "back": "We do not need to resolve whether gods exist to observe that they perform real, consequential, civilization-shaping social work. Nothing in the sociological or evolutionary account proves gods do not exist — a real divine entity might work through these very cognitive and social mechanisms. But the functional analysis can proceed independently of the theological question.", "id": "fc13"}, {"front": "How does Durkheim's analysis connect gods and nations?", "back": "The gods and the nation are, from Durkheim's perspective, the same kind of fiction performing the same function at different scales. When a soldier dies for her country, she dies for the sacred thing the nation is — and that sacred quality is generated by the same collective mechanisms Durkheim identified in Aboriginal totemic ritual.", "id": "fc14"}, {"front": "What is the 'open question' the text poses about secular modernity and the Big God hypothesis?", "back": "Whether secular institutions — courts, police, tax authorities — are adequate functional equivalents of divine oversight. These institutions extend surveillance and enforcement at scale, as gods did. Whether they fully replace the cooperation-enforcing and community-bonding functions of religion is, the text says, an empirical question.", "id": "fc15"}, {"front": "Apply the concept: Why do moralistic world religions tend to emphasize that God 'knows your innermost thoughts' rather than only your outward actions?", "back": "Because the enforcement problem the Big God solves is private behavior — acts committed when no human witness is present. Reputation networks can only track observable behavior. Omniscience extends moral enforcement to the private mind, ensuring that even unobserved defection from cooperative norms carries a perceived cost. This is the mechanism that enables cooperation among strangers at large scale.", "id": "fc16"}, {"front": "What does the Cross-Reference to Chapter 3 establish about the relationship between agent-detection and the genesis of gods?", "back": "Chapter 3 showed that humans reflexively attribute agency to systems that have none — markets, evolutionary processes, corporations. The same cognitive tendency generates gods. Whether the subject is the invisible hand of the market or the will of Zeus, the underlying mental operation is identical: the intentional stance applied to a large, complex, consequence-generating system.", "id": "fc17"}, {"front": "Why does the text say 'You cannot replace a social technology without providing a substitute'?", "back": "Because the persistence and universality of gods is explained by the functions they perform — cooperation enforcement, community bonding, moral authority. Debunking the metaphysical claims does not eliminate the social needs the fiction addresses. A secular society that removes gods without providing institutional substitutes loses the coordination mechanisms those gods provided.", "id": "fc18"}, {"front": "What does the text mean by saying the personification of nature 'may be a default mode of mind'?", "back": "Agent-detection is so ancient, universal, and automatic that it appears to be a feature of evolved human cognition rather than a product of any specific culture or teaching. We experience the world as populated by agents by default — impersonal forces become angry storms, generous rivers, pleased or displeased harvest goddesses — without conscious effort or cultural instruction.", "id": "fc19"}, {"front": "How does the Big God hypothesis explain the transition from local spirit religions to world religions?", "back": "Small hunter-gatherer societies used local spirits and ancestral presences — adequate for direct reciprocity and reputation enforcement in groups of ~150. As societies grew beyond Dunbar's number, direct enforcement broke down. Moralistic omniscient gods — who monitor all behavior, keep perfect books, and enforce in the afterlife — scale cooperation to thousands of anonymous strangers where reputation networks cannot.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

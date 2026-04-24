@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 2, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who was William of Ockham, and what was his original principle?", "back": "A fourteenth-century English friar whose theological opinions got him excommunicated. His Latin formulation — entia non sunt multiplicanda praeter necessitatem (entities must not be multiplied beyond necessity) — was embedded in a theological argument about universals. It migrated into scientific practice during the Scientific Revolution.", "id": "fc01"}, {"front": "What is Occam's Razor in its most familiar modern form?", "back": "Among competing explanations, prefer the simpler one. Do not multiply entities beyond necessity. If two hypotheses explain the available evidence equally well, choose the one requiring fewer assumptions, mechanisms, and moving parts. The razor's job is to cut away unnecessary complexity.", "id": "fc02"}, {"front": "How did Newton and Einstein apply Occam's Razor?", "back": "Newton argued that nature is simple and does not \"affect the pomp of superfluous causes.\" Einstein is often (probably apocryphally) quoted: \"everything should be made as simple as possible, but not simpler.\" Both express the spirit: simplicity is a virtue, and complexity that doesn't earn its keep should be cut.", "id": "fc03"}, {"front": "How did the Copernican heliocentric model exemplify correct application of the razor?", "back": "By moving the Sun to the center, Copernicus made many retrograde planetary motions geometric consequences of Earth's own orbital motion — one conceptual move eliminated dozens of epicycles. The Ptolemaic system's elaborate scaffolding of epicycles, equants, and deferents had accumulated to fit almost any observation by adding adjustable parameters. The razor cut.", "id": "fc04"}, {"front": "What is an epicycle, and why did the Ptolemaic system accumulate so many?", "back": "A circle riding on a circle — a geometrical device used to account for the apparently looping paths of planets in a geocentric model. Whenever observations revealed discrepancies, more epicycles were added to fix them. The resulting \"baroque clockwork\" could fit almost any data because it had so many adjustable parameters.", "id": "fc05"}, {"front": "How do phlogiston theory and Lavoisier's oxygen theory exemplify razor reasoning?", "back": "Phlogiston theory required an element with no other observable properties and apparent negative weight in some formulations. Lavoisier's oxygen theory required no such entity and fit the combustion data better. Fewer entities, better fit: the razor correctly favored oxygen.", "id": "fc06"}, {"front": "How does Einstein's special relativity and the luminiferous ether exemplify the razor?", "back": "The luminiferous ether — posited to carry electromagnetic waves — required increasingly elaborate properties as experiments failed to detect it. Special relativity required no medium at all. The simpler story (no ether) turned out to be the truer one.", "id": "fc07"}, {"front": "Who was Alfred Wegener, and why was his continental drift theory rejected?", "back": "A German meteorologist (1880–1930) who proposed that continents had once assembled into a single supercontinent (Pangaea) and drifted apart. He had suggestive evidence (matching coastlines, identical fossils across continents, continuous geological formations) but lacked a plausible physical mechanism. The geological establishment preferred the simpler fixed-continent theory with sunken land bridges.", "id": "fc08"}, {"front": "How was the geological rejection of continental drift a misapplication of parsimony?", "back": "The fixed-continent theory required positing numerous sunken land bridges — still multiplying entities — but avoided the new large-scale crustal dynamics Wegener's theory demanded. The establishment preferred simpler mechanisms over a more accurate description of reality. By the 1960s, paleomagnetism and plate tectonics vindicated Wegener: the complexity was necessary, not gratuitous.", "id": "fc09"}, {"front": "What is the distinction between gratuitous and necessary complexity?", "back": "Gratuitous complexity: added entities or mechanisms not demanded by evidence, serving only to keep a failing theory alive (Ptolemaic epicycles, phlogiston). Necessary complexity: entities or mechanisms required by evidence that the simpler theory cannot explain (plate tectonics, oxygen). The razor should cut the former but preserve the latter.", "id": "fc10"}, {"front": "What is underfitting (high bias) in machine learning?", "back": "A model that is too simple: its assumptions are so strong that it misses genuine structure in the data, predicting every output at approximately the same average value and getting things systematically wrong. The model cannot learn what is actually there. Human analogy: stereotyping or overgeneralization.", "id": "fc11"}, {"front": "What is overfitting (high variance) in machine learning?", "back": "A model that is too complex: rather than learning the underlying pattern, it memorizes every quirk and noise artifact in the training data. It predicts the training data perfectly and performs terribly on new data. Human analogy: superstition, or refusing to generalize — memorizing past experiences without applying lessons to new situations.", "id": "fc12"}, {"front": "What is the bias-variance tradeoff?", "back": "As model complexity increases, bias decreases and variance increases. The optimal model — best out-of-sample performance — is neither the simplest possible (high bias/underfitting) nor the most complex possible (high variance/overfitting). It minimizes the sum of bias and variance: the level of complexity that captures real signal without absorbing noise.", "id": "fc13"}, {"front": "What does the bias-variance tradeoff reveal about Occam's Razor as a principle?", "back": "That parsimony is not a goal but a constraint — a way of navigating between two equally bad errors. \"Prefer simpler\" is not a universal principle; it is \"prefer the level of complexity that captures the real signal without absorbing the noise.\" Ockham's Razor is an argument against gratuitous complexity, not an argument for minimalism.", "id": "fc14"}, {"front": "What is the human analogy for underfitting vs. overfitting in cognition?", "back": "Underfitting (high bias): \"all politicians are corrupt\" — stereotyping, overgeneralization, missing real variation. Overfitting (high variance): refusing to generalize at all, treating every situation as completely unique — memorizing past experiences without applying lessons to new ones. Most cognitive biases are systematic forms of one or the other.", "id": "fc15"}, {"front": "The Specimen box warns: \"The razor cuts in both directions.\" What does this mean?", "back": "The razor can eliminate unnecessary complexity (good) or it can eliminate necessary reality (bad). Used well, it cuts Ptolemaic epicycles and phlogiston. Used badly, it cuts continental drift and plate tectonics. The same principle produces both brilliant successes and catastrophic failures.", "id": "fc16"}, {"front": "What does the text mean when it says Occam's Razor is \"not a self-applying algorithm\"?", "back": "You cannot apply the razor mechanically. Judging what counts as \"simpler,\" \"necessary,\" or \"gratuitous\" depends on background assumptions that may be wrong. The razor is a question — \"what does this added complexity actually explain that the simpler story cannot?\" — that requires contextual judgment no principle can substitute for.", "id": "fc17"}, {"front": "Apply the razor: a historian proposes that a minor economic shock, a political assassination, and an ideological movement all independently contributed to a war. A rival argues one cause suffices. How should the razor be applied?", "back": "The razor asks: does the simpler single-cause explanation actually account for all the evidence the multi-cause explanation handles? If the rival's simpler account leaves significant evidence unexplained, the multi-cause complexity is necessary, not gratuitous — like plate tectonics rather than like Ptolemaic epicycles. The razor cuts unnecessary causes, not causes demanded by evidence.", "id": "fc18"}, {"front": "How does the cross-reference to cartography connect the razor to the chapter's broader themes?", "back": "Every map is an act of deliberate simplification: the projection that minimizes area distortion produces shape distortion; the one that preserves shape distorts area. There is no map that is both simple and complete. The question is always: simple enough for what purpose? This is the razor applied to cartography — parsimony is not minimalism but purpose-relative adequacy.", "id": "fc19"}, {"front": "What historical parallel does the text draw between the failure modes of Occam's Razor?", "back": "Every generation of scientists has preferred simpler theories in ways that turned out to embed the assumptions of their time. The geological establishment's preference for fixed continents, like Ptolemaic astronomers adding epicycles, shows that judgments about simplicity are not neutral — they reflect prior commitments that may themselves require revision.", "id": "fc20"}, {"front": "Scenario: a software engineer's machine learning model gets 99% accuracy on training data and 62% on new test data. What does this suggest, and how does the bias-variance framework help diagnose it?", "back": "The large gap between training accuracy (99%) and test accuracy (62%) is a classic signature of overfitting (high variance): the model memorized the training data's noise and quirks rather than learning the underlying pattern. The diagnosis is too much complexity — the model needs regularization or fewer parameters to capture the genuine signal without absorbing the noise.", "id": "fc21"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

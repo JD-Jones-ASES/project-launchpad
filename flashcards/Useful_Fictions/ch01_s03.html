@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 1, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the 'fiction of emptiness' as the text defines it?", "back": "The declaration that some territory — physical, mental, social, or historical — is blank, void, or unoccupied, and therefore available for writing upon. It is never a neutral observation; it is always a claim with consequences, and the consequences are almost always about power.", "id": "fc01"}, {"front": "What was Locke's tabula rasa and what Cartesian doctrine did it oppose?", "back": "The tabula rasa ('blank slate') is Locke's claim that the newborn mind is entirely empty, inscribed by experience alone. It opposed the Cartesian doctrine of innate ideas — the view that the mind arrives pre-equipped with concepts like God, mathematics, and logic.", "id": "fc02"}, {"front": "What was the liberating political implication of Locke's tabula rasa?", "back": "If no one is born with pre-inscribed rank or role, then intelligence and virtue are products of education and environment, not hereditary endowments. This was ammunition against aristocracy and the idea that some are born to rule. It underwrote the Enlightenment's project of shaping human beings through education.", "id": "fc03"}, {"front": "What was the dangerous implication of Locke's tabula rasa?", "back": "Whoever controls the inscription process controls the mind. The same logic that powered Enlightenment educational optimism also powered totalitarian indoctrination and colonial re-education ('mission civilisatrice'). Minds inscribed by 'wrong' cultures could be declared in need of overwriting.", "id": "fc04"}, {"front": "What was the French colonial mission civilisatrice, and how did blank-slate logic enable it?", "back": "The mission civilisatrice was France's imperial project of 'civilizing' colonized peoples. It drew on blank-slate logic: if minds inscribed by non-European traditions were simply incorrectly written, they could be legitimately overwritten with the 'correct' education.", "id": "fc05"}, {"front": "Define terra nullius and give its legal derivation.", "back": "Terra nullius means 'land of no one' or 'nobody's land.' Derived from the Roman concept of res nullius (things belonging to nobody), it held that land not occupied in ways European law recognized could be treated as unowned and taken.", "id": "fc06"}, {"front": "How was terra nullius applied to Australia, and for how long did the doctrine persist?", "back": "When British ships arrived in 1788, the continent was declared unoccupied despite being home to hundreds of distinct Aboriginal nations with 250+ languages and complex land governance. The doctrine persisted for 204 years, until the Mabo decision (1992).", "id": "fc07"}, {"front": "What was the Mabo decision (1992), and why does the text highlight its specific language?", "back": "The High Court of Australia ruled in Mabo v. Queensland (No. 2) that terra nullius had always been 'a fiction' — its own word — and recognized native title. The text notes that 'fiction' is not a word courts use lightly; the highest court in the land used the term to describe the legal foundation of the entire colonial enterprise.", "id": "fc08"}, {"front": "How long had Aboriginal and Torres Strait Islander peoples occupied Australia before terra nullius declared the continent empty?", "back": "At least 65,000 years — making terra nullius one of the most historically extreme applications of the fiction of emptiness.", "id": "fc09"}, {"front": "What was the French Revolutionary calendar's relationship to the 'fiction of emptiness'?", "back": "Introduced in 1793, the calendar declared history had begun anew — Year I. The months were renamed after natural phenomena; the old calendar was not erased but displaced. The text calls this a 'relatively benign' version of applying the fiction of emptiness to time rather than land or mind.", "id": "fc10"}, {"front": "What was the Khmer Rouge's 'Year Zero' and why does the text present it as an extreme case?", "back": "In 1975, Pol Pot declared Cambodian history erased and the country starting over. Cities were emptied, currency abolished, schools closed, books burned, and educated people killed as carriers of the contaminated past. The text calls it 'the fiction of the blank slate, applied at civilizational scale,' producing one of the worst genocides of the twentieth century.", "id": "fc11"}, {"front": "What underlying logic does the text say the tabula rasa, terra nullius, the French Revolutionary calendar, and the Khmer Rouge's Year Zero all share?", "back": "The belief that 'emptiness can be declared by fiat — that the act of naming something \"nothing\" is sufficient to make it nothing.' Each case treats the declaration of emptiness as if it creates reality, regardless of what actually exists.", "id": "fc12"}, {"front": "How does the text distinguish the mathematician's zero from the 'political zero'?", "back": "The mathematician's zero is 'a beautiful abstraction that enables calculation.' The political zero — the declared emptiness of a land, mind, or historical period — is 'something far more dangerous,' because its consequences fall on real people.", "id": "fc13"}, {"front": "How does the text connect the section's political material back to the book's opening about mathematical zero?", "back": "The text notes that in mathematics, zero required deciding that nothing was a kind of something. The political versions of this move are 'structurally identical, but the stakes are dramatically different.' A wrong theorem harms no one; a declared-empty continent harms millions.", "id": "fc14"}, {"front": "What three diagnostic questions does the text suggest asking when someone declares something 'empty'?", "back": "'Empty to whom?' — 'Empty by whose reckoning?' — 'And empty at what cost?' These questions reveal that declarations of emptiness are always perspectival and always carry consequences.", "id": "fc15"}, {"front": "Why does the text say Locke's epistemology and his politics are 'the same idea in different registers'?", "back": "The blank-slate mind assumes no one is born to a role, which underwrites the social-contract government that assumes no one is born to rule. Both rest on the same foundational claim: human nature is constructed by experience and environment, not fixed at birth.", "id": "fc16"}, {"front": "What was res nullius in Roman law, and how does it relate to terra nullius?", "back": "Res nullius means 'things belonging to nobody' — objects with no owner that could be claimed by whoever took possession. Terra nullius applied this principle to land: land without European-recognized ownership could be legally claimed by a colonizing power.", "id": "fc17"}, {"front": "Scenario: A government declares a historically inhabited region a 'development zone' with no recognized prior land rights, despite the fact that indigenous communities have managed the land for generations. What concept from this section does this illustrate?", "back": "Terra nullius logic — the fiction of emptiness applied to land. The declaration that the land is legally unoccupied ignores actual occupancy that does not fit official legal categories, replicating the same structural move the text identifies as 'never a neutral observation' but always a power claim.", "id": "fc18"}, {"front": "Scenario: A reform government redesigns an education system to make students 'forget' their cultural heritage and adopt entirely new values. Using the text's analysis, which intellectual lineage does this draw from, and what danger does it embody?", "back": "It draws from blank-slate logic: the assumption that minds can be fully overwritten, and that whoever controls education controls human nature. The text identifies this as the shadow of Locke's tabula rasa — the same idea that powered colonial 'civilizing' missions and, at its extreme, totalitarian indoctrination.", "id": "fc19"}, {"front": "How long did terra nullius persist as Australian law, and what were the main practical consequences of its overturning in 1992?", "back": "The doctrine persisted for 204 years (1788–1992). The Mabo decision recognized native title — that Aboriginal peoples never lost sovereignty over their lands — and its practical consequences 'continue to unfold,' including ongoing land rights claims and settlements.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

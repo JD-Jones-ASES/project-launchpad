@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 5, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is 'moral bookkeeping' and why does the text say the impulse is older than money itself?", "back": "The human tendency to track, tally, and balance virtue, vice, suffering, and good deeds in ledger-like systems. Karma, the cosmos's books, and institutional sin management all predate or parallel financial accounting systems.", "id": "fc01"}, {"front": "What does 'karma' mean, and from what language does it come?", "back": "From Sanskrit, meaning 'action' or 'deed.' In Hindu and Buddhist cosmology, every action generates a moral weight that accumulates across lifetimes, shaping conditions of future rebirths.", "id": "fc02"}, {"front": "How is karma structurally similar to double-entry bookkeeping?", "back": "Every action has two entries — the deed and its consequence — and the account must balance. The universe itself is the auditor. The moral ledger is precisely balanced; nothing is forgiven without consequence.", "id": "fc03"}, {"front": "What is samsara, and how does karma relate to it?", "back": "Samsara is the cycle of rebirth in Hindu and Buddhist cosmology. Karma accumulates across lifetimes within samsara; the ultimate goal in many traditions is to exhaust the karmic account entirely and exit the cycle.", "id": "fc04"}, {"front": "What was the 'Treasury of Merit' in medieval Catholic theology?", "back": "A theological reserve of surplus spiritual merit accumulated by Christ and the saints through their holy lives. This surplus was stored and administered by the Church, available for transfer to sinners who had accumulated a moral deficit.", "id": "fc05"}, {"front": "What was an indulgence, and what did it claim to do?", "back": "A papal certificate attesting that a specified quantity of moral debt had been cancelled — by transferring surplus merit from the Treasury to the purchaser, reducing or eliminating the temporal punishment due for sins already forgiven in confession.", "id": "fc06"}, {"front": "How were indulgences sold by the late medieval period?", "back": "For money, in tiered denominations — higher-grade certificates cancelled more punishment. Proceeds funded St. Peter's Basilica construction and bishops' campaigns. Johann Tetzel's aggressive marketing in Germany helped trigger the Reformation.", "id": "fc07"}, {"front": "What did Tetzel's jingle 'As soon as the coin in the coffer rings, the soul from purgatory springs' signify?", "back": "It encapsulated the commodification of moral credit: a direct cash payment for a specified spiritual outcome, treating salvation like a market transaction with a clear price and immediate delivery.", "id": "fc08"}, {"front": "What did Martin Luther deny about the indulgence system?", "back": "He denied (1) that the Church held a transferable treasury of merit, (2) that salvation could be purchased with money, and (3) that a papal certificate could substitute for genuine repentance.", "id": "fc09"}, {"front": "What did Luther NOT deny about moral accounting?", "back": "He did not deny that moral life has a structure that can be tracked, that virtue and sin accumulate, or that the account must eventually settle. He only moved the settlement from Church hands into God's.", "id": "fc10"}, {"front": "Who was Jeremy Bentham, and what was his major contribution to moral philosophy?", "back": "An English philosopher and jurist (1748–1832) who proposed the felicific calculus — a procedure for measuring the total utility of any action by summing pleasures and subtracting pains across seven dimensions, placing ethics on a quantitative basis.", "id": "fc11"}, {"front": "Name the seven dimensions along which Bentham proposed measuring pleasure and pain.", "back": "Intensity, duration, certainty, propinquity (how soon), fecundity (tendency to produce more of the same), purity (tendency not to produce the opposite), and extent (number of persons affected).", "id": "fc12"}, {"front": "What is the 'utilitarian monster' problem?", "back": "Because the felicific calculus sums pleasure across individuals, a large number of people gaining small pleasures can outweigh one person's intense suffering — seemingly justifying torture of an individual to slightly improve the mood of an entire city.", "id": "fc13"}, {"front": "How did John Stuart Mill try to fix the utilitarian monster problem, and why was the fix 'philosophically dubious'?", "back": "Mill introduced a distinction between 'higher' and 'lower' pleasures, effectively declaring some pleasures non-fungible. The fix is dubious because it abandons pure aggregation, admitting that moral reality does not simply sum — which undermines the original utilitarian project.", "id": "fc14"}, {"front": "What is the fundamental ontological problem with Bentham's felicific calculus?", "back": "Pain and pleasure are not measured in a common unit across persons. You cannot add your pleasure to mine; interpersonal comparison of utility is presupposed, not proven. There is no cardinal measure of wellbeing that is interpersonally comparable.", "id": "fc15"}, {"front": "How did utilitarian ethics migrate into modern policy, and what is the concrete example the text cites?", "back": "It became welfare economics and cost-benefit analysis. The clearest descendant is the 'value of a statistical life' — approximately $11 million in U.S. federal regulatory calculations — which is Bentham's felicific calculus applied to policy decisions.", "id": "fc16"}, {"front": "What was the common structure of karma, Catholic indulgences, and the felicific calculus?", "back": "All three apply commercial accounting logic — credits, debits, balancing — to moral life. They treat virtue and vice as quantifiable, accumulable, and transferable (or at least comparable), with the ledger eventually settling.", "id": "fc17"}, {"front": "What does the text say happened to the moral accounting metaphor across the Enlightenment?", "back": "The Enlightenment secularized moral accounting. It moved from Church-administered (indulgences) to mathematically formalized (Bentham's calculus), then into economics and policy analysis — but the underlying impulse to quantify moral worth persisted.", "id": "fc18"}, {"front": "The text says 'the accounting metaphor was not decorating a pre-existing moral intuition; it was the moral intuition.' What does this mean for karma?", "back": "The people who developed karma genuinely believed moral weight was as real as physical weight, and cosmic debts as binding as commercial ones. The ledger structure was not a convenient metaphor added afterward — it was the original conceptual framework through which moral causation was understood.", "id": "fc19"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

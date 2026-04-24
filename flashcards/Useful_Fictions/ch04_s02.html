@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 4, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How did Darwin characterize the term 'species' in On the Origin of Species?", "back": "As 'one arbitrarily given for the sake of convenience to a set of individuals closely resembling each other' — a convenience label, not a natural kind carved at the joints of reality.", "id": "fc01"}, {"front": "What is the central irony of Darwin's legacy regarding the species concept?", "back": "The man who gave us the most powerful explanation of how species form is also the man who proved that 'species' is a fiction — he spent twenty-three years preparing a book that dismantled the very category the book is named after.", "id": "fc02"}, {"front": "How many distinct definitions of 'species' did Kevin de Queiroz identify in 1997?", "back": "At least twenty-six distinct definitions in active scientific use. The number has not declined since.", "id": "fc03"}, {"front": "What is the Biological Species Concept (BSC), and who proposed it?", "back": "Proposed by Ernst Mayr in 1942: a species is a group of actually or potentially interbreeding natural populations that are reproductively isolated from other such groups.", "id": "fc04"}, {"front": "What is the primary limitation of the Biological Species Concept?", "back": "It says nothing about organisms that reproduce asexually — which includes a majority of life on Earth: all bacteria, many plants, and numerous insects. It also cannot be applied to fossils.", "id": "fc05"}, {"front": "What is the Phylogenetic Species Concept, and what practical problem does it create?", "back": "A species is the smallest group sharing a unique common ancestor and unique derived characteristic. It is more inclusive of asexual organisms but causes a proliferation of species — what used to be one species often fractures into a dozen, creating chaos in legal protections, conservation, and textbooks.", "id": "fc06"}, {"front": "How does the Morphological Species Concept classify organisms, and what is its main weakness?", "back": "It classifies by physical form — how taxonomy worked historically and how most museum specimens were originally classified. Its weakness: form and genetics frequently disagree; identical-looking beetles may be reproductively isolated, while dramatically different-looking subspecies may interbreed freely.", "id": "fc07"}, {"front": "What is the Ecological Species Concept?", "back": "It defines a species as organisms occupying the same ecological niche. It is one of the approximately twenty-six competing definitions in active use.", "id": "fc08"}, {"front": "What are ring species, and which example is highlighted in the section?", "back": "Ring species form when a population spreads in a ring around a geographic barrier. Adjacent populations along the ring can interbreed, but the two ends that eventually meet cannot. The Ensatina salamanders of California are the textbook example.", "id": "fc09"}, {"front": "Describe the Ensatina salamander ring species.", "back": "Ancestral Ensatinas spread south from the Pacific Northwest in two arms — one through coastal ranges, one through the Sierra Nevada. Adjacent populations along each arm can interbreed. But where the two arms meet in southern California, the end populations are too different to interbreed — they coexist like separate species, even though the ring is a single connected gradient.", "id": "fc10"}, {"front": "What does the Ensatina ring species reveal about the species category?", "back": "A single connected gradient can have 'same species' at every adjacent step and 'different species' at the junction. The ring shows that the category 'fails to close' — ring species describe a real pattern that occasionally refuses to be neatly bounded.", "id": "fc11"}, {"front": "What is a 'pizzly bear' (grolar bear), and what does its existence suggest?", "back": "A fertile hybrid of polar bear and grizzly bear, increasingly common as Arctic ice retreats. Its fertility suggests the reproductive isolation between the two species is incomplete — they diverged recently enough that the genetic distance has not become absolute.", "id": "fc12"}, {"front": "Why do most biologists still consider lions and tigers to be different species despite ligers existing in captivity?", "back": "Because reproductive isolation under natural conditions is what matters for the Biological Species Concept, not reproductive capacity in a zoo. Lions and tigers no longer share geographic range in the wild, so natural interbreeding does not occur.", "id": "fc13"}, {"front": "What is the 'deeper point' about speciation that the hybrid examples illustrate?", "back": "Speciation is a process, not an event. Populations diverge gradually through accumulating genetic, morphological, and behavioral differences. There is no moment at which two populations 'flip' from same to different species — just as there is no moment at which a heap of sand becomes a heap.", "id": "fc14"}, {"front": "What do all 26+ species definitions agree on, and what do they disagree about?", "back": "They agree: species are real, distinguishable groupings in nature. They disagree: the criteria by which the boundaries of those groupings are drawn.", "id": "fc15"}, {"front": "What are the direct legal stakes of species classification?", "back": "Whether a population counts as a distinct species has direct consequences for endangered species legal protections. A population classified as a separate species may qualify for protection; the same population classified as a subspecies may not.", "id": "fc16"}, {"front": "Apply: How does the Sorites paradox from section 1 parallel the 'species problem' in this section?", "back": "Just as there is no precise grain-count at which a heap becomes a heap, there is no precise genetic/morphological threshold at which two populations flip from same-species to different-species. Both cases involve drawing sharp lines through continuous gradients — the line is necessary for science and law, but it is drawn, not found.", "id": "fc17"}, {"front": "Why did Darwin spend 23 years before publishing On the Origin of Species, according to the section's framing?", "back": "The text states he 'spent twenty-three years preparing the book that would explain how species form, and by the time he published it, he was no longer sure the word meant anything at all.' The irony is that his own evolutionary research undermined the conceptual foundation of the category he was explaining.", "id": "fc18"}, {"front": "What does the section conclude about the species boundary, given all the evidence?", "back": "The species boundary is a line we draw across a gradient — necessary for doing science, but ultimately ours. Like the color line, it is a useful fiction: it captures a real pattern in nature while imposing a sharp boundary that nature itself does not enforce.", "id": "fc19"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

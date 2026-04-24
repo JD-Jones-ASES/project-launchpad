@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 6, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What three intellectual traditions does the text say converge on the conclusion that the self is a fiction?", "back": "Buddhist philosophy (anatta doctrine, ~500 BCE), Scottish Enlightenment empiricism (David Hume, 1739), and contemporary neuroscience of the default mode network. They arrived at this conclusion by entirely different methods over two and a half millennia.", "id": "fc01"}, {"front": "What is anatta, and what does the Buddhist doctrine of non-self claim?", "back": "Anatta is the Buddhist doctrine of no-self (~500 BCE, the Buddha). It holds that the self as ordinarily conceived — a permanent, unified, substantial entity that owns the body and persists through time — does not exist. What exists are the five aggregates (skandhas) arising together without a fixed center or owner behind them. This is not nihilism; it does not deny that experiences are real.", "id": "fc02"}, {"front": "What are the five aggregates (skandhas) in Buddhist philosophy?", "back": "Form (the body), sensation, perception, mental formations (including emotions and dispositions), and consciousness. These aggregates arise together, condition each other, and produce the functional appearance of a self — but there is no controller or owner behind them.", "id": "fc03"}, {"front": "What is the practical implication of anatta in Buddhist psychology?", "back": "The suffering that drives the cycle of rebirth arises from clinging — specifically, clinging to the fiction that there is a self worth protecting, aggrandizing, and defending. If the self is a fiction, clinging to it is the root of delusion, and releasing it is the root of liberation.", "id": "fc04"}, {"front": "What did David Hume find when he tried to locate the self by introspection?", "back": "He always stumbled on some particular perception — heat, cold, light, shade, love, hatred, pain, or pleasure. He could never catch himself without a perception and never observed anything but the perception. He concluded the self is 'nothing but a bundle or collection of different perceptions, which succeed each other with inconceivable rapidity, and are in perpetual flux and motion.'", "id": "fc05"}, {"front": "What is Hume's bundle theory of the self?", "back": "The self is not a substance but a bundle of perceptions with no underlying unity. The feeling of personal identity — continuous selfhood persisting through time — is a fiction generated by the resemblance and causation connecting successive perceptions. The mind imposes a narrative continuity on a stream of unconnected events.", "id": "fc06"}, {"front": "How did Hume respond to his own conclusion about the self, and what does the text say this illustrates?", "back": "He found it psychologically vertiginous — 'ready to reject all belief and reasoning' — and could only restore equilibrium through ordinary life (backgammon, dinner parties). The text uses this to illustrate: 'The useful fiction reinstalls itself the moment you stop actively resisting it.' The self is philosophically inescapable to refute and psychologically impossible to abandon.", "id": "fc07"}, {"front": "What is the default mode network (DMN), and what role does it play in producing the self?", "back": "A network of interconnected brain areas that becomes active when not engaged with external tasks — during daydreaming, reminiscing, planning future scenarios, and thinking about others' mental states. The DMN is the brain's story generator: it weaves memories, current perceptions, anticipated futures, and social models into the running narrative we experience as our self.", "id": "fc08"}, {"front": "What happens to the DMN during intense task engagement, meditation, or psychedelic states?", "back": "The DMN deactivates during intense task engagement. It is suppressed by meditation, flow states, and certain psychedelic compounds. People who experience profound DMN suppression often report that the sense of a narrative self dissolves; experience continues; there is awareness without a fixed center — strikingly consonant with the anatta doctrine.", "id": "fc09"}, {"front": "What were the split-brain experiments, and what did they reveal?", "back": "Roger Sperry and Michael Gazzaniga studied patients whose corpus callosum (the neural bridge connecting the brain's hemispheres) had been severed to treat epilepsy. Each hemisphere appeared to operate as an independent cognitive system. When the left hemisphere was asked why the right hand did something commanded only to the right hemisphere, it confabulated — generated a plausible explanation with no relation to the actual cause.", "id": "fc10"}, {"front": "What is Gazzaniga's 'interpreter module'?", "back": "A left-hemisphere circuit whose job is to construct a coherent narrative explaining the self's behavior after the fact, regardless of whether it knows what actually caused the behavior. It generates confabulation: plausible-sounding self-explanation that may have no relation to actual causation.", "id": "fc11"}, {"front": "What is a 'strange loop' according to Douglas Hofstadter, and how does it apply to the self?", "back": "A strange loop occurs when, by moving through the levels of a hierarchical system, you find yourself back where you started. The self is a strange loop: a high-level pattern in the brain that is causally real, that acts on the lower-level processes that generate it, and that exists as a genuine causal power — even though it has no independent existence outside those processes. 'The self is a fiction that became real by acting as if it were real.'", "id": "fc12"}, {"front": "What is the paradox posed by the 'Think About It' box: 'useful to whom?'", "back": "If the self is a story the brain tells, the brain is telling it to itself for its own functioning. But 'the brain' is not a single unified agent either — it is a massively parallel distributed system whose processes are not unified by anything like the self they generate. The obvious answer (useful to the organism) only relocates the problem: the organism's unity is as questionable as the self's.", "id": "fc13"}, {"front": "Why does the text say we cannot, in practice, do without the fiction of the self?", "back": "We cannot deliberate, plan, make promises, feel guilt or pride, or maintain relationships without treating ourselves and others as continuous persons. The legal system also depends on it: you can be held responsible for what your past self did only if there is a meaningful sense in which you are your past self.", "id": "fc14"}, {"front": "How does the corpus callosum connect to the unified-self hypothesis?", "back": "The corpus callosum is the neural bridge connecting the brain's two hemispheres. When it is severed (to treat severe epilepsy), the two hemispheres operate as independent cognitive systems — undermining the hypothesis that there is a single unified self coordinating all cognition. Instead, there appear to be (at least) two independent centers of experience and response.", "id": "fc15"}, {"front": "What does the text mean when it says the self 'bootstrapped itself into functional existence'?", "back": "The self is a high-level pattern generated by the brain (a 'fiction' in the sense that it has no independent existence). But once generated, it acts causally on the lower-level processes that produce it — shaping behavior, making decisions, maintaining commitments. By acting as if it were real, the fiction acquired real causal power. The story became the storyteller.", "id": "fc16"}, {"front": "Apply the concept: A defendant argues they should not be held responsible for a crime committed five years ago because the 'person' who did it no longer exists — they have entirely changed. How does the text's analysis bear on this argument?", "back": "The text acknowledges 'the philosophical and scientific case against a substantial, unified, continuous self is strong' — so the argument has philosophical grounding. But it also says: 'The legal system depends on it: you can be held responsible for what your past self did only if there is a meaningful sense in which you are your past self.' The self as fiction may be philosophically unsustainable, yet practically indispensable for systems of accountability and moral responsibility.", "id": "fc17"}, {"front": "What is confabulation, and why is it significant for the self as fiction?", "back": "Confabulation is the generation of plausible-sounding explanations for behavior that have no relation to the actual cause. In split-brain patients, the interpreter module confabulates reasons for actions it did not cause. The significance: if the brain's narrative-generating system routinely produces false self-explanations and we experience them as the self's authentic voice, the unified self-narrative may be largely post-hoc fiction.", "id": "fc18"}, {"front": "What does the closing sentence of Chapter 6 mean: 'The person who isn't there will be back in the morning. Count on it.'?", "back": "Despite conclusive philosophical argument (Hume), Buddhist practice (anatta), and neuroscientific evidence (DMN, split-brain), the self-fiction reinstalls itself each morning. You cannot stop experiencing yourself as a continuous person any more than you can stop using money once you understand it is a social convention. The most useful fictions are the ones we cannot stop believing even when we know they are fictions.", "id": "fc19"}, {"front": "How does the self as fiction connect thematically to the other fictions of personhood in Chapter 6?", "back": "Corporations, nations, gods, and the self are all 'persons who aren't there' — entities treated as having continuous identity, will, and moral status that they lack as physical or empirical facts. Each is a useful fiction: functionally indispensable (for commerce, solidarity, cooperation, and agency) while being false in the ordinary sense. The self is the deepest case because it is the fiction doing the believing in all the others.", "id": "fc20"}, {"front": "What is the Specimen box's account of 'why the self persists'?", "back": "Because it is extraordinarily useful. Planning, commitment, moral responsibility, and social trust all require the fiction of continuity. The self 'persists' not because the philosophical arguments for its reality are strong (they are weak) but because the social and cognitive functions it performs cannot be discharged without it.", "id": "fc21"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

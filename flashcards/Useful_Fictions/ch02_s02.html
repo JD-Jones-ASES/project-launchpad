@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 2, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the \"impossible zoo\" described at the opening of this section?", "back": "The collection of physically impossible objects that populate physics textbooks and daily scientific practice: the point particle, the massless rope, the perfectly elastic collision, the infinite plane, and the ideal gas. None of them exist — not approximately — yet removing them from physics would cause the field to largely collapse.", "id": "fc01"}, {"front": "What is an idealization, as defined in the KEY CONCEPT box?", "back": "A deliberate departure from reality intended to isolate a causal relationship. Unlike an approximation (which gets the right answer, approximately), an idealization may give exactly the wrong answer for any real system while giving exactly the right structural insight into all of them.", "id": "fc02"}, {"front": "What is the difference between an idealization and an approximation?", "back": "An approximation converges on the correct answer — it gets things roughly right. An idealization can give exactly the wrong answer for every real system while still revealing the structural relationship that underlies all real cases. The ideal gas is an idealization, not an approximation — it is not close to real gas behavior; it is a model of what gases would behave like if molecular volume and forces did not exist.", "id": "fc03"}, {"front": "What is the idealization strategy?", "back": "Strip the system down to its essential causal structure, understand that structure, and then build back up by adding the features that were stripped away. The frictionless plane exposes the angle-mass-acceleration relationship; friction can then be added back as a correction for specific real cases.", "id": "fc04"}, {"front": "Why does removing friction from a ramp model produce more generalizable understanding than including all friction factors?", "back": "Including all friction factors produces an accurate description of one specific block on one specific ramp — telling you almost nothing about any other case. Removing friction entirely exposes the angle-mass-acceleration relationship that is present in every real case. The idealization trades accuracy for generality.", "id": "fc05"}, {"front": "What is the ideal gas law, and what are its key assumptions?", "back": "PV = nRT, where P is pressure, V is volume, n is moles of gas, R is the universal gas constant, and T is absolute temperature. Key assumptions: molecules have zero volume, no intermolecular forces exist, all collisions are perfectly elastic, and molecules are indistinguishable.", "id": "fc06"}, {"front": "In what sense is the ideal gas law wrong, and in what sense does it illuminate?", "back": "It is wrong about every real gas: at high pressures, molecules take up space the law ignores; at low temperatures, intermolecular forces matter. Yet it illuminates why gases in general behave as they do — because molecules move, collide, and have average kinetic energy proportional to temperature. It reveals causal structure that the more accurate van der Waals equation obscures.", "id": "fc07"}, {"front": "What did van der Waals's corrected gas equation add, and why is it both more accurate and less illuminating?", "back": "The van der Waals equation (P + an²/V²)(V − nb) = nRT adds constants a and b specific to each gas, accounting for molecular volume and intermolecular forces. It is more accurate for real gases but less illuminating because its correction terms tell you how a specific gas behaves — not why gases in general behave as they do.", "id": "fc08"}, {"front": "What is a point particle (point mass), and why is it philosophically audacious?", "back": "An object with perfectly definite location and mass but no spatial extent — zero volume, no shape, no surface. It is philosophically audacious because you cannot touch it (touching requires surfaces), and yet Newtonian mechanics, celestial mechanics, and classical electrodynamics are built on it.", "id": "fc09"}, {"front": "What theorem explains why treating the Earth and Moon as point masses gives spacecraft-trajectory precision?", "back": "Newton proved that a spherically symmetric mass distribution exerts exactly the same gravitational force on an external point as a point mass of the same total mass located at its center. Real planets are approximately spherically symmetric, so the idealization holds well enough.", "id": "fc10"}, {"front": "What is the general pattern behind successful idealizations in physics?", "back": "Idealizations are chosen because the real system shares the idealization's key properties at a useful level of approximation. The art is knowing which properties to keep and which to discard — which is another way of saying the art is knowing what question you are trying to answer.", "id": "fc11"}, {"front": "What did Robert Boyle discover, and how did he discover it?", "back": "Boyle (1627–1691) used a J-shaped glass tube with trapped columns of air to show that pressure and volume are inversely proportional at constant temperature: double the pressure, halve the volume. This became Boyle's Law: PV = k (a constant).", "id": "fc12"}, {"front": "How is the idealization strategy philosophically related to Platonism, and why doesn't it require Platonism?", "back": "It resembles the Platonic idea that the world of appearances is a confused copy of a more perfect underlying reality. But you can be a thoroughgoing empiricist and still recognize that deliberately impossible objects are the most productive entry point into understanding real ones. The method is justified by results, not metaphysics.", "id": "fc13"}, {"front": "What does the rollcall of impossible physics objects include, and why does each one matter?", "back": "Point particle (mass without extent), massless rope (force transmission without inertia), perfectly elastic collision (no energy loss to heat or sound), infinite plane (used for field calculations), ideal gas (pressure-volume-temperature relationships). Each isolates a causal relationship by stripping away complicating features.", "id": "fc14"}, {"front": "Apply the idealization principle: a biologist models a cell membrane as a perfectly smooth, homogeneous sheet. When is this productive?", "back": "It is productive when the question concerns properties that depend on the membrane's average thickness or bulk permeability — where local heterogeneity (proteins, channels, lipid rafts) is irrelevant. It fails when the question specifically concerns how membrane proteins or structural defects affect transport. The idealization is chosen by the question being asked.", "id": "fc15"}, {"front": "What is the goal of scientific explanation, according to the section?", "back": "Not to describe a specific real system in all its particularity, but to identify the causal structure underlying a class of phenomena — to find the relationship between variables that holds even when other details vary. Impossible objects serve this goal by stripping away the varying details.", "id": "fc16"}, {"front": "Why does the ideal gas law reveal something the van der Waals equation obscures?", "back": "The van der Waals equation's correction terms (a, b) are empirically fitted to specific gases, making it accurate for each gas but opaque about why all gases share common behavior. The ideal gas law's false assumptions strip away the gas-specific deviations, leaving the universal causal skeleton: kinetic energy, collisions, temperature.", "id": "fc17"}, {"front": "Scenario: an engineer designs a suspension bridge using a model that treats cables as perfectly flexible (no bending stiffness). Is this an idealization or an approximation, and under what conditions does it work?", "back": "It is an idealization: real cables have some bending stiffness, so the assumption is categorically false, not merely inexact. It works when the span is long enough that bending stiffness contributes negligibly to the overall load-bearing behavior — the real cable shares the key property (dominant tensile behavior) at a useful level of approximation.", "id": "fc18"}, {"front": "What does the text mean by \"the real object happens to satisfy the key assumption well enough\"?", "back": "Idealizations succeed when the real system approximates the idealized one in the specific respect that matters for the question. Newton's point mass works because real planets are approximately spherically symmetric. The ideal gas law works for low-density gases at moderate temperatures because their molecules are far enough apart that volume and forces are negligible.", "id": "fc19"}, {"front": "What is the historical significance of van der Waals's corrected equation?", "back": "Johannes van der Waals won the Nobel Prize in Physics in 1910 for the equation that accounts for molecular volume and intermolecular forces, improving on the ideal gas law for real gases near high pressure or low temperature. It demonstrates that accuracy and structural illumination are distinct scientific virtues.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

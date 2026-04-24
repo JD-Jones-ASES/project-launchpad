@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 2, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who is Homo economicus, and what are his defining characteristics?", "back": "The fictional rational agent at the core of classical economics. He has complete information, perfectly consistent preferences, evaluates every choice by utility maximization, and is immune to emotion, sunk costs, framing effects, and social influence. He does not exist, has never existed, and could not exist given the actual architecture of the human brain.", "id": "fc01"}, {"front": "What was Adam Smith's original argument in The Wealth of Nations, and how does it differ from the cartoon version of pure self-interest?", "back": "Smith argued that markets have a structure — the \"invisible hand\" — by which individual decisions made for private reasons aggregate into socially beneficial outcomes. He did not claim that people are purely self-interested; his other major work, The Theory of Moral Sentiments, is a sophisticated account of human sympathy. The pure self-interest story was a later distortion.", "id": "fc02"}, {"front": "Why did neoclassical economists introduce the rational actor assumption?", "back": "Tractability: a rational agent's choices obey consistency conditions that allow construction of a utility function. With a utility function, you can apply calculus, find maxima, derive equilibrium conditions, and prove theorems. Rationality was a modeling device, not an empirical claim about how real people behave.", "id": "fc03"}, {"front": "Which three neoclassical economists formalized Smith's insights using mathematics in the late nineteenth century?", "back": "William Stanley Jevons, Léon Walras, and Alfred Marshall. They introduced the mathematical apparatus — utility functions, equilibrium analysis, marginal reasoning — that made economics a formal discipline.", "id": "fc04"}, {"front": "What is loss aversion, and how was it demonstrated by Kahneman and Tversky?", "back": "Loss aversion is the tendency for losses to feel roughly twice as painful as equivalent gains feel pleasant. Kahneman and Tversky demonstrated it with the Version A/B experiment: both versions offer mathematically identical choices ($1,500 certain vs. 50–50 chance of $1,000 or $2,000), yet most people prefer the certain option when framed as a gain (A) and the gamble when framed as a loss (B).", "id": "fc05"}, {"front": "What is anchoring, and why does it violate rational actor theory?", "back": "Anchoring is the tendency for an arbitrary numerical starting point in a question to infect subsequent numerical estimates. In the Turkey population experiment, those anchored at 35 million gave higher estimates than those anchored at 10 million. Homo economicus has immunity to framing effects — he ignores irrelevant information — so anchoring directly contradicts the model.", "id": "fc06"}, {"front": "What is prospect theory, and why is it significant?", "back": "A formal framework by Kahneman and Tversky (1979), the most cited paper in economics. It replaces classical utility theory's claims with: (1) people evaluate outcomes as gains and losses relative to a reference point, not as final wealth states; (2) losses weigh roughly twice as heavily as gains; (3) risk preferences reverse depending on framing.", "id": "fc07"}, {"front": "What is bounded rationality, and who introduced the concept?", "back": "Herbert Simon introduced bounded rationality: real decision-makers operate with limited information, limited computational capacity, and limited time, so they use heuristics (mental shortcuts) rather than optimization. Simon's key insight: this is not a cognitive bug but a feature. In a world of genuine complexity, optimization is computationally impossible; good-enough heuristics are more adaptive than perfect calculation.", "id": "fc08"}, {"front": "What three reasons does the text offer for why economists continue using rational actor models after the behavioral demolition project?", "back": "(1) Competitive markets weed out consistently irrational actors — traders who survive are closer to rational because irrational ones go broke. (2) Many irrational biases cancel in aggregate — overweighting and underweighting losses may balance across the market. (3) Rational actor models yield clean, testable predictions; a model that says \"sometimes rational, depending on Tuesday and hunger\" is more accurate and completely useless.", "id": "fc09"}, {"front": "What does the Specimen box list as the current status of Homo economicus?", "back": "\"Still the default assumption in large swaths of mainstream economics\" — despite being demolished by Simon (1955), Kahneman and Tversky (1979), and decades of behavioral experiments. He persists because the fiction produces tractable models that make correct predictions at the aggregate level even when every individual is irrational.", "id": "fc10"}, {"front": "How does the text invoke Box's dictum in its conclusion about Homo economicus?", "back": "\"This is George Box's dictum playing out in real time. Homo economicus is wrong about every real human. He is useful for understanding markets, designing policy, and predicting aggregate behavior.\" The fiction reveals the structure of incentives, market pressures, and equilibria — things reality hides.", "id": "fc11"}, {"front": "What distinguishes the demolition project's behavioral findings from \"merely interesting curiosities\"?", "back": "The biases Kahneman and Tversky catalogued — loss aversion, anchoring, framing effects — are deep regularities, reproducible across cultures and contexts, that reveal the actual cognitive architecture of human decision-making. They are not occasional lapses but structural features of how the human brain works.", "id": "fc12"}, {"front": "What was the historical trajectory of Homo economicus from modeling device to apparent description?", "back": "Initially, neoclassical economists knew rational actors were simplifications — modeling devices. But as models became more elaborate and successful at predicting certain market behaviors, the modeling device took on a life of its own. By the mid-twentieth century, some economists acted as though Homo economicus described a real phenomenon rather than a useful fiction.", "id": "fc13"}, {"front": "Apply the section's argument: a tech company runs A/B tests on two product descriptions — one emphasizing what users gain, the other emphasizing what they avoid losing. What outcome difference does behavioral economics predict?", "back": "Loss-framed descriptions should generate stronger responses (more clicks, purchases, or sign-ups) because losses weigh roughly twice as heavily as equivalent gains. This is loss aversion: the pain of losing X is psychologically greater than the pleasure of gaining X, so framing a purchase as avoiding a loss is more motivating than framing it as acquiring a gain.", "id": "fc14"}, {"front": "What caveat does the text raise at the end about economists' use of rational actor models?", "back": "\"Whether economists always remember that they are working with a fiction, and not a description, is another matter.\" The danger is not that the model is used — it is that the model's fictional status is forgotten, causing analysts to treat Homo economicus as a description of actual human beings rather than as a productive idealization.", "id": "fc15"}, {"front": "How does prospect theory's concept of a \"reference point\" differ from classical utility theory's assumption about how people evaluate outcomes?", "back": "Classical utility theory assumes people evaluate outcomes as final wealth states — what they end up with in absolute terms. Prospect theory says people evaluate outcomes relative to a reference point (what they expected or had before), so the same final wealth state can feel like a gain or a loss depending on the reference.", "id": "fc16"}, {"front": "Scenario: A salary negotiator learns that their employer's \"anchor\" offer is $60,000. Research shows the negotiator was planning to ask for $75,000 before seeing this anchor. What does anchoring research predict will happen?", "back": "The $60,000 anchor will likely pull the negotiator's final demand downward — they may ask for less than $75,000 or settle for less than they would have without seeing the anchor. Arbitrary numerical starting points systematically bias subsequent estimates and demands, even when the anchor is known to be irrelevant or artificially low.", "id": "fc17"}, {"front": "What does the text mean by the \"invisible hand\"?", "back": "Smith's term for the market mechanism by which individual decisions, each made for private reasons, aggregate into socially beneficial outcomes — without requiring individual virtue, altruism, or central coordination. The baker bakes to earn money; the buyer buys to eat; yet bread is distributed efficiently. The miracle is market structure, not human virtue.", "id": "fc18"}, {"front": "Why is a model that says \"sometimes people are rational and sometimes they're not, depending on whether it's Tuesday and they're hungry\" described as \"completely useless\"?", "back": "Because usefulness requires the ability to derive clean, testable predictions. A model that makes its predictions conditional on unstable, unobservable, or unpatterned variables cannot generate predictions that can be tested or falsified. More accuracy and less tractability is not always a trade worth making.", "id": "fc19"}, {"front": "What is the philosophically interesting part of economists' continued use of rational actor models, according to the text?", "back": "That behavioral economists' enthusiasm for the demolition project sometimes obscures this: mainstream economists largely know about loss aversion, anchoring, and framing effects — and they still use rational actor models because those models generate useful predictions at the aggregate level. Knowing the fiction is false does not require abandoning it.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

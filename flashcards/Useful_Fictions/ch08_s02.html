@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 8, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What philosophical shift occurred between the early and late Wittgenstein?", "back": "Early Wittgenstein (Tractatus Logico-Philosophicus): language is a picture of the world — meaningful sentences mirror the logical structure of facts. Late Wittgenstein (Philosophical Investigations, 1953): language is a diverse set of human practices (language games), each with its own internal logic, none reducible to any other, none grounded in anything outside itself.", "id": "fc01"}, {"front": "What is a language game (Wittgenstein)?", "back": "A structured human activity governed by rules that participants follow without necessarily being able to articulate those rules. Asking for help, giving orders, making jokes, reciting prayers, solving math problems — these are not variations on a single activity called 'using language.' They are different games with different rules, goals, and criteria for success and failure.", "id": "fc02"}, {"front": "What is family resemblance (Wittgenstein)?", "back": "The principle that many important concepts do not have necessary and sufficient conditions for their application. Instead, they are held together by a web of overlapping and criss-crossing similarities — like the resemblances among members of a family, where the same nose appears here, the same build there, but no single feature is shared by all members.", "id": "fc03"}, {"front": "How does Wittgenstein's analysis of the concept 'game' demonstrate family resemblance?", "back": "No single property is shared by all games: some involve winning and losing (but not ring-around-the-rosie), some are competitive (but not a child bouncing a ball alone), some require skill (but not pure chance games), some have fixed rules (but not children's spontaneous games). Yet we recognize them all as games through overlapping similarities rather than a shared essence.", "id": "fc04"}, {"front": "What does the Chomsky sentence 'Colorless green ideas sleep furiously' demonstrate about grammatical rules?", "back": "Native speakers immediately know the sentence is grammatically correct but semantically absurd — and cannot usually explain why. This demonstrates that deep grammar operates entirely below the threshold of conscious awareness: the rule is operating, but there is no legislator who wrote it, no enforcement agency, no written code. The rule is what the practice is.", "id": "fc05"}, {"front": "What is the distinction between deep grammar and prescriptive grammar?", "back": "Prescriptive grammar: the rules explicitly taught (as by an English teacher). Deep grammar: the structural rules that allow native speakers to generate and recognize well-formed sentences without being able to state those rules — operating entirely below the threshold of conscious awareness.", "id": "fc06"}, {"front": "What are desire paths, and what principle do they illustrate?", "back": "Desire paths are dirt trails worn into grass by accumulated pedestrian choices — shortcuts that emerge without being designed. They illustrate that rules can precede rulers: no one designed the desire path, yet it is a rule-like pattern. The informal rule emerges from aggregated practice before any formal rule is written. The game creates the rule.", "id": "fc07"}, {"front": "What is the 'chicken and egg' paradox of rules and games?", "back": "You need the rules to play the game in any coordinated way. But you need the game to understand what the rules are for — which means you need the game to understand the rules, which means you cannot have the rules without the game. Wittgenstein's resolution: 'following a rule is a practice.' The rule and the practice are not two separate things; the rule just is the pattern of the practice described at a level of abstraction.", "id": "fc08"}, {"front": "What is Wittgenstein's formula 'following a rule is a practice'?", "back": "The rule and the practice are not two separate things, one of which grounds the other. The rule is the pattern of the practice described at a certain level of abstraction. This dissolves the paradox of which came first: they are the same thing at different levels of description.", "id": "fc09"}, {"front": "What is the practical implication of 'the game creates the rule'?", "back": "If you want to change the rules of a game, you cannot just write new rules — you have to change the practice. You have to change what people do. Once enough people are doing something different, the new rules will write themselves. The rulebook follows the game; it does not lead it.", "id": "fc10"}, {"front": "How does the text apply this framework to anti-racism legislation?", "back": "Legislating against racism does not by itself change racist practice. But changing racist practice — making visible what it costs, making alternative practices available, making enforcement credible — eventually changes the law, the social norm, and the family resemblance network through which the concept of race operates. The game changes when players play differently; the rulebook follows.", "id": "fc11"}, {"front": "How does English common law illustrate 'the game creates the rule'?", "back": "Common law is built almost entirely from accumulated court decisions rather than legislative pronouncements. The rule is extracted from the pattern of cases rather than applied to them. Markets exchange value before contract law is written; the law follows commercial practice. The doing came first.", "id": "fc12"}, {"front": "What does it mean that 'grammar is law without a legislator'?", "back": "Social rules — what counts as a greeting, when to interrupt, how close to stand to a stranger — were never promulgated by any authority and are not written down. They exist because following them is what participation in the form of life consists of. Grammar and custom both illustrate that law (in the broad sense of rule) can operate without anyone having authored it.", "id": "fc13"}, {"front": "What is a 'form of life' in Wittgenstein's later philosophy?", "back": "A shared practice that provides the context in which language games are played and rules make sense. Wittgenstein's phrase 'to imagine a language means to imagine a form of life' means you cannot understand the rules of a practice without being inside the form of life that gives them meaning.", "id": "fc14"}, {"front": "Why do grammarians who try to arrest language evolution 'always fail'?", "back": "Because language rules are what the practice is — they emerge from and are sustained by actual use. An authority who writes down the rule is recording a pattern, not creating it. Once the practice shifts, the written rule no longer tracks reality. The rule follows the practice; the practice does not follow the rule.", "id": "fc15"}, {"front": "What is the significance of the phrase 'the rules of the game and the game itself are not separable'?", "back": "You cannot have a game without rules, and you cannot understand the rules without the game. The meaning of a rule — what counts as following it, what counts as violating it — only makes sense within the practice the rule belongs to. Rules and games are internally related, not externally connected.", "id": "fc16"}, {"front": "How does the desire path analogy illuminate what some universities have learned to do?", "back": "Some administrators read desire paths as information: where dirt tracks are worn, there is where the sidewalk should have been. This models a general practice: observe what the informal rule already is (the pattern of behavior), and formalize it. The informal rule informs and precedes the formal one.", "id": "fc17"}, {"front": "Apply the Wittgensteinian framework: a professional organization writes a new code of ethics for its members. Why might this fail to change member behavior?", "back": "According to the framework, rules follow practices rather than creating them. If members' actual conduct (the practice) hasn't changed, the new written code merely records an aspiration. Changing behavior requires changing what members do — the incentive structures, the visible costs of violations, the available alternatives. Once the practice shifts, the code will reflect the new norm; the code alone cannot produce the shift.", "id": "fc18"}, {"front": "Why is Wittgenstein's concept of family resemblance important for understanding how societies classify things?", "back": "If important concepts (justice, art, knowledge, game) lack necessary and sufficient conditions, then no classification of these things is final or natural. Categories are networks of overlapping similarities, open-textured and contested. This means that changing what falls inside a category is possible — you shift the resemblance network — and that definitional debates (what counts as art? as a fair trial?) are not resolvable by logic alone.", "id": "fc19"}, {"front": "What does Wittgenstein mean by saying that meaning is a 'function of use'?", "back": "The meaning of a word is not a thing inside a speaker's head or a logical form mirroring reality. It is determined by how the word is used within a form of life — in the context of a shared practice, with its own rules, purposes, and criteria for success and failure. Same word, different use, different meaning.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

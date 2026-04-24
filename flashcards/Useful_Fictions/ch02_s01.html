@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is George Box's dictum, and what does it precisely claim?", "back": "\"All models are wrong, but some are useful.\" It claims that because all models omit things, they all fail to describe reality perfectly — yet the interesting question is not whether a model is wrong but whether the ways it is wrong matter for the purpose at hand.", "id": "fc01"}, {"front": "What is a model, as defined in the chapter?", "back": "A purposeful simplification of reality that tries to capture only what matters for a specific question. Unlike a failed description (which aims for completeness and falls short), a model deliberately omits most features and, if well-designed, succeeds entirely at the narrower task it was built for.", "id": "fc02"}, {"front": "What is the difference between a \"failed description\" and a \"model\"?", "back": "Intent. A failed description tries to capture everything and falls short. A model tries to capture only what matters for a specific question, succeeding entirely at that narrower task. The spherical cow is not a failed description — it is a successful model of a particular kind.", "id": "fc03"}, {"front": "What does the spherical cow joke reveal about scientific practice?", "back": "That physicists routinely simplify objects to the point of apparent absurdity — stripping away legs, ears, and digestive complexity — and that this approach actually works. The spherical cow, stripped of almost everything, can tell you things the actual cow cannot.", "id": "fc04"}, {"front": "Why does the chapter call the spherical cow a \"deliberate subtraction\"?", "back": "In contrast to zero (Chapter 1's \"deliberate addition\" to our conceptual toolkit), the spherical cow removes almost everything that makes a cow an actual cow. Both are purposeful intellectual acts: one adds an entity, one strips features — both in pursuit of understanding.", "id": "fc05"}, {"front": "According to the chapter, what is the deep intuition that Box's dictum runs against?", "back": "The intuition that the goal of a description is to be complete — that leaving things out is cheating, laziness, or deception. Box's claim inverts this: leaving things out is the method, not a failure. The art is in choosing what to leave out.", "id": "fc06"}, {"front": "What is \"explanatory leverage\" in the context of models?", "back": "The ability to reason productively about a system by working with its simplified form. A model that included everything would have no explanatory leverage because it would be as complex as the thing it was trying to explain, offering no advantage over direct observation.", "id": "fc07"}, {"front": "What does the road map example illustrate about models?", "back": "A road map works precisely because it does not try to be the city — it omits trees, building colors, and traffic schedules to answer a specific question: how do I get from here to there? The purposeful omissions create usefulness; completeness would destroy it.", "id": "fc08"}, {"front": "What was Borges's imagined \"perfect map,\" and why would it be useless?", "back": "A map the size of the empire it depicted — complete and perfectly accurate in every detail. It would be useless because a map must be simpler than the territory to provide navigational leverage. A perfect map offers no advantage over standing in the territory itself.", "id": "fc09"}, {"front": "What does the Specimen box say the spherical cow preserves, and what does it discard?", "back": "Preserves: volume-to-surface-area ratios relevant to heat dissipation and order-of-magnitude mass estimates. Discards: basically everything else — legs, ears, metabolic complexity, behavioral variation. Verdict: Wrong about every real cow. Sometimes right about the herd.", "id": "fc10"}, {"front": "In what sense is a model a \"lie,\" and why does the chapter defend it anyway?", "back": "A model says things that are not true — a spherical cow is not round, a frictionless plane has no friction. But these false claims are made deliberately and transparently as tools: the history of science is partly the history of strategically untrue descriptions that generated genuine understanding that the true description could not provide.", "id": "fc11"}, {"front": "What is the source of a model's power, according to the chapter?", "back": "What you leave out — not incidentally, but as the core technique. A model identifies which features of a system drive its behavior and strips away everything else. The leftover, simplified thing is what you can reason about; the real, complicated thing is what you want to understand.", "id": "fc12"}, {"front": "What is the \"idealization scaffold\" described at the end of the chapter?", "back": "The method of beginning with the spherical cow (simplest case), understanding it fully, then gradually reintroducing the complications that were strategically dropped — watching at each step how the conclusions change. The cow with legs comes after the spherical cow; understanding begins with the lie.", "id": "fc13"}, {"front": "What does Box mean when he says all models are \"wrong\"?", "back": "A precise technical claim: a model, by definition, is a simplification of reality, and simplifications omit things. The moment you omit something, the model fails to describe reality with perfect accuracy. Therefore all models are wrong — not morally, but technically.", "id": "fc14"}, {"front": "Apply the chapter's argument: a neuroscientist studying memory uses a model that treats neurons as simple binary switches (on/off). Is this model \"wrong\"? Is it potentially useful?", "back": "Yes, it is wrong — real neurons have graded responses, complex chemistry, and spatial structure. But it may be useful: if the binary model captures the relevant causal structure for the specific question (e.g., pattern storage), it provides explanatory leverage that a fully accurate model would obscure. Whether its wrongness matters depends on the purpose.", "id": "fc15"}, {"front": "What does the KEY CONCEPT box distinguish between a \"description\" and a \"model\"?", "back": "A description aims for completeness — it tries to say everything true about a system. A model aims for leverage — it tries to say enough true things, in simple enough form, to reason productively. The spherical cow is not a failed description; it is a successful model of a particular kind.", "id": "fc16"}, {"front": "Why is the question \"how wrong is the model?\" more important than \"is the model wrong?\"", "back": "Because all models are wrong by definition (they all omit things). The relevant question is whether the model's particular wrongness matters for the purpose at hand. A model can be spectacularly wrong in some respects while being exactly right about the features that drive the system's behavior under study.", "id": "fc17"}, {"front": "Scenario: A medical researcher builds a model of infection spread that treats all individuals as identical (same immune response, same contact rate). What does this model omit, and under what conditions might it still be useful?", "back": "It omits individual variation in immunity, age, behavior, and social network structure. It might still be useful for answering population-level questions (e.g., estimating the basic reproduction number, predicting whether an epidemic grows or dies out), where average behavior drives the outcome and individual variation averages away.", "id": "fc18"}, {"front": "What intellectual tradition does the chapter place Box's dictum in?", "back": "A long tradition of scientific practice in which strategically untrue descriptions generate genuine understanding — understanding that, in many cases, the true description could not provide. This is framed as philosophically strange but empirically confirmed throughout the history of science.", "id": "fc19"}, {"front": "What does the chapter mean by \"the model is the bridge\"?", "back": "The model bridges the \"leftover, simplified thing you can reason about\" and the \"real, complicated thing you want to understand.\" It occupies the middle ground: simple enough to reason with, yet derived from real features — linking tractable analysis to genuine phenomena.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 7, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What was Mendeleev's key insight when he arranged elements by atomic weight in 1869?", "back": "He discovered that element properties recur periodically — the Periodic Law — and that this revealed gaps in the table corresponding to undiscovered elements whose properties he could predict.", "id": "fc01"}, {"front": "Name the three elements Mendeleev predicted and when they were discovered.", "back": "Gallium (1875), scandium (1879), and germanium (1886) — Mendeleev called them eka-aluminum, eka-boron, and eka-silicon. Their actual properties matched his predictions with startling precision.", "id": "fc02"}, {"front": "What is the difference between a 'filing cabinet' representation and a 'predictive' one, as the text defines them?", "back": "A filing cabinet representation categorizes what you already know. A predictive representation reveals structure that makes gaps visible as gaps — signaling what is not yet known. Mendeleev's table was predictive; it reached into the future.", "id": "fc03"}, {"front": "How did Moseley's 1913 discovery improve on Mendeleev's original table?", "back": "Moseley showed that an element's characteristic X-ray frequency is a function of its atomic number, not atomic weight. Reorganizing by atomic number resolved ordering anomalies (cobalt/nickel, tellurium/iodine) and placed the Periodic Law on firmer quantum mechanical ground.", "id": "fc04"}, {"front": "What does it mean that the periodic table was 'right before its theoretical justification had been found'?", "back": "Mendeleev's organizing principle — periodicity by weight — correctly mapped real chemical structure decades before quantum mechanics explained why: electron shell configurations produce the periodic recurrence of properties.", "id": "fc05"}, {"front": "What does the periodic table conceal, according to the Specimen box?", "back": "It hides the messiness of the lanthanides and actinides, which are relegated to the basement to keep the table printable. It also obscures the fact that several elements exist only briefly in laboratory conditions.", "id": "fc06"}, {"front": "How did the terms 'left' and 'right' in politics originate?", "back": "In the 1789 French National Assembly, delegates who supported the royal veto sat on the right side of the chamber; those who opposed it sat on the left. A spatial accident of seating became the master metaphor of Western political thought.", "id": "fc07"}, {"front": "What does the single-axis left-right political spectrum assume, and why is this problematic?", "back": "It assumes all political positions can be located on a single line between two poles, that the poles are genuine opposites, and that distance from the center equals radicalism. Political scientists argue this single dimension is empirically inadequate and embeds a preference for moderation into supposedly descriptive vocabulary.", "id": "fc08"}, {"front": "What is the Nolan Chart, and what problem does it address?", "back": "A 1971 chart by libertarian David Nolan adding a second axis: personal freedom versus government control of personal behavior. It reveals that libertarians (economically right, socially left) and authoritarians (economically left, socially right) cannot be located on the single left-right line.", "id": "fc09"}, {"front": "What did Maslow's 1943 paper actually propose about the hierarchy of needs?", "back": "Maslow proposed a flexible hierarchy where needs could be partially satisfied, individuals differed in ordering, and creative people could bypass lower needs for self-actualization. The hierarchy was not meant as a rigid sequence.", "id": "fc10"}, {"front": "Who created the pyramid visualization of Maslow's hierarchy, and when?", "back": "Management consultants in the 1960s and 1970s — not Maslow himself — created the pyramid. They found it useful for motivating workers and justifying organizational design.", "id": "fc11"}, {"front": "What did Tay and Diener's 2011 study find about Maslow's hierarchy?", "back": "Analyzing data from over 60,000 people across 123 countries, they found the hierarchical structure was not supported: higher-order need satisfaction predicted well-being independently of whether lower-order needs were met. The strict sequence the pyramid implies was not observable.", "id": "fc12"}, {"front": "Why does Maslow's pyramid persist despite empirical disconfirmation?", "back": "Because it is a beautiful organizing fiction. It makes the complexity of human motivation navigable, gives managers, therapists, and coaches a diagnostic vocabulary, and is useful in the way a map is useful — even at the cost of misrepresenting the territory.", "id": "fc13"}, {"front": "What is the Linnaean taxonomy, and in what sense is it a 'fiction'?", "back": "Carl Linnaeus's 1735 nested hierarchy (kingdom, class, order, genus, species) for all living things. It is a fiction because species do not come in neat discrete packages — they hybridize and grade into each other along evolutionary continua. Species boundaries are administrative decisions, not natural facts.", "id": "fc14"}, {"front": "Why is the Linnaean taxonomy 'indispensable' despite being a fiction?", "back": "Without it you cannot communicate about organisms or conduct ecology, epidemiology, or evolutionary biology at scale. The fiction is load-bearing — it does essential work even though it imposes discrete categories on continuous biological reality.", "id": "fc15"}, {"front": "What test does the text propose for whether an organizing fiction is worth keeping?", "back": "'The test is not: is this map true? The test is: does this map find things that are really there?' A representation is worth keeping if its organizing principle corresponds to real structure in the world — if it reveals genuine features of the phenomenon it maps.", "id": "fc16"}, {"front": "Apply the 'does it find things that are really there?' test to the left-right political spectrum.", "back": "The text concludes the spectrum persists partly because 'some left-right axis captures a genuine cleavage in most modern polities' — the dimension corresponds to something real, even if inadequately. But additional dimensions exist that the single axis cannot capture.", "id": "fc17"}, {"front": "What lesson does the periodic table offer about the relationship between representation and theory?", "back": "A representation can be truer than the data it was built from, and it can arrive before its theoretical justification. The table correctly mapped quantum structure decades before quantum mechanics existed — good organizing fictions can reach beyond the knowledge that generated them.", "id": "fc18"}, {"front": "What is a 'predictive taxonomy' and why does the periodic table qualify as one?", "back": "A predictive taxonomy is a classification scheme whose organizing principle reveals structure beyond the known cases — including gaps that correspond to real missing entries. The periodic table qualifies because its periodicity structure allowed Mendeleev to predict undiscovered elements with correct properties.", "id": "fc19"}, {"front": "What does the phrase 'a fiction — a scheme of organization imposed on an unruly universe — had reached into the future and touched something real' mean?", "back": "Mendeleev's table was not merely descriptive; it was structurally correct enough that its predictions came true. The organizing scheme captured genuine regularities in nature, not just human convenience — demonstrating that useful fictions can correspond to real features of the world.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

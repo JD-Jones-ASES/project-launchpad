@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 7, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the traditional (pre-Lakoff/Johnson) view of metaphor, and why do Lakoff and Johnson call it 'precisely backwards'?", "back": "The traditional view: metaphor is ornamental, added to thought after it has been completed in literal form. Lakoff and Johnson argue metaphor is not decoration — it is thought itself: the primary cognitive mechanism through which we understand abstract domains.", "id": "fc01"}, {"front": "What is a conceptual metaphor?", "back": "A systematic mapping from a concrete source domain onto an abstract target domain through which we understand, reason about, and act within the target domain. Examples: ARGUMENT IS WAR; TIME IS MONEY; LIFE IS A JOURNEY. They are pre-reflective and largely invisible.", "id": "fc02"}, {"front": "What is Metaphors We Live By, and who wrote it?", "back": "A 1980 book by cognitive linguists George Lakoff and Mark Johnson arguing that conceptual metaphors are the primary cognitive infrastructure of abstract thought — not literary devices but invisible structural mappings embedded in everyday language and reasoning.", "id": "fc03"}, {"front": "What does the ARGUMENT IS WAR mapping make salient, and what does it hide?", "back": "It makes salient: opposition between parties, the goal of defeating the other side, the notion of a winner. It hides: argument as collaborative inquiry, as mutual refinement, as a way of getting at the truth together.", "id": "fc04"}, {"front": "In Lakoff and Johnson's hypothetical ARGUMENT IS DANCE culture, what would count as a 'good argument'?", "back": "One that was elegant and mutually responsive, culminating in synthesis — somewhere neither participant could have reached alone. 'Winning' would be a category that does not apply; you cannot win a waltz.", "id": "fc05"}, {"front": "List four things that can be done to time in the TIME IS MONEY metaphor.", "back": "Time can be spent, wasted, saved, invested, budgeted, run out of, squandered, stolen, or given. These verbs reveal that time is treated as a finite resource subject to monetary logic.", "id": "fc06"}, {"front": "What ideological content does the TIME IS MONEY metaphor carry?", "back": "It presupposes that time is a finite resource that must be allocated efficiently, that the appropriate metric for time use is productivity, and that idle time is waste. It makes this industrial-economic orientation feel like obvious fact rather than one cultural choice among others.", "id": "fc07"}, {"front": "What does the text say the medieval Venetian merchant was doing when he charged interest on delayed repayment?", "back": "He was importing a monetary map onto temporal territory — treating time as something tradeable against money. The TIME IS MONEY metaphor preceded the ledger; the ledger made the metaphor permanent by giving it material form.", "id": "fc08"}, {"front": "What is the Sapir-Whorf hypothesis?", "back": "The hypothesis that the vocabulary of a language shapes the perceptual categories of its speakers — that linguistic distinctions (like color terms) influence what speakers perceive.", "id": "fc09"}, {"front": "How do Lakoff and Johnson extend the Sapir-Whorf hypothesis?", "back": "They scale it from vocabulary to conceptual structure: the question is not just whether having a word shapes perception, but whether the entire metaphorical mapping through which a domain is understood determines what can and cannot be thought about it.", "id": "fc10"}, {"front": "What did the crime metaphor experiment show about conceptual metaphors?", "back": "Subjects primed with 'crime is a beast preying on the city' recommended more punitive policies than those primed with 'crime is a virus infecting the city,' even with identical factual information. Conclusion: the metaphor was not describing a prior view; it was generating one.", "id": "fc11"}, {"front": "What does the LIFE IS A JOURNEY metaphor imply about a person's relationship to their own life?", "back": "It implies a traveler with a destination (goals), a location on a path (early career, midlife), decision points (crossroads), possible failure (losing your way), and possible success (arrival). It implies agency: choices determine outcomes.", "id": "fc12"}, {"front": "What does the LIFE IS A JOURNEY metaphor hide, according to the text?", "back": "It hides the ways that a life is made retroactively — the story only makes sense from where you stand now, meaning the map is drawn after the territory has been lived. It also hides the recursive, cyclical, multidimensional nature of lived experience.", "id": "fc13"}, {"front": "What does 'we are drawing the map as we go, and then remembering it as discovery' mean?", "back": "Narrative coherence is imposed on experience rather than found within it. We construct the story of our lives backward, and then experience this construction as if we had been following a pre-existing path — the metaphor makes imposition feel like discovery.", "id": "fc14"}, {"front": "What common features do conceptual metaphors share with maps?", "back": "Both are representations that enable reasoning about a domain; both preserve some features and hide others; both feel like neutral descriptions but encode choices about what to make visible; and both do invisible work on the user's thinking when their constructedness is forgotten.", "id": "fc15"}, {"front": "What five examples of conceptual metaphors does the Specimen box list?", "back": "ARGUMENT IS WAR; TIME IS MONEY; THE MIND IS A CONTAINER; LIFE IS A JOURNEY; MORALITY IS CLEANLINESS.", "id": "fc16"}, {"front": "Why does the text call conceptual metaphors 'the cognitive infrastructure on which the thinking runs'?", "back": "Just as physical infrastructure (roads, electrical grids) makes activity possible without being noticed, conceptual metaphors provide the structural basis for reasoning about abstract domains — they are foundational and invisible, not optional add-ons.", "id": "fc17"}, {"front": "What is the THINK ABOUT IT exercise asking the reader to do?", "back": "Identify the dominant metaphor governing a known domain (medicine, education, business), then ask what it hides — and what alternative metaphor would reveal what the dominant one conceals. Examples: is the body a machine (repair), a battlefield (immune system), or an ecology?", "id": "fc18"}, {"front": "Why does the text say the TIME IS MONEY mapping is 'a map that the industrial economy drew, and that we now mistake for the territory'?", "back": "The monetary framing of time emerged from a specific economic context (industrial capitalism) and is not a universal or necessary feature of human temporal experience. Other cultures organize time around cycles, relational obligations, and contemplative states — but within an industrial economy, the mapping feels like literal description rather than cultural imposition.", "id": "fc19"}, {"front": "What does the 'danger' entry in the Conceptual Metaphor Specimen box warn?", "back": "The mapping feels like description, not construction — which means its distortions are invisible until something breaks. Because conceptual metaphors operate pre-reflectively, users don't notice what the mapping hides until the hidden aspects become urgent.", "id": "fc20"}, {"front": "How does the section connect cognitive linguistics (Lakoff and Johnson) back to the broader Useful Fictions project?", "back": "Conceptual metaphors are invisible, structural, and load-bearing — they do the work of maps without being recognized as maps. Like Mercator's projection or Maslow's pyramid, they encode choices about what to preserve and what to distort, and become dangerous when their constructed nature is forgotten.", "id": "fc21"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

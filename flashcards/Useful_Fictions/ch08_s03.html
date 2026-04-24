@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 8, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Why does the text call the laminated scientific method poster a 'useful fiction' rather than simply 'wrong'?", "back": "The poster gives students a helpful framework for empirical investigation — a vocabulary and habits better than nothing. Like all useful fictions, it purchases tractability at the cost of accuracy. The problem arises when it is mistaken for an accurate description of science, turning from useful to harmful: actual scientific practice looks like deviance from a norm rather than the norm itself.", "id": "fc01"}, {"front": "What was Francis Bacon's inductivist account of science?", "back": "Bacon (Novum Organum, 1620): scientific knowledge is built from the ground up. Observe particular cases, collect enough of them, and the general law emerges from the accumulation. Patient, systematic observation, free from prior theory, generates the laws of nature. Science is essentially careful observation.", "id": "fc02"}, {"front": "What is Hume's problem of induction?", "back": "No finite number of observations can logically justify a universal conclusion. You can observe ten thousand white swans and conclude all swans are white — but one black swan in Australia falsifies the conclusion without invalidating any observation. Inductive reasoning cannot be justified inductively (circular) or deductively (can't go from 'some' to 'all'). The logical gap is permanent.", "id": "fc03"}, {"front": "What is the black swan example, and what does it demonstrate?", "back": "After observing ten thousand white swans, one might conclude all swans are white. The discovery of black swans in Australia falsifies this conclusion without invalidating any of the prior observations. This demonstrates Hume's problem of induction: no accumulation of confirming observations logically guarantees a universal claim.", "id": "fc04"}, {"front": "What is Popper's falsificationism?", "back": "Science proceeds by trying to refute hypotheses, not confirm them. A hypothesis is scientific if and only if it is falsifiable — if it makes predictions that could in principle be shown to be false. The hypothesis 'all swans are white' is falsifiable; the hypothesis 'bad things happen to those who offend invisible spirits' is not (every outcome can be counted as evidence).", "id": "fc05"}, {"front": "How does Popper's criterion distinguish science from pseudo-science?", "back": "Pseudo-scientific theories like astrology and certain forms of psychoanalysis are unfalsifiable — no observation could refute them. A theory that 'predicts everything' (is never wrong) is epistemically worthless. Science requires theories that are specifically risky — that could be wrong, and that specify what would count as showing them wrong.", "id": "fc06"}, {"front": "What is the 'Vulcan' example, and what problem with falsificationism does it illustrate?", "back": "When Mercury's perihelion violated Newtonian predictions, physicists did not abandon Newton — they posited an unseen planet ('Vulcan') to account for the discrepancy. Real science does not simply discard hypotheses at the first refuting observation. A framework too productive to abandon is kept alive despite anomalies — which violates strict falsificationism.", "id": "fc07"}, {"front": "What is a paradigm in Kuhn's sense?", "back": "A shared framework of assumptions, exemplary cases, tools, and standards that defines what counts as a good question, a good answer, and a problem worth solving within a scientific community. Normal science proceeds by solving puzzles within the paradigm rather than questioning the paradigm itself.", "id": "fc08"}, {"front": "What is normal science (Kuhn)?", "back": "Puzzle-solving within a paradigm. Scientists work within a shared framework, acknowledging anomalies but generally setting them aside — explaining them away, attributing them to experimental error, or filing them for later. Normal science is not continuous hypothesis testing; it is the routine application and refinement of an accepted framework.", "id": "fc09"}, {"front": "What is a paradigm crisis, and what triggers it?", "back": "A crisis occurs when anomalies accumulate to the point where normal puzzle-solving can no longer contain them. The paradigm cannot explain away enough of the accumulating counter-evidence, and a state of crisis develops in which fundamental assumptions become open to challenge.", "id": "fc10"}, {"front": "What is a paradigm shift (Kuhn)?", "back": "A revolutionary reorganization of an entire scientific field, following a paradigm crisis. After a paradigm shift, not just the answers but the questions and criteria for good answers change. The new paradigm is not more 'true' in a simple sense — it solves different problems and ignores different anomalies. It is a different game with different rules.", "id": "fc11"}, {"front": "Why was the Copernican Revolution a social rather than a logical event?", "back": "The geocentric model had accumulated epicycles and corrections sufficient to produce acceptable predictions; it was not obviously worse than the heliocentric model at the time of its replacement. The shift happened because the heliocentric model offered more elegant puzzle-solving, and because Galileo made the new framework culturally and rhetorically irresistible — not because of definitive logical refutation.", "id": "fc12"}, {"front": "What is Feyerabend's epistemological anarchism?", "back": "The only methodological principle consistent with the actual history of science is 'anything goes.' Not because evidence doesn't matter, but because every proposed methodological rule (induction, falsification, normal science) has been violated at crucial moments by the scientists who made the discoveries the rule was supposed to explain. Rules are reverse-engineered from discoveries, not discoveries derived from rules.", "id": "fc13"}, {"front": "What does it mean that scientific rules were 'reverse-engineered from discoveries'?", "back": "Galileo, Newton, and Einstein did not follow the methodological rules of their time — they violated them. The rules were constructed after the fact to describe what appeared to have worked. This means no prospective methodological rule can guarantee discovery; the appearance of method is retrospective rationalization.", "id": "fc14"}, {"front": "How does the text connect Feyerabend's 'anything goes' to the concept of models?", "back": "Feyerabend's claim is partly about models: scientists have historically made progress by constructing models that violated methodological rules of their time, because the models captured something real that the rules would have prohibited. Newtonian mechanics violated Aristotelian physics; quantum mechanics violated classical intuitions. Each methodologically forbidden model turned out to be a better map of the territory.", "id": "fc15"}, {"front": "What is the 'secret' of science's power, according to the text?", "back": "Not a method — a culture. A form of life in which the rules are provisional, anomalies are the most interesting things, and the highest virtue is to be proven wrong in a way that generates something new. Science is the only knowledge-producing game in which the game regularly rewrites its own rules.", "id": "fc16"}, {"front": "What does the text mean by saying science is 'a game that changes its own rules'?", "back": "Every major scientific revolution changes not just what counts as the right answer, but what counts as the right question and what counts as the right kind of answer. After the Copernican revolution, astronomers were doing a different kind of astronomy. After quantum mechanics, physicists accepted different kinds of claims. The rules of the game themselves are subject to revision during play.", "id": "fc17"}, {"front": "What do all four accounts of science (Bacon, Popper, Kuhn, Feyerabend) agree on?", "back": "The laminated poster is wrong. No account of how science actually works matches the idealized, sequential, numbered steps on the classroom display. They differ on what replaces the poster, but none defends it.", "id": "fc18"}, {"front": "Apply falsificationism: a nutrition researcher claims their diet plan is the healthiest because no study has shown it causes harm. What is wrong with this reasoning?", "back": "Absence of refutation is not confirmation. Popper's criterion holds that a theory that has never been falsified may simply be unfalsifiable (consistent with all outcomes) or inadequately tested — both are epistemically worthless situations. The researcher needs to state what evidence would show the diet plan harmful, and then test for it.", "id": "fc19"}, {"front": "How does a paradigm define 'anomaly' rather than 'refutation'?", "back": "Within a paradigm, an observation that conflicts with the framework is treated as an anomaly to be explained, not as a refutation that demands abandoning the framework. Anomalies are set aside, attributed to experimental error, or explained with auxiliary hypotheses. Only when anomalies accumulate beyond the paradigm's absorptive capacity does a crisis develop.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

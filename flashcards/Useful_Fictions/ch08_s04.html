@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 8, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is a 'strange loop' (Hofstadter), and why does the text call this book one?", "back": "A strange loop is a structure that, when traced upward through its levels of hierarchy, finds itself back where it started. Gödel's incompleteness theorem, Escher's Drawing Hands, and Bach's canons are all strange loops. The book is a strange loop because it used useful fictions to explain useful fictions — its method is an instance of its thesis.", "id": "fc01"}, {"front": "What is Gödel's incompleteness theorem, and why is it a strange loop?", "back": "Gödel's theorem is a mathematical statement that, when decoded, asserts its own unprovability within the system that generated it. It is a strange loop because it reaches up through the levels of a formal system and refers back to itself — the system cannot prove all of its own truths without generating a statement about its own limits.", "id": "fc02"}, {"front": "How does Escher's Drawing Hands illustrate the strange loop?", "back": "Each hand is drawing the other into existence — neither can be identified as the original. The image has no external foundation: each element grounds the next, which grounds the first. This is the visual paradigm for a system that, when traced to its foundations, discovers itself.", "id": "fc03"}, {"front": "In what way does Chapter 1 (Zero) exemplify the book's self-referential structure?", "back": "Chapter 1 introduced the concept of useful fiction using the history of zero — a number that does not name a quantity but makes all quantitative reasoning possible. The concept of 'useful fiction' is itself in this category: it does not name a thing in the world but makes a certain kind of thinking possible. Zero is a useful fiction that explains useful fictions.", "id": "fc04"}, {"front": "How did the book deploy an 'invisible hand' fiction while writing about invisible hand fictions?", "back": "The book personified its concepts throughout — speaking of 'what the magic circle does,' 'what the ledger wants,' 'what the map hides' — treating abstractions as agents with intentions. This is the invisible-hand fiction (Chapter 3): treating aggregate outcomes as if they were a single agent's intentions. The invisible hand, as the text puts it, wrote this textbook.", "id": "fc05"}, {"front": "How did the book enact the 'line' fiction (constructed categories) while explaining it?", "back": "The taxonomy of 'eight types of useful fiction' was invented for the book. There could have been six types, or twelve, or three. The boundaries between chapters — between 'model' and 'category,' between 'person' and 'game' — are not natural joints in the subject matter. They are incisions made by an author who needed to stop somewhere. The book drew lines while explaining that lines are drawn.", "id": "fc06"}, {"front": "What is the 'performative paradox' in the book's argument?", "back": "The book's thesis is that useful fictions produce real effects. If the category 'useful fiction' is itself a useful fiction, and it is productive, then its usefulness is exactly what the thesis predicts. The book is right, and the proof is the book itself: a statement that, if true, makes itself true. This is the performative paradox.", "id": "fc07"}, {"front": "What distinguishes a virtuous circle from a vicious circle in self-referential arguments?", "back": "A vicious circle confirms itself without reaching beyond itself — it is hermetically sealed. A virtuous circle uses itself as evidence for a claim that also predicts things outside itself. The book claims to be a virtuous circle: the productivity of the 'useful fiction' category is evidence for the claim that useful fictions produce real effects, and that claim also predicts things the book didn't examine.", "id": "fc08"}, {"front": "What is a gestalt switch, and what example from perception does the text use?", "back": "A gestalt switch is a perceptual shift that, once made, cannot be unmade. The Necker cube flips between two orientations once you notice it can flip — you can never return to seeing it as simply a hexagon. The young-woman/old-woman ambiguous image oscillates between figures once you've seen both. Gestalt switches, once made, are permanent.", "id": "fc09"}, {"front": "What gestalt switch does understanding 'useful fictions' produce?", "back": "Once you understand that money is a collective agreement that works because everyone acts as if it works, you cannot fully un-understand this. You can continue to use money, but with a different posture — a faint awareness that the whole structure is held up by a shared performance. The same switch applies to the corporation, the political spectrum, scientific paradigms, and population statistics.", "id": "fc10"}, {"front": "Is the gestalt switch produced by the book disabling or clarifying? What is the text's claim?", "back": "Clarifying, not disabling. The text says: 'This is not disabling. It is clarifying.' You can continue to act within monetary systems, corporations, and legal fictions — but with a different relationship to them. The knowledge is described as 'a kind of freedom.'", "id": "fc11"}, {"front": "What does the book admit about its own 'field guide' / natural history metaphor?", "back": "Using the vocabulary of natural history (specimens, classifications, field notes) to organize social and philosophical ideas is itself a map. It made certain things visible (the variety and systematicity of useful fictions) and hid others (the political contests over which fictions get institutionalized and by whom, and the fact that 'useful' is not a neutral description).", "id": "fc12"}, {"front": "How does the author-function in a book illustrate corporate personhood (Chapter 6)?", "back": "The author-function assigns to a name the responsibility for a text that emerged from a far messier process of reading, thinking, drafting, revising, and arguing with oneself. This is a legal fiction of a different kind: 'the book argues that…' and 'the author claims…' personify and unify something that was multiply authored and internally contested.", "id": "fc13"}, {"front": "What is the definition of useful fiction given at the start of the book, and what are its admitted limitations?", "back": "Definition: something that everyone agrees does not correspond to reality in any simple way, yet functions as if it does — and whose functioning produces real effects. Limitations: borderline cases (is a metaphor a useful fiction? a habit? a theorem?), internal tensions ('everyone agrees' is rarely true), and domains where the definition applies only uncomfortably. These are features, not bugs.", "id": "fc14"}, {"front": "What is the pragmatic test the text proposes for evaluating the 'useful fiction' definition?", "back": "Does having this category make you see things you would not otherwise have seen? Does it group things that belong together? Does it generate productive new questions? If you now see the monetary system, the corporation, the scientific paradigm, the courtroom, the periodic table, and this book as variations on a single structural theme — the definition has done its work.", "id": "fc15"}, {"front": "What does the text mean when it says a perfect mirror is indistinguishable from the thing it reflects?", "back": "A definition that perfectly captured the phenomenon would not be a useful fiction — it would be a mirror, and as Borges knew, a perfect mirror is indistinguishable from what it reflects. The imprecision of the 'useful fiction' definition is not a failure; it is evidence of the category's nature. A concept that exactly maps its domain is no longer a productive abstraction — it is the domain itself.", "id": "fc16"}, {"front": "What does the text mean by 'the game was always in progress'?", "back": "The most important useful fictions — money, law, nation, paradigm, self — are not ones we invented and then adopted. They are ones we found ourselves already inside, navigating by, before we had any capacity to examine them. The magic circle was drawn before we could walk. We arrive in the middle of a game already underway.", "id": "fc17"}, {"front": "What is the book's stated goal, given that we cannot escape the fictions we inhabit?", "back": "Not to escape the circles — there is no escaping them. But to change the relationship between the reader and the fictions they inhabit: from unreflective player to one who knows they are playing a game, and understands enough of the rules to see, occasionally, how the game might be played differently.", "id": "fc18"}, {"front": "Apply the self-referential framework: if a textbook about critical thinking used critical-thinking failures to illustrate critical-thinking failures, what would make that a virtuous rather than vicious circle?", "back": "It would be a virtuous circle if the demonstrations of critical-thinking failures (its method) were instances of the claim (that such failures are real and structurally identifiable) and if that claim also generated predictions about critical-thinking failures in contexts the book didn't examine. The self-confirmation becomes virtuous when it extends outward rather than folding in on itself.", "id": "fc19"}, {"front": "How does assessment (rubrics, grades, numerical scores) exemplify the 'ledger' useful fiction?", "back": "Double-entry bookkeeping made assets and liabilities commensurable — things not naturally comparable were given a common measure. Assessment rubrics do the same for understanding: whether a student understands a concept is not the kind of thing that naturally has a numerical value, but the rubric assigns one, making grading possible. The rubric is a useful fiction that commensures the incommensurable.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

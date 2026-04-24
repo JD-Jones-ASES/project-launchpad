@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 6, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who is Marianne, and where does she appear?", "back": "Marianne is the personification of the French Republic, Liberty, and the revolutionary spirit of 1789. She appears on France's official seal, on government buildings, and most famously in Eugène Delacroix's 1830 painting Liberty Leading the People, depicted as a bare-breasted, armed woman leading revolutionaries across the barricades.", "id": "fc01"}, {"front": "What is Benedict Anderson's definition of a nation from Imagined Communities (1983)?", "back": "An 'imagined political community' — imagined because members of even the smallest nation will never know most of their fellow members, yet in each person's mind lives an image of their shared communion. It is not a debunking claim; nations are a specific kind of social fiction, not a hoax.", "id": "fc02"}, {"front": "What are Anderson's three defining features of how a nation imagines itself?", "back": "(1) Limited — it has finite, if elastic, boundaries. (2) Sovereign — it claims the right to self-governance through a state apparatus. (3) Community — despite hierarchies and inequalities, the nation is conceived as a deep horizontal comradeship of citizens.", "id": "fc03"}, {"front": "What is 'print capitalism,' and why did Anderson consider it the mechanism that made modern nationalism possible?", "back": "Print capitalism is the commercial printing industry — newspapers, novels — that standardized vernacular languages and created daily shared texts consumed simultaneously by millions. It created the 'meanwhile': the sense that right now, across a vast imagined space, people like you are reading the same words and sharing the same symbolic world. The newspaper became the daily ceremony of the nation.", "id": "fc04"}, {"front": "What is the 'meanwhile' in Anderson's theory?", "back": "The psychological sense — created by simultaneously consumed print media — that right now, across a vast imagined space, people like you are reading the same words, thinking about the same events, and sharing the same symbolic world. It is the mechanism by which dispersed individuals came to feel national solidarity.", "id": "fc05"}, {"front": "What is the distinction between a 'nation' and a 'state'?", "back": "A state is a political and legal entity: a government with defined territory, a monopoly on legitimate violence (Weber's definition), a bureaucracy, and international recognition. A nation is a cultural and psychological entity: a group who believe they share common identity, history, language, or destiny — whether or not they have a state. The Kurds are a nation of ~35 million with no state.", "id": "fc06"}, {"front": "What is the 'sleight of hand' in the phrase 'nation-state,' and what are its political consequences?", "back": "The phrase implies every nation ought to have a state and every state a nation. This implication drives national self-determination movements and ethnic cleansing campaigns: if state and nation must coincide, the presence of the 'wrong' nation within a state's territory becomes an existential problem.", "id": "fc07"}, {"front": "What four nationhood rituals does the text identify as components of the psychological infrastructure of the nation?", "back": "(1) The national anthem — sung collectively, addresses the nation as a unitary consciousness. (2) The flag — a social technology for focusing collective emotion, treated with reverence extended to a sacred body. (3) The founding myth — a birth narrative that defines the nation by defining where it came from. (4) National enemies — defining what the nation is not, requiring a face to project hatred onto.", "id": "fc08"}, {"front": "Why are national enemies described as 'as essential as national heroes'?", "back": "The nation is defined against what it is not, and that not-ness requires a face. Propaganda reliably personifies enemy nations as malevolent figures because you can hate a person — it is harder to hate an economic and historical process. Enemies complete the national identity by specifying its boundaries.", "id": "fc09"}, {"front": "What does the U.S. Flag Code illustrate about how national symbols function?", "back": "The Flag Code specifies exactly how the flag must be displayed, folded, and retired (by burning), treating it with reverence extended to a sacred body. This reveals that the flag is not merely a symbol but a social technology for focusing and directing collective emotion.", "id": "fc10"}, {"front": "What is a founding myth in the context of national personhood?", "back": "A narrative of heroic national creation that establishes the nation's essential character. Examples: Americans have 1776; the French have 1789; the Israelis have the Exodus and 1948. These are not simply false or simply true — they are generative fictions that define what the nation is by defining where it came from.", "id": "fc11"}, {"front": "Name four national personification figures mentioned in the text and identify the nations they represent.", "back": "Marianne (France/Liberty), Uncle Sam (United States), Britannia (Britain/United Kingdom), Mother Russia (Russia), Columbia (earlier female personification of the United States, now displaced by Uncle Sam).", "id": "fc12"}, {"front": "What is the enabling power of the national fiction, according to the Specimen box?", "back": "It creates the comradeship that makes citizens willing to fund public goods, submit to shared laws, and die in wars — which is why Anderson asked why 'so many millions of people have been willing not so much to kill as willingly to die for such limited imaginings.'", "id": "fc13"}, {"front": "What is the destructive potential of the national fiction, according to the Specimen box?", "back": "When the national person is defined in exclusionary terms — racial, religious, or linguistic — non-members become existential threats to be expelled or destroyed. The logic of nation-state coincidence drives ethnic cleansing as well as self-determination movements.", "id": "fc14"}, {"front": "How does Columbia differ from the Statue of Liberty, according to the text?", "back": "Columbia was the feminine personification of the United States before Uncle Sam became dominant. She appears as the Statue of Freedom atop the Capitol dome — though most Americans have never been told her name. The text uses this to illustrate how national personifications can be forgotten even while remaining physically present.", "id": "fc15"}, {"front": "Apply the concept: Why does a sports broadcast play the national anthem before an international competition?", "back": "The anthem is one of the key nationhood rituals the text identifies — sung collectively at moments of communal gathering (including sporting events). It invokes the national person, creates the emotional sense of shared community, and reinforces citizens' connection to the imagined national comradeship by performing membership simultaneously with millions of other viewers.", "id": "fc16"}, {"front": "How does the Delacroix painting Liberty Leading the People (1830) illustrate the mechanism of national personification?", "back": "Delacroix gave an abstraction (Liberty, France, the revolutionary spirit of 1789) a body, a face, a will, and an emotional charge in the figure of Marianne. Citizens can feel loyalty to this person the way they feel loyalty to an actual person — fear, love, sacrifice — which is not possible for abstract institutional arrangements. Delacroix also placed his own self-portrait in the painting, marking the difference between observer and participant.", "id": "fc17"}, {"front": "What does the text mean when it says the nation-state dresses 'an impersonal institutional arrangement in the clothes of a person, then asks that person's children to lay down their lives for her'?", "back": "The nation-as-person is the key mechanism: abstract institutions (laws, bureaucracies, borders) cannot by themselves inspire sacrifice. By personifying the nation as a figure (mother, goddess, warrior-woman), the social technology converts institutional loyalty into something that feels like personal love, making citizens willing to die for what is, structurally, a social fiction.", "id": "fc18"}, {"front": "Why does the text say the national personification figures have been 'working for two centuries'?", "back": "Because they reliably generate the emotional responses — loyalty, sacrifice, solidarity — that the nation-state requires from citizens. The mechanism's durability shows that fictions, once institutionally established and ritually reinforced, maintain themselves through their own functional success. They persist because they work.", "id": "fc19"}, {"front": "What is the difference between how a tribe and a nation maintain community, according to the Specimen box?", "back": "Tribes operate through face-to-face interaction; nations operate at industrial scale through print and institutional mediation. Dunbar's number (~150 close relationships) constrains tribal community. Nations overcome this cognitive limit through the mechanism of imagined community — the sense of communion without direct personal acquaintance.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 6, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What happened on May 10, 1886 in Santa Clara County v. Southern Pacific Railroad, and why was it legally unusual?", "back": "Chief Justice Waite made a prefatory oral remark that the Fourteenth Amendment's equal protection clause applies to corporations. The case was decided on other grounds, but court reporter Bancroft Davis included Waite's comment as a headnote — a clerk's summary with no legal force — which subsequent courts treated as authoritative precedent.", "id": "fc01"}, {"front": "What is a headnote in legal documents?", "back": "A summary note that precedes a court opinion, written by a court reporter for administrative convenience. Headnotes have no legal force; they are not the court's words and are not binding law.", "id": "fc02"}, {"front": "What is a legal fiction?", "back": "A fact assumed or created by a court or legislature for purposes of legal reasoning, even though it does not correspond to empirical reality. Legal fictions are deliberate tools, not mistakes — false as biological or empirical claims but 'load-bearing' in the legal sense.", "id": "fc03"}, {"front": "What coordination problem does corporate personhood solve?", "back": "It solves the problem of organizing large-scale economic activity across time. Individual humans die, retire, and have heirs with different commitments. A corporation is an artificial person that can own property, enter contracts, and maintain continuous legal identity indefinitely — outlasting any individual participant.", "id": "fc04"}, {"front": "Define limited liability as it applies to corporate shareholders.", "back": "If a corporation goes bankrupt, creditors can pursue the corporation's assets but not the personal assets of shareholders. The shareholders' downside is capped at their investment; their upside is uncapped. This asymmetry is what enables large-scale risk capital accumulation.", "id": "fc05"}, {"front": "What does the text mean by calling limited liability 'the financial engine of modern capitalism'?", "back": "Without limited liability, investors would be personally exposed to unlimited losses, and risk capital would not accumulate at the scale required to build railroads, fund pharmaceutical research, or operate airlines. The legal fiction of corporate personhood is as indispensable to the industrial economy as double-entry bookkeeping.", "id": "fc06"}, {"front": "What constitutional amendment did the Santa Clara headnote apply to corporations, and what was that amendment originally intended to do?", "back": "The Fourteenth Amendment, ratified in 1868 to protect the citizenship rights of formerly enslaved people. The text calls its application to railroad corporations 'at minimum, an irony worth noting.'", "id": "fc07"}, {"front": "What constitutional rights did corporations acquire as the doctrine of corporate personhood expanded after Santa Clara?", "back": "Equal protection rights (Fourteenth Amendment), Fourth Amendment protections against unreasonable searches, partial Fifth Amendment protections against compelled self-incrimination, and — most controversially — First Amendment speech protections confirmed in Citizens United (2010).", "id": "fc08"}, {"front": "What did the Supreme Court hold in Citizens United v. FEC (2010)?", "back": "The First Amendment prohibits the government from restricting political expenditures by corporations, associations, or labor unions. Justice Kennedy's majority opinion held that because corporations are legal persons with First Amendment rights, restrictions on their political spending constitute government censorship.", "id": "fc09"}, {"front": "What was Justice Stevens' objection to the Citizens United majority, and what does the text identify as the deeper structural problem it illustrates?", "back": "Stevens argued corporations 'have no consciences, no beliefs, no feelings' and are not members of 'We the People.' The text uses this to illustrate the modularity problem: a fiction designed for one purpose (commercial coordination) can migrate into adjacent domains (constitutional law) with different requirements, producing results that would have seemed absurd to the fiction's original architects.", "id": "fc10"}, {"front": "Give three examples of legal fictions other than corporate personhood from the text.", "back": "(1) Adverse possession — a long-trespassing squatter is 'deemed' to own the land. (2) Constructive notice — you are presumed to know the contents of a public record whether you've read it or not. (3) The king can do no wrong — sovereign immunity is preserved while suit can be brought against the crown's agents.", "id": "fc11"}, {"front": "What four capabilities does the Specimen box list as things the corporation 'enables'?", "back": "Limited liability, perpetual existence, transferable shares, centralized management, and the accumulation of capital at industrial scale.", "id": "fc12"}, {"front": "What does the Specimen box identify as 'the slide' in the history of corporate personhood?", "back": "A fiction optimized for commercial coordination was imported into constitutional law, where it acquired rights designed for human beings.", "id": "fc13"}, {"front": "The text says the corporation is 'the person who isn't there, collecting the benefits of personhood while evading its full obligations.' What two consequences does this create?", "back": "It enables externalization of costs onto workers, communities, and environments (who have no recourse against a legally insulated entity), and it means the corporation cannot go to prison or feel remorse — which is exactly what it was designed to do.", "id": "fc14"}, {"front": "What general principle about useful fictions does the history of corporate personhood illustrate, according to the text?", "back": "Useful fictions are modular — they can be transplanted from the domain for which they were designed into adjacent domains. The same structural feature that makes a fiction powerful (its flexibility) also makes it dangerous (it can be applied where its premises do not hold).", "id": "fc15"}, {"front": "Apply the concept: A new biotech startup wants to raise funds from dozens of investors. Why does corporate structure, rather than a general partnership, make this easier under the logic described in the text?", "back": "In a general partnership, each partner bears unlimited personal liability for partnership debts, which deters risk investment. A corporation caps shareholder losses at the investment amount while leaving upside uncapped — the asymmetry that induces investors to commit capital to uncertain ventures at the scale required for biotech research.", "id": "fc16"}, {"front": "Why is the comparison of the corporation to double-entry bookkeeping significant in the text?", "back": "Both are abstract accounting or legal technologies — not physical infrastructure — that are nevertheless preconditions for large-scale modern commerce. Just as double-entry bookkeeping made complex firm accounting possible, corporate personhood makes pooled capital across time possible. Neither is visible, but both are load-bearing.", "id": "fc17"}, {"front": "What does the text mean by calling corporate personhood a 'doctrine' that 'emerged from a non-holding'?", "back": "The actual Supreme Court decision in Santa Clara was made on other grounds — no holding on corporate personhood was issued. Yet the headnote (a non-binding administrative note) was treated by later courts as if it were a holding, creating a major legal doctrine from a procedural artifact with no actual legal authority behind it.", "id": "fc18"}, {"front": "What is the paradox of corporate personhood identified in the Specimen box?", "back": "Modern capitalism is unimaginable without corporate personhood. Yet many of capitalism's most troubling features — externalized costs, insulated liability, unaccountable power — may also be unimaginable without it. The same fiction that built the industrial world also shields it from full moral accountability.", "id": "fc19"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

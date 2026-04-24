@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 4, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What exists on the physical landscape at the US-Canada border along the 49th parallel?", "back": "On a clear day, nothing visible. The prairie is identical on both sides. The grass, antelope, and sky are continuous. The line exists in databases, maps, GPS coordinates, and border-detection technology — not in the landscape itself.", "id": "fc01"}, {"front": "Why was the 49th parallel chosen as the US-Canada border in 1818?", "back": "British and American negotiators chose a line of latitude because it is geometrically clean, cartographically simple, and requires no knowledge of the actual terrain. Neither side had seen most of the territory they were dividing.", "id": "fc02"}, {"front": "What community does the 49th parallel divide, and what does that division produce?", "back": "It slices the Blackfoot Confederacy into two jurisdictions with different laws, different languages of government, and different histories of colonial policy — creating sharp legal differences where the underlying population is substantially the same.", "id": "fc03"}, {"front": "Who were Mark Sykes and François Georges-Picot?", "back": "A British diplomat (Sykes) and a French diplomat (Picot) who in 1916 divided the Arab territories of the collapsing Ottoman Empire between their respective countries' spheres of influence, using a map and a pencil in London and Paris — without significant firsthand knowledge of the territory.", "id": "fc04"}, {"front": "What line did the Sykes-Picot Agreement draw, and what did it separate?", "back": "A line from the Mediterranean coast near Acre eastward to the Persian frontier, separating a French zone to the north (modern Syria and Lebanon) from a British zone to the south (modern Iraq and Jordan).", "id": "fc05"}, {"front": "How did the Sykes-Picot line treat the Kurdish population?", "back": "It divided Kurdish communities among four future nation-states — Turkey, Syria, Iraq, and Iran — leaving them without a state of their own.", "id": "fc06"}, {"front": "Why was Mosul allocated to the British zone under Sykes-Picot?", "back": "Not because its communities had affinities with British interests, but because of the suspected oil deposits underneath it — a direct illustration of how imperial resource interests, not human geography, drove border placement.", "id": "fc07"}, {"front": "What were the League of Nations Mandates, and what was their relationship to Sykes-Picot?", "back": "They were international governance arrangements established after World War I, codified at the 1919 Paris Peace Conference, that modified and formalized the Sykes-Picot division. They became the borders of modern Iraq, Syria, Lebanon, and Jordan.", "id": "fc08"}, {"front": "What was the Berlin Conference of 1884-1885?", "back": "A meeting of 14 European nations (plus the US as observer) that established rules for the colonization of Africa. No African representative was present. Over three months, participants drew boundaries across the continent, mostly as geometric lines of latitude and longitude.", "id": "fc09"}, {"front": "What is the quantitative legacy of the Berlin Conference on Africa's borders?", "back": "44 straight-line borders accounting for approximately 44% of Africa's total boundary length, cutting across more than 177 distinct ethnic and linguistic groups.", "id": "fc10"}, {"front": "Name three African ethnic or national groups that were divided by colonial borders.", "back": "The Ewe (divided between British Gold Coast and German Togoland); the Somali (divided among five colonial jurisdictions); the Maasai (divided across two territories).", "id": "fc11"}, {"front": "What is the OAU principle of 'uti possidetis,' and why did post-independence African states adopt it?", "back": "The principle of keeping inherited colonial borders intact after independence. Post-independence African states adopted it calculating that renegotiating every border on the continent simultaneously would be worse than the inherited dysfunction.", "id": "fc12"}, {"front": "What is gerrymandering, and what is its origin?", "back": "The manipulation of political district boundaries to advantage a particular party or group. Named after Massachusetts Governor Elbridge Gerry, whose 1812 redistricting produced a salamander-shaped district so grotesque that the Boston Gazette depicted it as a monster.", "id": "fc13"}, {"front": "How does modern computational gerrymandering work?", "back": "Demographic data and computational mapping make it possible to optimize district shapes with extraordinary accuracy — packing opposition voters into a few overwhelmingly dominant districts while spreading majority voters efficiently across many competitive ones, effectively locking in a legislative majority for a decade.", "id": "fc14"}, {"front": "What does gerrymandering make visible that the 49th parallel and Sykes-Picot do not?", "back": "The explicit human agency behind border-drawing. With gerrymandering, we know someone chose those lines, we can name them, and we know whose interests they serve. Other borders dress up the same arbitrariness as geography or nature or history.", "id": "fc15"}, {"front": "What is the 'central irony' of border enforcement described in the Specimen box?", "back": "The more vigorously a border is enforced, the more real the differences it was supposed to merely describe eventually become: people stop visiting relatives on the other side, trade routes shift, languages diverge.", "id": "fc16"}, {"front": "What does a border 'do' at the most fundamental level, according to this section?", "back": "It creates a sharp difference where nature drew a gradient. A border imposes a line on continuous human geography — dividing what is substantially the same into legally, culturally, and eventually practically different categories.", "id": "fc17"}, {"front": "Apply: The section says gerrymandering is 'more honest than most borders' in a strange way. Explain this claim.", "back": "Most borders are presented as natural, historical, or inevitable — concealing the human choice behind them. Gerrymandering is naked instrumentalism: everyone knows someone chose those lines for partisan advantage. It strips away the pretense that all other borders maintain, even though the underlying logic (someone draws a line to serve an interest) is the same.", "id": "fc18"}, {"front": "How does the 'pen that draws the border on the map' function, according to the section?", "back": "It does not describe what is on the ground — it determines what will be enforced on the ground. The Sykes-Picot map did not describe the Middle East; it prescribed it. Gerrymandered maps do not reflect communities; they engineer electoral outcomes.", "id": "fc19"}, {"front": "What does the section mean by saying borders 'become real' through enforcement?", "back": "Initially, a border is just a line on a map. Over time, consistent enforcement, bureaucratic infrastructure, and the adjustment of human life to the border's existence make it real: communities grow apart, separate institutions form, and what was one continuous population becomes two distinct ones.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

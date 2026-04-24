@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 5, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who invented GNP, when, and for what original purpose?", "back": "Simon Kuznets, in a 1934 report to the U.S. Congress. Designed to help the Roosevelt administration understand the scale of the Great Depression and track the economy's recovery.", "id": "fc01"}, {"front": "What explicit warning did Kuznets include in his 1934 report?", "back": "'The welfare of a nation can scarcely be inferred from a measurement of national income.' He identified specific exclusions: unpaid household labor, environmental costs, inequality in distribution.", "id": "fc02"}, {"front": "List three things GDP excludes that matter for welfare.", "back": "Unpaid household and care work; environmental degradation (pollution costs); inequality in how output is distributed. Also: voluntary and subsistence production, leisure, political freedom, and social cohesion.", "id": "fc03"}, {"front": "Why do natural disasters, divorces, and car accidents increase GDP?", "back": "Each generates paid market transactions: disasters require cleanup and rebuilding; divorces create legal fees; car accidents generate hospital and body shop payments. GDP counts transactions, not whether the underlying event was good or bad for welfare.", "id": "fc04"}, {"front": "State Goodhart's Law.", "back": "'When a measure becomes a target, it ceases to be a good measure.' — Charles Goodhart. Once a metric governs decisions, actors optimize for the metric rather than the underlying reality, detaching the proxy from what it was meant to measure.", "id": "fc05"}, {"front": "What is Campbell's Law, and how does it differ from Goodhart's Law?", "back": "Campbell's Law (Donald Campbell): 'The more any quantitative social indicator is used for social decision-making, the more subject it will be to corruption pressures and the more apt it is to distort the social processes it is intended to monitor.' A broader formulation; Goodhart's is the more concise version of the same insight.", "id": "fc06"}, {"front": "Who invented the IQ test, when, and for what purpose?", "back": "Alfred Binet (with Théodore Simon), 1905, commissioned by the Paris school system. Purpose: identify children needing extra educational support — a practical screening tool, not a measure of fixed, innate intelligence. Binet himself warned against interpreting scores as measuring inborn ability.", "id": "fc07"}, {"front": "Who coined the 'intelligence quotient' and what is the formula?", "back": "William Stern coined 'intelligence quotient' in 1912: mental age divided by chronological age. Lewis Terman popularized it with the Stanford-Binet scale (1916).", "id": "fc08"}, {"front": "How were Binet's test results misused when applied to immigrants at Ellis Island?", "back": "Terman and Goddard interpreted scores as evidence of fixed, heritable, racial differences in intelligence. The numerical precision of a score like 'IQ: 78' made it easy to treat as a fact about a person rather than a performance on one test at one moment.", "id": "fc09"}, {"front": "What is the Flynn effect, and why does it 'compound the absurdity' of treating IQ as a stable attribute?", "back": "Average IQ scores rise roughly 3 points per decade, requiring periodic re-norming. A score of 70 in 1970 means something different from a score of 70 in 2020 — the score is a position on a shifting scale, not a measurement of a stable underlying trait.", "id": "fc10"}, {"front": "Why does the Flynn effect have 'immediate consequences for people whose legal fate hangs on a threshold'?", "back": "Legal thresholds (e.g., IQ 70 for intellectual disability determinations) are applied to re-normed tests. Whether a person falls above or below the threshold depends on which era's norms are used — the same raw performance can be 'below 70' or 'above 70' depending on the reference cohort.", "id": "fc11"}, {"front": "Who invented the Body Mass Index, when, and for what purpose?", "back": "Adolphe Quetelet, 1832, as the 'Quetelet Index.' Purpose: describe the statistical distribution of physical characteristics in large populations — an epidemiological tool, not a clinical diagnostic for individuals.", "id": "fc12"}, {"front": "When were BMI's clinical cutoffs standardized, and what categories do they define?", "back": "1998, by the World Health Organization: under 18.5 = underweight; 18.5–24.9 = normal; 25–29.9 = overweight; 30+ = obese. These are now used for clinical recommendations, insurance premiums, and access to procedures.", "id": "fc13"}, {"front": "List three documented problems with using BMI as an individual clinical measure.", "back": "1. Does not distinguish fat mass from muscle mass (muscular athletes score 'overweight'). 2. Does not account for fat distribution, which is more predictive of health risk. 3. Calibrated primarily on European-ancestry populations — performs differently across ethnic groups.", "id": "fc14"}, {"front": "What is the FICO credit score, and who created it?", "back": "A consumer creditworthiness score (range 300–850) created by Bill Fair (engineer) and Earl Isaac (mathematician), commercially launched in 1989. It predicts default rates from payment history, amounts owed, credit history length, credit types, and new inquiries.", "id": "fc15"}, {"front": "How does the credit score create the attribute it was supposed to measure?", "back": "A person with no credit history (recent immigrant, cash-only payer) has a low score not because they are untrustworthy but because the measurement tool has no data on them. By blocking access to credit, the low score prevents the person from generating the signals the score requires — the measurement constructs the attribute.", "id": "fc16"}, {"front": "What does 'measurement literacy' mean, according to the text?", "back": "The ability to ask, of any governing number: (1) What was this designed to measure? (2) Who designed it and for what purpose? (3) What does it exclude? (4) Who benefits from the current cutoffs? (5) Who bears the cost of misclassification?", "id": "fc17"}, {"front": "What is the general Goodhart's Law pattern described in the 'Think About It' box?", "back": "A statistical tool describes populations → adopted as individual proxy → acquires legal/institutional force as threshold → begins to shape the behavior it was supposed to describe (schools teach to the test; companies optimize for the metric) → proxy drifts from the original attribute while retaining institutional authority.", "id": "fc18"}, {"front": "What does the text mean by 'the number is not the thing; the map is not the territory'?", "back": "Any quantitative measure is an abstraction of a more complex reality. GDP is not welfare; IQ is not intelligence; BMI is not health. Treating the map as the territory — governing by the number as if the abstraction is the thing — produces perverse incentives and misclassification.", "id": "fc19"}, {"front": "How does the text describe the sharp administrative lines created by cutoffs like credit-score thresholds, BMI categories, and IQ boundaries?", "back": "They impose discrete boundaries on continuous distributions. A person scoring 619 and one scoring 620 on a credit score are statistically indistinguishable, but one gets the mortgage and one does not. This is 'the essential violence of all such lines.'", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

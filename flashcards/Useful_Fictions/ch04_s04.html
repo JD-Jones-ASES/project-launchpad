@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 4, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What measurable difference exists between a person one day before and one day after their 18th birthday?", "back": "None that any instrument can detect. Yet the legal difference is enormous: on the day of the birthday, they gain the right to buy alcohol, vote, sign contracts, be tried as an adult, and enlist without parental consent. The section opens with this contrast to show how a sharp line creates categorical difference across a continuous gradient.", "id": "fc01"}, {"front": "Give three examples of countries with different ages of majority.", "back": "South Korea: 19. Japan: 20 for most of the 20th century, revised to 18 in 2022. Iran: 9 for girls (Islamic lunar calendar) and 15 for boys. UK: 16 for military enlistment, 18 for voting. All are different answers to the same question about a gradient that contains no natural threshold.", "id": "fc02"}, {"front": "What was the 2023 US federal poverty line for a single individual, and what benefits does it gate?", "back": "$14,580/year. It determines eligibility for Medicaid, SNAP (food stamps), CHIP, the Earned Income Tax Credit, subsidized housing, reduced-price school meals, and dozens of other programs.", "id": "fc03"}, {"front": "Who was Mollie Orshansky, and how did she calculate the original US poverty line?", "back": "An economist at the Social Security Administration in the 1960s. She multiplied a Department of Agriculture minimum food budget estimate by three, based on the empirical observation that poor families at the time spent roughly one-third of income on food.", "id": "fc04"}, {"front": "Why does the contemporary US poverty line measure 'something considerably less than contemporary poverty'?", "back": "The line has only been adjusted for inflation since the 1960s — it has not been fundamentally recalculated. Housing, healthcare, and childcare costs have grown far faster than food costs in the intervening sixty years, making the original food-based formula increasingly inadequate.", "id": "fc05"}, {"front": "What is the 'benefits cliff'?", "back": "A situation where crossing the poverty line by a single dollar means losing thousands of dollars in benefits — because benefit eligibility is binary (eligible/ineligible) rather than gradual. The person at $14,579 and the person at $14,581 are materially identical but legally in different categories.", "id": "fc06"}, {"front": "What is the legal BAC threshold for driving in the United States?", "back": "0.08% BAC. At 0.079% a driver is legally sober; at 0.080% they are legally drunk. The physiological and cognitive difference between these two readings is not detectable by any performance test.", "id": "fc07"}, {"front": "Why was the US BAC limit changed from 0.10% to 0.08% in 2000?", "back": "Not because of new neuroscience: the federal government linked highway funding to states that adopted the lower limit. The driving population's neurological thresholds did not change in 2000 — the threshold change was political and administrative.", "id": "fc08"}, {"front": "What is the conventional IQ cutoff for intellectual disability, and what legal consequences does it carry?", "back": "An IQ score below 70 (roughly two standard deviations below the mean of 100), alongside adaptive behavior limitations. Under Atkins v. Virginia (2002), executing the intellectually disabled violates the Eighth Amendment — so a defendant with IQ 71 can be executed while one with IQ 69 cannot.", "id": "fc09"}, {"front": "What is the Flynn effect?", "back": "The documented trend of rising average IQ scores across the industrialized world at roughly 3 points per decade, attributed to better nutrition, expanded education, and growing familiarity with abstract test-taking. Test publishers periodically re-norm tests to keep the mean at 100.", "id": "fc10"}, {"front": "Why does the Flynn effect create a 'perverse complication' for the IQ-based death penalty threshold?", "back": "Because tests are periodically re-normed, a score of 70 on a test normed in 1990 reflects better actual performance than a score of 70 on a test normed in 2020. The legal threshold stays in the same place; what is on either side of it keeps shifting.", "id": "fc11"}, {"front": "What was the Supreme Court's ruling in Atkins v. Virginia (2002)?", "back": "That executing intellectually disabled defendants violates the Eighth Amendment's prohibition on cruel and unusual punishment. The case made the IQ 70 cutoff (plus adaptive behavior assessment) a legally operative threshold in capital cases.", "id": "fc12"}, {"front": "How does the age of criminal responsibility vary globally, according to the 'Think About It' box?", "back": "From 7 in some US states and Nigeria to 18 in Belgium, Brazil, and Colombia, with most of the world clustered in between. The developmental neuroscience of adolescent brain maturation does not contain a year at which responsibility 'switches on' — the choice is social and moral, not biological.", "id": "fc13"}, {"front": "What does the prefrontal cortex govern, and when does it complete development?", "back": "Impulse control and long-term planning. It continues developing into the mid-twenties — well past any conventional legal age of majority or criminal responsibility threshold.", "id": "fc14"}, {"front": "Why can't sharp legal thresholds simply be replaced by 'nuanced, continuous assessments'?", "back": "Because a system requiring individualized expert assessment for every case will be administered inconsistently, expensively, and in ways that systematically favor those with more resources and better advocates. A sharp line applied uniformly has virtues that gradient assessments do not.", "id": "fc15"}, {"front": "What is the 'recurring structure' of Chapter 4 as the section identifies it?", "back": "Continuous reality / discrete language: the electromagnetic spectrum (continuous) → color names (discrete); species diverge gradually → taxonomy requires boundaries; populations spread without natural edges → political borders slice them; humans mature along a gradient → legal systems require a fixed date of adulthood.", "id": "fc16"}, {"front": "What is the 'necessity and violence of the sharp line' as described in the section's conclusion?", "back": "Necessity: administrative systems require binary outcomes (eligible/ineligible, adult/child). Violence: the sharp line that is mistaken for a natural boundary treats people as categorically different when they are, by every physical measure, nearly identical — and stops anyone from asking whose interests the line serves or when it needs to be redrawn.", "id": "fc17"}, {"front": "Apply: The section says the danger is not that sharp lines exist, but that we 'forget they are drawn, not found.' What does this mean in practice?", "back": "When we treat an administrative threshold as a natural boundary, we stop questioning it: we don't ask whose interests it serves, who it systematically misclassifies, or when it needs updating. The poverty line, the age of majority, and the BAC threshold all need periodic review precisely because they are administrative choices, not natural facts — but they are often enforced with certainty appropriate only to natural law.", "id": "fc18"}, {"front": "Why does the section say the BAC limit at 0.08% is not a 'scientific discovery'?", "back": "Because the choice of 0.08% rather than 0.07% or 0.09% reflects political and administrative negotiation — specifically, federal pressure linking highway funding to the lower limit. The impairment itself is real, but the precise location of the legal line is chosen, not found in neuroscience.", "id": "fc19"}, {"front": "What does the section mean by the 'violence built into' a sharp line that is mistaken for reality?", "back": "It is 'the violence of insisting that the gradient contains a break that it does not.' A misidentified threshold treats nearly identical people as categorically different — different entitlements, different legal status, different life consequences — based on a boundary the underlying reality does not contain.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

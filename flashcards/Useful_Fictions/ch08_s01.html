@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 8, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is Huizinga's central thesis in Homo Ludens (1938)?", "back": "Civilization is a byproduct of play, not the reverse. Law, war, philosophy, ritual, and courtship are at their roots forms of play that were elaborated, institutionalized, and made serious. The game came first; the seriousness was added later.", "id": "fc01"}, {"front": "What is the magic circle?", "back": "The consensual boundary that separates game-space from ordinary space. Inside it, different rules apply — rules that have no authority outside the circle. It is maintained by the shared agreement of participants, not by any physical barrier.", "id": "fc02"}, {"front": "What five features define play, according to Huizinga?", "back": "(1) Voluntary — entered freely, not under compulsion. (2) Temporally and spatially bounded — it has a beginning, end, and designated space. (3) Governed by its own internal rules. (4) Intrinsically motivated — played for its own sake. (5) Attended by a special consciousness — participants know they are playing, and this intensifies rather than diminishes the experience.", "id": "fc03"}, {"front": "What does 'altered ontology' mean in the context of the magic circle?", "back": "Inside the magic circle, the facts about what things are change. When children agree that a stick is a sword, it genuinely is a sword for all game purposes. The circle creates a zone where a different set of rules about the identity and function of objects applies.", "id": "fc04"}, {"front": "Why does the child who says 'it's just a stick' not score a philosophical point?", "back": "She has simply refused to enter the magic circle — she has opted out of the shared agreement — rather than disproving it. The circle is a consensual zone, and opting out is not the same as refuting the fiction.", "id": "fc05"}, {"front": "How does the courtroom illustrate the magic circle?", "back": "A trial is a formalized game with strict rules about who speaks, in what order, and in what form. Boundary markers — the physical railing (the bar), judicial robes, oaths, prescribed forms of address — signal the transition into the circle. The judge's authority is produced by the performance of authority, not by some external metaphysical weight.", "id": "fc06"}, {"front": "What is 'the bar' in a courtroom, and why is it significant in Huizinga's framework?", "back": "The bar is the physical railing that separates participants from spectators. It functions as a spatial marker of the magic circle's boundary — one of several theatrical cues (along with robes, oaths, and forms of address) that signal entry into a space with different rules.", "id": "fc07"}, {"front": "How do the Geneva Conventions illustrate the magic circle?", "back": "The Conventions impose a magic circle around violence: even during war, certain rules apply and their violation is a distinct crime. They work not because an external sovereign enforces them, but because parties accept the fiction that they are bound by rules even while trying to kill each other. The categories they create (soldier, prisoner, military target) are maintained by shared agreement, not by self-evident facts.", "id": "fc08"}, {"front": "What is the paradox of seriousness inside the magic circle?", "back": "Inside the circle, standards are serious — you can win or lose, succeed or fail. Yet this seriousness depends on participants choosing to treat within-circle standards as if they were serious. The seriousness is simultaneously genuine and performed, real and fictional, deeply felt and known to be constructed.", "id": "fc09"}, {"front": "What happens when the magic circle breaks down — give two concrete examples from the text.", "back": "When defendants laugh at judges, the authority of the court collapses. When soldiers massacre prisoners, the distinction between soldier and murderer dissolves. In both cases, participants feel a violation of 'the shared fiction that made the activity possible at all' — something more fundamental than any specific rule.", "id": "fc10"}, {"front": "Why does the text call the magic circle 'the master category of the entire book'?", "back": "Because every useful fiction in the book works by establishing a boundary between the space where the fiction holds and the space where it does not. Money, law, corporate personhood — each requires a magic circle. The magic circle is the structural pattern underlying all collective fictions.", "id": "fc11"}, {"front": "How does money illustrate the magic circle?", "back": "Money requires a magic circle that transforms a paper rectangle into an obligation of the state. Inside the circle of the monetary economy, the paper is money. Outside any such circle, it is just a rectangle of paper. The question is not whether the magic circle is real, but whether enough people agree to play the game.", "id": "fc12"}, {"front": "How does corporate personhood illustrate the magic circle?", "back": "Corporate personhood holds within the magic circle of legal recognition. Inside it, the corporation exists as a legal agent with rights and liabilities. Outside it — without the shared legal agreement — the corporation simply does not exist. There is no natural fact that makes it a person; only the shared fiction does.", "id": "fc13"}, {"front": "What is the difference between the magic circle failing and someone refusing to enter it?", "back": "Refusing to enter (like the child who says 'it's just a stick') is an individual opt-out that leaves the circle intact for others. Failure of the circle means the collective agreement itself collapses — the activity either becomes something else (a brawl, a mere conversation) or ceases entirely.", "id": "fc14"}, {"front": "Why does knowing that robes are costumes and oaths are conventions not undermine judicial authority?", "back": "Because the authority is produced by the performance of authority and sustained by the agreement to play the game — not by any metaphysical weight external to human practice. The performance is the authority; there is no deeper foundation that could be exposed and removed.", "id": "fc15"}, {"front": "What does the medieval tournament illustrate about the magic circle?", "back": "A tournament was a formalized war-game where the magic circle of play transformed violence into regulated competition. Heraldic insignia, referees, ransoming rather than killing — all maintained the circle. When the circle broke down, the tournament immediately became a battle. The transformation was felt at once by all participants.", "id": "fc16"}, {"front": "What is the key question the text ends with regarding the magic circle?", "back": "The question is never whether the magic circle is real. The question is whether enough people agree to play the game. The reality of any collective fiction — money, law, nation, corporate personhood — depends entirely on collective participation, not on some external metaphysical validation.", "id": "fc17"}, {"front": "Apply the magic circle framework: a sports competition is being played in a venue that has lost its official sanctioning. According to the framework, what risk does this create?", "back": "Without the institutional magic circle (official sanctioning, recognized rules, legitimate referees), the shared agreement that gives the competition its authority is weakened. Outcomes may lose their recognized validity, and disputes that the circle would normally contain could escalate — because the boundary that separates the game from ordinary conflict has been undermined.", "id": "fc18"}, {"front": "What did Huizinga's book title Homo Ludens mean, and what claim does it make about human nature?", "back": "Homo Ludens means 'Man the Player.' The title proposes that playfulness is as fundamental to human nature as rationality (Homo sapiens) or tool-use (Homo faber). For Huizinga, the capacity to create and inhabit the magic circle is not incidental to humanity — it is constitutive of civilization itself.", "id": "fc19"}, {"front": "Why is it significant that the magic circle need not be a physical boundary?", "back": "It shows that the circle's power is entirely consensual and social rather than material. Courts have railings, but the railing only works because everyone agrees it marks a transition into a different normative space. The spatial marker signals the boundary; it does not create it. The agreement precedes and underlies all the physical markers.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

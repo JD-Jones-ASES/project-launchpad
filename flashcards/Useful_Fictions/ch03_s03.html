@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Fictions: A Field Guide &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Useful Fictions: A Field Guide &mdash; Chapter 3, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Useful_Fictions.html">&larr; Back to Useful Fictions: A Field Guide</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is emergence as defined in the text?", "back": "The phenomenon in which a system exhibits properties, behaviors, or capacities that none of its individual components possess. The colony is intelligent; no ant is. Wikipedia is accurate on average; no individual editor is infallible. A market price encodes information no single participant has.", "id": "fc01"}, {"front": "How many worker ants are in a mature leafcutter colony, and what is the key fact about their decision-making?", "back": "Approximately 250,000. None is in charge, none knows what the colony needs, and the queen is not an executive — she only lays eggs. Yet the colony maintains foraging trails, a fungal garden, temperature regulation, waste disposal, defense, and real-time adaptation.", "id": "fc02"}, {"front": "How does an individual ant's behavior work, and what does it lack?", "back": "Each ant responds to local chemical signals — pheromones, task signatures, odor gradients. Its behavior is locally determined. No ant has a model of the colony, a map of the territory, or a theory of resource optimization.", "id": "fc03"}, {"front": "What is Deborah Gordon's contribution to understanding ant colonies?", "back": "Gordon's decades of harvester ant research shows that 'the colony' is not a thing any ant has access to — it is a pattern emerging from millions of local interactions. When she removed foragers, the colony adjusted not by memo but by the changed chemical signal at the nest entrance triggering new behaviors in waiting ants. She calls this 'collective computation without a computer.'", "id": "fc04"}, {"front": "What tradeoffs does the ant colony solve, and how?", "back": "The protein-carbohydrate tradeoff, the exploration-exploitation tradeoff, and the predation-risk tradeoff — all without any agent doing the solving. Solutions are distributed across tens of thousands of insects each responding only to local information.", "id": "fc05"}, {"front": "List four canonical examples of emergence the text provides.", "back": "Ant colonies, termite mounds, bird murmurations (starlings), market prices, Wikipedia, consciousness (possibly), traffic flow, epidemics. Each shows complex global behavior arising from simple local rules and interactions.", "id": "fc06"}, {"front": "What did E. O. Wilson mean by calling insect colonies 'superorganisms'?", "back": "That at the collective level, colonies display adaptation, homeostasis, and purposive behavior — properties we normally attribute only to individual organisms. The colony acts like a single organism even though no individual component has those properties.", "id": "fc07"}, {"front": "Describe the Macrotermes termite mound and why it creates philosophical difficulty.", "back": "Mounds up to nine meters tall with internal architecture for ventilation, humidity control, waste management, and precise temperature regulation — built by termites with no individual understanding of the design. The 'architect' is the mound itself, a feedback system. This raises: at what point does 'as if designed' shade into 'functionally equivalent to designed'?", "id": "fc08"}, {"front": "Why can we say 'the heart pumps blood' without philosophical difficulty, but 'the termite mound regulates temperature' raises questions?", "back": "We attribute function to the heart because we know its individual-level designer: natural selection. The termite mound has no such individual-level designer — no termite designed it, and natural selection operated on the colony, not on mound architecture directly. The attribution of function without a known designer creates philosophical vertigo.", "id": "fc09"}, {"front": "What was Hegel's Weltgeist (World Spirit) / Zeitgeist (Spirit of the Age) theory?", "back": "Hegel argued that individual agents pursuing local goals produce global historical outcomes that none intended — but that these global outcomes are not accidental. They are the unfolding of a rational principle (the Weltgeist) gradually becoming aware of itself through human action. History is the autobiography of this Spirit.", "id": "fc10"}, {"front": "What did Hegel mean by calling Napoleon 'the World Spirit on horseback'?", "back": "Not that Napoleon was a great individual but that he was an unwitting instrument of History — not a man with a plan, but a vehicle through which the World Spirit was realizing its predetermined rational purpose.", "id": "fc11"}, {"front": "What is the text's critique of Hegel's Weltgeist?", "back": "It is 'emergence promoted to metaphysics' — the intelligence of the historical whole, instead of being acknowledged as an emergent fiction, is reified as a real force operating through individuals toward a predetermined goal. The intelligence is real; the spirit is the fiction.", "id": "fc12"}, {"front": "What is Conway's Game of Life, and what does it demonstrate?", "back": "A cellular automaton (1970) on a grid: three simple rules determine whether each cell lives, dies, or is born. From these rules emerge gliders, oscillators, self-generating structures, and in large enough grids, a Turing machine — unlimited computational complexity. No designer, no plan, no hand. Emergence is not mystical; it is what happens when simple rules interact at scale.", "id": "fc13"}, {"front": "What does the text mean by calling the Zeitgeist 'complicated Game of Life that someone decided to write a philosophy about'?", "back": "That Hegel observed a real phenomenon (emergent collective historical intelligence from simple local interactions) and then mystified it by attributing it to a metaphysical World Spirit with purposes and direction. Game of Life shows you can get the same pattern from three rules and a grid — no spirit required.", "id": "fc14"}, {"front": "What temptation does emergence create, according to the Specimen box?", "back": "The temptation to find the hidden coordinator — the invisible hand, the emergent 'plan' — when in fact there is no coordinator. The global order is real; the guiding intelligence behind it is a fiction projected by our agency-detection drives.", "id": "fc15"}, {"front": "What is the philosophical challenge of emergence stated in the Specimen box?", "back": "'If the intelligence is nowhere in particular, is it real? If the plan is nobody's plan, is it a plan at all?' These questions mark where emergence shades into vertiginous territory for human intuitions about agency and design.", "id": "fc16"}, {"front": "How does a starling murmuration work, and what does it demonstrate about emergence?", "back": "Tens of thousands of birds move as a single fluid entity, each following three simple rules: match velocity of nearby neighbors, avoid collisions, stay close to the group. No bird leads; no bird knows the shape of the whole. Complex global order from simple local rules — no plan, no coordinator.", "id": "fc17"}, {"front": "Apply the concept: A city's traffic patterns emerge in ways no single driver intended or planned. Is this emergence? What temptation does it create?", "back": "Yes — the traffic pattern is a system property none of the individual drivers produces or knows about. The temptation it creates is to infer a hidden traffic controller or emergent 'purpose' behind the patterns (rush-hour peaks, route concentrations) rather than recognizing them as consequences of simple individual decision rules at scale.", "id": "fc18"}, {"front": "What makes Wikipedia an example of emergence?", "back": "Wikipedia is accurate on average, and with exceptions — but no individual editor is infallible. The accuracy is a property of the collective system (distributed editing, correction mechanisms), not of any individual participant. The system exhibits a property (reliable knowledge) that no component has.", "id": "fc19"}, {"front": "How does this section connect to the chapter's overarching theme of 'fictions of agency without agents'?", "back": "Emergence is the underlying mechanism that generates the temptation: when local, agentless interactions produce global, intelligent-seeming behavior, human minds find it almost irresistible to posit a hidden coordinator. The section shows this move in ants, termites, markets, and Hegel's history — the same cognitive operation each time.", "id": "fc20"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>
