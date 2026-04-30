@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 6, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "push-pull factors", "back": "A framework for analyzing migration. Push factors are conditions in the place of origin motivating emigration: poverty, famine, political persecution, religious discrimination, lack of opportunity. Pull factors are conditions at the destination attracting migrants: available land, higher wages, political freedom, family networks. Large-scale migration typically results from the interaction of both.", "id": "fc01"}, {"front": "Great European Emigration (1845–1914)", "back": "Approximately 50 million Europeans emigrated between 1845 and 1914, primarily to the United States, Canada, Argentina, Brazil, and Australia. Push factors varied by country and period (Irish famine, Russian pogroms, English enclosure, artisan displacement). Pull factors included cheap land, industrial labor demand, and falling transatlantic shipping costs from steam technology.", "id": "fc02"}, {"front": "Ireland's Great Famine (1845–52)", "back": "A catastrophic famine that killed roughly one million Irish people and drove approximately one million more to emigrate within five years. One of the primary push factors in the Great European Emigration; created the Irish diaspora in the United States and Britain that later organized Irish nationalism.", "id": "fc03"}, {"front": "Jewish emigration from the Russian Empire (post-1881)", "back": "Large-scale emigration of Jewish communities from Russia triggered by the pogroms of 1881 and after. A political persecution push factor within the Great European Emigration; Jewish emigrants from Eastern Europe transformed New York's garment industry and established the American Jewish diaspora.", "id": "fc04"}, {"front": "indentured servitude (nineteenth-century)", "back": "A labor system in which workers signed contracts (indentures) agreeing to work for a fixed period — typically five years — in exchange for passage, food, housing, and a wage. Contracts were legally binding; workers could be imprisoned for breach. ~1.5 million Indian workers and 250,000 Chinese workers entered indenture between the 1830s and 1917.", "id": "fc05"}, {"front": "Why did indentured servitude emerge after slavery's abolition?", "back": "Britain abolished the slave trade (1807) and slavery in the Empire (1833); the U.S. in 1865; Brazil in 1888. Formerly enslaved people refused to continue plantation labor. Planters and colonial governments developed indentured servitude as a replacement — legally binding contracts that created coerced labor while maintaining the formal fiction of freedom.", "id": "fc06"}, {"front": "arkattis", "back": "Labor recruiters who enlisted Indian and Chinese workers for indentured service contracts. Frequently misrepresented conditions at the destination — promising good wages and pleasant environments, when workers actually faced plantation labor from sunrise to sunset, subsistence wages, and barracks barely better than slave quarters.", "id": "fc07"}, {"front": "Hugh Tinker — 'a new system of slavery'", "back": "British historian who described nineteenth-century Indian indentured labor as 'a new system of slavery' because of the coercive enforcement mechanisms, poor living conditions, and workers' vulnerability to abuse with limited legal recourse. Other historians note the formal differences — legal rights and time-limited contracts — making this a contested historiographical question.", "id": "fc08"}, {"front": "Sanderson Committee (1909)", "back": "A British government inquiry that heard testimony from Indian indentured laborers in Fiji, Natal, and the Caribbean about conditions under the indenture system. The testimony documented the gap between recruitment promises and actual conditions, providing primary source evidence for the debate about whether indentured servitude constituted 'a new system of slavery.'", "id": "fc09"}, {"front": "Indian indentured diaspora — destinations and legacy", "back": "Indian indentured workers went to Trinidad and Tobago, Guyana, Fiji, Mauritius, South Africa, and Suriname. These communities maintained Hinduism, Islam, festivals, and cuisine while adapting to new environments. They are the origin of substantial Indian diaspora communities in those countries today.", "id": "fc10"}, {"front": "Chinese indentured workers ('coolies')", "back": "Approximately 250,000 Chinese indentured workers went primarily to Southeast Asia, Hawai'i, and Peru, contributing to the Chinese diaspora of those regions. 'Coolie' was the contemporary term, now considered derogatory. Their labor built infrastructure and plantation agriculture across the Pacific and Latin American world.", "id": "fc11"}, {"front": "diaspora", "back": "A community of people living outside their ancestral homeland while maintaining cultural, linguistic, religious, or political ties to it. From the Greek for 'scattering.' Nineteenth-century imperialism and migration created multiple new diasporas — Irish, Indian, Chinese, Jewish — that became active agents in transnational cultural and political networks.", "id": "fc12"}, {"front": "Chinese Exclusion Act (1882)", "back": "U.S. federal legislation prohibiting Chinese laborers from immigrating to the United States. A case study in the structural tension within receiving societies: Chinese labor was economically demanded for railroad construction and mining, yet cultural anxieties about national identity and organized labor's competition concerns produced discriminatory legislation.", "id": "fc13"}, {"front": "Nativism in receiving societies", "back": "Anti-immigrant sentiment in societies simultaneously dependent on immigrant labor. The text identifies this as a structural tension: economic demand for immigrants (industrial labor, mining, farming) coexisted with cultural anxieties about national identity — producing the Chinese Exclusion Act, immigration quotas, and organized labor campaigns against foreign workers.", "id": "fc14"}, {"front": "Chain migration", "back": "Migration facilitated by existing networks of family members or community members who have already migrated — a pull factor. The text mentions family networks as one of the pull factors for European emigration; chain migration explains why specific immigrant communities clustered in specific cities and industries (Italian and Polish urban enclaves, Irish police forces).", "id": "fc15"}, {"front": "How did steam technology enable mass migration?", "back": "Steam-powered ships reduced transatlantic crossing time from six weeks (sail) to two weeks by 1870 and one week by 1900. This dramatically reduced both cost and time, making emigration accessible to people who previously could not afford the journey. A clear Technology (T) → Social (S) + Economic (E) connection.", "id": "fc16"}, {"front": "Diaspora communities as political actors", "back": "Nineteenth-century diaspora communities organized and funded nationalist and independence movements in their homelands: Irish-Americans funded Irish nationalism (Fenian Brotherhood → Easter Rising); Indian diaspora organized Indian nationalist politics (Gandhi in South Africa); Chinese diaspora funded Sun Yat-sen's republican movement.", "id": "fc17"}, {"front": "Mohandas Gandhi — South African origins", "back": "Gandhi's political career began in South Africa, where he organized against discrimination facing the Indian indentured community. He developed satyagraha (nonviolent resistance) as a political tool there before applying it to the Indian independence movement. His South African work directly connects to the indentured diaspora's political organizing.", "id": "fc18"}, {"front": "Sun Yat-sen and Chinese diaspora", "back": "Sun Yat-sen's movement for a Chinese republic (culminating in the Xinhai Revolution, 1911) drew both financial support and a political base from Chinese diaspora networks across Southeast Asia and the Americas. Diaspora communities maintained political connections to homeland affairs that eventually funded revolutionary change.", "id": "fc19"}, {"front": "Continuity: unfree labor across abolition", "back": "Despite the formal abolition of the Atlantic slave trade (1807 Britain, 1808 U.S.) and slavery itself, coerced labor did not disappear — it transformed into indentured servitude. The SPICE-T Economic (E) continuity: plantation agriculture still needed coerced labor; the legal framework changed (contracts vs. property) but the material conditions were similar enough that historians debate whether meaningful change occurred.", "id": "fc20"}, {"front": "SPICE-T analysis of nineteenth-century migration", "back": "Social (S): demographic change — largest voluntary/involuntary migration in history, new diaspora communities. Economic (E): labor supply to industrial and plantation economies; displacement of artisans. Technology (T): steamship enables scale. Political (P): Chinese Exclusion Act, immigration quotas, anti-immigrant nativism. Cultural (C): diaspora cultural preservation and adaptation; transnational political organizing.", "id": "fc21"}, {"front": "Compare: European emigration vs. indentured labor migration", "back": "Both were driven by the global reorganization of labor under industrialization and imperialism. Key differences: European emigration was primarily voluntary (though pushed by structural conditions); indentured labor was semi-coerced through contract enforcement. European migrants could choose destinations and moved to labor markets; indentured workers were recruited for specific employers. Both created diaspora communities.", "id": "fc22"}, {"front": "Why 1.5 million Indians entered indenture (structural causes)", "back": "British colonial economic policies in India (deindustrialization, cash-crop revenue systems) created rural poverty and desperation. Arkattis recruited from Bihar, eastern Uttar Pradesh, and Madras — regions already impoverished by colonial agricultural policies. The same colonial economy that created poverty in India generated demand for plantation labor in the Caribbean and Pacific.", "id": "fc23"}, {"front": "Continuity-and-change framing for indentured labor", "back": "Change: formal abolition of slavery; legal contract framework replacing property ownership; time-limited status. Continuity: plantation agricultural labor structure; barracks housing; coercive enforcement (imprisonment for breach); subsistence wages; vulnerability to abuse with limited legal recourse. AP exams frequently ask students to analyze this continuity-and-change dynamic.", "id": "fc24"}, {"front": "Receiving societies in the Great European Emigration", "back": "The United States absorbed ~30 million European immigrants between 1845–1914. Immigrant labor built railways, mined coal, worked steelworks. Irish immigrants became police forces in Boston and New York; Italian and Polish communities established urban enclaves; Jewish emigrants transformed the garment industry. Receiving societies were also sites of nativism.", "id": "fc25"}, {"front": "Global demographic significance of nineteenth-century migrations", "back": "Between 1815 and 1914, 50–55 million people migrated across oceanic distances — the largest such movement in human history to that point. The text calls this 'among the most consequential demographic shifts in modern history, comparable in scale (though not in form) to the Atlantic slave trade.' The demographic legacy: diaspora communities worldwide.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

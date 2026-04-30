@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 7, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Blitzkrieg", "back": "German military doctrine meaning 'lightning war': rapid coordinated attacks combining armored tanks, motorized infantry, and close air support to break through enemy lines, encircle defenders, and advance faster than the enemy can reorganize. It contradicted WWI's positional-war lessons. Its advantages diminished when supply lines lengthened and opponents adapted, as in the Soviet Union.", "id": "fc01"}, {"front": "Operation Barbarossa (22 June 1941)", "back": "Germany's invasion of the Soviet Union — the largest military invasion in history, with over 3 million German soldiers attacking along a front from the Baltic to the Black Sea. Initially successful, penetrating deep into Soviet territory and capturing millions of prisoners. But the Soviet Union did not collapse as Germany expected.", "id": "fc02"}, {"front": "Battle of Stalingrad (July 1942–February 1943)", "back": "The turning point of the European war. Germany's Sixth Army besieged the city on the Volga; Soviet Operation Uranus encircled and trapped it, destroying 330,000 men. From Stalingrad onward, the Red Army was consistently on the offensive. It was the largest single German military defeat of the war.", "id": "fc03"}, {"front": "Eastern Front (WWII)", "back": "The Soviet-German theater of WWII — the decisive theater of the European war. The Soviet Union suffered approximately 27 million dead (military and civilian), the largest national toll of any belligerent. D-Day (June 1944) opened a second front but did not determine the outcome, which was decided primarily on Soviet soil.", "id": "fc04"}, {"front": "D-Day / Normandy landings (6 June 1944)", "back": "The Western Allied amphibious invasion of German-occupied France that opened a second front in the European theater. Strategically significant, but the section notes it 'did not determine the overall outcome' of the European war — that was decided primarily on the Eastern Front.", "id": "fc05"}, {"front": "Pearl Harbor (7 December 1941)", "back": "Japan's attack on the US naval base in Hawaii — 'a date which will live in infamy' (FDR). Brought the United States into the war simultaneously in the Pacific (vs. Japan) and Europe (Germany and Italy declared war on the US). Japan simultaneously invaded British Malaya, the Philippines, Hong Kong, the Dutch East Indies, and Burma.", "id": "fc06"}, {"front": "Nanjing Massacre (December 1937–January 1938)", "back": "Japanese forces killed an estimated 200,000–300,000 Chinese civilians and prisoners of war in Nanjing during Japan's full-scale invasion of China. Cited as evidence that the Pacific war began years before Pearl Harbor — the 1937 invasion killed an estimated 20 million Chinese civilians and combatants total.", "id": "fc07"}, {"front": "Greater East Asia Co-Prosperity Sphere", "back": "Japan's ideological framing for its Southeast Asian empire — presented as Asian liberation from Western imperialism. In practice it substituted brutal Japanese colonial control for British, Dutch, and American control, extracting resources and compelling forced labor throughout occupied territories.", "id": "fc08"}, {"front": "Pacific war as decolonization catalyst", "back": "Japan's rapid defeat of European colonial powers in Southeast Asia permanently shattered the myth of European invincibility that had sustained colonial rule. 'Europeans could be defeated by non-Europeans, and colonial rule was not a permanent or natural order.' The Pacific war accelerated decolonization movements that reshaped Asia, Africa, and the Middle East in the 1950s–60s.", "id": "fc09"}, {"front": "Island-hopping", "back": "American Pacific strategy combining naval and amphibious warfare, economic blockade, and air power. US forces destroyed Japan's naval power at Midway (June 1942) and progressively captured or bypassed Japanese island bases across the Central and South Pacific, advancing toward the Japanese home islands.", "id": "fc10"}, {"front": "Battle of Midway (June 1942)", "back": "The decisive naval battle in which US forces destroyed Japan's naval power in the Central Pacific — a turning point in the Pacific theater analogous to Stalingrad's role in the European theater. After Midway, Japan was consistently on the defensive.", "id": "fc11"}, {"front": "Tokyo firebombing raid (9–10 March 1945)", "back": "A single US bombing raid on Tokyo that killed an estimated 80,000–100,000 civilians — comparable in immediate casualties to the atomic bombings of Hiroshima and Nagasaki. Part of a strategic bombing campaign against Japanese cities that was already underway before the atomic bombs were dropped.", "id": "fc12"}, {"front": "Hiroshima and Nagasaki atomic bombings (August 1945)", "back": "The US dropped atomic bombs on Hiroshima (6 August) and Nagasaki (9 August) 1945. Hiroshima: 70,000–80,000 immediate deaths; 90,000–166,000 within four months. Japan surrendered 15 August; formal surrender 2 September 1945 aboard USS Missouri. The debate over their necessity, alternatives, and war-crime status remains genuinely contested.", "id": "fc13"}, {"front": "United Nations (1945)", "back": "Founded in 1945 to replace the failed League of Nations. Security Council with five permanent veto-holding members (US, Soviet Union, Britain, France, China). The veto structure ensures great-power investment in the institution while allowing any P5 member to block collective action.", "id": "fc14"}, {"front": "Bretton Woods system", "back": "Post-WWII economic framework establishing the US dollar as the world's reserve currency and creating the International Monetary Fund (IMF) and World Bank. Institutionalized US economic hegemony and multilateral economic governance as the foundation of the postwar liberal international economic order.", "id": "fc15"}, {"front": "Invasion of Manchuria (1931)", "back": "Japan's seizure of Manchuria from China in 1931 — the beginning of Japanese military expansion across East and Southeast Asia that would lead to full-scale invasion of China (1937) and eventually WWII in the Pacific. Shows the Pacific war's origins were independent of and earlier than the European conflict.", "id": "fc16"}, {"front": "Battle of Britain (summer–autumn 1940)", "back": "The RAF's successful defense of British airspace against Luftwaffe attacks that denied Germany the air superiority necessary for a cross-Channel invasion. Britain's refusal to sue for peace after France's collapse forced Hitler to turn east against the Soviet Union.", "id": "fc17"}, {"front": "WWII casualty figures", "back": "Estimated 70–85 million dead — more than three times WWI's toll — of whom roughly 38–55 million were civilians. The Soviet Union alone suffered approximately 27 million dead. WWII's civilian majority among the dead (vs. WWI's military majority) reflects the escalation of total war to include strategic bombing, genocide, and mass civilian targeting.", "id": "fc18"}, {"front": "Cold War origins", "back": "The Grand Alliance between the United States and the Soviet Union was 'a marriage of convenience against a common enemy.' By 1946–1947, the alliance had shattered and the Cold War had begun — the fault line that would define the next forty-five years, visible in the division of Germany into occupation zones that hardened into two states.", "id": "fc19"}, {"front": "SPICE-T: How does the Pacific war illustrate the Political theme?", "back": "Japan's military victories over European colonial powers permanently delegitimized European colonial rule by shattering the myth of European invincibility. This was a political transformation: colonial authority rested partly on the belief that European power could not be defeated. When that belief was destroyed, colonial rule lost a key pillar of its political legitimacy, accelerating independence movements across Asia and Africa.", "id": "fc20"}, {"front": "Compare WWI's Western Front with WWII's Eastern Front as military experiences.", "back": "WWI's Western Front was static: trenches, minimal movement, industrial attrition for minimal territorial gain. WWII's Eastern Front was dynamic: Blitzkrieg initially produced rapid German advances; Operation Uranus produced Soviet encirclement of German forces; from 1943 the Red Army conducted massive offensive operations. Both were the decisive theaters of their respective wars and both produced staggering casualties.", "id": "fc21"}, {"front": "Germany's occupation zones after WWII", "back": "Germany was divided into four occupation zones (American, British, French, and Soviet) after WWII. These would harden into two states: West Germany (Federal Republic) aligned with the Western powers, and East Germany (German Democratic Republic) under Soviet control — a physical embodiment of the emerging Cold War division.", "id": "fc22"}, {"front": "Japan's occupation by the United States", "back": "After Japan's surrender, the United States under General MacArthur occupied Japan and oversaw its democratization and demilitarization. Unlike Germany, Japan was not divided into multiple occupation zones — the US exercised exclusive control, reshaping Japan's political system and renouncing its military capacity through the new constitution.", "id": "fc23"}, {"front": "Why was WWII the largest conflict in human history?", "back": "Scale: 70–85 million dead on every inhabited continent. Duration: 1939–1945 (Pacific roots from 1931). Geographic scope: every ocean and continent. Civilian majority: 38–55 million civilian deaths from strategic bombing, genocide, occupation atrocities, and famine. Technology: industrial weapons (tanks, aircraft, atomic bombs) applied at unprecedented scale by states mobilizing entire national economies.", "id": "fc24"}, {"front": "Singapore and the myth of European invincibility", "back": "Japan's rapid capture of Britain's fortress of Singapore in February 1942 — considered impregnable — was a defining shock that demonstrated European colonial powers could be routed by Asian forces. Along with Dutch defeat in Java and French collapse in Indochina, Singapore permanently undermined the myth that European rule was a natural or permanent order.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

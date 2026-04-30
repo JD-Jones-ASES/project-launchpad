@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 6, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "New Imperialism", "back": "The aggressive, state-directed wave of European colonial expansion between approximately 1870 and 1914, during which industrialized powers seized roughly 10 million square miles of new territory and brought 150 million additional people under colonial rule. Distinguished from earlier colonialism by its speed, scale, and explicit ideological justifications.", "id": "fc01"}, {"front": "Social Darwinism", "back": "The misapplication of Charles Darwin's evolutionary ideas — especially Herbert Spencer's phrase 'survival of the fittest' — to human societies and races. Social Darwinists argued that European dominance was a natural outcome of racial competition. The theory had no scientific basis and was used to justify colonial conquest and racial hierarchy.", "id": "fc02"}, {"front": "civilizing mission (mission civilisatrice)", "back": "The ideological claim that European colonizers had a duty to 'uplift' peoples they deemed less advanced. In practice it justified conquest and forced cultural transformation — the imposition of European languages, Christianity, and legal codes without the consent of the colonized. Served as both sincere belief and convenient rationalization for resource extraction.", "id": "fc03"}, {"front": "investment imperialism", "back": "A form of imperial expansion driven by the export of surplus European capital. By the 1890s, British capital invested abroad exceeded domestic investment. Colonial and semi-colonial territories absorbed this capital through infrastructure projects (railways, harbors, telegraphs) that returned reliable profits while also serving military control.", "id": "fc04"}, {"front": "raw material extraction (as imperial motive)", "back": "The most visible economic driver of the New Imperialism. European manufacturers restructured entire colonial economies to supply rubber (Congo), cotton (Egypt, India), palm oil (West Africa), tin (Malaya), and diamonds and gold (South Africa), dismantling pre-existing agricultural systems in the process.", "id": "fc05"}, {"front": "J. A. Hobson", "back": "British economist and journalist who argued in Imperialism: A Study (1902) that imperial profits flowed to a narrow financial class while ordinary citizens paid the tax burden of maintaining colonial armies. His critique challenged the claim that empire was economically beneficial to Britain as a whole.", "id": "fc06"}, {"front": "Herbert Spencer", "back": "British philosopher who coined the phrase 'survival of the fittest' and applied evolutionary logic to human societies and nations. Spencer's ideas became the intellectual foundation of Social Darwinism and were used — without scientific basis — to justify European dominance over colonized peoples.", "id": "fc07"}, {"front": "Rudyard Kipling", "back": "British author who published 'The White Man's Burden' (1899) in McClure's Magazine, addressed to American readers at the moment of U.S. annexation of the Philippines. The poem frames colonial rule as a thankless duty — 'burden' — for the colonizer, while depicting colonized peoples as passive and inferior.", "id": "fc08"}, {"front": "\"The White Man's Burden\" (1899)", "back": "A poem by Rudyard Kipling urging the United States to accept the 'burden' of governing the Philippines after the Spanish-American War. It frames imperialism as a selfless civilizing duty while erasing colonized peoples' agency. Published in February 1899, timed to coincide with Senate ratification of the Treaty of Paris.", "id": "fc09"}, {"front": "H. T. Johnson and \"The Black Man's Burden\" (1899)", "back": "A counter-poem by Reverend H. T. Johnson, an African American minister and editor of the AME Church Review, published in 1899. Johnson strips Kipling's euphemisms and reframes colonial expansion as violent military conquest against people armed with clubs and arrows facing European rifles.", "id": "fc10"}, {"front": "Maxim gun", "back": "A machine gun capable of firing 500 rounds per minute, invented by Hiram Maxim and demonstrated in 1884 — the same year as the Berlin Conference. The Maxim gun gave colonial forces an overwhelming technological advantage and made territorial conquest militarily feasible across Africa and Asia.", "id": "fc11"}, {"front": "surplus capital (as imperial motive)", "back": "By the 1870s–1890s, industrialized European economies produced profits beyond domestic investment opportunities. This surplus capital sought outlets in colonial territories through infrastructure projects, creating a financial motive for empire that operated alongside raw-material extraction and market-seeking.", "id": "fc12"}, {"front": "market imperialism", "back": "The drive to open new consumer markets in colonial territories to absorb the surplus industrial output of European factories. European manufacturers needed destinations for goods produced beyond domestic demand — one of three economic imperatives the text identifies alongside raw materials and investment outlets.", "id": "fc13"}, {"front": "What is the SPICE-T 'dual engine' of the New Imperialism?", "back": "The economic track extracted commodities, redirected labor, and integrated colonial economies into European-centered markets. The cultural track produced ideologies (Social Darwinism, civilizing mission) that justified extraction as benevolence. The two tracks reinforced each other: ideology made extraction seem natural; extraction made ideology necessary.", "id": "fc14"}, {"front": "Why did the New Imperialism accelerate dramatically after 1870?", "back": "Industrial capitalism had generated surpluses of goods, capital, and productive capacity that exceeded domestic demand. Simultaneously, interstate nationalist rivalry intensified competition for territory and prestige. New military technologies (Maxim gun, steam gunboats) made rapid conquest feasible. All three factors converged in the 1870s–1880s.", "id": "fc15"}, {"front": "How does Kipling's poem function as a primary source for analyzing imperial ideology?", "back": "Its historical context (U.S. Philippine annexation), intended audience (American readers), purpose (advocacy for imperial responsibility), and point of view (colonized peoples appear as objects, never subjects) all reveal how the civilizing mission erased indigenous agency and reframed conquest as duty.", "id": "fc16"}, {"front": "What is the key difference between a distractor and a correct answer in AP World History multiple-choice questions about imperialism's causes?", "back": "Distractors typically isolate one factor (technology only, religion only) or reverse the causal direction. Strong answers reflect the text's multi-causal framework: economic surpluses + interstate rivalry + ideology all operating simultaneously. Watch for answers that assign agency only to Europeans.", "id": "fc17"}, {"front": "terra nullius", "back": "Latin for 'empty land.' The legal fiction that land without European-style property documentation was unoccupied and could be claimed by colonizers. Used across Africa and the Pacific to delegitimize existing indigenous sovereignty — despite hundreds of sophisticated political entities existing at the time of conquest.", "id": "fc18"}, {"front": "How did colonialism restructure colonial economies?", "back": "Colonial regimes dismantled pre-existing agricultural systems, forced subsistence farmers into cash-crop or plantation labor, and reorganized production around the extraction of specific commodities (rubber, cotton, tin, gold) needed by European industrial economies. This integration served European markets at the expense of local food security.", "id": "fc19"}, {"front": "Suez Canal (1869) — significance for imperialism", "back": "The canal cut the sailing distance from Britain to India by roughly 7,000 miles, transforming imperial logistics and becoming a critical artery of British power. Britain's determination to protect this route led directly to its occupation of Egypt in 1882 — a clear case of strategic-geographic motives driving territorial expansion.", "id": "fc20"}, {"front": "What SPICE-T theme does the civilizing mission primarily represent?", "back": "Cultural (C): the imposition of European languages, Christianity, legal codes, and educational systems on colonized peoples without their consent. However, the civilizing mission also intersects with Political (P) — as governance justification — and Economic (E) — as cover for resource extraction.", "id": "fc21"}, {"front": "How does the New Imperialism differ from earlier European overseas expansion (pre-1800)?", "back": "Earlier expansion was gradual, commercially driven, and often indirect (trading posts, coastal enclaves). The New Imperialism was aggressive, state-directed, rapid, and involved direct territorial administration. Industrial technologies (steamships, telegraphs, machine guns) and developed ideological frameworks distinguished it from earlier phases.", "id": "fc22"}, {"front": "Contextualization: How did the Industrial Revolution create the conditions for the New Imperialism?", "back": "Industrialization generated surpluses of manufactured goods (needing markets), capital (needing investment outlets), and factory production (needing raw materials). It also produced the military technologies — steam gunboats, breech-loading rifles, the Maxim gun — that made rapid colonial conquest feasible. Industrial competition among states intensified nationalist rivalry.", "id": "fc23"}, {"front": "What was the 'cartridge incident' in India (1857), and why does it illustrate causation vs. triggering events?", "back": "Sepoys were required to bite Enfield cartridges rumored to be greased with pork and beef fat — forbidden respectively to Muslims and Hindus. This was the immediate trigger of the 1857 Rebellion, but the text frames it as 'a spark, not the fire itself' — underlying structural causes (annexation, deindustrialization, racism) were the real causes.", "id": "fc24"}, {"front": "Compare: Kipling's framing of colonized peoples vs. H. T. Johnson's framing", "back": "Kipling: colonized people are 'half devil and half child,' passive objects who appear only as the 'burden' Europeans must manage. Johnson: colonized people are victims of armed military conquest — 'feeble folks' facing rifle fire, centered as the true subjects of imperial violence rather than its passive recipients.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

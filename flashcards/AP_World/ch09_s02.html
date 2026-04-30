@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 9, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Life expectancy transformation, 1900–2024", "back": "Global average life expectancy at birth rose from approximately 32 years in 1900 to about 73 years by 2024 — a gain of more than four decades in a single century, described as the most rapid and dramatic alteration of basic human life conditions in history.", "id": "fc01"}, {"front": "Alexander Fleming and penicillin (1928)", "back": "Scottish bacteriologist who discovered penicillin in 1928. Its mass production during World War II inaugurated the antibiotic era, transforming previously fatal infections. Global tuberculosis mortality fell roughly 90% between 1900 and 2000 in countries where antibiotics were available.", "id": "fc02"}, {"front": "Antibiotic revolution", "back": "The era inaugurated by penicillin and followed by streptomycin, tetracycline, and hundreds of others — chemical compounds that kill or inhibit bacterial growth. Before antibiotics, infected wounds, childbirth, and tuberculosis were common killers; antibiotics transformed these threats where available.", "id": "fc03"}, {"front": "WHO Intensified Smallpox Eradication Program (1967–1980)", "back": "The World Health Organization program that achieved the complete elimination of smallpox through ring vaccination and surveillance — making smallpox the only human disease ever eradicated. Demonstrated that multilateral coordination could permanently eliminate a disease.", "id": "fc04"}, {"front": "Expanded Programme on Immunization (1974)", "back": "WHO program that systematized childhood vaccination against diphtheria, tetanus, whooping cough, measles, polio, and tuberculosis in low-income countries. By the early 2020s, global measles vaccination had prevented an estimated 25 million deaths between 2000 and 2022.", "id": "fc05"}, {"front": "Epidemiological transition", "back": "The historical shift from societies dominated by infectious and parasitic diseases (cholera, malaria, tuberculosis) with high childhood mortality, to post-transition societies where chronic non-communicable diseases (heart disease, cancer, diabetes) become the primary causes of death. Many low-income nations simultaneously bear both burdens.", "id": "fc06"}, {"front": "Unequal distribution of medical advances", "back": "Medical progress in the twentieth century benefited most those with existing infrastructure, research capacity, and purchasing power. Sub-Saharan Africa continued to bear disproportionate burdens from malaria and HIV/AIDS. The COVID-19 pandemic exposed this starkly through 'vaccine nationalism.'", "id": "fc07"}, {"front": "Vaccine nationalism", "back": "The practice during the COVID-19 pandemic (2020–2023) in which wealthy nations secured vaccine supplies for their own populations, leaving low-income countries waiting while their populations continued to die. Illustrated the long-standing pattern that medical advances disproportionately benefit those with purchasing power.", "id": "fc08"}, {"front": "Norman Borlaug", "back": "American agronomist who developed high-yield varieties of wheat (working with Rockefeller and Ford foundations and the Mexican government) in the 1940s–1970s. A central figure of the Green Revolution; he estimated his work saved one billion lives from famine.", "id": "fc09"}, {"front": "Green Revolution", "back": "Agricultural transformation between the 1940s and 1970s through high-yield varieties of wheat, rice, and maize, combined with irrigation, synthetic fertilizers, and pesticides. Dramatically increased food production in South Asia and Latin America — India became a net grain exporter by the 1980s.", "id": "fc10"}, {"front": "Costs of the Green Revolution", "back": "High-yield varieties required expensive inputs (water, fertilizer, pesticides) smallholders could not afford without debt; caused severe groundwater depletion in Punjab, India; displaced traditional crop varieties reducing agrobiodiversity; benefited larger, capital-rich farmers over smallholders, tenants, and women.", "id": "fc11"}, {"front": "Agrobiodiversity loss", "back": "The displacement of traditional crop varieties — developed by indigenous farmers over millennia in Mexico, Philippines, and elsewhere — by standardized high-yield varieties during the Green Revolution. Reduced genetic diversity makes food systems more vulnerable to single-pathogen crop failure.", "id": "fc12"}, {"front": "Punjab aquifer depletion", "back": "In India's Punjab region, Green Revolution tube-well irrigation powered by subsidized electricity drew down aquifers far faster than rainfall could replenish them — a groundwater deficit now threatening the region's agricultural future. A long-term environmental cost of the Green Revolution.", "id": "fc13"}, {"front": "Genetically modified organisms (GMOs)", "back": "Crops produced by directly manipulating plant DNA to introduce desired traits: herbicide-resistant (Roundup Ready soybeans), insect-resistant (Bt crops), or nutritionally enhanced (Golden Rice). Supporters argue they are essential for feeding eight billion amid climate disruption; critics raise concerns about corporate seed control and ecological risks.", "id": "fc14"}, {"front": "Golden Rice", "back": "A genetically engineered variety of rice enhanced with Vitamin A, developed to address malnutrition in regions where rice is the staple food. Represents the potential of biotechnology to address nutritional deficiency, though it became caught up in broader GMO controversies.", "id": "fc15"}, {"front": "Roundup Ready crops (Monsanto)", "back": "Herbicide-resistant genetically modified crops developed by Monsanto that allow farmers to spray broad-spectrum herbicides without killing their crop. Critics raised concerns about 'superweeds' developing herbicide resistance and corporate control of seed supplies.", "id": "fc16"}, {"front": "Bt crops", "back": "Insect-resistant genetically modified crops that express a toxin from the bacterium Bacillus thuringiensis, reducing pesticide applications in initial trials. Part of the wave of GMO agricultural biotechnology in the 1990s and 2000s.", "id": "fc17"}, {"front": "Why did the Green Revolution disproportionately exclude women?", "back": "Women perform the majority of subsistence agricultural labor in many South Asian and African contexts, but Green Revolution extension services and credit programs were directed at male 'household heads.' This structural exclusion meant women bore work burdens without proportional access to inputs or income gains.", "id": "fc18"}, {"front": "How does the GMO debate illustrate a recurring historical pattern?", "back": "The text argues that 'transformative innovations generate genuine benefits alongside genuine risks, and the distribution of both is shaped by political and economic power as much as by scientific evidence' — a pattern also visible in the Green Revolution, antibiotics access gaps, and vaccine nationalism.", "id": "fc19"}, {"front": "SPICE-T connection: Technology and Interaction with Environment in medical/agricultural advances", "back": "Antibiotics, vaccines, and high-yield crops (Technology) transformed human interaction with the natural environment — enabling population growth and reshaping ecosystems (irrigation, monocultures, pesticides). But Technology alone did not determine outcomes: existing Economic and Social inequalities determined who accessed these advances.", "id": "fc20"}, {"front": "Compare antibiotic and vaccine contributions to life-expectancy gains", "back": "Antibiotics treated existing infections (penicillin 1928; mass use from WWII), while vaccines prevented infection through immunization (smallpox eradication program 1967–1980; WHO EPI 1974). Both were essential; vaccines achieved permanent eradication of smallpox — the clearest measure of long-term disease elimination.", "id": "fc21"}, {"front": "What is the historical significance of India's famine-to-surplus transformation?", "back": "India experienced devastating famines as recently as 1943 but became a net grain exporter by the 1980s following the Green Revolution. This is one of the most dramatic agricultural turnarounds of the 20th century — though it came with costs including aquifer depletion and inequality.", "id": "fc22"}, {"front": "How does the COVID-19 pandemic connect to the section's central argument?", "back": "The text presents vaccine nationalism during COVID-19 as making starkly visible the century-long pattern: the core lesson of twentieth-century medical history is not simply 'science advanced' but 'who gets access to the advances science made?' — access is determined by wealth and infrastructure, not medical need.", "id": "fc23"}, {"front": "Ring vaccination strategy", "back": "The technique used in the WHO's smallpox eradication program: rather than attempting universal vaccination, health workers traced contacts of confirmed cases and vaccinated only those in the 'ring' around each outbreak. This targeted approach enabled complete eradication even in resource-limited settings.", "id": "fc24"}, {"front": "How do large-scale technological interventions interact with existing social inequalities?", "back": "Both the Green Revolution and the antibiotic/vaccine revolution show that benefits accumulate where infrastructure, capital, and institutional access already exist. Transformative technologies amplify rather than erase existing inequalities unless deliberate redistributive policies intervene.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

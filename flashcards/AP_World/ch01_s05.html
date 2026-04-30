@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 1, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Lineage group (West African political unit)", "back": "The fundamental political unit in much of sub-Saharan Africa: a set of people claiming descent from a common ancestor. Lineage membership determined access to land, eligibility for authority, labor/food obligations, and one's network of allies. Powerful lineages could organize subordinate lineages into chiefdoms, kingdoms, and empires.", "id": "fc01"}, {"front": "Griot (jeli / gewel)", "back": "A professional oral historian, musician, and keeper of genealogical and political knowledge in West African societies. Griots memorized the histories and genealogies of royal lineages and recited them at ceremonial occasions. They served as living archives and diplomatic intermediaries, providing institutional memory in societies without alphabetic writing.", "id": "fc02"}, {"front": "Sundiata epic", "back": "The oral foundational narrative of the Mali Empire, preserved and transmitted by griots. It describes the rise of Sundiata Keita, who unified the Mande-speaking peoples and defeated the Sosso king Sumanguru Kanté at the Battle of Kirina (c. 1235), establishing the foundation of Malian imperial power.", "id": "fc03"}, {"front": "Battle of Kirina (c. 1235)", "back": "The decisive military victory in which Sundiata Keita defeated the Sosso king Sumanguru Kanté, unifying the Mande-speaking peoples and establishing the political foundation of the Mali Empire.", "id": "fc04"}, {"front": "Mansa", "back": "The title meaning 'emperor' or 'ruler' borne by the rulers of the Mali Empire. The most celebrated was Mansa Musa I (r. c. 1312–1337), whose 1324 Hajj pilgrimage brought Mali to international attention and whose reign represented the peak of Malian power.", "id": "fc05"}, {"front": "Mansa Musa I (c. 1280–1337)", "back": "The ninth mansa of the Mali Empire and its most internationally celebrated ruler. His 1324 Hajj pilgrimage with a reported entourage of 60,000 people distributed so much gold that the metal's value was reportedly depressed in Cairo and the Middle East for over a decade. He appears on the 1375 Catalan Atlas — the first representation of a sub-Saharan African ruler in European cartography.", "id": "fc06"}, {"front": "Gold–Salt exchange (trans-Saharan trade)", "back": "The economic foundation of the Mali Empire: gold was produced in forest regions to the south (Bambuk and Buré fields), salt in Saharan mines to the north, exchanged via the Niger River corridor. Mali taxed goods at every junction, funding armies and patronage without relying on an agricultural tax base.", "id": "fc07"}, {"front": "Timbuktu (Tombouctou)", "back": "Commercial and intellectual center of the Mali Empire, situated where the Niger River bent closest to the Sahara. A trading entrepot where gold, salt, and forest products met. Its mosque schools — especially the Sankore madrasa — attracted scholars from across the Islamic world and produced hundreds of thousands of Arabic-language manuscripts in law, astronomy, medicine, and history.", "id": "fc08"}, {"front": "Sankore mosque and madrasa", "back": "The principal academic institution of Timbuktu, expanded under Mansa Musa's patronage, which functioned as a university. It attracted scholars from across Dar al-Islam and produced a rich corpus of Arabic scholarship — directly refuting the historical image of pre-colonial Africa as lacking a literate tradition.", "id": "fc09"}, {"front": "Abu Ishaq al-Sahili", "back": "A poet-architect from Granada (or Seville) whom Mansa Musa brought back from his 1324 Hajj pilgrimage. Al-Sahili supervised the construction of mosques and royal buildings in the distinctive Sahelian mud-brick architectural style that became characteristic of the region.", "id": "fc10"}, {"front": "Catalan Atlas (1375)", "back": "A medieval European world map on which Mansa Musa appears, depicted enthroned and holding a gold nugget — the first representation of a sub-Saharan African ruler in European cartography. It demonstrates Mali's wealth and visibility within the international network of geographic knowledge.", "id": "fc11"}, {"front": "Ibn Battuta (1304–1368/1369)", "back": "Moroccan scholar and traveler whose Rihla (Travels) documented journeys spanning the Islamic world from Morocco to China. He visited Mali in 1352 and provided the richest external account of the Mali court. His perspective was shaped by his identity as a North African Arab Muslim scholar writing for a North African Islamic audience.", "id": "fc12"}, {"front": "Rihla (Travels) — Ibn Battuta", "back": "Ibn Battuta's account of his travels compiled for a North African Islamic audience. On Mali, he praised Malian justice and Islamic observance while describing Mansa Sulayman as 'miserly.' A primary source requiring sourcing analysis: his perspective shaped what he noticed and valued.", "id": "fc13"}, {"front": "Mansa Sulayman", "back": "The Mali ruler described by Ibn Battuta during his 1352 visit, a decade after Mansa Musa's peak. Ibn Battuta characterized him as 'a miserly king' — a personal judgment that reflects Ibn Battuta's outsider perspective and his audience's expectations of royal generosity.", "id": "fc14"}, {"front": "Sahelian mud-brick architecture", "back": "The distinctive architectural style of the West African Sahel region, characterized by large mud-brick structures with projecting wooden beams and organic forms. Developed under Malian patronage after Mansa Musa's Hajj and associated with Abu Ishaq al-Sahili. The Djinguereber Mosque in Timbuktu is a surviving example.", "id": "fc15"}, {"front": "How did kinship-based political organization differ from bureaucratic state organization?", "back": "Kinship-based systems (common in sub-Saharan Africa) organized authority through lineage membership, elder status, and ancestral legitimacy rather than formal written law codes or examination-recruited officials. This system was flexible (scaling from lineage to empire) but based on personal/familial bonds rather than impersonal institutional appointment.", "id": "fc16"}, {"front": "SPICE-T: What Economic theme does the gold–salt trade illustrate?", "back": "The gold–salt exchange illustrates the Economic theme: Mali's imperial power derived from controlling complementary resource zones and taxing the corridor between them — demonstrating how geographic position and trade control can generate state power without relying on the agricultural surplus taxation that funded Eurasian bureaucratic states.", "id": "fc17"}, {"front": "SPICE-T: What Cultural theme do the Timbuktu manuscripts illustrate?", "back": "The Timbuktu manuscripts illustrate the Cultural theme and directly challenge Eurocentric narratives: West Africa had a rich written scholarly tradition in Arabic spanning Islamic law, astronomy, medicine, and history — contributing to, not merely receiving from, the broader intellectual culture of Dar al-Islam.", "id": "fc18"}, {"front": "SPICE-T: What Social theme does kinship lineage organization illustrate?", "back": "Lineage-based social organization illustrates the Social theme: in sub-Saharan Africa, access to land, authority, labor obligations, and social networks was organized through kinship and descent rather than class, caste, or examination-based criteria. This produced different forms of social stratification and political legitimacy than in Eurasian states.", "id": "fc19"}, {"front": "Sourcing skill: How does Ibn Battuta's audience shape his account?", "back": "Ibn Battuta's Rihla was compiled for a North African Islamic audience. This shaped his emphasis: he praised Mali's justice and Islamic observance (valued by his audience) while describing Mansa Sulayman as 'miserly' (applying Moroccan standards of royal generosity). His framing of Malians through the lens of Islamic piety reflects his own cultural position, not a neutral observation.", "id": "fc20"}, {"front": "Comparison: Malian imperial power vs. Song Chinese imperial power", "back": "Song China built imperial power through agricultural taxation administered by a scholar-gentry bureaucracy. Mali built imperial power through controlling trans-Saharan trade corridors and taxing commodity exchange — no mass literate bureaucracy, but patronage of Islamic scholars and Islam as an ideological framework aligned Mali with the broader Dar al-Islam network.", "id": "fc21"}, {"front": "Comparison: Griots vs. Confucian scholars as institutional memory", "back": "Both griots (West Africa) and Confucian scholars (Song China) preserved political knowledge and provided institutional continuity. Griots operated through oral transmission and personal performance; Confucian scholars operated through written texts and examination-based appointment. Both demonstrate that complex states require mechanisms for preserving and transmitting political knowledge across generations.", "id": "fc22"}, {"front": "Continuity/Change: What changed about Mali's relationship to Islam during Mansa Musa's reign?", "back": "Mali had been integrating into Dar al-Islam for decades before Mansa Musa. His reign represented the peak of this integration: the 1324 Hajj announced Mali's wealth to the Islamic world, he returned with scholars and architects, and Timbuktu developed into a major Islamic intellectual center — transforming Mali from a peripheral Islamic polity to a central one.", "id": "fc23"}, {"front": "Why did Mansa Musa's gold distribution matter beyond the Middle East?", "back": "The gold price depression following Mansa Musa's Hajj shows that West African material production was connected to Mediterranean and Islamic economic systems. His appearance on the 1375 Catalan Atlas shows that this connection reached European geographic awareness. Mali's economy was not isolated but integrated into a broader Afro-Eurasian exchange network.", "id": "fc24"}, {"front": "Contextualization: What distinguished Mali from purely agricultural empires?", "back": "Unlike Song China (agricultural + commercial taxation) or the Byzantine Empire (agricultural + trade taxes), Mali's power was primarily extractive at trade junctions rather than from taxing agricultural production. Its geographic position as intermediary between gold-producing south and salt-producing north — rather than direct territorial resource control — was the basis of imperial wealth.", "id": "fc25"}, {"front": "Bambuk and Buré gold fields", "back": "Gold-producing regions south of the Sahel controlled by or adjacent to the Mali Empire. Their gold flowed northward through the Niger River corridor to Saharan trade routes and ultimately to Mediterranean markets — the commodity that made Mali one of the wealthiest states in the fourteenth-century world.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

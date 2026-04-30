@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 7, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Total war", "back": "A form of warfare in which a belligerent state mobilizes all of its economic, industrial, social, and political resources for the war effort, and in which civilian populations, economies, and infrastructure become direct targets or participants. WWI introduced industrial-scale total war; the concept applies equally to WWII.", "id": "fc01"}, {"front": "Western Front", "back": "The static system of trenches stretching more than 700 km from the Belgian coast to the Swiss border, established by December 1914 and essentially immovable for three and a half years. It exemplified the technological impasse of total war: defensive weapons far outpaced offensive tactics.", "id": "fc02"}, {"front": "Battle of the Somme (1916)", "back": "A WWI battle lasting July–November 1916. The British army suffered 57,470 casualties on the first day — the worst day in British military history. Total casualties on all sides reached approximately 1.2 million for a territorial gain measured in kilometers. It epitomizes the futility of offensive tactics against industrial defensive weapons.", "id": "fc03"}, {"front": "Battle of Verdun (1916)", "back": "A WWI battle lasting February–December 1916 between France and Germany, producing an estimated 700,000 casualties. France's commander Pétain issued the famous order 'Ils ne passeront pas' ('They shall not pass'), symbolizing a defensive war of attrition rather than territorial gain.", "id": "fc04"}, {"front": "First Battle of the Marne (September 1914)", "back": "The battle that halted Germany's rapid advance through Belgium, ending the Schlieffen Plan's premise that France could be knocked out in weeks. Both sides subsequently dug into trenches, creating the Western Front stalemate that would last until 1918.", "id": "fc05"}, {"front": "Defence of the Realm Act (Britain, 1914)", "back": "British legislation giving the government sweeping powers over industry, labor, and food supplies during WWI — a concrete example of total war's economic mobilization, in which the state took direct control of civilian economic life.", "id": "fc06"}, {"front": "Women's wartime industrial labor and suffrage", "back": "Women entered industrial workforces across all belligerent countries during WWI — operating machinery in munitions factories, driving ambulances, serving as nurses. This economic mobilization permanently reshaped suffrage debates: Britain extended the vote to women over 30 in 1918; full suffrage followed in 1928.", "id": "fc07"}, {"front": "Gallipoli campaign (1915)", "back": "A British attempt to knock the Ottoman Empire out of the war by seizing the Dardanelles strait. It failed at a cost of over 250,000 Allied and 250,000 Ottoman casualties. It became a defining national experience for Australia and New Zealand, whose troops bore heavy losses.", "id": "fc08"}, {"front": "Paul von Lettow-Vorbeck", "back": "German commander in East Africa who waged a guerrilla campaign with African Askari soldiers that tied down far larger Allied forces until after the Armistice — a campaign almost entirely fought and suffered by African populations. An estimated 200,000 African civilians and soldiers died.", "id": "fc09"}, {"front": "Armistice of November 11, 1918", "back": "The agreement that silenced the guns of WWI on 11 November 1918 at 11:00 a.m. It ended active fighting but did not yet determine the peace terms — those were negotiated at the Paris Peace Conference (1919).", "id": "fc10"}, {"front": "Paris Peace Conference (1919)", "back": "The conference at which Allied leaders — Britain's Lloyd George, France's Clemenceau, and the US's Wilson — negotiated the peace terms after WWI. The resulting treaties were shaped by a fundamental contradiction: each Allied leader wanted different things, and the compromise satisfied no one.", "id": "fc11"}, {"front": "Woodrow Wilson's Fourteen Points", "back": "Wilson's January 1918 framework for a just peace, including national self-determination, freedom of the seas, open diplomacy, and a League of Nations. Widely circulated as Allied propaganda, it raised expectations — in Germany and among colonial peoples — that the actual Versailles settlement then betrayed.", "id": "fc12"}, {"front": "Treaty of Versailles (1919)", "back": "The primary WWI peace treaty with Germany. Key terms: the war guilt clause (Article 231) assigned sole responsibility to Germany; reparations (ultimately 132 billion gold marks); Germany lost 13% of its territory including Alsace-Lorraine and the Polish Corridor; all overseas colonies were forfeited; army limited to 100,000 men.", "id": "fc13"}, {"front": "War guilt clause (Article 231)", "back": "The Versailles clause assigning sole responsibility for WWI to Germany and its allies, providing the legal justification for reparations. Germany signed under protest, describing the treaty as a 'diktat.' Combined with reparations and territorial losses, it generated nationalist resentment that Hitler later exploited.", "id": "fc14"}, {"front": "Reparations (WWI)", "back": "Financial compensation imposed on Germany by the Treaty of Versailles, ultimately set at 132 billion gold marks in 1921. Combined with the war guilt clause, territorial losses, and military restrictions, reparations contributed to the economic instability of the Weimar Republic and the political resentment Hitler exploited.", "id": "fc15"}, {"front": "League of Nations", "back": "The collective-security organization proposed in Wilson's Point XIV. Created by the Versailles settlement, but the United States never joined after the Senate refused ratification. The League's inability to enforce collective security contributed to the failure to contain fascist aggression in the 1930s.", "id": "fc16"}, {"front": "Sykes-Picot Agreement", "back": "A secret agreement between Britain and France dividing former Ottoman Arab territories into spheres of influence. It betrayed Arab nationalists' expectations of independence (Hussein-McMahon Correspondence) and drew borders with no relation to existing ethnic, tribal, or religious communities — generating conflicts lasting into the twenty-first century.", "id": "fc17"}, {"front": "Hussein-McMahon Correspondence (1915–1916)", "back": "Correspondence between the Sharif of Mecca (Hussein) and British High Commissioner McMahon, in which Britain promised Arab independence in exchange for the Arab Revolt against the Ottomans. The promise was betrayed at Versailles, where Britain and France divided the Arab territories under the mandate system.", "id": "fc18"}, {"front": "Korean Samil Movement (1919)", "back": "A Korean independence movement triggered by the outrage that Point V of Wilson's Fourteen Points had not secured Korean independence from Japan at the Paris Peace Conference. It illustrates how Versailles' betrayal of self-determination for colonized peoples produced nationalist resistance movements.", "id": "fc19"}, {"front": "Ho Chi Minh at the Paris Peace Conference", "back": "Working as a hotel worker in Paris, Ho Chi Minh attempted to petition the peace conference for Vietnamese self-determination under Wilson's Point V. He was ignored — illustrating that self-determination's promise was extended to white Europeans while being denied to Asian and African colonial peoples.", "id": "fc20"}, {"front": "WWI casualty figures", "back": "Approximately 10 million military dead, 7 million civilian dead, and 21 million wounded — unprecedented in scale. Russia alone suffered over 5 million military dead by 1917. These figures represent the human cost of industrial total war and the mass conscription of entire male generations.", "id": "fc21"}, {"front": "The 'broken promise' of Versailles for colonized peoples", "back": "WWI raised expectations among colonized peoples — through Wilson's Fourteen Points and the promise of self-determination — that went unmet at Versailles. Arab nationalists, Koreans, and Vietnamese were all denied the self-determination applied to white European nations, fueling decolonization movements for the next half-century.", "id": "fc22"}, {"front": "SPICE-T: How does total war connect to the Economic theme?", "back": "Total war required governments to take direct control of industrial production, impose rationing, redirect labor, and mobilize national economies for warfare. This transformed the relationship between state and economy: it established precedents for government economic intervention that influenced both Keynesian economics and fascist/communist command economies in the interwar period.", "id": "fc23"}, {"front": "Compare the Allied leaders' goals at the Paris Peace Conference.", "back": "Wilson (USA) wanted a just peace based on self-determination and a League of Nations. Clemenceau (France) wanted to punish and weaken Germany permanently, having been invaded twice in 50 years. Lloyd George (Britain) sought a compromise between revenge and stability. The treaty's contradictions reflect these irreconcilable aims.", "id": "fc24"}, {"front": "Why did the Versailles peace create conditions for WWII?", "back": "Two mechanisms: (1) Harshness toward Germany — war guilt, reparations, territorial losses, military restrictions — generated nationalist resentment that Hitler exploited. (2) The betrayal of self-determination for colonized peoples created grievances fueling anti-colonial movements. Neither the harshness nor the broken promises created stability; instead they produced the political instability and resentment that fascism exploited.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

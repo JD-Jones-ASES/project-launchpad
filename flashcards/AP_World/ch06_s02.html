@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 6, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Scramble for Africa", "back": "The rapid, competitive annexation of African territory by European powers between approximately 1880 and 1914. Accelerated by the Berlin Conference (1884–85), enabled by the Maxim gun and steam-powered gunboats. By 1914, only Ethiopia and Liberia remained formally independent.", "id": "fc01"}, {"front": "Berlin Conference (1884–1885)", "back": "A conference convened by German Chancellor Otto von Bismarck at which European powers established rules for claiming African territory. No African rulers or representatives were present. Key provisions: notify other signatories of new claims; demonstrate 'effective occupation'; Congo basin declared a free-trade zone under Leopold II.", "id": "fc02"}, {"front": "General Act of the Berlin Conference", "back": "The formal agreement produced by the 1884–85 Berlin Conference. Established 'effective occupation' as the standard for territorial claims, created the Congo Free State under Leopold II's personal authority, and included welfare language about African peoples that bore no relationship to actual colonial practice.", "id": "fc03"}, {"front": "effective occupation", "back": "The Berlin Conference standard requiring European powers to demonstrate actual administrative presence — not merely a planted flag — to justify territorial claims in Africa. Disadvantaged African states by demanding European-style bureaucratic documentation as the measure of legitimate sovereignty.", "id": "fc04"}, {"front": "terra nullius", "back": "Latin for 'empty land.' A legal fiction claiming that land without European-style property documentation was unoccupied. Used by European colonizers to delegitimize African sovereignty and justify seizure of territory that was in fact governed by hundreds of distinct political entities.", "id": "fc05"}, {"front": "Congo Free State", "back": "A territory in central Africa placed under the personal authority of Belgian King Leopold II by the Berlin Conference. Presented as a humanitarian venture; in practice, Leopold's agents extracted rubber and ivory through forced labor, hostage-taking, and mutilation of workers who failed quotas. Population loss estimated at 1–10 million people.", "id": "fc06"}, {"front": "King Leopold II of Belgium", "back": "Belgian monarch who controlled the Congo Free State as personal property (1885–1908), presenting it as a civilizing project while overseeing one of history's most brutal colonial regimes. Forced to transfer the Congo to the Belgian government in 1908 following international pressure from journalists E. D. Morel and diplomat Roger Casement.", "id": "fc07"}, {"front": "E. D. Morel and Roger Casement", "back": "The journalist and diplomat whose documentation of Congo Free State atrocities — forced labor, hand-cutting as punishment, mass death — created international scandal and forced Leopold II to transfer the Congo to Belgian government control in 1908. Their campaign is characterized as one of the first modern human-rights movements.", "id": "fc08"}, {"front": "Battle of Adwa (March 1, 1896)", "back": "A decisive military victory by Ethiopia (under Emperor Menelik II) over an Italian colonial force, the most significant African military defeat of a European power in the colonial era. Italian force: ~17,500 troops; Ethiopian force: ~100,000, armed with modern rifles from France and Russia. Italy was forced to sign the Treaty of Addis Ababa recognizing Ethiopian sovereignty.", "id": "fc09"}, {"front": "Emperor Menelik II", "back": "Ethiopian emperor (r. 1889–1913) who led Ethiopia to victory at the Battle of Adwa (1896), securing Ethiopian independence throughout the colonial period. Acquired modern rifles from France and Russia, modernized the Ethiopian military, and signed the Treaty of Addis Ababa that confirmed Italian recognition of Ethiopian sovereignty.", "id": "fc10"}, {"front": "Treaty of Addis Ababa (1896)", "back": "Peace agreement signed after the Battle of Adwa in which Italy formally recognized Ethiopian sovereignty, making Ethiopia one of only two African nations (along with Liberia) to remain formally independent through the entire colonial period.", "id": "fc11"}, {"front": "Sokoto Caliphate", "back": "A major Islamic state in West Africa (founded 1804) that was one of hundreds of sophisticated African political entities in existence when European colonizers arrived. Its existence (along with the Zulu kingdom and Ethiopian empire) is cited to refute the terra nullius claim that Africa was a political vacuum.", "id": "fc12"}, {"front": "Zulu Kingdom", "back": "A powerful southern African state with sophisticated military traditions, defeated by British forces at the Battle of Ulundi (1879). Cited as evidence that European conquest involved the destruction of functioning states, not the filling of political vacuums.", "id": "fc13"}, {"front": "What does the absence of African representatives at Berlin reveal?", "back": "It demonstrates that the partition of Africa was imposed entirely by European states acting in their own interests. The text emphasizes this to show that 'effective occupation' language legitimized conquest without African consent — a fundamental violation of the sovereignty of hundreds of distinct political entities.", "id": "fc14"}, {"front": "Contingency in imperial conquest (Adwa)", "back": "The text uses Adwa to argue that colonial conquest was not inevitable. European success depended on specific conditions: Maxim gun advantage, African political fragmentation, and absence of unified resistance. When those conditions were absent — as in Ethiopia — the outcome was different. History could have unfolded differently.", "id": "fc15"}, {"front": "Otto von Bismarck and the Berlin Conference", "back": "German Chancellor who convened the Berlin Conference (1884–85) not from territorial ambition but from concern that colonial rivalry would destabilize European diplomacy. By organizing the rules of the Scramble, Bismarck paradoxically accelerated Africa's partition by providing a legal framework for it.", "id": "fc16"}, {"front": "Ideology-practice gap in colonial Africa", "back": "The Berlin Conference's General Act included welfare language about African peoples; the Congo Free State used forced labor and mutilation. This gap — humanitarian rhetoric masking violent extraction — is the text's central analytical problem for Unit 6 and appears across all colonial contexts, not only the Congo.", "id": "fc17"}, {"front": "Pan-African significance of Adwa", "back": "Ethiopia's victory at Adwa became a symbol across Africa and the African diaspora of the possibility of successfully resisting European domination. It influenced twentieth-century Pan-African movements and was later invoked by independence movements across the continent.", "id": "fc18"}, {"front": "What technology enabled the Scramble for Africa?", "back": "The Maxim gun (500 rounds/minute, 1884), breech-loading rifles, and steam-powered gunboats gave European forces decisive advantages over armies using muskets or traditional weapons. The Maxim gun's demonstration coincided with the Berlin Conference — a SPICE-T Technology–Political intersection.", "id": "fc19"}, {"front": "Why did Berlin Conference borders cause long-term harm?", "back": "Borders were drawn along geometric lines reflecting European state interests and competition, cutting across existing ethnic groups, trade networks, and ecological zones. These artificial borders became post-colonial Africa's political boundaries in the twentieth century, creating structural conditions for conflict and governance challenges that persist.", "id": "fc20"}, {"front": "How does the Congo Free State function as a historical case study?", "back": "It is the 'starkest example' of the ideology-practice gap: Leopold's humanitarian framing vs. systematic violence. It also demonstrates that the civilizing-mission language of the Berlin Conference was not binding on actual practice. And it shows that international human-rights pressure can produce political change, even if slowly.", "id": "fc21"}, {"front": "Compare: SPICE-T themes in the Scramble for Africa", "back": "Political (P): European states partition a continent and destroy sovereign African states. Technology (T): Maxim gun enables conquest. Economic (E): raw material extraction drives territorial competition. Social (S): African populations subjected to forced labor, violence, demographic collapse. Cultural (C): terra nullius and civilizing mission erase African sovereignty.", "id": "fc22"}, {"front": "What was Africa's political landscape in 1870?", "back": "Hundreds of distinct political entities — kingdoms, empires, caliphates, and smaller polities — with sophisticated military traditions, trade networks, legal systems, and diplomatic practices. European control was limited to roughly 10% of the continent, mostly coastal enclaves accumulated over four centuries.", "id": "fc23"}, {"front": "Liberia — significance in colonial Africa", "back": "Along with Ethiopia, one of only two African nations to remain formally independent throughout the colonial period (1880–1914). Liberia had been established as a colony for freed American slaves (1822) and was recognized by European powers, which complicated annexation claims. Its independence was thus different in origin from Ethiopia's military defense.", "id": "fc24"}, {"front": "Hilaire Belloc quotation — analytical significance", "back": "'Whatever happens, we have got / The Maxim gun, and they have not.' This quotation captures the SPICE-T Technology–Political intersection the text identifies: industrial military technology directly enabled the political reorganization of an entire continent. It also shows contemporary European awareness of the coercive basis of conquest.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

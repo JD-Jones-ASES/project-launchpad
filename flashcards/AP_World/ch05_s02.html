@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 5, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "American Revolution (1775–1783)", "back": "The first Atlantic Revolution, in which thirteen British colonies declared independence and established a constitutional republic. It established a model other revolutionaries cited, while remaining constrained by its leaders' protection of slavery and indigenous dispossession.", "id": "fc01"}, {"front": "Seven Years' War (1756–1763)", "back": "A global conflict that left Britain deeply in debt, prompting new colonial taxes that sparked American resistance. The war's fiscal aftermath directly caused the constitutional crisis of 'no taxation without representation.'", "id": "fc02"}, {"front": "Stamp Act (1765)", "back": "British tax on colonial paper documents, the first of several revenue measures imposed without colonial legislative consent after the Seven Years' War. Colonists protested it as taxation without representation.", "id": "fc03"}, {"front": "Townshend Acts (1767)", "back": "British duties on colonial imports (glass, paper, tea) that renewed the taxation controversy after the Stamp Act's repeal. Colonial boycotts and organized resistance followed.", "id": "fc04"}, {"front": "Tea Act (1773)", "back": "British legislation giving the East India Company a monopoly on colonial tea sales; the Boston Tea Party was a direct response. Escalated the constitutional conflict leading to armed rebellion.", "id": "fc05"}, {"front": "'No taxation without representation'", "back": "The colonial constitutional argument that British subjects could only be taxed by legislative bodies in which they were represented. Parliament, 3,000 miles away, was not such a body — making British taxation a violation of constitutional rights, not merely an economic complaint.", "id": "fc06"}, {"front": "mercantilism", "back": "The economic doctrine that national wealth depended on accumulating gold and silver, and that colonies existed to supply raw materials and purchase finished goods from the mother country. British mercantilist policies (restricting colonial trade, manufacturing, and monetary policy) were a structural source of American resentment.", "id": "fc07"}, {"front": "Continental Congress", "back": "The colonial governing body that convened in Philadelphia to coordinate resistance to Britain. After failed reconciliation attempts, it appointed a committee to draft the Declaration of Independence and managed the Revolutionary War.", "id": "fc08"}, {"front": "Declaration of Independence (July 4, 1776)", "back": "Drafted by Thomas Jefferson, it translated Lockean natural rights theory into American political language ('life, liberty, and the pursuit of happiness') and listed 27 grievances against George III to justify revolution as the people's right when government violates the social contract.", "id": "fc09"}, {"front": "Thomas Jefferson (1743–1826)", "back": "Principal drafter of the Declaration of Independence; drew heavily on Locke and Enlightenment natural rights theory. A Virginia plantation owner who enslaved more than 600 people — embodying the core contradiction of the American revolutionary settlement.", "id": "fc10"}, {"front": "Lexington and Concord (April 1775)", "back": "The opening military engagements of the American Revolution, where colonial militia confronted British regulars. The 'shot heard round the world' marked the transition from constitutional argument to armed conflict.", "id": "fc11"}, {"front": "Three-Fifths Compromise", "back": "The constitutional provision counting enslaved people as three-fifths of a person for apportionment of congressional seats. Built chattel slavery into the republic's political framework and gave slaveholding states disproportionate power.", "id": "fc12"}, {"front": "Black Loyalists", "back": "Enslaved Black people who fought for the British in exchange for the promise of freedom. Their choice illustrated that for enslaved people, British promises of emancipation were more credible than the Patriot rhetoric of liberty.", "id": "fc13"}, {"front": "Treaty of Paris (1783)", "back": "The agreement ending the Revolutionary War in which Britain recognized American independence. Opened the trans-Appalachian interior to American expansion, accelerating indigenous dispossession.", "id": "fc14"}, {"front": "U.S. Constitution (1787)", "back": "The world's first modern written constitution, establishing a federal republic with separation of powers, bicameral legislature, and eventually the Bill of Rights. Embodied Enlightenment principles of limited government but also embedded protections for slavery.", "id": "fc15"}, {"front": "Bill of Rights (1791)", "back": "The first ten amendments to the U.S. Constitution, protecting individual liberties including freedom of speech, religion, and assembly. Became a model for constitutional protection of rights in other countries.", "id": "fc16"}, {"front": "Loyalists", "back": "Approximately 20% of colonists who remained loyal to Britain during the Revolution. Tens of thousands fled to Canada and the Caribbean after independence, representing the revolution's losers rather than a unified colonial consensus.", "id": "fc17"}, {"front": "Why did indigenous peoples overwhelmingly support the British?", "back": "Indigenous peoples calculated — correctly — that American independence would accelerate westward expansion into their territories. British policy had more often attempted to limit westward settlement (e.g., Proclamation of 1763); American independence removed that restraint.", "id": "fc18"}, {"front": "What is the 'radicalism and limits' framework for the American Revolution?", "back": "Radical: first modern written constitution, separation of powers, institutionalized Enlightenment rights. Limited: chattel slavery was protected constitutionally, women and enslaved people excluded from equal rights, indigenous peoples dispossessed. The revolution changed who governed without dismantling existing social hierarchies.", "id": "fc19"}, {"front": "How did colonists apply Locke's philosophy to British taxation?", "back": "Locke argued that government derived legitimacy from the consent of the governed. Colonists argued that since Parliament did not represent them, British taxes violated the social contract — making resistance not just permissible but obligatory under Lockean theory.", "id": "fc20"}, {"front": "Why is the American Revolution considered the 'first' Atlantic Revolution?", "back": "It was the first major political event to translate Enlightenment arguments into a successful revolutionary program, creating a model — natural rights, constitutional republic, social contract justification — that French, Haitian, and Latin American revolutionaries later cited and adapted.", "id": "fc21"}, {"front": "SPICE-T: Political theme of the American Revolution", "back": "The Revolution produced the world's first modern written constitution (1787) and Bill of Rights (1791), institutionalizing Enlightenment principles of limited government, separation of powers, and individual rights — while simultaneously embedding protections for chattel slavery.", "id": "fc22"}, {"front": "SPICE-T: Economic theme of the American Revolution", "back": "Independence broke Britain's mercantilist grip on American trade, opening American merchants to the Atlantic economy. However, the southern plantation economy (enslaved labor) was protected, not challenged, and westward expansion intensified indigenous dispossession.", "id": "fc23"}, {"front": "How did the American Revolution influence later revolutions?", "back": "By grounding independence in natural rights and the social contract, the founders created a universalist framework invoked by French, Haitian, and Latin American revolutionaries. But the revolution's limits — especially slavery — also became the central battleground for the next generation of Atlantic revolutionary politics.", "id": "fc24"}, {"front": "What was the contradiction between the Declaration's promise and the Constitution's provisions?", "back": "The Declaration proclaimed 'all men are created equal' with unalienable rights, but the Constitution protected slavery through the Three-Fifths Compromise, the slave trade (until 1808), and fugitive slave laws — explicitly not extending equality to the approximately 700,000 enslaved people in the new nation.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

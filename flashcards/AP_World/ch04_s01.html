@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 4, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "astrolabe", "back": "A portable astronomical instrument that measures the altitude of celestial bodies above the horizon. Portuguese navigators adapted a simplified marine version for use on a moving ship, enabling sailors to calculate their latitude at sea — one of the key instruments of fifteenth-century open-ocean navigation.", "id": "fc01"}, {"front": "caravel", "back": "A small, fast Portuguese sailing vessel (typically 50–80 tons) whose hybrid lateen-and-square rigging allowed it to sail both upwind and downwind. Its shallow draft made it ideal for coastal and river-mouth exploration; Columbus used two caravels (the Niña and Pinta) in his 1492 crossing.", "id": "fc02"}, {"front": "magnetic compass", "back": "A navigational instrument originating in China and diffused to Europe via the Islamic world by the twelfth century. It allowed sailors to maintain a heading regardless of cloud cover, freeing them from reliance on visible stars and enabling reliable open-ocean navigation.", "id": "fc03"}, {"front": "portolan chart", "back": "A detailed, compass-bearing map of coastlines developed by Mediterranean sailors. Portuguese expeditions extended portolan charts voyage by voyage down the African coast, creating cumulative institutional knowledge of routes and hazards.", "id": "fc04"}, {"front": "lateen sail", "back": "A triangular sail of Arab origin that allows a vessel to sail closer to the wind than square sails. Incorporated into the caravel's hybrid rigging, lateen sails enabled Portuguese navigators to beat upwind when returning northward from equatorial Africa.", "id": "fc05"}, {"front": "joint-stock financing", "back": "A financial arrangement in which multiple investors pooled capital in exchange for shares of any profits, spreading risk across a syndicate. Italian banking families refined it; Iberian monarchs adapted it for transoceanic exploration, making costly voyages economically viable.", "id": "fc06"}, {"front": "Prince Henry 'the Navigator' (1394–1460)", "back": "Portuguese royal patron who sponsored systematic exploration of the West African coast. Under his patronage, Portuguese expeditions extended portolan charts into uncharted territory and accumulated navigational knowledge that laid the groundwork for later transoceanic voyages.", "id": "fc07"}, {"front": "Bartolomeu Dias (1488)", "back": "Portuguese explorer who rounded the Cape of Good Hope in 1488, proving it was possible to reach the Indian Ocean from the Atlantic by sailing around Africa. His voyage completed the African coast route that Vasco da Gama would use to reach India in 1498.", "id": "fc08"}, {"front": "Vasco da Gama (1498)", "back": "Portuguese navigator who completed the first direct sea voyage from Europe to India via the Cape of Good Hope in 1497–1498. His voyage established the Portuguese-controlled Indian Ocean trade route that bypassed Ottoman intermediaries in the Levant.", "id": "fc09"}, {"front": "Christopher Columbus (1492)", "back": "Genoese navigator sailing for Spain who reached the Caribbean in October 1492, initiating sustained European contact with the Americas. He miscalculated Earth's circumference by roughly 40%; the Americas lay across his path where open ocean should have been, preventing his crew from dying of thirst before reaching Asia.", "id": "fc10"}, {"front": "quinto real (royal fifth)", "back": "The Spanish crown's requirement that 20% of all precious metals and trade profits from American colonies be paid to the crown. Collected and regulated by the Casa de Contratación (est. 1503), it funded Habsburg wars, the royal court, and imperial expansion.", "id": "fc11"}, {"front": "Casa de Contratación (1503)", "back": "The Spanish state trading agency established in 1503 to license, finance, and regulate Atlantic voyages. It extracted the quinto real and transformed exploration from private adventure into an imperial project directly controlled by the crown.", "id": "fc12"}, {"front": "fall of Constantinople (1453)", "back": "The Ottoman Empire's capture of Constantinople, which consolidated Ottoman control over eastern Mediterranean and Levantine spice routes, raising the cost of overland trade with Asia. This economic pressure was a primary political incentive for Iberian investment in maritime routes to Asia.", "id": "fc13"}, {"front": "spice trade", "back": "The commerce in pepper, cinnamon, cloves, and nutmeg from South and Southeast Asia. Spices were not merely luxury goods — they were essential preservatives and medicines whose high value-to-weight ratio made them ideal maritime cargo and the principal economic motive for European maritime exploration.", "id": "fc14"}, {"front": "Ottoman Empire's role in European maritime expansion", "back": "By controlling the eastern Mediterranean and Levantine overland routes after 1453, the Ottomans acted as costly intermediaries for the Asian spice trade. This made finding a direct sea route to Asia enormously profitable for any European power that could establish it, directly incentivizing Portuguese and Spanish exploration.", "id": "fc15"}, {"front": "Why was the galley unsuitable for Atlantic voyages?", "back": "The galley was an oar-powered Mediterranean warship designed for calm coastal waters. It was too slow, too dependent on manpower, and too vulnerable to Atlantic swells and storms to sustain open-ocean voyages. The caravel's sail-based hybrid rigging replaced it as the exploration vessel of choice.", "id": "fc16"}, {"front": "What is the SPICE-T theme 'Technology' and how does it apply to this section?", "back": "Technology as a SPICE-T category examines how tools, techniques, and innovations enable historical change. In this section, the convergence of the compass, astrolabe, portolan charts, and caravel rigging lowered the cost and risk of ocean navigation — making European maritime expansion possible but not inevitable.", "id": "fc17"}, {"front": "European innovation as 'integrative' — what does this mean?", "back": "The section argues that European maritime technology was not independently invented but integrated: the compass came from China, the astrolabe from the Islamic world, and the lateen sail from Arab navigators. European — specifically Iberian — contribution was combining these inherited tools with institutional funding to make sustained voyages economically rational.", "id": "fc18"}, {"front": "Why was the Niña's and Pinta's shallow draft significant?", "back": "A shallow draft means the vessel sits high in the water and can enter coastal shallows and river mouths where deeper-keeled ships would run aground. This made caravels ideal for the coastal exploration and reconnaissance that preceded establishment of trading posts and colonies.", "id": "fc19"}, {"front": "What economic characteristic made spices ideal cargo for long-distance maritime trade?", "back": "Spices had a high value-to-weight ratio: they were extraordinarily valuable relative to how much they weighed and the storage space they occupied. This made them economically rational cargo for small, expensive-to-operate ships crossing thousands of miles of ocean.", "id": "fc20"}, {"front": "How did Italian banking capital contribute to Iberian maritime expansion?", "back": "Italian banking families (Genoese and Florentine) had refined joint-stock financing through Mediterranean trade. They supplied capital for Iberian exploration ventures, spreading risk and providing the institutional financial infrastructure that made long-distance voyaging commercially viable before colonial returns could fund themselves.", "id": "fc21"}, {"front": "'Technology as a Threshold Condition for Expansion' — what is the AP exam implication?", "back": "The AP exam asks students to evaluate the relative importance of technology, economic incentives, and political structures. European expansion was not inevitable; it required a specific convergence of inherited technologies (compass, astrolabe, lateen sail) with institutional funding and political incentives (Ottoman barrier, spice profits). No single factor is sufficient alone.", "id": "fc22"}, {"front": "How did the Portuguese crown institutionalize exploration knowledge?", "back": "The Portuguese crown, through royal patronage under Prince Henry and later through the Casa da Minhoca (trading house), funded systematic expeditions that extended portolan charts voyage by voyage. This created institutional knowledge rather than leaving discoveries to individual navigators — transforming exploration into a state-directed accumulation of geographic capital.", "id": "fc23"}, {"front": "Compare latitude-finding (astrolabe) with heading-maintenance (compass) — why were both necessary?", "back": "The compass maintained a consistent heading regardless of visibility, allowing sailors to hold a course without seeing stars or the sun. The astrolabe determined where on Earth (by latitude) that heading had taken them. Together they solved the two core problems of open-ocean navigation: direction and position.", "id": "fc24"}, {"front": "What does 'blue-water sailing' mean, and why was it significant?", "back": "Blue-water sailing refers to open-ocean voyaging far from any coastline, as opposed to coastal or littoral navigation. Before reliable instruments and appropriate vessels, European sailors hugged coastlines. Blue-water capability — unlocked by the astrolabe, compass, and caravel — made transoceanic routes across the Atlantic and around Africa possible.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

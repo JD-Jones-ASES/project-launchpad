@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 4, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Middle Passage", "back": "The forced sea crossing from West Africa to the Americas — the middle leg of the triangular Atlantic trade route. Enslaved Africans were packed into ships under extreme overcrowding, disease, dehydration, and violence. Mortality ranged from 10–20% (1–2 million deaths at sea). Survivors arrived traumatized and stripped of languages, names, and kinship ties.", "id": "fc01"}, {"front": "Atlantic slave trade — scale", "back": "Approximately 36,000 documented slave-trading voyages between 1500 and 1875 (Trans-Atlantic Slave Trade Database). Roughly 12.5 million enslaved Africans transported; ~10.7 million survived the Middle Passage. Largest recipients: Brazil (~4.9M), Caribbean (~4.0M), Spanish America (~1.3M), North America (~400,000).", "id": "fc02"}, {"front": "triangular trade", "back": "The Atlantic circuit: European ships carried manufactured goods (textiles, firearms, iron, alcohol) to West Africa → traded for enslaved people → Middle Passage to the Americas → sold enslaved people; returned to Europe with sugar, tobacco, and cotton. The three legs defined the economic logic of the entire system.", "id": "fc03"}, {"front": "how did the Atlantic slave trade differ from earlier forms of slavery?", "back": "Earlier slavery (in Africa, Europe, Asia) was based on debt, war captivity, or criminal punishment — not hereditary racial status. The Atlantic system introduced: hereditary status (children born enslaved), racial coding (status determined by African descent), permanent chattel ownership, and an unprecedented industrial scale of forced migration.", "id": "fc04"}, {"front": "Portuguese model — sugar and slavery", "back": "The Portuguese first articulated enslaved African labor with sugar plantation monoculture on Atlantic islands (Madeira, Azores, São Tomé) in the mid-fifteenth century, then in Brazil. Sugar's extraordinary labor-intensity — requiring large year-round disciplined workforces — created the demand structure that the Atlantic slave trade was built to supply.", "id": "fc05"}, {"front": "why were Africans preferred as plantation labor?", "back": "Three interlocking reasons: (1) West Africa was geographically accessible from Atlantic islands; (2) existing African political structures — including slave-trading elites — provided a supply chain; (3) African populations had partial immunity to malaria and yellow fever endemic in tropical plantation zones, where indigenous Americans and European laborers died rapidly.", "id": "fc06"}, {"front": "Trans-Atlantic Slave Trade Database (slavevoyages.org)", "back": "A collaborative historical database documenting approximately 36,000 slave-trading voyages. It provides the most rigorous quantitative foundation for scholarship on the Atlantic slave trade, including voyage records, mortality data, port origins, and destination distributions.", "id": "fc07"}, {"front": "Bartolomé de las Casas (1484–1566)", "back": "A Dominican friar who was a former encomendero before converting to indigenous advocacy. His Brevísima relación de la destrucción de las Indias (1542) documented Spanish atrocities against indigenous Americans, addressed to King Charles I. His account carries the authority of an eyewitness insider and the limitations of a rhetorical advocate with an explicit political purpose.", "id": "fc08"}, {"front": "Brevísima relación de la destrucción de las Indias (1542)", "back": "Las Casas's account of Spanish violence against indigenous Americans, published in 1542 and addressed to the Spanish king. Notable for its graphic descriptions of colonial violence and its stated explanation — greed for gold — for Spanish behavior. Historians use it with attention to Las Casas's purpose, audience, and omissions (especially his underemphasis on disease).", "id": "fc09"}, {"front": "AP sourcing skills — Las Casas example", "back": "Las Casas's account illustrates AP sourcing skills: (1) Historical context — writing in 1542 while the colonial system was still forming; (2) Purpose — persuading the king to reform a reformable system; (3) Point of view — insider-turned-critic who witnessed violence but does not discuss disease's role in depopulation; (4) Audience — royal, shaping what he includes and omits.", "id": "fc10"}, {"front": "Dahomey, Asante, Ndongo — roles in the Atlantic slave trade", "back": "West and Central African states that became deeply enmeshed in the Atlantic slave trade as suppliers. They transformed their political structures around slave-raiding and long-distance trade. Participation was partly coerced by competition: states that refused participation were disadvantaged militarily against rivals who received firearms in exchange for enslaved people.", "id": "fc11"}, {"front": "firearms trade and political instability in West Africa", "back": "Firearms were a key commodity exchanged for enslaved people. States that participated in the Atlantic slave trade received firearms; states that refused faced military disadvantage against armed rivals. This created an incentive spiral in which participation was dangerous to refuse, increasing wars of capture, political fragmentation, and the supply of enslaved people.", "id": "fc12"}, {"front": "demographic effects of the Atlantic slave trade on Africa", "back": "Not disease-driven (unlike the Americas), but demographic drain through forced emigration. Young adults — the most productive economic cohort — were disproportionately exported. Men were enslaved for Atlantic markets more than women, creating gender imbalances that disrupted agriculture and social organization. West and Central Africa's population by 1850 was significantly smaller than it would have been without the trade.", "id": "fc13"}, {"front": "Gold Coast, Slave Coast, Congo/Angola", "back": "The primary West and Central African regions from which enslaved people were taken. These geographic designations reflect European commercial categories imposed on existing African political territories; they do not correspond to single political units but to zones of intense Atlantic trading activity.", "id": "fc14"}, {"front": "North America vs. Brazil/Caribbean — enslaved population comparison", "back": "North America received ~400,000 enslaved Africans directly; its enslaved population grew through natural increase. Brazil received ~4.9 million and the Caribbean ~4.0 million because Caribbean sugar plantation mortality was so high that the workforce required constant replenishment. Different mortality rates reflect different plantation regimes, not different levels of brutality overall.", "id": "fc15"}, {"front": "Candomblé and Vodou — syncretic religions", "back": "Religious traditions that emerged in the African diaspora by blending West African spiritual practices with Catholic iconography. Candomblé developed in Brazil; Vodou in Haiti. They represent both the violence of the Atlantic slave system (which stripped Africans of their original religious contexts) and the cultural creativity of diaspora communities preserving identity under oppression.", "id": "fc16"}, {"front": "Creole languages", "back": "Hybrid linguistic systems that emerged in the Caribbean and South America, combining European grammatical frameworks with African vocabulary and phonology. Creole languages represent both the destruction of original African linguistic communities (through the mixing of people from different regions) and the creative reconstruction of shared communication across that diversity.", "id": "fc17"}, {"front": "SPICE-T: Social — racialization of labor", "back": "The Atlantic slave trade introduced a new social category: hereditary racial status as the basis of unfreedom. By linking African descent to permanent, heritable enslavement, it created a racial hierarchy that structured social relations in the Americas for centuries after emancipation. This is the SPICE-T Social theme applied: how the slave trade reorganized social structures and produced new categories of personhood.", "id": "fc18"}, {"front": "Afro-Brazilian Capoeira", "back": "A Brazilian martial art that developed among enslaved Africans, combining fighting techniques with dance and music in ways that disguised combat training from slave owners. It illustrates the African diaspora's cultural creativity under conditions of extreme constraint — one of the examples the source uses to demonstrate that the Americas became home to new cultural forms neither purely African nor purely European.", "id": "fc19"}, {"front": "What does 'chattel' slavery mean?", "back": "In chattel slavery, enslaved people are legally defined as movable property — the same legal category as livestock or furniture. Chattel status meant that enslaved people could be bought, sold, inherited, mortgaged, and bequeathed. The Atlantic slave trade institutionalized chattel slavery at a scale and with a hereditary permanence that distinguished it from most earlier forms of servitude.", "id": "fc20"}, {"front": "labor crisis — connection between Sections 4.2 and 4.3", "back": "The Columbian Exchange's demographic catastrophe (Section 4.2) created an acute labor crisis for European colonizers: sugar, tobacco, cotton, and silver required vast labor that indigenous populations could no longer supply. The Atlantic slave trade (Section 4.3) was the solution European powers devised. Understanding the connection is essential for AP causal arguments about why the slave trade took its specific form.", "id": "fc21"}, {"front": "quinto real's relationship to the slave trade", "back": "The quinto real (royal fifth) applied to silver, not directly to the slave trade, but the two systems were connected: silver profits financed Spanish imperial expansion, which required the coerced labor systems (encomienda, mita) that the New Laws tried to reform, which in turn increased demand for African enslaved labor as indigenous labor became legally (if not practically) restricted.", "id": "fc22"}, {"front": "Why is 'Atlantic slave trade as a transformation of two worlds' an important AP framing?", "back": "The AP exam asks students to think beyond single-region narratives. The 'two worlds' framing requires understanding how the same trade simultaneously reorganized West African political economies (around slave raiding and firearms) and American plantation economies (around racial chattel labor) — showing that global interconnection transforms all participants, not just the obviously victimized party.", "id": "fc23"}, {"front": "mortality during the Middle Passage", "back": "Roughly 10–20% of enslaved Africans died during the crossing — meaning 1–2 million of the ~12.5 million transported perished at sea. Causes included dysentery, scurvy, smallpox, dehydration, and violence. Despite this, economic incentives drove traders to pack ships to maximize cargo per voyage, accepting predictable losses as a cost of business.", "id": "fc24"}, {"front": "CONTINUITY — African diaspora cultural survival", "back": "Despite the Middle Passage's deliberate destruction of cultural continuity (mixing language groups, stripping names), African diaspora communities reconstructed cultural identity through hybrid forms: Creole languages, syncretic religions, food traditions, music, and spiritual practices. Cultural memory persisted and transformed, demonstrating resilience within an inherently violent system.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

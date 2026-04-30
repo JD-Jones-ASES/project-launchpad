@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 6, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "British Raj", "back": "The period of direct British Crown rule over India, 1858–1947, following suppression of the Indian Rebellion of 1857. Governed through a Viceroy and the Indian Civil Service (ICS), whose senior positions were almost exclusively held by British officials. Controlled roughly 300 million people at its peak.", "id": "fc01"}, {"front": "British East India Company (EIC)", "back": "A royal-chartered trading company (est. 1600) that gradually acquired political and military functions in India over two centuries — maintaining armies, administering territory, collecting taxes, and signing treaties. By the mid-19th century it governed most of India directly. Abolished by the Government of India Act (1858) after the Indian Rebellion.", "id": "fc02"}, {"front": "Government of India Act (1858)", "back": "British legislation that abolished the East India Company and transferred its authority over India to the Crown, establishing the Raj. It created the Viceroy position and the Indian Civil Service. Marked the shift from commercial to explicitly imperial framing of Britain's relationship to India.", "id": "fc03"}, {"front": "Queen Victoria as Empress of India", "back": "Victoria assumed the title Kaiser-i-Hind (Empress of India) at the Delhi Durbar of January 1, 1877, following Prime Minister Disraeli's Royal Titles Act (1876). She never visited India but expressed genuine concern for Indian subjects — concern that coexisted with complete support for imperial rule.", "id": "fc04"}, {"front": "Delhi Durbar", "back": "Elaborate ceremonial events (1877, 1903, 1911) staging British imperial sovereignty for dual audiences: Indian elites (whose cooperation was needed for indirect governance) and European audiences (for whom imperial scale was performed). The pageantry assembled Indian princes in postures of submission to the British Crown.", "id": "fc05"}, {"front": "paramountcy", "back": "The British system requiring nominally independent Indian princes to defer to British authority on all external matters. Created the fiction of Indian sovereignty while ensuring British control over foreign policy and, indirectly, domestic governance. Governed the 562 princely states alongside directly ruled presidencies.", "id": "fc06"}, {"front": "direct rule vs. indirect rule", "back": "Two colonial administrative models. Direct rule replaced existing political structures with European administrators and law codes (used in Bengal, Bombay, Madras presidencies). Indirect rule maintained existing structures (Indian princes, Malay sultans) while directing policy through British 'advisors.' Indirect rule was cheaper and less culturally disruptive.", "id": "fc07"}, {"front": "deindustrialization of India", "back": "The collapse of India's textile manufacturing under colonial trade policy: cheap British machine-made cloth flooded Indian markets while Indian textile exports were taxed. India's share of world manufacturing fell from ~25% (1750) to ~2% (1900). A policy-driven transformation, not a natural economic shift.", "id": "fc08"}, {"front": "ryotwari and zamindari revenue systems", "back": "Colonial tax systems imposing cash-based taxation on Indian subsistence farmers. Forced farmers to produce cash crops for export rather than food crops, eliminating their economic buffer against climatic shocks. When monsoons failed, catastrophic famines resulted — even as the Raj continued to export grain.", "id": "fc09"}, {"front": "late Victorian holocausts (Mike Davis)", "back": "Historian Mike Davis's concept describing the colonial-era famines that killed millions in India and other colonized regions. His argument: mass death was produced not by natural disaster alone but by colonial economic policies — cash-crop taxation, grain exports — that stripped subsistence farmers of any buffer against monsoon failures.", "id": "fc10"}, {"front": "Great Famine of 1876–79 (India)", "back": "A catastrophic famine in southern India that killed an estimated 5.5 million people while the Raj continued to export grain from the subcontinent. The famine's scale reflected colonial agricultural restructuring (cash-crop coercion) interacting with monsoon failure — a case study in colonialism's structural violence.", "id": "fc11"}, {"front": "French Indochina", "back": "A French colonial territory assembled by military conquest between the 1850s and 1893, incorporating modern Vietnam, Cambodia, and Laos. France imposed French language and culture, abolished Confucian examination systems, enforced corvée labor, and supported Catholic missions. Vietnamese resistance was continuous.", "id": "fc12"}, {"front": "corvée system", "back": "A system of forced, unpaid labor imposed on colonial subjects. In French Indochina, corvée labor was used to construct roads, railways, and public buildings. One of multiple coercive mechanisms that generated sustained Vietnamese resistance and contributed to the conditions for Ho Chi Minh's independence movement.", "id": "fc13"}, {"front": "Confucian examination system — abolition in Indochina", "back": "France abolished Vietnam's Confucian-based civil service examination system and replaced it with French educational institutions. This dismantled a traditional path to social mobility and elite status, disrupting Vietnamese society and generating resistance from educated elites displaced by the change.", "id": "fc14"}, {"front": "Union of Indochina (1887)", "back": "The formal administrative consolidation of French colonial territory in Southeast Asia, comprising Cochinchina, Cambodia, Annam, and Tonkin (Laos added 1893). Represents the completion of France's military and administrative conquest of the region through a process that began with the seizure of Saigon in 1859.", "id": "fc15"}, {"front": "Ho Chi Minh — connection to colonial administration", "back": "The Vietnamese independence leader whose twentieth-century movement built on conditions created by French colonial administration: corvée labor, cultural imposition, abolition of existing institutions, and continuous armed uprisings from 1885 onward. The text traces a direct causal line from colonial policy to independence movement.", "id": "fc16"}, {"front": "What does India's 25%→2% manufacturing share illustrate about colonialism?", "back": "It demonstrates that colonial trade policy could systematically destroy existing industries to benefit the colonizing economy. India had been one of the world's largest textile producers; deliberate flooding of its markets with cheap British cloth and taxation of its exports dismantled that industry within a century.", "id": "fc17"}, {"front": "How did the Raj combine both administrative models?", "back": "The Raj used direct rule in the three presidencies (Bengal, Bombay, Madras) and indirect rule in 562 princely states. Both models extracted resources and constrained sovereignty; the difference was in administrative cost and the degree of cultural disruption imposed on the governed population.", "id": "fc18"}, {"front": "SPICE-T: Economic consequences of the British Raj", "back": "Economic (E): deindustrialization from 25% to 2% of world manufacturing; cash-crop revenue systems exposing farmers to famine risk; grain exports during famine. These represent the systematic integration of India's economy into British industrial needs at the expense of Indian welfare.", "id": "fc19"}, {"front": "How did the Opium Wars relate to British and Chinese imperialism?", "back": "The Opium Wars (1839–42 and 1856–60) forced China to cede Hong Kong to Britain, open treaty ports, grant extraterritoriality to foreign nationals, and accept legally enforced opium imports. China was never formally colonized but subjected to 'unequal treaties' that stripped sovereignty over ports, courts, and tariff policy — semi-colonialism.", "id": "fc20"}, {"front": "unequal treaties (China)", "back": "A series of treaties imposed on the Qing dynasty following military defeats in the Opium Wars and subsequent conflicts. They stripped China of control over its port cities (treaty ports), subjected foreign nationals to Chinese law only through their own consular courts (extraterritoriality), and set tariff rates that benefited foreign importers.", "id": "fc21"}, {"front": "How does Asia's encounter with imperialism differ from Africa's?", "back": "Asia experienced more varied outcomes: India came under direct British administration; China experienced semi-colonialism via unequal treaties without formal colonization; Japan successfully modernized and avoided colonization entirely. Africa was more uniformly partitioned. The common thread was industrial military asymmetry, but the specific outcomes differed by state capacity and response.", "id": "fc22"}, {"front": "Benjamin Disraeli — Royal Titles Act (1876)", "back": "British Prime Minister who secured passage of the Royal Titles Act (1876), making Victoria Empress of India. The text notes his belief that 'imperial grandeur strengthened Conservative politics at home' — showing how colonial symbolism served domestic British political interests, not only external imperial ones.", "id": "fc23"}, {"front": "Compare: Raj agricultural policy and colonial economy restructuring", "back": "The Raj reorganized Indian agriculture around export cash crops (via revenue systems), mirroring the Congo's rubber extraction, Egypt's cotton monoculture, and West Africa's palm oil production. Across colonial Africa and Asia, the pattern was the same: indigenous subsistence economies restructured to supply European industrial and commercial needs.", "id": "fc24"}, {"front": "What is the significance of Britain exporting grain from India during the 1876–79 famine?", "back": "It demonstrates that the Raj prioritized the commercial interests of the colonial economy (grain exports as revenue) over the welfare of its subjects (5.5 million famine deaths). This is direct evidence of the ideology-practice gap: the Crown's 1858 proclamation of equal protection coexisted with policies that treated Indian lives as expendable for commercial gain.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

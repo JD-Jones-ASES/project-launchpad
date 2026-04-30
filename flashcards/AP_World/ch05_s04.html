@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 5, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Haitian Revolution (1791–1804)", "back": "The most radical of the Atlantic Revolutions — the only one in which enslaved people themselves seized power, abolished slavery, and founded an independent nation. Produced the first free Black republic in history. Terrified slave-owning societies across the Atlantic world precisely because it succeeded.", "id": "fc01"}, {"front": "Saint-Domingue", "back": "The French colony on the western third of Hispaniola (present-day Haiti); the most economically productive colony in the Atlantic world, producing ~40% of Europe's sugar and more than half its coffee. This extraordinary wealth rested entirely on the enslaved labor of ~500,000 Africans.", "id": "fc02"}, {"front": "grand blancs and petit blancs", "back": "The two categories of white colonists in Saint-Domingue: grand blancs were wealthy white planters; petit blancs were small merchants, artisans, and overseers. Together approximately 40,000 people at the top of the colony's racial hierarchy.", "id": "fc03"}, {"front": "gens de couleur", "back": "Free people of color (free Black and mixed-race individuals) in Saint-Domingue, numbering approximately 30,000. Many owned property; some owned enslaved people themselves. Despite legal freedom, they faced racial humiliation laws banning them from eating with whites, sitting beside them in church, or holding public office.", "id": "fc04"}, {"front": "Vincent Ogé (?–1791)", "back": "Leader of a 1790 uprising of free people of color demanding political rights from the National Assembly after the Declaration of the Rights of Man raised the question of whether it applied to them. Captured, tortured, and executed — his fate radicalized the colony's political climate.", "id": "fc05"}, {"front": "Bois Caïman ceremony (August 14, 1791)", "back": "A Vodou ceremony at which enslaved leaders gathered in the forests of northern Saint-Domingue, becoming the founding moment of the Haitian Revolution. Days later, on August 22–23, the massive uprising erupted across the northern province.", "id": "fc06"}, {"front": "Toussaint L'Ouverture (c. 1743–1803)", "back": "The most brilliant military and political leader of the Haitian Revolution. Born enslaved, freed around 1776, he built a disciplined army that repelled British invasion (1793–1798), negotiated alliances with Spain and Britain, and unified Saint-Domingue under his authority. Arrested under a flag of truce by Napoleon's forces in 1802; died in French captivity April 1803.", "id": "fc07"}, {"front": "Why is Toussaint's surname significant?", "back": "He added 'L'Ouverture' (meaning 'the opening' in French) to his birth name, signaling his role as one who opened the path to freedom. The self-naming reflects his political self-consciousness and the revolutionary significance he understood his actions to carry.", "id": "fc08"}, {"front": "British invasion of Saint-Domingue (1793–1798)", "back": "Britain's attempt to seize Saint-Domingue after the Revolution began. Toussaint's forces repelled the British expedition, which lost thousands to battle and yellow fever. The failure of British reconquest demonstrated the Haitian forces' military capability.", "id": "fc09"}, {"front": "Toussaint's 1801 Constitution", "back": "The constitution Toussaint promulgated making himself governor-for-life of Saint-Domingue, effectively ending French sovereignty without formally declaring independence. Napoleon responded by sending a French expeditionary force to restore control.", "id": "fc10"}, {"front": "Jean-Jacques Dessalines (1758–1806)", "back": "Haitian general who, with Henri Christophe, led the forces to final victory after Toussaint's arrest. Declared Haitian independence on January 1, 1804, and ordered the massacre of most remaining white colonists for strategic security reasons.", "id": "fc11"}, {"front": "Haitian independence declaration (January 1, 1804)", "back": "Dessalines declared Haiti independent and named the new nation 'Haiti' — the indigenous Taino word for the island — deliberately rejecting the French colonial name of Saint-Domingue. Haiti became the first free Black republic in history.", "id": "fc12"}, {"front": "Why did Haiti's independence terrify U.S. slaveholders?", "back": "It proved that enslaved people were political agents capable of organized, sustained revolutionary action and could successfully overthrow slavery — something slave-owning societies desperately needed to deny. The United States did not officially recognize Haiti until 1862.", "id": "fc13"}, {"front": "Louisiana Purchase (1803)", "back": "Napoleon's sale of the Louisiana Territory to the United States, doubling American territory. Caused by the Haitian Revolution: with Saint-Domingue lost, Napoleon could not maintain a Caribbean empire, making Louisiana strategically pointless.", "id": "fc14"}, {"front": "German Coast Uprising (1811)", "back": "A major slave revolt in Louisiana that explicitly cited Haiti as inspiration, demonstrating the Haitian Revolution's direct influence on enslaved people across the Americas.", "id": "fc15"}, {"front": "Haiti as refuge and symbol", "back": "After independence, Haiti was the only country that actively welcomed African American emigration in the antebellum period and supported abolitionist movements internationally. It became a symbol of both hope (for enslaved people) and fear (for slaveholders) across the Atlantic.", "id": "fc16"}, {"front": "How did yellow fever affect the Haitian Revolution's outcome?", "back": "The French expeditionary force Napoleon sent in 1801–1802 was decimated as much by yellow fever as by battle — Haitian forces, with greater immunity, benefited from this epidemiological asymmetry. The disease's toll made French military reconquest impossible.", "id": "fc17"}, {"front": "How did the French Revolution destabilize Saint-Domingue's hierarchy?", "back": "The Declaration of the Rights of Man (1789) raised the question of whether free people of color (gens de couleur) had the same rights as white colonists. When the National Assembly equivocated, it triggered Ogé's 1790 uprising. Napoleon's 1802 reversal of slavery abolition then radicalized the enslaved majority.", "id": "fc18"}, {"front": "What made the Haitian Revolution the 'radical test' of Atlantic Enlightenment?", "back": "It extended Enlightenment universal principles furthest: the American Revolution protected slavery; the French Revolution wavered; only the Haitian Revolution abolished slavery unconditionally and established governance by people who had themselves been enslaved — taking 'all men are created equal' at its word.", "id": "fc19"}, {"front": "SPICE-T: Social theme of the Haitian Revolution", "back": "The revolution abolished the racial hierarchy of grand blancs/petit blancs/gens de couleur/enslaved Africans, replacing it (incompletely) with a Black republic. However, new hierarchies emerged: military officers became the new elite, and the distinction between elite gens de couleur and the black peasant majority persisted.", "id": "fc20"}, {"front": "SPICE-T: Political theme of the Haitian Revolution", "back": "The Revolution produced the first free Black republic in history, governed by formerly enslaved people. It proved that enslaved people were political agents capable of organized revolution — a demonstration that reshaped Atlantic politics by terrifying slaveholding governments and inspiring resistance movements.", "id": "fc21"}, {"front": "Compare: outcomes of the American vs. Haitian revolutions on slavery", "back": "American Revolution: constitutionally protected chattel slavery, counted enslaved people as three-fifths of a person, excluded them from the Declaration's promise. Haitian Revolution: unconditionally abolished slavery, established a republic governed by formerly enslaved people — the sharpest possible contrast.", "id": "fc22"}, {"front": "average life expectancy of enslaved person in Saint-Domingue", "back": "Seven years after arrival. Planters calculated it was cheaper to work enslaved people to death and replace them through the Atlantic slave trade than to allow natural reproduction — a calculation that reveals the extraordinary brutality underpinning Saint-Domingue's wealth.", "id": "fc23"}, {"front": "Alexandre Pétion and the Haitian Revolution's Latin American connections", "back": "Haitian president who supported Simón Bolívar's independence campaigns in exchange for Bolívar's promise to abolish slavery in liberated territories — demonstrating the Haitian Revolution's direct influence on Latin American independence movements.", "id": "fc24"}, {"front": "Why did Toussaint's arrest radicalize the revolution rather than end it?", "back": "He was lured to a meeting under a flag of truce and arrested by Napoleon's forces in 1802 — a betrayal of the rules of war that made negotiated compromise impossible. Dessalines and Christophe led the final phase fighting for total independence and permanent abolition, not autonomy within France.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

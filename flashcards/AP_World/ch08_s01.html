@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 8, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Cold War", "back": "Geopolitical, ideological, and economic competition between the United States and the Soviet Union from approximately 1947 to 1991. Unlike conventional wars, it involved no direct large-scale military conflict between the two superpowers, instead playing out through arms races, proxy wars, intelligence operations, propaganda, and competition for influence in newly decolonized states.", "id": "fc01"}, {"front": "Bipolar world", "back": "The post-WWII international order in which two superpowers — the United States and the Soviet Union — dominated global politics, organizing the planet into competing alliances, spheres of influence, and proxy conflicts. Unlike earlier multipolar great-power systems, bipolarity concentrated global competition between exactly two rival centers.", "id": "fc02"}, {"front": "Containment", "back": "American Cold War strategy articulated by George Kennan (1946–47) holding that the United States did not need to roll back Soviet power — only to prevent its further spread. Kennan argued the Soviet system's internal contradictions would eventually produce its own transformation or collapse if it could not expand.", "id": "fc03"}, {"front": "George Kennan", "back": "American diplomat who articulated the strategy of containment in the 'Long Telegram' (1946) and the anonymous 'X Article' in Foreign Affairs (1947). He argued Soviet expansionism stemmed from Marxist ideology combined with traditional Russian imperial anxiety, and that patient resistance rather than rollback was the appropriate American response.", "id": "fc04"}, {"front": "Truman Doctrine (1947)", "back": "President Truman's declaration that the United States would support 'free peoples who are resisting attempted subjugation by armed minorities or by outside pressures.' Initially applied to Greece and Turkey, its sweeping language implied a global obligation to resist Communist movements and justified interventions in Korea, Vietnam, Iran, and the Congo.", "id": "fc05"}, {"front": "Marshall Plan", "back": "A $13 billion (1948–1952) American program of economic aid to rebuild war-shattered Western European economies, designed to prevent economic desperation from driving voters toward Communist parties. Extraordinarily successful: Western Europe recovered rapidly, Communist electoral strength peaked then declined, and participating nations became firm American allies.", "id": "fc06"}, {"front": "Comecon (Council for Mutual Economic Assistance, 1949)", "back": "Soviet-organized economic coordination body for the socialist bloc, formed after the USSR rejected the Marshall Plan and pressured Eastern European satellites to do likewise. Comecon and the Marshall Plan together created two separate economic systems — the material foundation for Cold War 'two worlds' rhetoric.", "id": "fc07"}, {"front": "NATO (North Atlantic Treaty Organization, 1949)", "back": "Alliance formed in April 1949 committing the United States and eleven Western European nations to collective defense: an attack on any member was to be treated as an attack on all. NATO institutionalized the permanent American military presence in Western Europe, with hundreds of thousands of troops stationed in West Germany.", "id": "fc08"}, {"front": "Warsaw Pact (1955)", "back": "Soviet-led collective defense alliance covering the USSR and its Eastern European satellites, formed within days of West Germany's admission to NATO in 1955. It was the Soviet bloc's parallel to NATO, institutionalizing Soviet military dominance over Eastern Europe.", "id": "fc09"}, {"front": "Iron Curtain", "back": "Term coined by Winston Churchill to describe the ideological and military boundary dividing Cold War Europe, running roughly from the Baltic Sea to the Adriatic and separating NATO-aligned Western Europe from Warsaw Pact Eastern Europe. Germany was divided; Berlin became the most volatile European flashpoint.", "id": "fc10"}, {"front": "Berlin Blockade and Airlift (1948–49)", "back": "Soviet blockade of West Berlin's land access routes, met by an American-led sustained airlift that supplied the city for eleven months. The episode was a major early test of Western resolve in the Cold War and demonstrated that the U.S. would not abandon its position in Berlin.", "id": "fc11"}, {"front": "Berlin Wall", "back": "Barrier erected by East Germany (with Soviet approval) in August 1961 to stop the flight of skilled workers to West Berlin. Stood as the Cold War's most visible symbol of ideological division until it fell on November 9, 1989, signaling the end of the Cold War's European division.", "id": "fc12"}, {"front": "Mutually Assured Destruction (MAD)", "back": "Strategic doctrine holding that any nuclear first strike would guarantee a retaliatory strike sufficient to destroy the attacker, making nuclear war irrational for both superpowers. MAD created a 'bizarre but remarkably stable deterrence structure' that displaced Cold War competition into proxy wars and political influence contests rather than direct superpower conflict.", "id": "fc13"}, {"front": "Sputnik 1 (1957)", "back": "First artificial Earth satellite, launched by the Soviet Union in October 1957. Its launch shocked the American public, triggered massive expansion of science education (National Defense Education Act, 1958), and led to the creation of NASA. Demonstrated that the Space Race was inseparable from the nuclear missile programs of both superpowers.", "id": "fc14"}, {"front": "Space Race", "back": "Cold War technological competition between the superpowers expressed in the race to achieve milestones in space exploration. Key events: Soviet cosmonaut Yuri Gagarin became first human in space (1961); American astronauts first landed on the Moon (1969). Space programs were inseparable from ICBM development and Cold War prestige competition.", "id": "fc15"}, {"front": "Marxism-Leninism", "back": "The Soviet Union's official ideology: the Communist Party directs a state-owned economy toward the collective good, eliminating capitalist exploitation of workers. The Soviet system presented itself as the vanguard of this ideology and believed it was destined to prevail globally — making compromise with capitalism 'genuinely difficult.'", "id": "fc16"}, {"front": "Liberal capitalism", "back": "The American ideological model championed during the Cold War: free markets, multiparty electoral democracy, and protection of individual rights against state power. Like Marxism-Leninism, it was 'universal in its self-understanding' — its proponents believed it was destined to prevail globally.", "id": "fc17"}, {"front": "Why did the Cold War begin so quickly after WWII ended? (causation)", "back": "The wartime alliance between the U.S. and USSR had been one of necessity against a common enemy. Once Germany surrendered in May 1945, suppressed tensions resurged: Stalin consolidated Communist control over Eastern Europe (Poland, Hungary, Romania, Bulgaria, Czechoslovakia by 1948), which Americans interpreted as Soviet expansionism. Both sides held mutually reinforcing suspicions that were 'neither entirely wrong, nor entirely right.'", "id": "fc18"}, {"front": "How did MAD reshape Cold War competition? (causation)", "back": "Because nuclear weapons made direct superpower war 'almost unimaginably catastrophic,' competition was displaced onto non-nuclear theaters: proxy wars in Korea, Vietnam, Afghanistan, and Angola, and intensive competition for political influence in newly decolonized states across Asia, Africa, and Latin America. MAD stabilized the nuclear threshold while making peripheral conflicts more frequent.", "id": "fc19"}, {"front": "What was the strategic logic behind the Marshall Plan? (causation + political economy)", "back": "Economic aid was the second pillar of containment — the first being military. Secretary of State Marshall proposed the plan to prevent the economic desperation of war-shattered Western European nations from driving their voters toward Communist parties. The plan was explicitly both humanitarian and geopolitical: the rapid economic recovery it produced solidified Western Europe's alignment with the United States.", "id": "fc20"}, {"front": "SPICE-T: How did Cold War competition link Political and Technology themes?", "back": "The Cold War was simultaneously a geopolitical and technological contest. Sputnik (1957) triggered U.S. investment in science education and space/missile programs. The Space Race (Gagarin 1961; Moon landing 1969) was inseparable from ICBM programs. Science, technology, and geopolitics were fused — producing as a side effect the computing and communications technologies that later transformed the global economy.", "id": "fc21"}, {"front": "SPICE-T: How does the Cold War illustrate the Economic theme?", "back": "The Cold War created two parallel global economic systems: the American-organized free-market bloc (aided by the Marshall Plan) and the Soviet-organized socialist bloc (coordinated through Comecon). These systems operated on different principles — private ownership and markets vs. state ownership and central planning — and became increasingly disconnected, materializing the 'two worlds' ideological divide.", "id": "fc22"}, {"front": "Compare Soviet and American Cold War aims in Eastern Europe, 1945–1948", "back": "Soviet aims: consolidate buffer states along USSR's western border by installing Communist-dominated governments (Poland, Hungary, Romania, Bulgaria, Czechoslovakia by 1948) — driven by Marxist ideology and traditional Russian security anxiety. American interpretation: evidence of Soviet drive for global domination. The source notes 'neither interpretation was entirely wrong, and neither entirely right' — illustrating how mutual misperception structured the conflict.", "id": "fc23"}, {"front": "'X Article' (1947)", "back": "Anonymous article by diplomat George Kennan published in Foreign Affairs magazine (1947), publicly articulating the strategy of containment. Kennan argued Soviet expansionism was driven by Marxist ideology and Russian imperial anxiety, that rollback was unnecessary, and that patient containment would allow the Soviet system's internal contradictions to produce its own collapse. The article shaped American strategy for four decades.", "id": "fc24"}, {"front": "How did nuclear weapons paradoxically stabilize superpower relations while destabilizing the Global South?", "back": "MAD made direct superpower conflict irrational, creating stability at the nuclear level. But this stability displaced competition into proxy wars fought in Korea, Vietnam, Afghanistan, Angola, and other post-colonial states — whose populations suffered the actual violence of the Cold War while the superpowers competed indirectly. Nuclear weapons thus protected the superpowers from each other while exporting conflict to weaker states.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

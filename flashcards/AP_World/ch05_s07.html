@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 5, Section 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Global spread of industrialization", "back": "By mid-nineteenth century, industrialization spread from Britain to Belgium (1820s–30s), France and German states (1840s–60s), the United States (accelerating after 1865), Japan (after Meiji Restoration 1868), and Russia (1890s). Each path was shaped by local conditions, state capacity, and position in the global economy.", "id": "fc01"}, {"front": "bourgeoisie", "back": "In Marxist analysis, the class that owns the means of production (factories, machinery, capital) and employs the proletariat. More broadly, the urban middle and upper-middle class (merchants, manufacturers, professionals, financiers) whose political ideology was classical liberalism — free markets, individual rights, constitutional government.", "id": "fc02"}, {"front": "classical liberalism", "back": "The dominant economic ideology of the early industrial era — rooted in Adam Smith, extended by Ricardo and John Stuart Mill — arguing that free markets, private property, and minimal government interference would produce the greatest prosperity. Opposed mercantilist restrictions, tariffs, and labor regulations. Created an internal tension between economic liberalism (free markets) and political liberalism (rights, democracy).", "id": "fc03"}, {"front": "socialism", "back": "The ideology arguing that means of production should be owned collectively rather than by private capitalists, distributing industrial productivity's benefits more equitably. Emerged as the industrial working class's response to the miserable conditions of early factory labor.", "id": "fc04"}, {"front": "Karl Marx (1818–1883)", "back": "German philosopher who, with Engels, developed scientific socialism (historical materialism) — the theory that history is driven by class struggle over productive resources, that capitalism has internal contradictions, and that those contradictions would inevitably produce revolution and communism. Spent most of his adult life in London exile, researching in the British Museum.", "id": "fc05"}, {"front": "Friedrich Engels (1820–1895)", "back": "Marx's collaborator; co-author of The Communist Manifesto (1848) and supporter of Marx's research. Son of a German industrialist, his direct knowledge of factory conditions in Manchester informed their analysis.", "id": "fc06"}, {"front": "historical materialism (scientific socialism)", "back": "Marx and Engels' theory that history is driven by class struggle over productive resources — not ideas, great men, or divine will. Capitalism is a historically specific mode of production with internal contradictions (bourgeoisie vs. proletariat exploitation) that would inevitably produce revolution and communist society without classes.", "id": "fc07"}, {"front": "Communist Manifesto (1848)", "back": "Marx and Engels' pamphlet arguing that 'the history of all hitherto existing society is the history of class struggles,' that capitalism had reduced social conflict to bourgeoisie vs. proletariat, and that the proletariat would inevitably overthrow capitalism. Published in the year of European revolutionary upheaval.", "id": "fc08"}, {"front": "utopian socialists", "back": "Early socialists — Robert Owen, Charles Fourier, Henri de Saint-Simon — who experimented with alternative cooperative communities rather than developing systematic revolutionary theory. Owen built model factory communities; Fourier proposed cooperative 'phalansteries'; Saint-Simon advocated expert management of industry for social benefit.", "id": "fc09"}, {"front": "Robert Owen (1771–1858)", "back": "Welsh manufacturer and utopian socialist who built model factory communities (New Lanark, Scotland; New Harmony, Indiana) demonstrating that industrial production could be organized more humanely. An early experimenter with cooperative socialism rather than a theorist of revolution.", "id": "fc10"}, {"front": "Japan's Meiji industrialization (after 1868)", "back": "State-directed industrialization responding to the threat of Western imperialism. The government sent students abroad, hired foreign experts, built state-owned model factories, then privatized them to zaibatsu. Within a generation Japan defeated Russia (1905) — the first Asian nation to defeat a major European power in the modern era.", "id": "fc11"}, {"front": "zaibatsu", "back": "Large Japanese industrial conglomerates that emerged when the Meiji government privatized state-owned model factories to private industrial interests. Combined banking, manufacturing, and trading operations under family-controlled corporate structures.", "id": "fc12"}, {"front": "Germany's 'second industrial revolution'", "back": "German industrialization (1840s–60s, accelerating after unification 1871) focused on chemicals, electrical engineering, and steel — the science-based industries of the 'second industrial revolution.' Used state-directed investment and systematic application of scientific research, producing some of the world's largest industrial firms.", "id": "fc13"}, {"front": "Social Democratic Party (Germany)", "back": "The German socialist political party that became the largest socialist party in Europe by 1914 — a product of German industrialization's powerful labor movement. Represented the organized political expression of the industrial working class, pursuing socialist goals through electoral politics.", "id": "fc14"}, {"front": "Russian industrialization (1890s)", "back": "Heavily dependent on foreign (French and Belgian) capital; concentrated in Saint Petersburg, Moscow, and Baku. Produced enormous social tensions: small industrial working class surrounded by vast peasant majority, governed by autocratic tsar. Tensions exploded in 1905 revolution and definitively in 1917.", "id": "fc15"}, {"front": "serfdom abolished in Russia (1861)", "back": "The same year as American emancipation; abolished in Russia to allow former serfs to enter factory towns. Russian industrialization was constrained by former serfs entering labor markets with limited capital access, contributing to the social instability that produced the 1905 and 1917 revolutions.", "id": "fc16"}, {"front": "American industrialization after 1865", "back": "Accelerated dramatically after the Civil War; combined abundant resources, large internal market, technological innovation, and — crucially — enslaved people's agricultural productivity that had financed northern industrial investment and supplied northern cotton mills. By 1900 the U.S. had surpassed Britain in industrial output.", "id": "fc17"}, {"front": "invisible hand", "back": "Adam Smith's metaphor for the self-regulating mechanism of competitive free markets, where individual self-interest produces socially efficient outcomes without government direction. Central metaphor of classical liberalism and laissez-faire economics.", "id": "fc18"}, {"front": "labor theory of value", "back": "David Ricardo's economic theory that the value of a commodity is determined by the labor required to produce it. Marx adopted and extended this theory to argue that capitalists extracted 'surplus value' from workers — paying them less than the full value their labor created — as the mechanism of exploitation.", "id": "fc19"}, {"front": "Revolutions of 1848", "back": "Revolutionary upheavals across Europe (France, Prussia, Austria-Hungary, Italy) in 1848 — the same year as The Communist Manifesto's publication. The Manifesto's opening ('A spectre is haunting Europe') captured the anxiety of European elites and the aspirations of socialist movements simultaneously.", "id": "fc20"}, {"front": "What is the relationship between industrial capitalism and the three competing ideologies?", "back": "All three (classical liberalism, socialism, Marxist communism) were responses to the same phenomenon: the disruption of traditional social arrangements by industrial capitalism. Their conflict defined political history from the Russian Revolution (1917) to the Cold War (1947–1991).", "id": "fc21"}, {"front": "SPICE-T: How does the global spread of industrialization demonstrate Economic change?", "back": "Each industrializing nation was transformed economically: new bourgeoisie and proletariat classes, destruction of artisan and agricultural livelihoods, concentration of wealth in urban industrial centers, and integration into global commodity chains. Non-industrializing regions became raw material suppliers and markets, reinforcing economic inequality.", "id": "fc22"}, {"front": "How was Japanese industrialization defensive in character?", "back": "Japan industrialized explicitly to resist Western imperialism. The Meiji government's fear of the fate of China (forced unequal treaties) drove rapid state-directed modernization. Japan's 1905 defeat of Russia demonstrated that industrial-military power could resist European domination — validating the defensive industrialization strategy.", "id": "fc23"}, {"front": "What does the Communist Manifesto's 'A spectre is haunting Europe' signal?", "back": "It positions communism as an already-threatening force that frightened 'all the powers of old Europe' (Pope, Czar, Metternich, police-spies). The opening demonstrates that the Manifesto was written as a political intervention in an ongoing struggle, not merely an academic analysis.", "id": "fc24"}, {"front": "Why did Russia's industrialization produce particularly unstable social outcomes?", "back": "The combination of late industrialization, autocratic tsarist government lacking capacity to manage social conflicts, small industrial working class beside enormous peasant majority, and dependence on foreign capital meant that Russian society could not absorb industrialization's disruptions. Explosions in 1905 (revolution) and 1917 (revolution overthrowing the tsar) resulted.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

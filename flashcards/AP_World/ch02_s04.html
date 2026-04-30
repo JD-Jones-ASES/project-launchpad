@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 2, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Chinggis Khan (Temüjin, c. 1162–1227)", "back": "Founder of the Mongol Empire; unified the Mongol tribes at the great quriltai (assembly) of 1206. Introduced meritocratic military organization, the decimal unit system, sophisticated signal communications, and the yasa (legal code). Died 1227 during the campaign against the Tangut kingdom of Xi Xia; his successors expanded the empire to the largest contiguous land empire in history.", "id": "fc01"}, {"front": "Quriltai", "back": "A grand assembly of Mongol leaders; the quriltai of 1206 proclaimed Temüjin as 'Chinggis Khan' (universal ruler), marking the formal founding of the Mongol Empire. Quriltai were also convened to select successors and make major political decisions.", "id": "fc02"}, {"front": "Yasa", "back": "Chinggis Khan's legal code for the Mongol Empire. Key provisions included meritocratic military promotion, religious tolerance (all clergy exempt from taxation), and rules governing commercial and diplomatic conduct. The yasa's religious tolerance reflected practical governance, not theological conviction.", "id": "fc03"}, {"front": "Decimal unit system", "back": "The Mongol military organizational structure dividing the army into units of 10, 100, 1,000, and 10,000 (arban, jagun, mingan, tümen). By cutting across clan and tribal lines, it created units loyal to commanders rather than kin groups—producing an army of extraordinary cohesion and discipline capable of coordinating across vast distances.", "id": "fc04"}, {"front": "Parthian shot", "back": "The technique of shooting backward from a galloping horse, named for ancient Parthian cavalry and practiced by Mongol warriors. Combined with forward and lateral shots at full gallop, this skill gave Mongol horse archers a 360-degree combat capability that was a decisive advantage over infantry-based armies in open terrain.", "id": "fc05"}, {"front": "Mongol paradox: destruction and connectivity", "back": "The Mongol conquests killed millions and devastated urban centers from Zhongdu to Baghdad, yet created the conditions for the most intensive Eurasian exchange in premodern history. Three mechanisms connect violence to connectivity: political unification (eliminating borders), religious tolerance (welcoming all merchants), and the Yam relay system (enabling rapid communication and travel).", "id": "fc06"}, {"front": "Four successor khanates", "back": "After Chinggis Khan's death, the Mongol Empire was divided among his descendants into four major khanates: (1) Yuan dynasty in East Asia (China/Korea), (2) Ilkhanate in Persia and Iraq, (3) Chagatai Khanate in Central Asia, (4) Golden Horde in Russia and the western steppe. All maintained nominal loyalty to the Great Khan.", "id": "fc07"}, {"front": "Yuan dynasty", "back": "The Mongol dynasty ruling China (1271–1368), founded by Kublai Khan (Chinggis Khan's grandson). The Yuan adopted Chinese administrative practices while maintaining Mongol dominance. Its collapse in 1368 brought the Ming dynasty to power and was accelerated by epidemic disease (the Black Death) and internal rebellions.", "id": "fc08"}, {"front": "Ilkhanate", "back": "The Mongol successor state controlling Persia, Iraq, and surrounding territories (1256–1335). Ruled by Hulagu Khan (Chinggis Khan's grandson); sacked Baghdad in 1258, ending the Abbasid caliphate. The Ilkhanate eventually converted to Islam and became an important conduit for technology diffusion westward.", "id": "fc09"}, {"front": "Sack of Baghdad (1258)", "back": "The Mongol (Ilkhanate) destruction of Baghdad, then the intellectual capital of the Islamic world. The Abbasid caliph was reportedly killed by being rolled in felt to avoid shedding royal blood. This event ended the Abbasid caliphate and was, with the destruction of Merv (1221), the most catastrophic example of what Mongol resistance meant.", "id": "fc10"}, {"front": "Why could Mongol cavalry not conquer walled cities alone?", "back": "Cavalry excels in open-field mobility but cannot assault fortified walls. The Mongols solved this by recruiting Chinese, Persian, and Arab engineers to operate siege weapons: trebuchets, battering rams, and gunpowder-based devices. This adaptability made them the first steppe army capable of efficiently reducing fortified urban centers.", "id": "fc11"}, {"front": "Mongol religious tolerance — practical rationale", "back": "The yasa mandated tolerance for all religions. The Mongols ruled peoples of many faiths and understood that religious persecution would produce costly rebellions. Christian, Muslim, Buddhist, and Taoist clergy were all exempt from taxation. Tolerance reflected pragmatic statecraft, not theological liberalism.", "id": "fc12"}, {"front": "Golden Horde", "back": "The Mongol successor state controlling Russia and the western steppe (roughly 1240s–1502). It dominated the Rus principalities, collected tribute, and served as the westernmost extension of the Mongol political system. The Golden Horde eventually converted to Islam. Its power over Rus principalities shaped Russian political development for over two centuries.", "id": "fc13"}, {"front": "Chagatai Khanate", "back": "The Mongol successor state in Central Asia, occupying the strategic heartland of the old Silk Road routes. As the middle link between the Yuan in the east and the Ilkhanate and Golden Horde in the west, its stability (or instability) directly affected the flow of overland trade across Eurasia.", "id": "fc14"}, {"front": "Merv (destruction, 1221)", "back": "A major Central Asian city destroyed by Mongol forces in 1221 after resisting conquest. Its destruction, along with Baghdad's (1258), was among the most catastrophic examples of Mongol terror policy. These events illustrate the deliberate calculation behind the terror: resistance meant total destruction; surrender meant incorporation.", "id": "fc15"}, {"front": "SPICE-T: How does the Mongol Empire illustrate the 'Political' theme?", "back": "The Mongol Empire created the largest contiguous land empire in history through meritocratic military organization, innovative command structures (decimal system), and the calculated use of terror and clemency. Its political innovation—religious tolerance and a universal legal code (yasa)—enabled governance across a multi-faith, multi-ethnic empire of unprecedented scale.", "id": "fc16"}, {"front": "SPICE-T: How does Mongol expansion illustrate the 'Technology' theme?", "back": "The Mongols combined steppe cavalry mobility with adopted siege technology (Chinese/Persian/Arab engineers), creating a hybrid military force that could defeat both open-field armies and fortified cities. The Mongol Empire then became a technology superhighway, transmitting gunpowder weapons, printing, and paper money westward during the Pax Mongolica.", "id": "fc17"}, {"front": "Meritocracy in Mongol military", "back": "Officers were promoted based on talent and battlefield performance rather than clan birth or hereditary status. This meritocratic system, combined with the decimal unit structure cutting across tribal lines, produced unprecedented military cohesion and enabled complex multi-column maneuvers across hundreds of kilometers.", "id": "fc18"}, {"front": "Mongol terror policy — calculated vs. savage", "back": "The text emphasizes that Mongol mass destruction of resisting cities was 'calculated terror'—a rational policy to reduce siege duration and conquest costs by making resistance seem futile. Surrendering cities were spared and administered; resisting cities were destroyed. This was strategic deterrence, not mere cruelty.", "id": "fc19"}, {"front": "Pastoral nomadism and Mongol military advantage", "back": "Mongol children learned to ride before they could walk; adult warriors were, in effect, professional mounted archers. This close symbiosis with horses—a feature of pastoral nomadic life—gave steppe peoples a decisive advantage over infantry-based settled armies in open-field combat, before Chinggis Khan added organizational discipline.", "id": "fc20"}, {"front": "How did Mongol unification eliminate trade barriers?", "back": "Before Mongol conquest, the Eurasian steppe was fragmented into dozens of political units, each extracting customs and tribute from passing merchants. By uniting these under a single political authority, the Mongols removed the cumulative burden of multiple border crossings—creating what the text calls 'the largest free-trade zone in world history.'", "id": "fc21"}, {"front": "Continuity and Change: Mongol Empire and Eurasian trade", "back": "Change: Mongol conquest (c. 1206–1260) devastated urban centers and killed millions, temporarily disrupting trade. Then: political unification under Pax Mongolica (c. 1260–1368) dramatically increased trade volume and safety. Continuity: the underlying Silk Road routes and the commodity composition of trade (silk, spices, horses, metals) remained broadly the same.", "id": "fc22"}, {"front": "Compare: Mongol vs. Roman Empire — mechanisms of connectivity", "back": "Both empires created large zones of relative peace enabling internal trade (Pax Romana, Pax Mongolica). Rome built roads and used Latin as a commercial lingua franca; the Mongols built the Yam relay and used paiza letters. Both used military force to establish and maintain internal order. Key difference: Mongol empire was far larger and more short-lived; Roman empire urbanized and settled; Mongol empire governed from a nomadic base.", "id": "fc23"}, {"front": "Signal system of the Mongol army", "back": "The Mongol army communicated across vast battle fronts using flags, fires, and riders—a sophisticated signal network enabling coordinated multi-column attacks. This communication infrastructure was later extended empire-wide as the Yam relay system, showing how military innovation fed into commercial and administrative infrastructure.", "id": "fc24"}, {"front": "Mongol Empire — geographic extent", "back": "At its peak, the Mongol Empire stretched from the Pacific coast of China and Korea westward to Hungary and the Danube—covering more than 24 million square kilometers, the largest contiguous land empire in world history. This geographic scale made it the single most powerful force shaping Eurasian exchange networks in the 13th–14th centuries.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

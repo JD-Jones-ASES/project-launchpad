@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 4, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "'Reorganization' vs. 'Expansion' — the AP framing distinction", "back": "The standard narrative calls this period European 'expansion,' implying Europe grew outward into an empty world. The source argues 'reorganization' is more accurate: transoceanic contact restructured existing hierarchies of power and wealth, elevating some actors while catastrophically diminishing others. No region was simply 'found and incorporated'; all were complex societies that responded actively.", "id": "fc01"}, {"front": "Europe as a 'peripheral region' in 1450", "back": "In 1450, Europe was peripheral by global standards: the most sophisticated financial institutions were in China and the Islamic world; the largest cities were in China (Nanjing, Beijing) and the Ottoman Empire (Istanbul); the most extensive trade networks were the Indian Ocean system and the Silk Roads. Europe's rise by 1750 was not a continuation of pre-existing superiority — it was a specific shift caused by specific factors.", "id": "fc02"}, {"front": "What caused the shift in global power toward Atlantic Europe by 1750?", "back": "Not European cultural or technological superiority in any comprehensive sense. The shift resulted from a specific combination: deep-water navigation technology, Atlantic geography, epidemic disease (as an unintended weapon), joint-stock financing, and American resource endowments (silver, plantation agriculture). These gave Atlantic Europe an asymmetric advantage in the specific configuration of opportunities that transoceanic contact created.", "id": "fc03"}, {"front": "Ming China in 1450 — why it doesn't contradict European rise", "back": "Ming China in 1450 had superior iron production, a larger bureaucracy, and arguably more sophisticated agriculture than European states. The Mughal Empire in 1600 had a larger GDP than England. This is cited to demonstrate that European dominance was NOT due to comprehensive superiority — it was due to the specific advantages created by transoceanic contact in the Atlantic context.", "id": "fc04"}, {"front": "winners in the reorganization of global hierarchies (1450–1750)", "back": "Atlantic European states (Portugal, Spain, Dutch Republic, France, England) gained commercial dominance and colonial empires. West African slave-trading elites (Dahomey, Asante) gained political power and firearms through participation in the slave trade. Creole plantation owners in the Americas accumulated wealth from forced labor. All three categories of winners benefited at others' direct expense.", "id": "fc05"}, {"front": "losers in the reorganization of global hierarchies (1450–1750)", "back": "Indigenous Americans: 50–90% population loss to epidemic disease; political structures destroyed; subjected to coerced labor. West African communities supplying enslaved people: demographic drain, political destabilization, gender imbalances. The enslaved themselves: subjected to the Middle Passage, hereditary chattel status, and permanent forced labor. The reorganization was not neutral — it created catastrophic losers alongside winners.", "id": "fc06"}, {"front": "Spanish vs. Dutch colonial models — comparison", "back": "Spanish: state enterprise with explicit Catholic ideological justification; crown controls trade (Casa de Contratación); coerced indigenous labor (encomienda, mita). Dutch VOC: private corporate enterprise, empire outsourced to shareholders; violence enforced corporate monopoly (Banda massacre). Both predicated on violence and extraction from non-European populations. Both became templates for later European colonialism.", "id": "fc07"}, {"front": "Creole languages", "back": "Hybrid linguistic systems combining European grammatical frameworks with African vocabulary and phonology, created across the Caribbean and South America. Represent both the violence of the slave trade (which mixed African-language speakers and stripped original linguistic communities) and the creativity of diaspora communities reconstructing shared communication across diversity.", "id": "fc08"}, {"front": "African diaspora cultural synthesis — why it matters for AP", "back": "The cultural forms created by enslaved Africans (Candomblé, Vodou, Creole languages, Capoeira) are among 'the most significant — and most frequently unacknowledged — cultural contributions to the modern world,' per the source. AP essays should recognize African diaspora cultural creativity as an active historical force, not merely passive victimization.", "id": "fc09"}, {"front": "Indian Ocean trade — continuity amid European rise", "back": "The Indian Ocean trade was not destroyed by European commercial expansion — it remained vigorous. European actors (VOC, EIC) inserted themselves as armed intermediaries and toll-takers, extracting profit from trade flows they did not originate. This illustrates the AP concept of continuity: non-European commercial systems persisted even as European power expanded.", "id": "fc10"}, {"front": "Chinese commercial sophistication — continuity into the 19th century", "back": "Chinese commercial sophistication 'remained largely outside Atlantic circuits until the nineteenth century.' China continued extensive regional commerce and had the world's largest GDP by many estimates into the 18th century. The Atlantic revolution did not immediately incorporate China — Chinese engagement with global capitalism intensified only in the 19th century.", "id": "fc11"}, {"front": "global silver circuit — Americas → Europe → China", "back": "American silver from Potosí flowed west to Europe (paying for manufactured goods), then east to China (paying for silks, porcelain, tea). Chinese insatiable demand for silver (which it used as currency) made it the ultimate destination of much Atlantic silver. This circuit linked the Americas, Europe, and Asia in a single global monetary system for the first time.", "id": "fc12"}, {"front": "price revolution — long-term global impact", "back": "The influx of American silver established global monetary circuits that linked the Americas, Europe, and Asia in a price-level connection that had not existed before 1492. Silver's global circulation meant that monetary conditions in one region could affect prices in another — an early form of global economic integration whose consequences lasted centuries.", "id": "fc13"}, {"front": "plantation system as lasting legacy", "back": "The plantation system established in the colonial Americas set the template for export-oriented monoculture agriculture in tropical regions. This template remained dominant in Latin America, the Caribbean, and Southeast Asia through the twentieth century — making the colonial plantation one of the most durable economic structures in world history.", "id": "fc14"}, {"front": "racialized labor systems as lasting legacy", "back": "The racial coding of labor developed in the colonial Americas — hereditary enslaved status linked to African descent — left legal and social legacies that shaped the politics of the United States, Brazil, and the Caribbean for centuries after emancipation. The categories were colonial constructions, but their effects persisted long after the colonial systems that created them were dismantled.", "id": "fc15"}, {"front": "seeds of the modern world economy", "back": "Three features established between 1450 and 1750 that persisted after colonialism ended: (1) global silver circuits linking the Americas, Europe, and Asia; (2) plantation monoculture as the template for tropical export agriculture; (3) racialized labor systems leaving legal and social legacies in former slave societies. These make the period foundational for understanding modern global economic inequality.", "id": "fc16"}, {"front": "Berlin Conference (1884–85) — connection to Tordesillas", "back": "The source explicitly traces the logic from the Treaty of Tordesillas (1494) to the Berlin Conference: Tordesillas established the precedent that European powers could negotiate ownership of the non-European world among themselves without indigenous consent. The Berlin Conference applied the same logic to Africa in the nineteenth century — European powers dividing the continent at a conference table.", "id": "fc17"}, {"front": "SPICE-T: all five themes in the synthesis", "back": "Section 4.6 integrates all SPICE-T themes: Social (racial hierarchies, diaspora cultures); Political (rise of Atlantic European states, decline of indigenous political structures); Interaction with Environment (Columbian Exchange ecology); Cultural (syncretic religions, Creole languages); Economic (silver circuits, plantation monoculture, mercantilism); Technology (ships and weapons enabling expansion). The synthesis section's purpose is to show these themes as interconnected, not separate.", "id": "fc18"}, {"front": "what changed globally between 1450 and 1750? (AP answer)", "back": "Change: scale and direction of global trade (Atlantic circuits now dominant); racial coding of labor (hereditary chattel slavery); rise of Atlantic European commercial and military power; incorporation of the Americas into Eurasian commercial systems; reorganization of West African political economies around slave raiding; creation of African diaspora cultures in the Americas.", "id": "fc19"}, {"front": "what continued globally between 1450 and 1750? (AP answer)", "back": "Continuity: Indian Ocean trade remained vigorous; Chinese commercial sophistication remained largely outside Atlantic circuits; African political structures adapted rather than simply collapsing; indigenous American communities survived and adapted despite demographic catastrophe; pre-existing Eurasian overland trade systems persisted alongside the new oceanic systems.", "id": "fc20"}, {"front": "VOC as 'inserted toll-taker' — what this means", "back": "Rather than creating new trade from scratch, the VOC and EIC inserted themselves into existing Indian Ocean commercial systems — using military force to claim chokepoints, ports, and monopoly rights over trade that had operated for centuries. They extracted profit from existing trade flows rather than generating new value through production. This is the source's model of European commercial imperialism in Asia.", "id": "fc21"}, {"front": "Mughal Empire GDP vs. England in 1600", "back": "The source notes that 'the Mughal Empire in 1600 had a larger GDP than England.' This is cited to show that European commercial dominance was not pre-existing — it required the specific configuration of Atlantic contact, epidemic disease, and new resource endowments to produce. India's economic dominance persisted until European colonialism actively dismantled it in the 18th and 19th centuries.", "id": "fc22"}, {"front": "Aztec and Inca states — why they were not primitive", "back": "The source describes Aztec and Inca states as 'sophisticated administrative entities with extensive road networks and tribute systems.' This is essential for AP anti-Eurocentrism: the conquest of these states was not the defeat of primitive peoples by advanced Europeans — it was the collapse of sophisticated political systems under the weight of epidemic disease, alliance politics, and the specific vulnerabilities created by transoceanic contact.", "id": "fc23"}, {"front": "CONTINUITY AND CHANGE together — AP essay requirement", "back": "The source states: 'The AP exam's emphasis on continuity and change requires students to identify what changed (the scale and direction of global trade, the racial coding of labor, the rise of Atlantic Europe) and what continued (Indian Ocean trade, African political structures adapting, Chinese commercial sophistication remaining largely outside Atlantic circuits).' Essays that address only change, not continuity, are incomplete.", "id": "fc24"}, {"front": "African cultural creativity — not despite but through violence", "back": "The source makes this point carefully: 'The cultural creativity of the African diaspora was produced under conditions of extreme violence and deprivation. This is crucial to understand: the synthesis was not a harmonious blending of equals.' Acknowledging both the violence and the creativity is essential for accurate historical analysis — neither triumphalist nor purely victimological.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

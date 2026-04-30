@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 3, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Gunpowder Empires", "back": "The collective term for the Ottoman, Safavid, and Mughal empires, which all used cannon and firearms (diffused from China) to overwhelm cavalry-based rivals and consolidate vast territories across Afro-Eurasia after 1450.", "id": "fc01"}, {"front": "Ottoman Empire — founding and peak dates", "back": "Founded c. 1299; reached its classical zenith under Süleyman the Magnificent (r. 1520–1566); lasted until 1922.", "id": "fc02"}, {"front": "Süleyman the Magnificent (Kanuni)", "back": "Ottoman sultan (r. 1520–1566) who expanded the empire into Hungary, dominated the Mediterranean, and codified Ottoman law. Called 'the Lawgiver' (Kanuni) by his own subjects; 'the Magnificent' by Europeans.", "id": "fc03"}, {"front": "Conquest of Constantinople — year and significance", "back": "1453. The Ottomans ended the Byzantine Empire, gained control of the Bosphorus strait, and positioned Istanbul as the hub of overland trade routes between Europe and Asia.", "id": "fc04"}, {"front": "Vilayet / Vali", "back": "Ottoman provincial administrative unit (vilayet) governed by an appointed official (vali) responsible for collecting taxes, maintaining order, and forwarding revenues to Istanbul.", "id": "fc05"}, {"front": "Kanun", "back": "Ottoman dynastic law issued by the sultan, distinct from but complementary to Islamic law (shari'a). Süleyman's extensive legal code earned him the title Kanuni (Lawgiver).", "id": "fc06"}, {"front": "Shari'a", "back": "Islamic legal tradition derived from the Quran and hadith. Ottoman sultans blended shari'a with dynastic kanun; the millet system gave non-Muslim communities their own equivalents for personal-status matters.", "id": "fc07"}, {"front": "Millet System", "back": "The Ottoman administrative arrangement granting recognized non-Muslim religious communities (Greek Orthodox, Armenian, Jewish) autonomy over internal legal and religious affairs. Members paid the jizya and were barred from military service and high office but were protected from forced conversion.", "id": "fc08"}, {"front": "Jizya", "back": "A poll tax levied by Islamic states on non-Muslim subjects (dhimmis). Paid by non-Muslim millets in the Ottoman Empire. Abolished for Hindus by Mughal emperor Akbar; reinstated by Aurangzeb.", "id": "fc09"}, {"front": "Devshirme", "back": "The Ottoman system of periodically conscripting boys from Christian Balkan families, converting them to Islam, and training them in palace schools. Graduates became Janissaries or high officials (viziers). Their loyalty derived from total dependence on the sultan.", "id": "fc10"}, {"front": "Janissaries", "back": "Elite full-time Ottoman infantry recruited through the devshirme. Housed in Istanbul, paid regular salaries, trained in firearms — considered the finest infantry in the world at their peak (15th–16th centuries). Abolished in 1826.", "id": "fc11"}, {"front": "Mimar Sinan", "back": "Chief Ottoman architect under Süleyman, who designed the Suleymaniye Mosque in Istanbul — one of the great monuments of Islamic architecture, combining classical Ottoman style with Byzantine structural precedents.", "id": "fc12"}, {"front": "Hayreddin Barbarossa", "back": "Ottoman naval admiral whose fleet dominated the Mediterranean during Süleyman's reign, enabling the empire to project power westward into North Africa and challenge Spanish Habsburg naval supremacy.", "id": "fc13"}, {"front": "Safavid Empire — founding and state religion", "back": "Founded 1501 by Shah Ismail I; officially ended 1722. Declared Twelver Shi'a Islam the official state religion, transforming Iran from a mostly Sunni population into the heartland of Shi'a Islam.", "id": "fc14"}, {"front": "Twelver Shi'a Islam", "back": "The branch of Islam that recognizes twelve imams as the rightful successors to the Prophet Muhammad. Made the official religion of Safavid Iran by Shah Ismail I; the Safavid dynasty claimed descent from the seventh imam.", "id": "fc15"}, {"front": "Shah Abbas I (r. 1588–1629)", "back": "Safavid ruler who rebuilt Isfahan into a magnificent capital (featuring the Naqsh-e Jahan square) and reformed the army by replacing tribal cavalry with ghulam (slave soldiers) loyal directly to the shah.", "id": "fc16"}, {"front": "Ghulam", "back": "Slave soldiers in the Safavid army, introduced by Shah Abbas I as a replacement for unreliable tribal cavalry. Paralleled the Ottoman devshirme: warriors with no independent power base, loyal entirely to the ruler.", "id": "fc17"}, {"front": "Naqsh-e Jahan", "back": "The grand royal square in Isfahan, the Safavid capital rebuilt under Shah Abbas I. It became a center of commerce, ceremony, and royal display — one of the largest public squares in the world at the time.", "id": "fc18"}, {"front": "Mughal Empire — founding and peak", "back": "Founded 1526 by Babur (First Battle of Panipat); reached greatest extent under Aurangzeb (d. 1707); formally ended 1857. At its height covered nearly the entire Indian subcontinent.", "id": "fc19"}, {"front": "Babur and the First Battle of Panipat (1526)", "back": "Central Asian prince of Timurid-Chinggisid descent who defeated the Lodi Sultanate at Panipat, establishing Mughal rule in northern India. His memoir (Baburnama) is a key primary source.", "id": "fc20"}, {"front": "Akbar the Great (r. 1556–1605)", "back": "Mughal emperor who governed a majority-Hindu empire with deliberate religious syncretism: abolished the jizya on non-Muslims, appointed Hindus to high office, and developed Din-i-Ilahi — a personal syncretic philosophy blending Islam, Hinduism, Zoroastrianism, and Christianity.", "id": "fc21"}, {"front": "Din-i-Ilahi ('Divine Faith')", "back": "Akbar's eclectic personal religious philosophy drawing on Islam, Hinduism, Zoroastrianism, and Christianity. Attracted only a small circle of courtiers but symbolized his syncretist approach to governing a religiously diverse empire.", "id": "fc22"}, {"front": "Aurangzeb (r. 1658–1707)", "back": "Last of the great Mughal emperors. Reinstated the jizya, destroyed some Hindu temples, and enforced Sunni orthodoxy. Extended the empire to its maximum territorial extent, but the alienation of Hindu, Sikh, and Shi'a subjects contributed to post-death fragmentation.", "id": "fc23"}, {"front": "What SPICE-T theme connects the gunpowder technology diffusion from China to all three Gunpowder Empires?", "back": "Technology (and Cultural Interaction): The spread of cannon and firearms from Chinese origins across Eurasia demonstrates how military technology transfer shaped state formation across cultures — none of the three empires invented these weapons, but all harnessed them for imperial consolidation.", "id": "fc24"}, {"front": "Why is the term 'Gunpowder Empires' potentially misleading when applied as the sole explanation for Ottoman, Safavid, and Mughal power?", "back": "Military technology alone did not sustain these empires. Each also built sophisticated administrative, legal, and ideological systems — provincial governance, law codes, religious legitimacy strategies — to govern diverse populations across vast distances. 'Gunpowder conquered territory; administration and ideology held it.'", "id": "fc25"}, {"front": "How did the Safavid Shi'a conversion serve as a political border strategy?", "back": "By making Shi'a Islam the state religion, the Safavids created a sharp ideological boundary with the Sunni Ottoman Empire to the west and the mostly Sunni Mughal Empire to the east, reducing the risk of population defection to rivals and giving Iranian subjects a distinct political-religious identity.", "id": "fc26"}, {"front": "Compare Ottoman and Mughal strategies for governing religiously diverse populations.", "back": "The Ottomans used the millet system: recognized communities governed themselves internally but paid jizya and were excluded from high office. The Mughals under Akbar used syncretism: abolished jizya, promoted inter-faith appointments, and blended traditions — a more integrative approach, though later reversed by Aurangzeb.", "id": "fc27"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

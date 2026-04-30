@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 1, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Dar al-Islam", "back": "Literally 'the Abode of Islam' — the territory where Islamic law governed. By 1200 it was an aspiration more than a political reality, encompassing a vast, culturally diverse arc from Iberia to India united by religion, Arabic scholarship, and shared legal institutions rather than a single empire.", "id": "fc01"}, {"front": "Abbasid Caliphate (750–1258 CE)", "back": "The Islamic caliphate based in Baghdad that succeeded the Umayyads in 750. Under caliphs like Harun al-Rashid it became one of the world's wealthiest cities. By 1200 its political power was hollow — real authority had shifted to Turkic sultans — but it retained symbolic religious authority until the Mongol destruction of Baghdad in 1258.", "id": "fc02"}, {"front": "Caliphate", "back": "The political-religious institution of Islamic governance headed by a caliph claiming succession from the Prophet Muhammad. Major caliphates: Umayyad (661–750), Abbasid (750–1258), Ottoman (1517–1924). By 1200 real military power had shifted to Turkic sultans while the caliph retained symbolic religious authority.", "id": "fc03"}, {"front": "House of Wisdom (Bayt al-Hikma)", "back": "Abbasid translation and research institution in Baghdad that brought scholars from Arab, Persian, Greek, Indian, and Jewish backgrounds together to translate classical texts into Arabic and produce original contributions in mathematics, astronomy, optics, and medicine. Its translations later triggered Europe's Scholastic revolution.", "id": "fc04"}, {"front": "Seljuk Turks", "back": "A Sunni Turkic confederation from Central Asia that swept into Baghdad in 1055, displaced the Buyid dynasty, and governed in the Abbasid caliph's name as sultans. They brought Turkic military organization into the Islamic world — part of a recurring pattern of Central Asian migration transforming Dar al-Islam's political landscape.", "id": "fc05"}, {"front": "Ulama", "back": "Islamic religious scholars who interpreted and transmitted Islamic law, theology, and education across Dar al-Islam. Because their authority derived from Quranic scholarship rather than political appointment, they could function under almost any regime, providing institutional continuity across political fragmentation.", "id": "fc06"}, {"front": "Sharia", "back": "Islamic religious law derived from the Qur'an, Hadith, scholarly consensus, and analogical reasoning. It governed ritual practice, family law, inheritance, commercial transactions, and criminal penalties. Interpreted by the ulama through the four Sunni legal schools (Hanafi, Maliki, Shafi'i, Hanbali).", "id": "fc07"}, {"front": "Madrasa", "back": "Islamic school funded by religious endowments (waqf) and staffed by ulama. Madrasas across the Islamic world shared a curriculum, so a graduate in Cairo shared training with counterparts in Samarkand or Timbuktu — a key mechanism of Dar al-Islam's portable institutional coherence.", "id": "fc08"}, {"front": "Waqf", "back": "A religious endowment in Islamic law — donated property (land, buildings) set aside to generate revenue for a charitable or religious purpose, such as funding a madrasa, mosque, or hospital. Waqf endowments allowed Islamic educational and religious institutions to operate independently of political regimes.", "id": "fc09"}, {"front": "Fatwa", "back": "A legal opinion issued by an Islamic scholar (ulama) interpreting sharia in a specific situation. Fatwas were authoritative but not binding like modern court rulings; different legal schools could issue different fatwas on the same question.", "id": "fc10"}, {"front": "Sufism", "back": "A mystical, devotional approach to Islam emphasizing personal spiritual experience through practice, poetry, and discipline organized around charismatic teachers (shaykhs) and brotherhoods (tariqa). Sufi missionaries were highly effective at spreading Islam to new regions by engaging local spiritual traditions rather than imposing a rigid legal code.", "id": "fc11"}, {"front": "Tariqa", "back": "A Sufi brotherhood organized around a charismatic teacher (shaykh). Tariqa networks carried Islam into sub-Saharan Africa, Central Asia, Southeast Asia, and South Asia through personal spiritual relationships, creating a syncretic popular Islam that incorporated local practices.", "id": "fc12"}, {"front": "Delhi Sultanate (1206–1526)", "back": "The Islamic sultanate in northern India established after Muhammad of Ghor's defeat of Rajput confederations (1192–1206). Governed majority Hindu populations through the dhimmi system. Under Sultan Alauddin Khalji (r. 1296–1316) it repelled Mongol invasions, preserving Islamic institutions in South Asia when they were being destroyed elsewhere.", "id": "fc13"}, {"front": "Dhimmi", "back": "A legal status in Islamic law for 'protected peoples' — originally developed for Jews and Christians, extended to Hindus under the Delhi Sultanate — that permitted practice of their religion in exchange for payment of the jizya (poll tax). In practice under the Delhi Sultanate, the relationship was more complex than the formal category suggests.", "id": "fc14"}, {"front": "Jizya", "back": "The poll tax paid by dhimmis (non-Muslims under Islamic governance) in exchange for protection and the right to practice their religion. Under the Delhi Sultanate, Hindus classified as dhimmis paid jizya while retaining considerable cultural and commercial autonomy.", "id": "fc15"}, {"front": "Qutb Minar", "back": "A minaret in Delhi constructed under the Delhi Sultanate that combined Persian Islamic decorative vocabulary with Indian stonework techniques — a physical embodiment of cross-cultural synthesis under the Sultanate and a 'material record of cross-cultural encounter.'", "id": "fc16"}, {"front": "Hajj", "back": "The annual Islamic pilgrimage to Mecca — one of the five pillars of Islam — that brought Muslims from across Dar al-Islam into physical contact. As an institutional mechanism, the Hajj helped maintain Islamic civilizational coherence by creating a shared experience transcending regional political differences.", "id": "fc17"}, {"front": "Islamic Golden Age", "back": "The period of exceptional intellectual and cultural achievement in the Islamic world, centered on but not limited to the Abbasid period (c. 750–1258). Characterized by the translation movement, original contributions in mathematics, astronomy, medicine, and optics, and cosmopolitan patronage of knowledge regardless of the scholar's religion.", "id": "fc18"}, {"front": "Second Battle of Tarain (1192)", "back": "The decisive battle in which Muhammad of Ghor defeated the Rajput confederations, consolidating Islamic military control over northern India and enabling the establishment of the Delhi Sultanate in 1206.", "id": "fc19"}, {"front": "SPICE-T: What Cultural theme does the House of Wisdom illustrate?", "back": "The House of Wisdom illustrates the Cultural (and Interaction) theme — it exemplifies cross-cultural intellectual exchange, with scholars of multiple religions and ethnicities collaborating to translate and extend classical knowledge, demonstrating how intellectual traditions can circulate across civilizational boundaries.", "id": "fc20"}, {"front": "SPICE-T: What Political theme does the ulama-madrasa network illustrate?", "back": "The ulama-madrasa network illustrates how political authority can be maintained through non-governmental institutions. The network provided portable legal and educational standards that held Dar al-Islam together across political fragmentation — a form of soft power independent of any dynasty.", "id": "fc21"}, {"front": "How did Islamic institutional coherence differ from Chinese imperial coherence?", "back": "Song China's coherence derived from a centralized bureaucratic state funded by commercial taxation, with the emperor as apex. Dar al-Islam's coherence derived from shared non-political institutions — ulama, madrasas, sharia, Hajj, Sufi networks — that persisted independently of any regime, enabling coherence despite intense political fragmentation.", "id": "fc22"}, {"front": "Continuity/Change: What changed about Abbasid authority between 750 and 1200?", "back": "Political power progressively hollowed out: Shi'a Buyid dynasties held the caliph under effective house arrest from 945; Seljuk Turks displaced the Buyids in 1055 and governed in the caliph's name. By 1200 the Abbasid caliph retained only symbolic religious authority — a dramatic continuity in form but change in substance.", "id": "fc23"}, {"front": "What is the significance of the Mongol destruction of Baghdad (1258)?", "back": "The Mongol sack of Baghdad ended the Abbasid Caliphate and destroyed one of the Islamic world's greatest intellectual and commercial centers. It is the moment most clearly demonstrating why Dar al-Islam's non-political institutional coherence mattered — religious and legal institutions survived even where political structures were obliterated.", "id": "fc24"}, {"front": "Comparison: Sufi missionaries vs. ulama scholars — different approaches to Islamic expansion", "back": "Ulama spread Islam through legal-educational institutions (madrasas, courts) requiring formal study of Arabic and sharia — effective in urban, literate contexts. Sufis spread Islam through personal spiritual relationships and accommodation of local practices — more effective in rural, non-literate, or culturally distinct regions like sub-Saharan Africa and Southeast Asia.", "id": "fc25"}, {"front": "Syncretism in the Delhi Sultanate", "back": "Under the Delhi Sultanate, Islamic and Hindu traditions blended in architecture (Qutb Minar combining Persian and Indian styles), administration (Hindu officials in the bureaucracy), commerce (Hindu merchant dominance), and devotional music — demonstrating that conquest did not mean cultural erasure.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

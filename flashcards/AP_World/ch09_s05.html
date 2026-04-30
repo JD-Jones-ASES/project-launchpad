@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 9, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Anthropocene", "back": "Term proposed by Nobel Prize–winning chemist Paul Crutzen and biologist Eugene Stoermer in 2000 for the current geological epoch, defined by human activity becoming a force of geological magnitude — altering Earth's chemistry, climate, and biodiversity at a scale comparable to major natural events like asteroid impacts.", "id": "fc01"}, {"front": "Paul Crutzen and Eugene Stoermer (2000)", "back": "The Nobel Prize–winning atmospheric chemist and biologist who jointly proposed the Anthropocene concept in 2000, arguing that humanity had entered a new geological epoch defined by human-driven planetary-scale change.", "id": "fc02"}, {"front": "Great Acceleration", "back": "The period from approximately 1950 to the present during which major indicators of human impact on Earth's systems began rising at unprecedented rates in 10,000 years of settled civilization: population tripled, GDP ×15, water use doubled, nitrogen ×10, motor vehicles grew ×25, CO₂ to 390 ppm.", "id": "fc03"}, {"front": "CO₂ levels: Great Acceleration baseline", "back": "Between 1950 and 2010, atmospheric CO₂ rose from 310 parts per million to nearly 390 ppm — a level not reached in at least 800,000 years of ice-core climate records. Baseline evidence for human-caused atmospheric change.", "id": "fc04"}, {"front": "Distributional injustice of climate change", "back": "The ethical dimension of climate change: the wealthiest industrialized nations (U.S., EU, Russia, China) generated the vast majority of cumulative greenhouse gas emissions. The nations most exposed to flooding, drought, and extreme heat are disproportionately in the Global South and Pacific — those who caused the least harm bear the greatest cost.", "id": "fc05"}, {"front": "Small island states and climate threat", "back": "Tuvalu, Kiribati, and the Maldives face the literal inundation of their entire national territory from sea-level rise caused almost entirely by emissions from other countries. The starkest example of climate distributional injustice.", "id": "fc06"}, {"front": "UNFCCC and the Rio Earth Summit (1992)", "back": "The United Nations Framework Convention on Climate Change was produced at the first Earth Summit in Rio de Janeiro (1992), establishing the international institutional framework for subsequent climate negotiations including Kyoto and Paris.", "id": "fc07"}, {"front": "Kyoto Protocol (1997)", "back": "The first binding international climate treaty, requiring developed nations to reduce greenhouse gas emissions while exempting rapidly industrializing countries (China, India). The United States signed but never ratified it; Canada ratified and withdrew. Architecture generated controversy over fairness to U.S. industry.", "id": "fc08"}, {"front": "Paris Agreement (2015)", "back": "Climate agreement signed by 196 parties at COP21. Each country submitted its own Nationally Determined Contribution (NDC) — a self-set emissions pledge. Goal: limit average global warming to well below 2°C above pre-industrial levels, with efforts toward 1.5°C. Left critics: too weak. Right critics: unfair economic burden.", "id": "fc09"}, {"front": "Nationally Determined Contribution (NDC)", "back": "Each country's self-set pledge to reduce emissions under the Paris Agreement. Replaced Kyoto's top-down binding targets with voluntary national commitments — criticized as too weak to achieve warming goals but more politically inclusive than Kyoto's approach.", "id": "fc10"}, {"front": "U.S. Paris Agreement withdrawal and return", "back": "The United States withdrew from the Paris Agreement under President Trump (2017) and rejoined under President Biden (2021). Illustrates the vulnerability of international climate agreements to domestic political change — a key limit of the voluntary NDC architecture.", "id": "fc11"}, {"front": "Greenhouse gas", "back": "A gas (CO₂, methane, nitrous oxide) that absorbs and re-emits infrared radiation, trapping heat in the lower atmosphere. The primary anthropogenic sources: CO₂ from fossil fuels/deforestation; methane from livestock, rice paddies, gas leakage; nitrous oxide from fertilizer. The greenhouse effect is natural; human emissions intensify it.", "id": "fc12"}, {"front": "Planetary boundaries", "back": "Thresholds identified by scientists beyond which Earth's systems may destabilize in ways that undermine conditions for human civilization. The most urgent: climate change, biodiversity loss, and ocean acidification — all interrelated dimensions of the Anthropocene.", "id": "fc13"}, {"front": "Sixth mass extinction", "back": "The current rate of species extinction, estimated at 100 to 1,000 times the pre-industrial background rate. Causes: habitat destruction (primarily agricultural and urban expansion), invasive species, overfishing, climate change. Named 'sixth' because five prior mass extinctions are identified in the fossil record.", "id": "fc14"}, {"front": "Biodiversity loss: consequences", "back": "Reduced agricultural resilience (fewer wild crop relatives for disease resistance), declining fisheries, disappearance of ecosystems that filter water and regulate local climates. The loss of crop wild relatives is particularly significant given ongoing climate-driven agricultural disruption.", "id": "fc15"}, {"front": "Ocean acidification", "back": "As oceans absorb approximately 25% of atmospheric CO₂, they become more acidic — threatening the calcium carbonate shells of mollusks, corals, and plankton at the base of marine food chains. Coral reef bleaching events, driven by warming and acidification, threaten to make large portions of tropical reefs functionally dead by mid-century.", "id": "fc16"}, {"front": "Coral reef bleaching", "back": "Mass dying of corals caused by ocean warming and acidification. Under high-emissions scenarios, large portions of the world's tropical reefs could be functionally dead by mid-century — threatening marine biodiversity and the human communities that depend on reef ecosystems.", "id": "fc17"}, {"front": "Greta Thunberg and Fridays for Future", "back": "Swedish youth climate activist whose 'school strike for climate' grew into the Fridays for Future movement, drawing millions into global climate strikes across 150 countries in 2019. Represents the youth-led dimension of transnational climate advocacy.", "id": "fc18"}, {"front": "SPICE-T: Interaction with Environment in the Anthropocene", "back": "The Anthropocene illustrates the AP World History Interaction with Environment theme at its most consequential modern scale: unlike ancient civilizations that altered local environments, industrial civilization has become a planetary-scale environmental force. Technology is simultaneously the cause (fossil fuels, industrial agriculture) and proposed solution (renewables, carbon capture).", "id": "fc19"}, {"front": "Compare Kyoto and Paris approaches to emissions reduction", "back": "Kyoto: binding targets set by international negotiators, assigned only to developed nations (exempted China/India), U.S. never ratified. Paris: voluntary self-set NDCs from all countries, politically more inclusive but criticized as too weak. Trade-off: binding targets are stronger but politically fragile; voluntary pledges are more durable but potentially insufficient.", "id": "fc20"}, {"front": "Why does climate change represent 'distributional injustice'?", "back": "Those who caused the most cumulative emissions (wealthy industrialized nations — U.S., EU, Russia, now China) are not those most exposed to the worst physical impacts (flooding, drought, cyclones — predominantly in South Asia, sub-Saharan Africa, Southeast Asia, Pacific Islands). The causers and the sufferers are largely different countries.", "id": "fc21"}, {"front": "Nitrogen and synthetic fertilizers: Great Acceleration", "back": "Nitrogen added to soils through synthetic fertilizer increased ten-fold between 1950 and 2010 — one of the most rapid indicators of human alteration of Earth's biogeochemical cycles. Excess nitrogen causes water pollution (eutrophication), dead zones in coastal waters, and greenhouse gas (nitrous oxide) emissions.", "id": "fc22"}, {"front": "Technology paradox in the Anthropocene", "back": "Technology is simultaneously the source of the Anthropocene crisis (fossil fuel combustion, industrial agriculture, synthetic chemistry) and the proposed solution (renewable energy, carbon capture, precision agriculture). The key historical question: can technological change be directed rapidly and equitably enough to prevent the worst outcomes — and who decides?", "id": "fc23"}, {"front": "How does the Anthropocene connect to earlier AP World History periods?", "back": "Ancient agricultural civilizations altered local river systems and depleted soils in limited areas. Industrial Revolution (19th century) began fossil fuel combustion at scale. The Anthropocene represents the acceleration of these long-standing patterns to planetary scale — continuity in kind, revolutionary in magnitude.", "id": "fc24"}, {"front": "Why does the Paris Agreement's voluntary architecture create vulnerability?", "back": "Because NDCs are self-set pledges rather than binding treaty obligations, domestic political change can alter commitments without legal consequence — as demonstrated by the U.S. withdrawal (2017) and return (2021). A truly binding framework requires domestic ratification, which proved politically impossible under Kyoto.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

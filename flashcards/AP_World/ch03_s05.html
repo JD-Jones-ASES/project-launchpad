@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 3, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Protestant Reformation — trigger event", "back": "Martin Luther posted (or mailed) his 95 Theses to the door of the Castle Church in Wittenberg, Germany, on October 31, 1517, attacking the sale of indulgences as contradicting the Bible's emphasis on salvation by faith alone.", "id": "fc01"}, {"front": "Indulgences", "back": "Certificates sold by the Catholic Church claiming to reduce a buyer's time in purgatory. Luther's attack on them as corrupt and unscriptural sparked the Reformation. Revenues from indulgence sales often funded Church construction projects, including St. Peter's Basilica.", "id": "fc02"}, {"front": "Sola fide / Sola scriptura", "back": "Luther's two core theological principles: sola fide ('faith alone') — salvation comes through faith, not Church sacraments or purchased indulgences; sola scriptura ('scripture alone') — the Bible, not Church tradition or papal authority, is the source of religious authority.", "id": "fc03"}, {"front": "Priesthood of all believers", "back": "Luther's principle that laypeople can read and interpret scripture without clerical mediation — challenging the Catholic Church's exclusive interpretive authority and the necessity of ordained priests as intermediaries between believers and God.", "id": "fc04"}, {"front": "Martin Luther (1483–1546)", "back": "German Augustinian monk and professor of theology whose 95 Theses (1517) launched the Protestant Reformation. Translated the Bible into German. Endorsed suppression of the Peasants' War (1524–25), showing the limits of his challenge to hierarchy: religious reform did not mean social revolution.", "id": "fc05"}, {"front": "Lutheranism — spread and political support", "back": "Spread through northern Germany and Scandinavia. German princes supported it partly for theological reasons, partly because conversion enabled them to seize Church lands — an economic and political incentive alongside religious conviction.", "id": "fc06"}, {"front": "Calvinism", "back": "Reformed Protestant theology developed by John Calvin (Geneva); emphasized predestination and republican church governance (no bishops; congregational/presbyterian structures). Spread to the Netherlands, Scotland, and France (Huguenots). Proved compatible with commercially minded urban populations.", "id": "fc07"}, {"front": "Counter-Reformation", "back": "The Catholic Church's internal reform movement in response to Protestantism; centered on the Council of Trent (1545–1563), which clarified Catholic doctrine, reformed clerical abuses, and created the Jesuit order for missionary work and education worldwide.", "id": "fc08"}, {"front": "Council of Trent (1545–1563)", "back": "The Catholic Church council that launched the Counter-Reformation. Clarified and reaffirmed Catholic doctrine, reformed clerical abuses (plural benefices, simony), and established seminaries for clerical education. Rejected Luther's core theological challenges.", "id": "fc09"}, {"front": "Peace of Augsburg (1555)", "back": "Agreement establishing cuius regio, eius religio ('whose realm, his religion') — each German prince could choose whether his territory would be Lutheran or Catholic. Made religion a matter of state sovereignty rather than universal Church authority; prefigured modern state sovereignty.", "id": "fc10"}, {"front": "Cuius regio, eius religio", "back": "'Whose realm, his religion.' The principle established by the Peace of Augsburg (1555): the ruler determines the official religion of his territory. Subjects who disagreed could emigrate. Transferred religious authority from the universal Church to territorial sovereigns.", "id": "fc11"}, {"front": "Thirty Years' War (1618–1648)", "back": "Devastating conflict in central Europe that was partly a Catholic-Protestant religious war and partly a struggle for territorial power among German princes, France, Sweden, and the Habsburg Empire. Ended by the Peace of Westphalia (1648).", "id": "fc12"}, {"front": "Peace of Westphalia (1648)", "back": "Ended the Thirty Years' War; extended religious coexistence to Calvinists; and, more importantly, established the principle of state sovereignty as the foundation of the modern international order — each state has supreme authority within its borders.", "id": "fc13"}, {"front": "Divine right of kings", "back": "Doctrine that monarchical authority derives directly from God, not from subjects' consent or Church validation. Developed in Europe by James I of England and Bossuet in France. Not uniquely European: analogous concepts include the Ottoman zill-i-ilahi, Safavid Imamic descent, and the Chinese Mandate of Heaven.", "id": "fc14"}, {"front": "Zill-i-ilahi ('Shadow of God')", "back": "The Ottoman concept of divinely sanctioned rulership — the sultan as God's shadow on earth. Analogous to European divine right theory; provided transcendent legitimacy beyond military force.", "id": "fc15"}, {"front": "Mandate of Heaven (Tianming)", "back": "The Chinese concept that rulers govern with divine sanction; if they rule unjustly, Heaven withdraws the mandate and a new dynasty rises. The Qing used this framework alongside Confucian ritual to legitimize their rule over Han Chinese subjects.", "id": "fc16"}, {"front": "Safavid-Ottoman religious-political frontier", "back": "The Safavid imposition of Shi'a Islam created a state-level contest over Muslim population loyalty in Iraq, Azerbaijan, and the Arabian Peninsula. The Ottomans positioned themselves as Sunni orthodoxy defenders; the Safavids portrayed Ottomans as usurpers. Religion was a tool of geopolitical competition.", "id": "fc17"}, {"front": "Edict of Nantes (1598) and its Revocation (1685)", "back": "The Edict of Nantes granted French Protestants (Huguenots) religious toleration. Louis XIV revoked it in 1685, forcing roughly 200,000 Huguenots — many skilled artisans and merchants — into exile, strengthening Protestant rival economies (England, Netherlands, Prussia) at France's expense.", "id": "fc18"}, {"front": "Huguenots", "back": "French Calvinists who gained legal protection under the Edict of Nantes (1598). Louis XIV's 1685 revocation expelled them; their emigration to Protestant countries strengthened those economies with skilled craftworkers and merchants — an unintended consequence of religious uniformity policy.", "id": "fc19"}, {"front": "Six models of religion-state relations (1450–1750)", "back": "1. Ottoman millet system (tolerated plurality under Muslim supremacy); 2. Safavid confessional state (enforced Shi'a orthodoxy); 3. Mughal syncretism under Akbar (deliberate blending); 4. Mughal orthodoxy under Aurangzeb (enforced Sunni supremacy); 5. Qing multi-confessional patronage (different religions for different subjects); 6. European cuius regio (confession set by ruler's choice).", "id": "fc20"}, {"front": "Religion as state-building tool — core concept", "back": "Across the 1450–1750 world, rulers fused religion and politics deliberately. Religion defined the community, distinguished insiders from outsiders, and gave the ruler's authority a transcendent source beyond mere military force. This was not unique to any one civilization — it was a global political strategy.", "id": "fc21"}, {"front": "Qing multi-confessional patronage", "back": "The Qing emperors patronized Buddhism to win Mongolian and Tibetan loyalty, performed Confucian ritual for Han subjects, and maintained their own Manchu shamanic traditions. Using different religious identities for different audiences — not syncretism but strategic pluralism.", "id": "fc22"}, {"front": "Compare Safavid confessional state and Ottoman millet system.", "back": "The Safavid state enforced Shi'a Islam as the single state religion, assuming uniformity strengthened loyalty and distinguished Iran from rivals. The Ottoman millet system assumed that managed plurality — autonomy for recognized communities under Muslim supremacy — was a more practical way to govern a diverse empire. Each made a different assumption about the relationship between religious uniformity and political stability.", "id": "fc23"}, {"front": "How did the printing press change the religious-political landscape of the Reformation?", "back": "The printing press allowed Luther's 95 Theses to circulate across Europe within weeks — faster than the Church could suppress them. This created a new dynamic: heterodox ideas could reach mass audiences before institutional responses could contain them, making the Reformation qualitatively different from earlier Church criticisms.", "id": "fc24"}, {"front": "Peasants' War (1524–25) and Luther's response", "back": "German peasants drew on Lutheran ideas of spiritual equality to demand social and economic liberation. Luther condemned the revolt and endorsed its violent suppression, revealing the limits of the Reformation: religious reform of Church doctrine did not extend to social revolution or challenges to secular hierarchy.", "id": "fc25"}, {"front": "Why did rulers in this period refuse to separate religion from politics?", "back": "In an age when most people understood legitimate authority as divinely sanctioned, no ruler could afford to ignore religion as a source of legitimacy. Religion defined community identity, justified the ruler's authority, and distinguished loyal subjects from potential enemies. Secularism as a political principle had not yet emerged.", "id": "fc26"}, {"front": "Jesuit order — founding purpose", "back": "Founded as part of the Counter-Reformation following the Council of Trent (1545–1563). Created as a vehicle for missionary work and education worldwide; established schools and missions from Asia (Kangxi Emperor's court) to the Americas. Became the primary instrument of Catholic global outreach.", "id": "fc27"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

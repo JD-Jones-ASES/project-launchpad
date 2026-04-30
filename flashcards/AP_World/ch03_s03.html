@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 3, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Russia in 1450 — political condition", "back": "A patchwork of competing principalities still emerging from two centuries of Mongol domination. By 1750, transformed into the largest contiguous land empire on earth, stretching from the Baltic to the Pacific.", "id": "fc01"}, {"front": "Ivan IV ('Ivan the Terrible') — reign dates and key title", "back": "r. 1547–1584. First Russian ruler to formally adopt the title of tsar (Slavic form of 'Caesar'), claiming the Roman and Byzantine imperial inheritance. Combined genuine early reforms with later terror.", "id": "fc02"}, {"front": "Why Ivan IV adopted the title 'tsar'", "back": "To signal a claim to the Roman and Byzantine imperial inheritance — positioning the Russian ruler as a universal sovereign, heir to the prestige of the Roman Empire via Byzantium, above ordinary European princes.", "id": "fc03"}, {"front": "Ivan IV's early accomplishments (before the terror)", "back": "Conquest of Mongol Khanates of Kazan (1552) and Astrakhan (1556), opening Siberian expansion; legal codification via the Sudebnik of 1550; creation of pomeshchiki (service nobles) dependent on the tsar.", "id": "fc04"}, {"front": "Boyars", "back": "The hereditary nobility of medieval Russia who held large estates, commanded armed retinues, and sat on the noble council (Duma). The tsars' struggle to replace boyar independence with a service-based nobility was central to Russian political history from Ivan III through Peter the Great.", "id": "fc05"}, {"front": "Pomeshchiki", "back": "Service nobles created by Ivan IV — a new military-service class that held estates only as long as they served the state. Contrasted with hereditary boyar nobles; designed to create a nobility loyal to the tsar rather than independently powerful.", "id": "fc06"}, {"front": "Oprichnina", "back": "A special administrative territory placed under Ivan IV's direct personal control, enforced by the oprichniki (black-robed secret police) who carried a dog's head and broom as symbols of sniffing out and sweeping away treason. It devastated the boyar class but also wrecked Russia's administrative capacity.", "id": "fc07"}, {"front": "Oprichniki", "back": "Ivan IV's black-robed secret police who enforced the oprichnina through arrests, executions, and confiscations against the boyar class. Their terror shattered the old aristocratic order but destabilized the Russian state.", "id": "fc08"}, {"front": "Time of Troubles (1598–1613)", "back": "A period of political crisis and near-state-collapse in Russia following Ivan IV's reign, caused in part by the devastation wrought by the oprichnina. Ended with the establishment of the Romanov dynasty.", "id": "fc09"}, {"front": "Peter the Great — reign dates and core project", "back": "r. 1682–1725. Systematically Westernized Russian institutions through top-down reform modeled on Western European practices observed during the Grand Embassy (1697–98). Built a modern navy, won the Great Northern War, founded Saint Petersburg.", "id": "fc10"}, {"front": "Grand Embassy (1697–98)", "back": "Peter I's incognito tour of western Europe where he worked in Dutch shipyards, visited English factories, and met scientists and engineers. The direct inspiration for his systematic Westernization reforms.", "id": "fc11"}, {"front": "Table of Ranks (1722)", "back": "Peter's 14-level merit-based civil bureaucracy in which advancement depended on state service rather than birth. Created a service-based noble class loyal to the tsar; paralleled the Ottoman devshirme logic of loyalty through dependency.", "id": "fc12"}, {"front": "Holy Synod (Peter's church reform)", "back": "Peter abolished the Patriarchate of the Russian Orthodox Church and replaced it with the Holy Synod — a board overseen by a lay official appointed by the tsar. Subordinated religious authority completely to state control.", "id": "fc13"}, {"front": "Saint Petersburg — founding and symbolic meaning", "back": "Built on swampy land seized from Sweden during the Great Northern War, at the cost of tens of thousands of forced laborers. Designed by European architects and oriented toward the West — literally and symbolically Peter's declaration of a new, Westernized Russia.", "id": "fc14"}, {"front": "Great Northern War (1700–1721)", "back": "War between Russia and Sweden in which Peter the Great's reformed Russian army ultimately defeated Sweden, securing Russia's access to the Baltic Sea. Marked Russia's emergence as a major European military power.", "id": "fc15"}, {"front": "Beard tax (Peter the Great)", "back": "Peter required Russian nobles to shave their beards (a profound affront to Orthodox tradition) as part of his Westernization program. Those who refused paid a beard tax — a stark example of coercive modernization imposed by state decree.", "id": "fc16"}, {"front": "Russian serfdom — key dates", "back": "Formally codified in 1649 (Sobornoye Ulozheniye); intensified under Peter the Great. Unlike western European serfdom, which was declining by 1500, Russian serfdom deepened through the 18th century. Serfs could be bought, sold, and punished by lords. Formally emancipated in 1861.", "id": "fc17"}, {"front": "Paradox of Petrine modernization", "back": "Peter imported Western ideas of rational administration and merit-based bureaucracy while simultaneously deepening serfdom — binding peasants more tightly to the land. Westernization at the top; archaic labor coercion at the bottom. The tension would haunt Russia until 1861.", "id": "fc18"}, {"front": "Cossacks", "back": "Free semi-military communities on the Russian steppe who served as frontiersmen, pushing eastward across Siberia at extraordinary speed. Reached the Pacific by 1639. Key agents of Russian territorial expansion, driven by the fur trade.", "id": "fc19"}, {"front": "Russian expansion into Siberia — economic driver", "back": "The fur trade (yasak — fur tribute imposed on indigenous Siberian peoples) drove Russian eastward expansion, just as the spice trade drove European maritime expansion. State military power combined with economic incentive to conquer enormous territory.", "id": "fc20"}, {"front": "Yasak", "back": "The fur tribute imposed by Russia on indigenous Siberian peoples (hunters, reindeer herders, shamanic communities) incorporated into the Russian tribute system. The primary economic return of Siberian expansion.", "id": "fc21"}, {"front": "Treaties of Nerchinsk (1689) and Kyakhta (1727)", "back": "Two treaties between Russia and Qing China delineating boundaries and establishing trade routes. Nerchinsk was the first formal treaty between China and a European power; Kyakhta expanded the trade relationship. Demonstrated both states' diplomatic sophistication.", "id": "fc22"}, {"front": "Coercive modernization — definition and examples", "back": "A pattern of top-down reform in which an autocratic ruler uses state power to force institutional change on a reluctant population without consent. Peter the Great's Russia is the defining early modern example; Meiji Japan and Kemalist Turkey represent later iterations of the same pattern.", "id": "fc23"}, {"front": "How did Russian expansion into Siberia parallel European maritime colonialism (SPICE-T)?", "back": "Both combined economic incentive (fur vs. spice) with state military power to conquer territory. Both devastated indigenous populations through disease, coerced labor, and cultural disruption. Russian expansion parallels the Columbian Exchange's effects in structure, if not scale.", "id": "fc24"}, {"front": "Compare Ivan IV's oprichnina and Peter the Great's Table of Ranks as tools for subordinating the nobility.", "back": "Both aimed to replace independent hereditary noble power with loyalty to the tsar, but through opposite methods. Ivan's oprichnina used terror and confiscation to destroy the boyar class physically. Peter's Table of Ranks used institutional incentives — tying advancement to service — to restructure noble identity around state loyalty. The first destabilized Russia; the second modernized it.", "id": "fc25"}, {"front": "Why is Russia's path to empire distinctive among the land-based empires of 1450–1750?", "back": "Russia's expansion was primarily eastward and contiguous across land (Siberia), driven by the fur trade and Cossack frontiersmen rather than gunpowder conquest of urban civilizations. Its state-building was characterized by coercive modernization from above (Westernization) combined with intensified internal serfdom — a paradox absent from the Ottoman, Safavid, and Mughal cases.", "id": "fc26"}, {"front": "Sudebnik of 1550", "back": "Ivan IV's legal code, part of his early reform program. Standardized Russian law and is considered part of the constructive phase of Ivan's reign, before the oprichnina period of terror.", "id": "fc27"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

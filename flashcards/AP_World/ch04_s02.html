@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 4, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Columbian Exchange", "back": "The widespread transfer of plants, animals, diseases, people, and cultural practices between the Americas and the Eastern Hemisphere following Columbus's 1492 voyage, named by historian Alfred Crosby (1972). Ecologically asymmetrical: the Americas received Old World diseases causing demographic catastrophe; Eurasia and Africa received American crops contributing to population growth.", "id": "fc01"}, {"front": "Alfred Crosby", "back": "American historian who coined the term 'Columbian Exchange' in his 1972 book of the same name. He described the biological transfer between hemispheres as 'the most significant ecological event since the last Ice Age,' shifting the historiography of European expansion toward ecological causation.", "id": "fc02"}, {"front": "maize (corn)", "back": "A crop originating in Mesoamerica that traveled eastward as part of the Columbian Exchange. Highly productive in both tropical and temperate climates and growable on marginal soils, maize expanded agricultural carrying capacity across Africa, Europe, and Asia after 1492.", "id": "fc03"}, {"front": "potato", "back": "An Andean highland crop that spread to Europe via the Columbian Exchange. It could be grown in cold, wet climates inhospitable to most Eurasian grains, becoming the caloric foundation of Ireland, Germany, Russia, and parts of China. The Irish population roughly doubled between 1700 and 1845 on potato agriculture.", "id": "fc04"}, {"front": "cassava (manioc)", "back": "A starchy root crop from the Amazon basin that spread rapidly through sub-Saharan Africa via the Columbian Exchange, providing calories in tropical soils that resisted other crops. Its spread contributed to population growth in equatorial Africa.", "id": "fc05"}, {"front": "sugar cane", "back": "Originally from New Guinea via India and the Mediterranean, sugar cane was introduced to the Caribbean and Brazil by Spanish and Portuguese colonizers. Its extraordinary labor demands became the primary economic driver of the Atlantic slave trade, making it the most consequential Western-moving transfer of the Columbian Exchange.", "id": "fc06"}, {"front": "smallpox in the Americas", "back": "The single most devastating component of the Columbian Exchange. Smallpox arrived in Hispaniola with Columbus's second expedition (1493) and spread faster than any Spanish soldier could march. It reached Mexico before Cortés, killing the Aztec emperor Cuitláhuac and perhaps half of Tenochtitlan's population before the siege began.", "id": "fc07"}, {"front": "immunological isolation of the Americas", "back": "The Americas had been ecologically isolated from Eurasian disease pools for approximately 12,000 years. Indigenous Americans had zero acquired immunity to smallpox, measles, typhus, influenza, bubonic plague, cholera, or malaria — diseases to which Old World populations had developed partial resistance over millennia of exposure.", "id": "fc08"}, {"front": "demographic collapse in the Americas", "back": "The catastrophic population decline of indigenous Americans following European contact. Scholarly consensus estimates pre-contact population at 50–60 million. By 1600, epidemics had reduced this by 50–90% in different regions. Central Mexico fell from ~20–25 million (1519) to ~1 million by 1620.", "id": "fc09"}, {"front": "horse in the Americas", "back": "Introduced by the Spanish as part of the Columbian Exchange, horses spread across the Great Plains and transformed indigenous societies within a generation or two. The equestrian bison-hunting cultures of the Comanche, Sioux, and Cheyenne — often called 'traditional' — were in fact products of this post-1492 introduction.", "id": "fc10"}, {"front": "why did Cortés defeat the Aztec empire? (AP framing)", "back": "Not primarily through military superiority. Smallpox had already killed the Aztec emperor and devastated Tenochtitlan before the siege. Tlaxcalan allies with grievances against Aztec tribute demands provided critical military support. Political fragmentation within the Triple Alliance was also decisive. Disease, alliance politics, and internal divisions — not Spanish guns alone — explain the conquest.", "id": "fc11"}, {"front": "Tlaxcalan alliance", "back": "The Tlaxcalans were indigenous Mesoamericans who allied with Cortés against the Aztec Triple Alliance. They provided the bulk of the fighting force that besieged Tenochtitlan. Their alliance reflects indigenous political agency and the internal grievances against Aztec tributary demands — a causation that military-focused narratives of conquest overlook.", "id": "fc12"}, {"front": "price revolution (introduced in section context)", "back": "The sustained inflation across Europe caused by the influx of American silver after 1492. Though developed fully in Section 4.5, the price revolution illustrates how the Columbian Exchange's monetary dimension (silver) affected Europe as profoundly as its biological dimension (crops and diseases).", "id": "fc13"}, {"front": "demographic consequences of Columbian Exchange in Eurasia vs. Americas", "back": "Asymmetrical: Eurasia and Africa gained American crops (potato, maize, cassava) that increased caloric availability and contributed to population growth over two centuries. The Americas lost 50–90% of their population to Eurasian diseases against which they had no immunity. The exchange benefited one side demographically while catastrophically harming the other.", "id": "fc14"}, {"front": "Old World livestock in the Americas", "back": "Horses, cattle, pigs, sheep, and goats arrived with the Spanish and spread faster than European settlers. Beyond enabling equestrian Plains cultures, feral pigs competed with native deer and turkey. European livestock produced soil compaction and overgrazing in regions that had evolved under different megafaunal pressures.", "id": "fc15"}, {"front": "SPICE-T: Interaction with Environment — Columbian Exchange", "back": "The Columbian Exchange is the premier AP World History example of human-environment interaction: organisms deliberately and accidentally moved between hemispheres reshaped entire ecosystems. Horse introduction created Plains bison cultures; pig populations altered forest composition; American crops expanded Eastern Hemisphere agricultural carrying capacity; European livestock altered American soil chemistry.", "id": "fc16"}, {"front": "What made indigenous Americans more vulnerable to Eurasian diseases than Europeans?", "back": "Twelve thousand years of ecological isolation from the Eurasian disease pool meant that no indigenous American had ever been exposed to smallpox, measles, typhus, or influenza — and neither had any ancestor. Old World populations had partial genetic and immunological resistance built over generations of exposure and survival. Indigenous Americans had none.", "id": "fc17"}, {"front": "Hispaniola — demographic example", "back": "The Caribbean island where Columbus first landed (1492) and where European contact was earliest and most intense. Las Casas reported the population had been reduced from more than three million to roughly two hundred within fifty years. The Caribbean islands as a whole were virtually depopulated within fifty years — the most extreme regional case of Columbian Exchange demographic collapse.", "id": "fc18"}, {"front": "North America vs. Brazil/Caribbean in the slave trade (connection to s02 context)", "back": "North America received only ~400,000 enslaved Africans directly; its enslaved population grew through natural increase. Brazil received ~4.9 million and the Caribbean ~4.0 million. The difference relates to plantation mortality: Caribbean sugar islands required constant importation because death rates were so high — a product of the brutal conditions directly connected to the sugar monoculture that the Columbian Exchange made central to colonial economies.", "id": "fc19"}, {"front": "'Disease as the primary agent of conquest' — AP scoring implication", "back": "The source explicitly states: students who explain conquest primarily in military terms earn lower scores than those who integrate disease causation. AP readers expect causal arguments that incorporate epidemic disease, indigenous alliance politics, and political fragmentation — not simply Spanish technological or military superiority.", "id": "fc20"}, {"front": "ecological isolation — 12,000 years", "back": "The approximate length of time the Americas had been separated from Eurasia and Africa before 1492. This isolation meant not only that disease pools did not overlap, but also that the Americas had evolved distinct plant and animal species. The Columbian Exchange ended this isolation permanently, initiating a global biological homogenization whose effects are still unfolding.", "id": "fc21"}, {"front": "Why did feral pigs cause ecological damage in the Americas?", "back": "European pigs (and other livestock) evolved in Eurasian ecosystems alongside particular native species. Introduced into American environments, they competed directly with native deer and turkey, rooted up native vegetation, and disrupted ecosystems that had evolved under the pressure of different megafaunal grazers. American soils and plants had no evolutionary history with European livestock.", "id": "fc22"}, {"front": "What role did the Columbian Exchange play in enabling European colonial dominance?", "back": "The demographic catastrophe caused by epidemic disease — reducing indigenous American populations by 50–90% — was the primary mechanism enabling European colonial control. With populations destroyed, food networks disrupted, and political leadership killed by disease, surviving indigenous societies could not effectively resist colonial labor extraction and land seizure. Disease was the unintended but decisive weapon of conquest.", "id": "fc23"}, {"front": "caloric impact of American crops on Eurasia", "back": "Maize and sweet potatoes expanded agricultural production in Chinese upland regions. The potato expanded Irish, German, and Russian food production on previously marginal land. Cassava expanded production in tropical Africa. Collectively, these crops contributed to population growth across three continents over the two centuries after 1492 — one of history's largest nutritional transformations.", "id": "fc24"}, {"front": "CONTINUITY: What aspects of the Americas persisted despite the Columbian Exchange?", "back": "While disease and ecological disruption were catastrophic, many indigenous communities survived and adapted. Indigenous agricultural practices (maize cultivation, terrace farming) continued. Cultural and linguistic communities persisted despite demographic loss. Some indigenous political structures adapted to colonial conditions. The Columbian Exchange was devastating but not total erasure — indigenous resilience is part of the historical picture.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

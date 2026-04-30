@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 2, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Black Death", "back": "The pandemic caused by the bacterium Yersinia pestis that swept Eurasia in the mid-14th century (c. 1331–1353), killing an estimated one-third to one-half of the population of Europe, the Middle East, and portions of China and Central Asia. The deadliest pandemic in recorded human history; its effects reshaped labor markets, religious institutions, and social structures.", "id": "fc01"}, {"front": "Yersinia pestis", "back": "The bacterium responsible for bubonic plague, whose primary hosts are burrowing rodents of the Central Asian steppe (marmots, gerbils, rats). Transmitted among rodents by fleas; reaches humans when infected fleas bite human hosts. In the human lymphatic system it produces buboes (swollen lymph nodes), high fever, hemorrhagic skin blackening, and 30–90% death rate untreated. A secondary pneumonic form is nearly 100% fatal.", "id": "fc02"}, {"front": "Pandemic", "back": "An epidemic disease that spreads across multiple countries or continents, affecting a large proportion of the world's population. The Black Death was a pandemic in this sense; it spread through exchange networks—trade routes were simultaneously channels of commerce and channels of contagion. This recurring pattern (connectivity = contagion risk) is central to AP World History.", "id": "fc03"}, {"front": "Bubonic plague — transmission mechanism", "back": "Yersinia pestis is transmitted from infected rodents to humans via flea bites. Infected fleas from Central Asian steppe rodents (marmots, gerbils, rats) traveling with human settlements and caravans bit human hosts, introducing the bacterium into the lymphatic system. Characteristic symptom: buboes (swollen lymph nodes), especially in groin, armpit, and neck.", "id": "fc04"}, {"front": "Pneumonic plague", "back": "A secondary form of plague spread by airborne respiratory droplets rather than flea bites, affecting the lungs. Nearly 100% fatal compared to the 30–90% mortality of bubonic plague. It spread especially in densely populated urban settings, contributing to the catastrophic mortality rates in European and Middle Eastern cities.", "id": "fc05"}, {"front": "Caffa (Crimea), 1346", "back": "A Genoese trading port on the Crimean peninsula besieged by Mongol forces. Mongol forces reportedly catapulted plague-infected corpses over the city walls—one of history's first documented incidents of biological warfare. Genoese merchants fleeing Caffa carried the disease to Constantinople and Sicily in 1347, spreading the Black Death into the Mediterranean world.", "id": "fc06"}, {"front": "Black Death timeline", "back": "Origins: Central Asian rodent populations, 1330s. Chinese epidemic disease in Hebei: c. 1330s. Caffa, Crimea: 1346. Constantinople and Sicily: 1347. Northern Europe: 1349–1350. Iceland: within 3 years of Sicily. Successive waves continued: 1361–63, 1374, and intermittently for three centuries.", "id": "fc07"}, {"front": "Black Death demographic impact — Europe", "back": "The first wave (1347–1353) killed an estimated one-third to one-half of Europe's population—roughly 25 million out of 75 million. England's population did not return to pre-plague levels until the 16th century. Successive waves (1361, 1374, intermittently for three centuries) prevented faster recovery.", "id": "fc08"}, {"front": "Black Death demographic impact — Islamic world", "back": "Egypt lost an estimated 40% of its population; Syria and Iraq were 'similarly devastated.' Recovery was even slower than in Europe. These figures challenge the Eurocentric framing of the Black Death as primarily a European event.", "id": "fc09"}, {"front": "Black Death and labor markets", "back": "Mass mortality created labor scarcity across Europe. Surviving peasants gained unprecedented bargaining power—lords had to offer wages and better conditions to attract scarce workers. The long-term trend toward the end of serfdom in Western Europe was accelerated by plague mortality.", "id": "fc10"}, {"front": "English Peasants' Revolt (1381)", "back": "A major uprising partly caused by lords' attempts to reimpose pre-plague labor obligations on a workforce that had learned its post-plague market value. The revolt illustrates the political consequences of demographic shock: mass mortality → labor scarcity → peasant leverage → elite backlash → popular revolt.", "id": "fc11"}, {"front": "Religious crisis from the Black Death", "back": "The Black Death killed perhaps half of Europe's parish priests and many learned monks. Prayer and sacraments' failure to protect the faithful shook spiritual confidence and contributed to questioning of ecclesiastical authority. Flagellant movements spread across Germany and the Low Countries; Jewish communities were massacred across Central Europe on false accusations of well-poisoning.", "id": "fc12"}, {"front": "Flagellants", "back": "Groups of penitents who publicly whipped themselves to appease divine wrath during the Black Death. They spread across Germany and the Low Countries, representing a breakdown of orthodox religious authority in the face of catastrophe and the search for non-institutional responses to perceived divine punishment.", "id": "fc13"}, {"front": "Persecution of Jewish communities during Black Death", "back": "Jewish communities across Central Europe were accused without evidence of poisoning wells and were subjected to massacres during the Black Death. This represents the scapegoating dynamic typical of social crises—unfounded accusations against a vulnerable minority population during a catastrophe that no authority could explain or stop.", "id": "fc14"}, {"front": "Ibn Khaldun on the Black Death", "back": "A great Syrian historian and sociologist who lost his parents to the plague; wrote in 1377 that civilization had been struck 'as if by a bolt from the sky,' that the East and the West had been depopulated, and that the world had changed. His account is a significant non-European primary source confirming the Eurasian—not merely European—scale of the catastrophe.", "id": "fc15"}, {"front": "al-Maqrizi", "back": "An Egyptian polymath who documented the plague's repeated return to Cairo and its effects on the city's grain supply and administrative function—an important non-European primary source for the Black Death's impact on North Africa and the Islamic world.", "id": "fc16"}, {"front": "Black Death and the Yuan dynasty's collapse", "back": "Epidemic disease coincided with and contributed to the political instability that ended Mongol rule in China. The Ming dynasty replaced the Yuan in 1368; its subsequent wariness of unrestricted overland Central Asian trade was influenced partly by the memory of a pandemic that had traveled those very routes.", "id": "fc17"}, {"front": "Connectivity-contagion pattern", "back": "A recurring pattern in AP World History: the same infrastructure that accelerates commercial exchange also accelerates the spread of infectious disease. Examples: Mongol road network → Black Death (Unit 2); Columbian Exchange → smallpox devastation of Indigenous Americans (Unit 4); WWI global troop movements → 1918 influenza pandemic (Unit 7).", "id": "fc18"}, {"front": "Paradox of the Black Death: disruption and recovery", "back": "Short-term: trade collapsed, ports closed, caravans disbanded. Medium-term: per-capita wealth among survivors increased in some regions as labor scarcity raised wages and standards of living for artisan and merchant classes. The economic recovery of the late 14th and 15th centuries was partly a product of this demographic restructuring.", "id": "fc19"}, {"front": "SPICE-T: How does the Black Death illustrate the 'Interaction with Environment' theme?", "back": "The Black Death demonstrates the biological dimension of human-environment interaction: disease organisms living in natural rodent reservoirs entered human commercial networks when conditions changed (Mongol disruption of steppe ecosystems, increased human-rodent contact via caravan routes). The environment—specifically the Central Asian steppe rodent population—was both the disease reservoir and the factor humans could not control.", "id": "fc20"}, {"front": "SPICE-T: Social theme — Black Death consequences", "back": "The Black Death reshaped social structures across Eurasia: in Europe, it eroded serfdom by shifting labor market power to surviving peasants; it killed half of Europe's clergy, contributing to a religious authority crisis; it triggered scapegoating of Jewish communities; it produced flagellant movements. In the Islamic world, repeated plague waves depopulated cities and disrupted administrative and intellectual life.", "id": "fc21"}, {"front": "Why was sub-Saharan Africa less affected by the Black Death?", "back": "The Sahara Desert and the ecological distribution of the plague's primary rodent reservoir (Central Asian steppe species rather than sub-Saharan African ones) largely protected sub-Saharan Africa from the main plague waves. The trans-Saharan trade routes did not serve as effective transmission corridors for this particular pathogen.", "id": "fc22"}, {"front": "Hanseatic League, Venice, Genoa — trade collapse", "back": "The major commercial networks of northern and Mediterranean Europe all experienced trade collapses in the late 1340s as the Black Death struck ports and cities. This short-term disruption illustrates how epidemic disease, transmitted via trade networks, can rapidly reverse the commercial gains those same networks had built.", "id": "fc23"}, {"front": "Continuity and Change: Eurasian trade networks after the Black Death", "back": "Change: population collapse disrupted trade volume; the Ming dynasty reduced overland Central Asian trade; some western European economies restructured as labor became more expensive. Continuity: the Indian Ocean maritime network was less affected; trans-Saharan routes continued; the Ottoman Empire later revived overland Silk Road connections. The basic geography of trade routes persisted.", "id": "fc24"}, {"front": "Compare: Black Death (14th c.) and Columbian Exchange diseases (16th c.)", "back": "Both demonstrate the connectivity-contagion pattern: increased exchange connectivity (Mongol roads in the 14th century; European oceanic routes in the 16th) carried pathogens into populations with no prior exposure. Both caused catastrophic mortality (one-third to one-half in the Black Death; up to 90% in some Indigenous American populations). Both reshaped labor markets, political structures, and religious life in affected societies.", "id": "fc25"}, {"front": "Waba", "back": "The Arabic term for plague, used in the Islamic world's description of the Black Death. The existence of an Arabic terminology illustrates that the Black Death was as significant an event for Islamic civilization as for European—the Islamic world experienced comparable or worse mortality, challenging any Eurocentric narrative of the plague.", "id": "fc26"}, {"front": "Great Mortality", "back": "A term used by European chroniclers for what later became known as the Black Death. The contemporary name—focusing on death toll rather than naming it 'black'—reflects the scale of the catastrophe as contemporaries experienced it. The term 'Black Death' came later; contemporaries knew it as a killing on a scale that defied comprehension.", "id": "fc27"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

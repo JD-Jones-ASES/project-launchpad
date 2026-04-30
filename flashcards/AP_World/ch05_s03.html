@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 5, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "French Revolution (1789–1799)", "back": "The most convulsive political event in eighteenth-century Europe, transforming France from an absolute monarchy to a republic through phases of radicalization including the Declaration of the Rights of Man, the Terror, and Napoleon's rise. Generated modern political vocabulary: left/right, liberty/equality/fraternity, revolution itself.", "id": "fc01"}, {"front": "Ancien Régime", "back": "The pre-revolutionary French social and political order: an absolute monarchy supported by the First Estate (clergy) and Second Estate (nobility), with the Third Estate (97% of the population) bearing the tax burden. Structural inequality of this system was the root cause of the Revolution's fiscal crisis.", "id": "fc02"}, {"front": "Estates-General", "back": "France's feudal representative body, divided into three orders: clergy (First), nobility (Second), and everyone else (Third, ~97% of population). Had not met since 1614; convened by Louis XVI in 1789 to approve new taxes, triggering the revolutionary crisis.", "id": "fc03"}, {"front": "Third Estate", "back": "The approximately 97% of France's population outside the clergy and nobility — including peasants, artisans, urban workers, and the bourgeoisie. Bore the full tax burden while the privileged estates paid little or nothing. Voted to reconstitute itself as the National Assembly in 1789.", "id": "fc04"}, {"front": "National Assembly", "back": "The governing body formed when the Third Estate voted to reconstitute itself in June 1789, claiming the authority to give France a constitution. Its formation transferred sovereignty from the king to the people — transforming a fiscal dispute into a constitutional revolution.", "id": "fc05"}, {"front": "Tennis Court Oath (June 20, 1789)", "back": "The oath taken by delegates of the National Assembly not to disband until France had a written constitution — a dramatic act of defiance against royal authority that transformed the Estates-General dispute into a constitutional revolution.", "id": "fc06"}, {"front": "storming of the Bastille (July 14, 1789)", "back": "A Paris crowd's attack on the Bastille fortress — a symbol of royal despotism — that moved the Revolution from the Assembly hall into the streets. July 14 is now France's national holiday (Bastille Day).", "id": "fc07"}, {"front": "Declaration of the Rights of Man and of the Citizen (August 1789)", "back": "The National Assembly's proclamation that sovereignty resided in the nation and every citizen possessed natural rights to liberty, property, security, and resistance to oppression. Its universalist language resonated across the Atlantic world, read in Haiti and translated into dozens of languages.", "id": "fc08"}, {"front": "sans-culottes", "back": "Literally 'without knee-breeches' — the political identity of radical urban poor (artisans, shopkeepers, wage laborers) in Paris. They demanded price controls, popular democracy, and anti-counter-revolutionary action; their pressure from below drove the Revolution's most extreme phase, the Terror.", "id": "fc09"}, {"front": "Jacobins", "back": "The radical republican faction in the National Convention, dominated by Robespierre, that controlled the Committee of Public Safety during the Terror (1793–1794). They argued that the Republic's survival required emergency measures against foreign and internal enemies.", "id": "fc10"}, {"front": "Reign of Terror (September 1793–July 1794)", "back": "The most violent phase of the French Revolution, when the Committee of Public Safety executed approximately 17,000 people officially, with tens of thousands more dying in prison or in the military suppression of the Vendée uprising. A revolution of liberty produced mass killing.", "id": "fc11"}, {"front": "Committee of Public Safety", "back": "The emergency governing body dominated by Robespierre and the Jacobins during the Terror. Justified mass executions as necessary to defend the Republic against foreign invasion and internal counter-revolutionary rebellion.", "id": "fc12"}, {"front": "Maximilien Robespierre (1758–1794)", "back": "The Jacobin leader who dominated the Committee of Public Safety during the Terror. Argued that revolutionary violence was justified by existential threats to the Republic. Arrested and guillotined in Thermidor (July 1794), ending the Terror.", "id": "fc13"}, {"front": "Thermidor (July 1794)", "back": "The reaction that ended the Reign of Terror: Robespierre was arrested and executed by other French revolutionaries. A more conservative Directory governed France from 1795 to 1799 before Napoleon's coup.", "id": "fc14"}, {"front": "Flight to Varennes", "back": "Louis XVI's failed attempt to flee France in 1791, which destroyed whatever trust remained between the king and the revolutionary government and accelerated the monarchy's abolition. It exposed Louis as counter-revolutionary.", "id": "fc15"}, {"front": "Napoleon Bonaparte (1769–1821)", "back": "French general who seized power in 1799 and became Emperor in 1804. Simultaneously heir and betrayer of the Revolution: preserved legal equality through the Code Napoléon, spread revolutionary principles through conquest, but abolished press freedom, political participation, and France's 1794 abolition of slavery.", "id": "fc16"}, {"front": "Code Napoléon (1804)", "back": "The civil law code synthesizing Enlightenment principles of legal equality, individual property rights, and abolition of feudal privileges. Became the model for legal systems across Europe and Latin America; France, Louisiana, Quebec, Spain, Portugal, and most of Latin America use its framework today.", "id": "fc17"}, {"front": "Napoleon's reversal of slavery abolition (1802)", "back": "Napoleon reinstated slavery in French Caribbean colonies in 1802, reversing the National Convention's 1794 abolition. This decision, driven by Saint-Domingue's plantation economy, directly precipitated the Haitian Revolution's final, successful phase.", "id": "fc18"}, {"front": "Vendée uprising", "back": "A royalist peasant rebellion in western France (1793–1796) against the Republic — one of the counter-revolutionary threats that justified the Committee of Public Safety's emergency measures. The military suppression killed tens of thousands.", "id": "fc19"}, {"front": "What SPICE-T themes define the French Revolution?", "back": "Political: transformed sovereignty from monarchy to nation; abolished feudal order; created modern political vocabulary (left/right, revolution). Cultural: the universalist language of rights spread globally. Economic: abolished feudal obligations, enabled bourgeois property rights (Code Napoléon).", "id": "fc20"}, {"front": "How does the French Revolution demonstrate the 'paradox of revolutionary violence'?", "back": "A movement dedicated to liberty (Enlightenment ideals) produced mass killing (the Terror) when translated into power under existential pressure. The Jacobins argued survival required the Terror; critics argued it betrayed liberty's premises. This paradox recurs in subsequent revolutions (Haitian, Russian, Chinese).", "id": "fc21"}, {"front": "How did the French fiscal crisis become a political revolution?", "back": "Louis XVI convened the Estates-General in 1789 to solve the debt crisis. The Third Estate's demand for proportional representation, the Tennis Court Oath, the Bastille's fall, and food shortages each escalated a tax dispute into a constitutional revolution that abolished the Ancien Régime.", "id": "fc22"}, {"front": "How did the French Revolution differ from the American in its social scope?", "back": "The American Revolution was led by a colonial elite seeking independence without dismantling domestic social hierarchies. The French Revolution erupted within France, attacking the monarchy, aristocracy, and Church simultaneously — abolishing feudalism, executing the king, and (temporarily) abolishing slavery.", "id": "fc23"}, {"front": "Why was the Declaration of the Rights of Man significant for the Haitian Revolution?", "back": "Its universalist language — every citizen has rights to liberty, property, security, and resistance to oppression — raised the question of whether free people of color and enslaved Africans in Saint-Domingue held those same rights. When France equivocated, the Haitian Revolution answered the question by force.", "id": "fc24"}, {"front": "Directory (1795–1799)", "back": "The more conservative government that ruled France after the Thermidor reaction ended the Terror. Unstable and corrupt, it was overthrown by Napoleon's coup in 1799 (the 18 Brumaire), replacing it with the Consulate.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

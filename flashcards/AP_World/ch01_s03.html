@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 1, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Belief systems as state architecture", "back": "The analytical framework from this section: rulers in the period 1200–1450 did not merely tolerate religion but actively deployed it as political infrastructure — legitimizing hierarchy, organizing social behavior, and making authority seem cosmically ordained rather than merely coerced.", "id": "fc01"}, {"front": "Syncretism", "back": "The blending of two or more religious, philosophical, or cultural traditions into a new, hybrid form. Examples: Chan Buddhism absorbing Daoist spontaneity; Sufi Islam incorporating West African spirit-veneration; Neo-Confucianism synthesizing Confucian ethics with Buddhist metaphysics and Daoist cosmology.", "id": "fc02"}, {"front": "Chan Buddhism (Zen)", "back": "A form of Buddhism that emphasizes direct experience, austerity, and disciplined practice over textual study. Known as Chan in China, Zen in Japan. It resonated with the samurai warrior class in Japan, providing a spiritual framework for a martial ethic, while coexisting with Neo-Confucianism among China's educated elite.", "id": "fc03"}, {"front": "Pure Land Buddhism", "back": "A Buddhist school patronized by the Kamakura shogunate (1185–1333) that made the faith accessible beyond aristocratic monasteries through its emphasis on devotion to Amida Buddha and promise of rebirth in the Pure Land. One of several new schools that democratized Buddhism in medieval Japan.", "id": "fc04"}, {"front": "Kamakura shogunate (1185–1333)", "back": "Japanese military government that patronized new Buddhist schools — Pure Land, Zen, and Nichiren — making the faith accessible beyond aristocratic monasteries. Buddhism served as a source of political prestige through association with the imperial family and patronage of great temples.", "id": "fc05"}, {"front": "Tripitaka Koreana", "back": "Approximately 80,000 wooden printing blocks preserving the entire Buddhist canon, produced by the Goryeo dynasty of Korea during a Mongol invasion in the hope that the merit generated would protect the kingdom. Cited in the source as 'one of history's most dramatic illustrations of belief deployed as political strategy.'", "id": "fc06"}, {"front": "Goryeo dynasty (918–1392)", "back": "Korean dynasty that used Buddhism as the ideological foundation of royal authority. Its production of the Tripitaka Koreana illustrated the deployment of religious merit-making as political strategy. Neo-Confucianism began displacing Buddhism toward the dynasty's end, fully replacing it under the succeeding Joseon dynasty.", "id": "fc07"}, {"front": "Joseon dynasty (founded 1392)", "back": "Korean dynasty that comprehensively embraced Neo-Confucianism, reorganizing Korean society around Confucian hierarchical relationships, ancestor veneration, and bureaucratic governance. Women's social position contracted significantly as Neo-Confucian gender norms were institutionalized in law and custom.", "id": "fc08"}, {"front": "Byzantine Empire", "back": "The eastern continuation of the Roman Empire, based in Constantinople. By 1200 it was in serious decline. Governed through the theory of symphonia (church-state harmony). The Fourth Crusade's sack of Constantinople (1204) permanently fractured Orthodox-Catholic relations. It fell to the Ottomans in 1453.", "id": "fc09"}, {"front": "Symphonia", "back": "The Byzantine theological theory describing harmony between church and state — the emperor ruled with divine mandate and protected the church's institutional existence, while the Patriarch of Constantinople provided spiritual legitimacy. It conceived church and imperial authority as 'two wings of a single divine order.'", "id": "fc10"}, {"front": "Fourth Crusade (1202–1204)", "back": "A crusade that catastrophically sacked Constantinople rather than reaching the Holy Land, established the Latin Empire, and permanently fractured the relationship between Eastern Orthodox and Roman Catholic Christianity. The Schism of 1054 had created institutional separation; the sack of 1204 made reconciliation essentially impossible.", "id": "fc11"}, {"front": "Schism of 1054", "back": "The formal rupture between Eastern Orthodox and Roman Catholic Christianity, in which the Pope and Patriarch of Constantinople excommunicated each other. It established the institutional separation of the two churches; the sack of Constantinople in 1204 deepened the divide irreparably.", "id": "fc12"}, {"front": "Monastic institutions (Buddhist and Christian)", "back": "Organizations of monks or nuns committed to communal religious life. In both Buddhist East Asia and Christian Europe, monasteries preserved learning, transmitted manuscripts, controlled significant land, and provided education, social welfare, and ritual services. They were key vehicles of cultural continuity.", "id": "fc13"}, {"front": "'Third Rome' — Moscow", "back": "After the fall of Constantinople to the Ottomans (1453), the Principality of Moscow claimed to be the 'Third Rome' — the legitimate heir to Orthodox Christian civilization. This claim positioned Moscow as the new center of the Orthodox world after Constantinople's fall.", "id": "fc14"}, {"front": "Neo-Confucianism's spread to Korea vs. Japan", "back": "In Korea, Neo-Confucianism displaced Buddhism comprehensively under the Joseon dynasty (founded 1392) — reorganizing society, contracting women's rights, and restructuring governance. In Japan, Neo-Confucianism's penetration was still in early stages during the Kamakura and Muromachi periods, becoming influential only in the Edo period (1603–1868).", "id": "fc15"}, {"front": "Buddhism's geographic reach vs. Neo-Confucianism's", "back": "Buddhism spread from India across South, Southeast, and East Asia, adapting to dozens of local cultures and languages. Neo-Confucianism spread primarily from Song China to Korea, Japan (limited), and Vietnam — a more geographically concentrated but politically intensive diffusion.", "id": "fc16"}, {"front": "SPICE-T: How do belief systems illustrate the Political theme?", "back": "Rulers used Buddhism, Neo-Confucianism, sharia, and Orthodox Christianity to naturalize social hierarchy, supply trained administrators or legitimizing priests, and embed loyalty within a cosmic framework — making political authority seem divinely ordained rather than merely imposed by force.", "id": "fc17"}, {"front": "SPICE-T: How do belief systems illustrate the Cultural theme?", "back": "Belief systems spread across regions and blended with local traditions (syncretism), creating hybrid cultural forms. Buddhism adapted to Japanese warrior culture (Zen-samurai), Islamic Sufism adapted to West African spirit traditions, and Neo-Confucianism shaped art, literature, and social norms in China, Korea, and Vietnam.", "id": "fc18"}, {"front": "Comparison: Buddhism vs. Neo-Confucianism on gender", "back": "Buddhism offered women a formal role as nuns, though the monastic hierarchy was male-dominated. Neo-Confucianism explicitly subordinated women through the five relationships and hierarchical family norms; in Joseon Korea, Neo-Confucian reforms significantly restricted women's legal rights compared to the preceding Goryeo Buddhist period.", "id": "fc19"}, {"front": "Why did Song Neo-Confucians criticize Buddhism?", "back": "Song Neo-Confucian scholars like Zhu Xi criticized Buddhist metaphysics because its emphasis on detachment from worldly concerns seemed incompatible with Confucian commitment to social relationships and political engagement — Neo-Confucianism required active participation in family, government, and society.", "id": "fc20"}, {"front": "How did the Catholic Church function as political infrastructure in medieval Europe?", "back": "The Church administered birth, marriage, and death rituals; collected the tithe; trained the only substantial literate class (the clergy); and maintained the only Europe-wide administrative network. Despite political feudal fragmentation, the Church provided trans-European authority — paralleling, in different form, the ulama's role in Dar al-Islam.", "id": "fc21"}, {"front": "Continuity/Change: How did Buddhism change as it spread from India to Japan?", "back": "Buddhism originated as a path to individual liberation from suffering. In Japan, it was adapted into court prestige (Nara period), then new schools (Pure Land, Zen, Nichiren) under the Kamakura shogunate made it accessible to warriors and commoners alike — its social function expanded from elite monasticism toward popular devotion and warrior ethics.", "id": "fc22"}, {"front": "Contextualization: Why did rulers need theological legitimacy in 1200–1450?", "back": "In a world where most people were illiterate and deeply religious, divine mandate was the most powerful form of legitimacy. Rulers who could claim cosmic backing — through Neo-Confucian mandate of heaven, Islamic caliphal succession, Buddhist merit, or Byzantine symphonia — made their authority seem natural rather than arbitrary.", "id": "fc23"}, {"front": "AP Exam Tip: Buddhism vs. Neo-Confucianism as comparison essay approaches", "back": "Buddhism was more universally portable (crossed linguistic/ethnic boundaries more readily) but less directly state-useful. Neo-Confucianism was more directly useful to the state (produced a trained bureaucracy through the exam system) but spread more narrowly. A good comparison essay distinguishes the mechanism of legitimacy: Buddhism used karmic order; Neo-Confucianism used social ethics and reciprocal duty.", "id": "fc24"}, {"front": "What happened to Orthodox Christianity after Constantinople fell (1453)?", "back": "Orthodox Christianity survived and eventually flourished in new centers — Serbia, Bulgaria, and especially the Principality of Moscow, which claimed to be the 'Third Rome.' Religious traditions can outlast the political structures that initially carried them.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

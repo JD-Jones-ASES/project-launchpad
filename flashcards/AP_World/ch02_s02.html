@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 2, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Monsoon", "back": "A seasonal wind system characterized by a reliable reversal of direction twice yearly. In the Indian Ocean, the southwest monsoon (April–September) carries ships from Arabia and Africa toward India and Southeast Asia; the northeast monsoon (October–March) returns them. This predictable pattern made long-distance maritime trade feasible centuries before European exploration.", "id": "fc01"}, {"front": "Dhow", "back": "A broad category of lateen-rigged sailing vessels used across the Indian Ocean, built without iron nails (planks sewn with coconut-fiber cord), making them flexible and easily repaired. The triangular lateen sail allowed dhows to sail closer to the wind than square-rigged ships—critical for coastal navigation and monsoon-transition sailing.", "id": "fc02"}, {"front": "Swahili Coast", "back": "The eastern African littoral from present-day Somalia to Mozambique, home to a string of port cities (Kilwa, Mombasa, Malindi, Zanzibar, Sofala) active in Indian Ocean trade. Swahili culture blended Bantu African, Arab, and Persian elements; cities exported gold, ivory, and enslaved people and imported textiles, porcelain, and glass beads.", "id": "fc03"}, {"front": "Kilwa Kisiwani", "back": "The wealthiest Swahili Coast city-state, an island port off the Tanzanian coast that controlled the gold trade flowing northward from the Zimbabwe plateau. When Ibn Battuta visited around 1331, he called it 'one of the most beautiful and well-constructed towns in the world,' noting its stone buildings and active gold market.", "id": "fc04"}, {"front": "Ibn Battuta", "back": "A Moroccan Muslim scholar and traveler (1304–c. 1368/69) who journeyed across the Islamic world and beyond (c. 1325–1354), visiting the Swahili Coast, Mali, the Golden Horde, and China. His accounts are a primary source for Indian Ocean commerce, Swahili city life, and the breadth of the Islamic world in the 14th century.", "id": "fc05"}, {"front": "Great Zimbabwe", "back": "A major stone-built polity on the Zimbabwe plateau in southern Africa whose gold was exported northward through Kilwa to the broader Indian Ocean network. Archaeological evidence shows extensive trade connections via Swahili Coast intermediaries.", "id": "fc06"}, {"front": "How did the monsoon enable trade without advanced navigational instruments?", "back": "The monsoon's seasonal reversal was so predictable that sailors could time voyages by the calendar: depart Arabia in May on the southwest monsoon, reach India in weeks, and ride the northeast monsoon home by December. No compass was required when wind direction itself was the navigation system.", "id": "fc07"}, {"front": "Srivijaya", "back": "A maritime empire based on Sumatra that controlled access to the Spice Islands of the Moluccas and served as a key entrepot in the Indian Ocean–South China Sea network from the 7th through the 13th century. Its power was based on controlling the Strait of Malacca, the chokepoint between the Indian Ocean and the South China Sea.", "id": "fc08"}, {"front": "Majapahit", "back": "A major empire based on Java that succeeded Srivijaya as the dominant Southeast Asian maritime polity (c. 1293–1527), controlling access to the Spice Islands and serving as an entrepot in Indian Ocean trade.", "id": "fc09"}, {"front": "Spice Islands (Moluccas)", "back": "The sole source of cloves and nutmeg in the premodern world, located in the eastern Indonesian archipelago. Control over access to these islands was the principal motivation for later European exploration; Southeast Asian entrepots like Srivijaya and Majapahit grew wealthy as intermediaries in the spice trade.", "id": "fc10"}, {"front": "What did the Malabar and Coromandel coasts of India export?", "back": "Pepper, cinnamon, cardamom, and cotton textiles—the latter among the most globally traded goods of the premodern world. Indian cotton cloth was distributed across the Indian Ocean from East Africa to Southeast Asia.", "id": "fc11"}, {"front": "Lateen sail", "back": "A triangular sail rigged fore-and-aft, used on dhows and other Indian Ocean vessels. Unlike square sails (which only work with the wind behind the ship), the lateen sail allows sailing at an angle to the wind, enabling more flexible coastal navigation and better performance during the monsoon transitions.", "id": "fc12"}, {"front": "Kiswahili language", "back": "A Bantu language with significant Arabic vocabulary that developed on the East African coast as the language of Swahili commercial and cultural life. Its existence is linguistic evidence of the long-term blending of African and Arab-Persian influences through Indian Ocean commerce.", "id": "fc13"}, {"front": "How did Islam spread across maritime Southeast Asia?", "back": "Voluntarily, through the social capital of Muslim merchant communities rather than by conquest. Rulers adopted Islam for access to Muslim commercial networks and prestige; merchants converted because it signaled trustworthiness to Muslim trading partners. This pattern—faith following commerce—was different from Islam's spread in other regions.", "id": "fc14"}, {"front": "Diasporic merchant communities — role in Indian Ocean trade", "back": "Communities of merchants who settled permanently in foreign ports (Arab and Persian merchants in Indian cities; Indian Gujarati and Tamil traders in Southeast Asian ports; Chinese merchants in Java and Sumatra) maintained homeland connections while adapting locally. They reduced transaction costs by providing credit networks, commercial knowledge, and shared legal frameworks across political boundaries.", "id": "fc15"}, {"front": "What goods moved from the Persian Gulf and Red Sea into Indian Ocean trade?", "back": "Silver, horses (prized in India where warhorses were difficult to breed), dates, and textiles woven in the workshops of Iraq and Egypt. Horses were especially significant as a military commodity exchanged for Indian and Southeast Asian goods.", "id": "fc16"}, {"front": "Chinese porcelain — evidence of Indian Ocean trade network", "back": "Chinese blue-and-white porcelain has been excavated at sites along the entire East African coast—physical archaeological evidence of the reach of Indian Ocean maritime networks, testifying to direct or indirect commercial links between China and East Africa.", "id": "fc17"}, {"front": "Vasco da Gama (1497–1498)", "back": "Portuguese explorer who completed the first European maritime voyage around Africa to India. His arrival disrupted but did not create the Indian Ocean trading system, which had operated as an Afro-Asian commercial network for more than a millennium before European entry.", "id": "fc18"}, {"front": "SPICE-T: How does the Indian Ocean basin illustrate the 'Interaction with Environment' theme?", "back": "The entire Indian Ocean commercial system was built around exploiting the monsoon—a meteorological feature of the environment. Dhow technology adapted to monsoon conditions; trading seasons were structured around wind reversal. Human commerce was profoundly shaped by and dependent on this environmental rhythm.", "id": "fc19"}, {"front": "SPICE-T: How does the Indian Ocean basin illustrate the 'Social' theme?", "back": "Diasporic communities intermarried with local populations, producing the Swahili cultural synthesis and mixed merchant-local families in Southeast Asian ports. Gender, kinship, and religious identity were reconfigured by long-term diaspora settlement. The enslaved people exported from the Swahili Coast represent a social dimension of Indian Ocean exchange.", "id": "fc20"}, {"front": "What continuity does the Indian Ocean system represent across the 1200–1450 period?", "back": "The basic infrastructure—monsoon knowledge, dhow technology, diasporic merchant communities, port-city institutions—was already established well before 1200 and persisted through 1450. Change within this period included the growing prominence of Islam in the network, the expansion of Swahili coast city-states, and the increased role of Chinese trade under the Song and Yuan dynasties.", "id": "fc21"}, {"front": "Entrepot", "back": "A port city that serves as a hub for redistributing goods between regional trading networks. Southeast Asian cities like Srivijaya and Malacca functioned as entrepots connecting Chinese merchants in the South China Sea to Indian and Arab merchants in the Indian Ocean, taking a cut of the transit trade.", "id": "fc22"}, {"front": "How did the Indian Ocean system differ from the Silk Road relay system?", "back": "The Indian Ocean allowed direct long-distance voyages (Arabia to India, India to Southeast Asia) exploiting the monsoon, whereas Silk Road trade relied on a relay of regional middlemen who each traded only a segment. Indian Ocean merchants often sailed the full distance between hubs; Silk Road merchants typically did not.", "id": "fc23"}, {"front": "Why were Swahili Coast cities NOT 'backwaters,' according to the source?", "back": "They were 'sophisticated urban polities with stone architecture, active literary traditions in Kiswahili, and a culture that blended Bantu African foundations with Arab and Persian influences.' They were wealthy export platforms, not passive recipients of outside goods—controlling trade in gold and ivory from the African interior.", "id": "fc24"}, {"front": "Causation: What made Kilwa the wealthiest Swahili Coast city?", "back": "Kilwa's geographic position allowed it to control the gold trade flowing northward from the Zimbabwe plateau—the primary raw material fueling its wealth. Its island location facilitated maritime access while providing defensibility. This combination of geographic advantage and commodity control made it the dominant city-state on the Swahili Coast.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

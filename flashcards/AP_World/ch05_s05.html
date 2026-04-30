@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 5, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Latin American Independence (1808–1826)", "back": "The largest wave of decolonization in history before the twentieth century, in which most of Spain's vast American empire dissolved into more than a dozen independent nations. Drew on Enlightenment ideas, Atlantic revolutionary examples, and the casta system's contradictions — but primarily served creole interests.", "id": "fc01"}, {"front": "casta system", "back": "The rigid Spanish colonial social hierarchy based on racial descent: peninsulares (born in Spain) at top, then creoles (Spanish-descent born in Americas), mestizos, mulatos, indigenous peoples, and enslaved Africans. Encoded racial and social privilege in colonial law and administration.", "id": "fc02"}, {"front": "peninsulares", "back": "Spanish-born colonists in the Americas who received preference for the highest administrative, ecclesiastical, and commercial positions in the colonial system. Their monopoly on top offices was the creoles' central grievance.", "id": "fc03"}, {"front": "creole (criollo)", "back": "People of Spanish descent born in the Americas rather than in Spain. They dominated lower colonial administration, Church, and economy but were excluded from the highest offices. This structural exclusion made creoles the natural leaders of independence movements — though their social conservatism made them reluctant to extend revolution's benefits to others.", "id": "fc04"}, {"front": "mestizos and mulatos", "back": "People of mixed European-indigenous ancestry (mestizos) or mixed African-European ancestry (mulatos) in Spanish colonial society. Together with indigenous peoples and enslaved Africans, constituted 80–90% of the population; often provided critical military force in independence wars but were excluded from political settlements.", "id": "fc05"}, {"front": "junta", "back": "A governing council formed across Spanish America after Napoleon's 1808 invasion of Spain, initially claiming to rule in the name of the deposed King Ferdinand VII. Some juntas evolved into independence movements; others remained loyalist.", "id": "fc06"}, {"front": "Napoleon's invasion of Spain (1808)", "back": "The immediate catalyst for Latin American independence: Napoleon placed his brother Joseph Bonaparte on the Spanish throne, creating a legitimacy vacuum across Spanish America. To whom did colonial loyalty belong if the king was a French puppet?", "id": "fc07"}, {"front": "Simón Bolívar (1783–1830)", "back": "Venezuelan creole known as 'El Libertador'; led independence campaigns across present-day Venezuela, Colombia, Ecuador, Peru, and Bolivia. Educated in Europe in Enlightenment thought; his Jamaica Letter (1815) was the most sophisticated Latin American revolutionary document. His dream of a unified South American federation collapsed by 1830.", "id": "fc08"}, {"front": "Jamaica Letter (1815)", "back": "Bolívar's analysis, written from exile, of Spain's colonial record and the prospects for South American independence. He rejected monarchy, envisioned a unified Hispanic American federation, and honestly acknowledged that formal independence would not automatically produce social equality or effective governance.", "id": "fc09"}, {"front": "creole nationalism", "back": "The pattern by which Latin American independence was led by creole elites who sought political independence from Spain but were unwilling to dismantle the racial, land, and labor hierarchies that benefited them. Independence replaced peninsulares with creoles without fundamentally redistributing wealth or power.", "id": "fc10"}, {"front": "Father Miguel Hidalgo (1753–1811)", "back": "Mexican parish priest whose Grito de Dolores ('Cry of Dolores') in 1810 mobilized tens of thousands of mestizo and indigenous peasants against both Spanish authority and creole landowners. His popular movement terrified the creole elite; he was captured and executed in 1811.", "id": "fc11"}, {"front": "Grito de Dolores (September 16, 1810)", "back": "Hidalgo's call to arms that launched Mexico's independence movement with mass participation from mestizo and indigenous peasants. Celebrated as Mexican Independence Day. The popular uprising it triggered alarmed the creole elite as much as the Spanish colonial government.", "id": "fc12"}, {"front": "José María Morelos (1765–1815)", "back": "Hidalgo's successor in Mexico's independence movement; continued to lead the popular independence struggle. Like Hidalgo, he was captured and executed, showing the limits of popular revolutionary leadership against both Spanish and creole conservative opposition.", "id": "fc13"}, {"front": "Agustín de Iturbide (1783–1824)", "back": "Royalist creole officer who co-opted Mexico's independence movement in 1821 by striking a deal with moderate independence forces, ensuring the creole class retained its social position. Briefly became Emperor Agustín I — illustrating the conservative outcome of Mexican independence.", "id": "fc14"}, {"front": "José de San Martín (1778–1850)", "back": "Argentine general who led the famous Andes crossing in 1817 — one of the great military feats of the era — liberating Chile and coordinating with Bolívar in Peru's independence. Less politically ambitious than Bolívar, he eventually withdrew from South American politics.", "id": "fc15"}, {"front": "Pedro I of Brazil (1798–1834)", "back": "Son of Portugal's King John VI; remained in Brazil after his father returned to Portugal in 1821 and declared Brazilian independence as Emperor Pedro I in 1822 under pressure from Brazilian creole elites. Brazil's monarchy made it 'unusually conservative even by Latin American standards.'", "id": "fc16"}, {"front": "caudillos", "back": "Military strongmen who dominated nineteenth-century Latin American politics after independence. Most new republics cycled between creole factions dominated by caudillos rather than achieving stable democratic governance — the political reality of post-independence Latin America.", "id": "fc17"}, {"front": "Alexandre Pétion and Bolívar", "back": "Haitian president who provided Bolívar with resources for his independence campaigns in exchange for Bolívar's promise to abolish slavery in liberated territories. This connection linked the Haitian Revolution directly to South American independence.", "id": "fc18"}, {"front": "Why did indigenous peoples participate in independence wars but gain little from independence settlements?", "back": "They sometimes provided decisive military force but were excluded from political settlements because creole leaders — who shaped the new constitutions and governments — were unwilling to dismantle racial and land hierarchies. Indigenous tribute was technically abolished but often replaced by other coerced labor.", "id": "fc19"}, {"front": "SPICE-T Social theme: Latin American independence outcomes", "back": "Formal political equality among male citizens in most new republics, but intact social hierarchies of race, land, and indigenous subordination. Wars produced enormous social disruption (armies recruited mestizos, indigenous fighters, freed enslaved people) without producing genuine social transformation.", "id": "fc20"}, {"front": "SPICE-T Political theme: Latin American independence outcomes", "back": "Most republics adopted written constitutions modeled on U.S. and French examples, proclaiming natural rights and separation of powers. In practice, power cycled between creole factions dominated by military strongmen (caudillos), and most of the 19th century saw civil wars and regional fragmentation.", "id": "fc21"}, {"front": "How was the largest wave of decolonization in pre-twentieth-century history limited?", "back": "Despite political independence, the new Latin American states preserved colonial social structures: racial hierarchies, land concentration, indigenous tribute (in modified forms), and often slavery. Creole elites gained power but the mass of the population — mestizos, indigenous peoples, enslaved Africans — saw little change.", "id": "fc22"}, {"front": "Compare: Spanish American vs. Brazilian paths to independence", "back": "Spanish America: independence through prolonged military campaigns led by creole officers and popular forces (1810s–1820s), producing republics. Brazil: relatively peaceful transition in 1822 when Prince Pedro declared independence as Emperor — a monarchy — under creole elite pressure, without widespread armed conflict.", "id": "fc23"}, {"front": "Why did Bolívar's dream of South American federation fail?", "back": "Regional, racial, and creole factional differences made unified governance impossible. Each newly independent territory had its own creole elite with local interests; centrifugal forces of geography, social structure, and political rivalry overwhelmed Bolívar's federalist vision. He acknowledged these divisions in his Jamaica Letter.", "id": "fc24"}, {"front": "How did Latin American independence movements draw on the Haitian Revolution?", "back": "Bolívar received material support from Haiti's Alexandre Pétion in exchange for anti-slavery commitments. Haiti's example also shaped the fears of conservative creole elites — who were willing to accept independence but wanted to prevent any social revolution from below that might resemble Saint-Domingue's uprising.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

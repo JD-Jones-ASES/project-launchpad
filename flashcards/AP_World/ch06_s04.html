@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 6, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Indian Rebellion of 1857 (Sepoy Rebellion)", "back": "The largest uprising against British rule in India's colonial period. Began when sepoys mutinied at Meerut and Delhi over Enfield cartridges rumored to be greased with pork and beef fat. The rebellion spread into civil society across northern and central India. British suppression was brutal; the aftermath abolished the EIC and established direct Crown rule (the Raj).", "id": "fc01"}, {"front": "sepoys", "back": "Indian soldiers in the British East India Company's army. Formed the social base of the 1857 rebellion, which began as a mutiny over the Enfield cartridge issue but spread into civil society, involving dispossessed princes, landowners, peasants, and religious figures across northern and central India.", "id": "fc02"}, {"front": "Doctrine of Lapse", "back": "A British annexation policy that seized Indian princely states whose rulers died without male heirs, regardless of adopted succession. Over three decades of application before 1857, it dispossessed numerous Indian princes and their dependent networks — one of the principal underlying structural causes of the Indian Rebellion.", "id": "fc03"}, {"front": "Bahadur Shah II", "back": "The elderly Mughal emperor proclaimed symbolic leader of the Indian Rebellion of 1857. Rebels chose him to invoke both Muslim and Hindu resistance to Christian foreign rule. After British suppression, he was tried, convicted, and exiled to Rangoon — ending the Mughal dynasty.", "id": "fc04"}, {"front": "Underlying causes of the 1857 Rebellion (beyond the cartridge issue)", "back": "Three decades of Doctrine of Lapse annexations; destruction of Indian textile industries through British trade policy; cultural and religious pressure from missionary activity; and increasingly contemptuous racial attitudes of British officials toward educated Indians — all creating accumulated structural grievances that the cartridge incident ignited.", "id": "fc05"}, {"front": "Consequences of the 1857 Rebellion for British policy", "back": "The East India Company was abolished and replaced by direct Crown rule (the Raj). The Indian Army was reorganized to prevent future sepoy coordination. British racial attitudes toward Indians hardened into institutional segregation. The rebellion also became the basis for Indian nationalist historiography — later reclaimed as the 'First War of Indian Independence.'", "id": "fc06"}, {"front": "Boxer Uprising (1899–1901)", "back": "A Chinese uprising against Christian missionaries, Chinese Christians, and foreign commercial interests, led by the Yihetuan ('Righteous and Harmonious Fists'). Empress Dowager Cixi issued an imperial edict supporting the Boxers and declaring war on foreign powers. Suppressed by an Eight-Nation Alliance; the Boxer Protocol imposed a crushing indemnity.", "id": "fc07"}, {"front": "Yihetuan / 'Boxers'", "back": "A Chinese secret society combining martial arts practice with religious rituals its adherents believed made them invulnerable to bullets. The Boxers directed their violence against Christian missionaries, Chinese Christians, and foreign commercial interests, which they blamed for China's humiliations and disruption of traditional society.", "id": "fc08"}, {"front": "Empress Dowager Cixi", "back": "De facto ruler of Qing China who in June 1900 issued an imperial edict supporting the Boxers and declaring war on foreign powers — a strategic miscalculation that resulted in Beijing's occupation by the Eight-Nation Alliance and the devastating Boxer Protocol (1901).", "id": "fc09"}, {"front": "Eight-Nation Alliance (1900)", "back": "A multinational military force (Britain, France, Germany, the United States, Japan, Russia, Italy, and Austria-Hungary) that suppressed the Boxer Uprising, occupied Beijing, and sacked the Forbidden City. Its composition demonstrates the multilateral character of late-nineteenth-century imperialism in China.", "id": "fc10"}, {"front": "Boxer Protocol (1901)", "back": "The agreement imposed on the Qing dynasty after the Boxer Uprising's suppression. Required China to pay an indemnity of 450 million taels of silver — more than the Qing government's annual revenue — and allowed foreign troops to be permanently stationed in Beijing.", "id": "fc11"}, {"front": "Meiji Restoration (1868)", "back": "The political transformation in which young samurai from Satsuma and Chōshū overthrew the Tokugawa shogunate and restored nominal imperial authority to Emperor Meiji. The actual agenda was rapid state-directed modernization — fukoku kyōhei ('rich country, strong army') — to resist Western imperial pressure.", "id": "fc12"}, {"front": "fukoku kyōhei", "back": "'Rich country, strong army' — the slogan of Meiji Japan's modernization program. Captured the instrumental logic: industrial and military power were prerequisites for defending sovereignty against Western coercion. Economic development and military strength were pursued as tools of national survival, not ends in themselves.", "id": "fc13"}, {"front": "Iwakura Mission (1871–1873)", "back": "A Japanese government study mission to Europe and America, led by Iwakura Tomomi. The mission identified specific institutions that gave Western powers their strength and reported back to Japan's government, providing the information base for selective modernization — military, legal, educational, and industrial reforms.", "id": "fc14"}, {"front": "Selective modernization (Meiji strategy)", "back": "Japan's approach to Western pressure: systematically study multiple Western models, identify the specific institutions conferring power, and adopt them selectively. Prussian conscript army, British navy, German constitution (1889), railway network, compulsory education, zaibatsu — each model chosen instrumentally, not culturally.", "id": "fc15"}, {"front": "zaibatsu", "back": "Large Japanese industrial corporate conglomerates modeled on Western industrial capitalism, developed during the Meiji period (post-1868). Key instruments of Japan's rapid industrialization and one of the institutional innovations the Meiji government adopted from Western models.", "id": "fc16"}, {"front": "Sino-Japanese War (1894–1895)", "back": "Japan's military victory over China, demonstrating that a modernized Asian state could defeat a larger Asian neighbor. Japan gained Taiwan as a colony and demonstrated that the power dynamics of the industrial era were not exclusively controlled by Western states.", "id": "fc17"}, {"front": "Russo-Japanese War (1904–1905)", "back": "Japan's military victory over Russia — widely regarded as the first time in the modern industrial era that an Asian power defeated a major European power in a large-scale conflict. Demonstrated to colonized peoples worldwide that Western military dominance was not inherent or permanent.", "id": "fc18"}, {"front": "Why did Japan succeed where China did not? (four factors)", "back": "Historians point to: (1) Japan's smaller geographic scale, making centralization easier; (2) Tokugawa infrastructure of literacy and commercialization; (3) absence of a powerful entrenched gentry class defending the status quo; (4) political unity produced by the Meiji government. Critically, neither country's path was predetermined.", "id": "fc19"}, {"front": "Spectrum of responses to imperialism", "back": "The text identifies: (1) armed rebellion (Sepoy Rebellion, Boxer Uprising, Mahdist War) — usually suppressed by superior European firepower; (2) religious and cultural nationalism (Boxers, Wahabi movement) — channeled anti-colonial sentiment through cultural identity; (3) state-directed modernization (Meiji, Egypt's Muhammad Ali) — acquired Western military capacity; (4) military resistance with modern weapons (Ethiopia/Adwa). No single response guaranteed success.", "id": "fc20"}, {"front": "What made the Boxer Uprising ultimately self-defeating?", "back": "Religious nationalism and anti-colonial sentiment were not coordinated with a political strategy. The Boxers' belief in ritual invulnerability to bullets was militarily fatal; Cixi's support turned a popular uprising into a state military confrontation against eight combined powers; the Boxer Protocol left China weaker than before.", "id": "fc21"}, {"front": "Compare: Meiji Japan and Qing China as responses to Western pressure", "back": "Key differences: Japan's smaller scale enabled centralization; Japan lacked a conservative gentry class defending existing institutions; Japan had Tokugawa literacy/commercialization infrastructure; Meiji reformers made deliberate strategic choices about which Western institutions to adopt. China's attempted reforms (Self-Strengthening Movement) were blocked by entrenched scholar-officials and fragmented political authority.", "id": "fc22"}, {"front": "What was Perry's 'black ships' — and why did they matter?", "back": "Four steam-powered American warships commanded by Commodore Matthew Perry that arrived in Edo Bay in 1853 and demanded Japan open its ports. Their significance: Japan lacked military technology to resist, forcing the Convention of Kanagawa (1854) and Harris Treaty (1858) — exposing the Tokugawa shogunate's inadequacy and triggering the political crisis that produced the Meiji Restoration.", "id": "fc23"}, {"front": "SPICE-T: What themes does the Sepoy Rebellion engage?", "back": "Social (S): sepoys, landowners, peasants, and religious figures united across social groups. Political (P): abolition of EIC, establishment of the Raj, army reorganization. Cultural (C): religious grievances (cartridge rumor), missionary pressure, racial contempt by British. Economic (E): textile deindustrialization dispossessing artisans as underlying cause.", "id": "fc24"}, {"front": "Indian Rebellion as 'First War of Indian Independence'", "back": "The reframing of the 1857 Rebellion by Indian nationalist historians as the first war of Indian independence rather than a 'mutiny' — a political act of counter-memory. The reframing emphasizes Indian agency and nationalist intent over the British narrative of disorder and disloyalty.", "id": "fc25"}, {"front": "Contingency in colonial history: what 1857, 1900, and 1868 share", "back": "All three episodes demonstrate that outcomes were not predetermined. 1857 showed the depth and breadth of Indian resistance — and the costs of lacking unified command. 1900 showed that Chinese popular resistance without political strategy produced catastrophic results. 1868 showed that strategic state-directed modernization could prevent colonization. Different choices, different conditions, different outcomes.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

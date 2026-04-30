@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 2, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Pax Mongolica", "back": "The 'Mongol Peace,' roughly 1260–1368, during which the overland routes of Central Asia were policed, taxed, and maintained by Mongol authorities. Not universal—successor khanates fought each other periodically—but for travelers and merchants it represented a qualitative improvement over the fragmented, bandit-plagued pre-Mongol steppe.", "id": "fc01"}, {"front": "Yam system", "back": "The Mongol imperial postal relay network, consisting of stations (yamb) spaced 25–40 kilometers apart along major routes throughout the empire, each stocked with fresh horses, riders, food, and accommodation. Enabled couriers to travel 300+ km/day—a speed unmatched until the telegraph—and allowed merchants with a paiza to travel rapidly across Eurasia.", "id": "fc02"}, {"front": "Paiza", "back": "A letter of safe conduct issued by Mongol rulers, guaranteeing the bearer food, horses, and lodging at any imperial relay station. Its guarantee was backed by the credible threat of imperial retribution against violators. The Polo brothers used paiza on their journeys to and from Kublai Khan's court.", "id": "fc03"}, {"front": "Marco Polo (1254–1324)", "back": "A Venetian merchant who traveled to Kublai Khan's court (c. 1271–1295) using Mongol infrastructure. His account—dictated to romance writer Rustichello da Pisa while imprisoned in Genoa—is one of the richest Western primary sources for the Pax Mongolica era. He emphasized trade commodities, imperial wealth, and logistical infrastructure because his audience wanted commercial intelligence.", "id": "fc04"}, {"front": "Ibn Battuta (1304–c. 1368/69)", "back": "A Moroccan Muslim scholar and jurist who traveled c. 1325–1354 across the Islamic world and beyond. He foregrounded mosques, Muslim courts, and Islamic learning rather than trade and logistics—reflecting his juridical identity and his audience's desire for religious and legal guidance. Together with Marco Polo, he provides a 'stereo view' of the 14th-century world.", "id": "fc05"}, {"front": "Marco Polo vs. Ibn Battuta — observational bias", "back": "Marco Polo (Christian Italian merchant) emphasized commerce, wealth, and logistics; rarely discussed religion in depth. Ibn Battuta (Muslim Moroccan jurist) emphasized mosques, Islamic governance, and community practice; criticized religious syncretism. Their different emphases reflect different identities, audiences, and purposes—neither account is 'neutral.'", "id": "fc06"}, {"front": "Khanbaliq (Cambaluc)", "back": "The capital of Kublai Khan's Yuan dynasty, located near modern Beijing. Marco Polo described it as receiving goods 'of greater cost and rarity, and in greater abundance of all kinds, than to any other city in the world.' It was the eastern hub of the Yam system and the political center of the Pax Mongolica.", "id": "fc07"}, {"front": "What technologies diffused westward during the Pax Mongolica?", "back": "Gunpowder weapons (bombs, fire arrows, early cannon) reached the Islamic world by the late 13th century and Europe by the mid-14th. Block printing spread similarly. Paper money (pioneered by Song China, adopted by Yuan) was observed by Marco Polo and began circulating in parts of the Ilkhanate. Agricultural crops (citrus, cotton, new rice strains) also redistributed across the empire's ecological zones.", "id": "fc08"}, {"front": "Paper money under the Yuan dynasty", "back": "Paper currency was pioneered by the Song dynasty and adopted by the Yuan (Mongol-ruled China). Marco Polo observed paper money in use at Kublai Khan's court—a concept still absent in Europe. Its westward diffusion during the Pax Mongolica introduced the idea to the Ilkhanate, though full adoption in the Islamic world and Europe came later.", "id": "fc09"}, {"front": "What were the limits of the Pax Mongolica?", "back": "The Pax Mongolica was real but limited: (1) successor khanates warred with each other (especially Ilkhanate vs. Golden Horde over Azerbaijan), disrupting trade during civil conflicts; (2) Islamic scholars experienced Mongol rule as catastrophic after the sack of Baghdad; (3) most importantly, the peace was an invisible carrier of Yersinia pestis (bubonic plague).", "id": "fc10"}, {"front": "Niccolò and Maffeo Polo — first journey (c. 1260–1269)", "back": "The Venetian merchants made the first Polo family journey to Kublai Khan's court using Yam infrastructure, returning with the Khan's invitation to the Pope to send 100 learned Christian men. This episode illustrates how Pax Mongolica infrastructure enabled unprecedented diplomatic and commercial contact between the western and eastern ends of Eurasia.", "id": "fc11"}, {"front": "Rustichello da Pisa", "back": "The romance writer who recorded Marco Polo's account while both were prisoners of war in Genoa (c. 1298). His background as a romance author shaped the narrative style and possibly embellished some details; the account's European merchant audience further shaped what was foregrounded. These contextual factors must be considered when using the text as historical evidence.", "id": "fc12"}, {"front": "Kublai Khan", "back": "Chinggis Khan's grandson; founder of the Yuan dynasty in China (r. 1260–1294); established the court at Khanbaliq (Beijing). He is the ruler described by Marco Polo as maintaining the Yam system with 200,000 horses empire-wide. His reign represents the height of Pax Mongolica commercial and diplomatic connectivity.", "id": "fc13"}, {"front": "200,000 horses in the Yam system", "back": "Marco Polo reported that Kublai Khan's Yam employed 200,000 horses empire-wide at the height of its operation—a logistical investment illustrating the scale of the Mongol commitment to rapid communication and the enormous resource extraction required to maintain it.", "id": "fc14"}, {"front": "SPICE-T: Technology theme in Pax Mongolica", "back": "The Pax Mongolica was, in the text's phrase, 'the world's first transcontinental technology-transfer mechanism.' Gunpowder weapons, printing, paper money, and agricultural innovations all diffused across Eurasia during or immediately following the Mongol peace—a consequence of the political connectivity the empire created.", "id": "fc15"}, {"front": "How did Yam differ from the Silk Road caravanserai system?", "back": "Both provided relay stops for travelers, but the Yam was a state-controlled imperial system with fresh horses available on demand for bearers of paiza—enabling 300+ km/day courier travel. Caravanserais were merchant-funded or privately built rest facilities not primarily designed for rapid relay; travel times were slower and stops were commercial in nature.", "id": "fc16"}, {"front": "Ilkhanate and Golden Horde conflict", "back": "A specific limitation of the Pax Mongolica: the Ilkhanate (Persia/Iraq) and Golden Horde (Russia/western steppe) clashed periodically after the 1260s, particularly over Azerbaijan. These intra-Mongol conflicts disrupted the overland trade network precisely in the central corridor, demonstrating the Pax Mongolica's fragility during civil wars.", "id": "fc17"}, {"front": "Primary source sourcing: HAPP framework", "back": "For AP World History document analysis: Historical Context (when/where written, political situation), Audience (who was the intended reader), Purpose (why was it written), Point of View (how does the author's identity shape what is emphasized or omitted). Marco Polo's account is a model case for applying all four lenses.", "id": "fc18"}, {"front": "How did the Pax Mongolica connect to the Black Death?", "back": "The same road network, relay stations, and caravan routes that enabled commercial exchange also enabled rats and fleas carrying Yersinia pestis to move from Central Asian rodent reservoirs westward. The connectivity of the Pax Mongolica was simultaneously a commercial superhighway and a disease corridor—the same infrastructure serving both functions.", "id": "fc19"}, {"front": "Ibn Battuta in Mali vs. in China", "back": "In Mali, Ibn Battuta criticized the mixing of Islamic and indigenous practices at court. In China, he lamented the isolation of Muslim merchants from Chinese society. These contrasting responses illustrate how his juridical Muslim identity shaped his observations differently in different contexts—always through the lens of Islamic orthodoxy and community.", "id": "fc20"}, {"front": "Agricultural diffusion during Pax Mongolica", "back": "Citrus fruits, cotton, and new strains of rice were redistributed across the empire's ecological zones as the Mongol road network moved agricultural species between previously separated regions. This biological exchange prefigures the Columbian Exchange of Unit 4 and is part of the Pax Mongolica's technology-transfer legacy.", "id": "fc21"}, {"front": "Continuity and Change: Silk Roads before and during Pax Mongolica", "back": "Continuity: overland routes, relay infrastructure, multi-commodity trade, and the relay system persisted. Change: the Pax Mongolica dramatically increased the speed and safety of travel (Yam + paiza), added state-guaranteed protection, and accelerated technology transfer. The network's geography was largely unchanged; its institutional guarantee was qualitatively new.", "id": "fc22"}, {"front": "Compare: Pax Mongolica vs. Pax Romana as exchange-enabling political orders", "back": "Both created large zones of relative internal peace enabling commercial exchange. Both invested in physical infrastructure (Yam relay vs. Roman roads) and legal uniformity. Key differences: Pax Romana endured 200+ years; Pax Mongolica lasted about a century. The Roman system urbanized and settled populations; the Mongol system was administered through a nomadic ruling class with a layered civil bureaucracy.", "id": "fc23"}, {"front": "Keshikten (imperial guard)", "back": "The 12,000-horseman personal guard of Kublai Khan, described by Marco Polo as 'Knights devoted to their Lord.' Maintained 'for his own state and dignity,' not out of fear—evidence of the imperial court's emphasis on ceremonial power display alongside practical military function.", "id": "fc24"}, {"front": "Why did the Ming dynasty reduce overland trade after 1368?", "back": "The Ming's post-1368 wariness of overland Central Asian trade was influenced in part by the memory of the Black Death, which had traveled those same routes. The Yuan collapse, partly driven by epidemic disease, left the Ming dynasty with a cautious attitude toward the commercial connectivity that had also served as a disease corridor.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

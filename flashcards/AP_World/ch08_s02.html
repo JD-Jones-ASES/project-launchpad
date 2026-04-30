@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 8, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Proxy war", "back": "A conflict in which two or more outside powers support opposing sides, allowing their rivalry to be fought through local actors rather than directly. Cold War proxy wars were typically fought in post-colonial states with weak governments and militaries dependent on superpower weapons. Crucially: local soldiers pursued their own political goals — the 'proxy' label can obscure their agency.", "id": "fc01"}, {"front": "Brinkmanship", "back": "The Cold War diplomatic strategy of deliberately advancing to the edge of nuclear war in order to force the adversary to back down. It assumed rational leaders would choose retreat over mutual annihilation. The Cuban Missile Crisis revealed both the strategy's logic and its 'terrifying fragility' — resolution depended on avoiding accidents, not just rational decisions at the top.", "id": "fc02"}, {"front": "Korean War (1950–53)", "back": "The first major military confrontation of the Cold War. North Korea invaded South Korea on June 25, 1950, with Soviet equipment and Stalin's approval. China intervened in November 1950 when UN forces approached its border. The war ended with an armistice in July 1953 at roughly the original 38th parallel, at a cost of approximately 36,000 American and 130,000 South Korean military dead.", "id": "fc03"}, {"front": "38th parallel", "back": "The line dividing the Korean peninsula in 1945: the Soviet Union accepted Japanese surrender north of this line, the United States south of it. By 1950 two rival governments had consolidated. The 1950–53 Korean War ended with an armistice near this same line, restoring the pre-war division after three years of catastrophic fighting.", "id": "fc04"}, {"front": "Mao Zedong (1893–1976)", "back": "Leader of the Chinese Communist Party and founder of the People's Republic of China (proclaimed October 1, 1949). Developed a distinctively Chinese form of Marxism centering the peasantry rather than the urban proletariat as the revolutionary class. His domestic policies included the Great Leap Forward (famine killing 15–55 million) and Cultural Revolution (decade of political terror). Broke with the Soviet Union in the Sino-Soviet Split.", "id": "fc05"}, {"front": "People's Republic of China (PRC, 1949)", "back": "Communist state proclaimed by Mao Zedong on October 1, 1949, after the Communist Party defeated the Kuomintang (Nationalists) in the Chinese Civil War. Its founding transformed the Cold War from a primarily European superpower contest into a genuinely global ideological struggle, and its intervention in Korea demonstrated Communist China's willingness to challenge American military power.", "id": "fc06"}, {"front": "Long March (1934–35)", "back": "A 6,000-mile strategic retreat by Chinese Communist forces under Mao Zedong, escaping Nationalist encirclement. The march saved the Communist forces from annihilation and became the founding myth of the People's Republic — evidence of perseverance and revolutionary will that legitimized Mao's leadership.", "id": "fc07"}, {"front": "Great Leap Forward (1958–62)", "back": "Mao's forced collectivization campaign that reorganized China's agriculture and industry into large communes. The campaign caused a catastrophic famine that killed an estimated 15–55 million people — one of the deadliest human-caused disasters in history. It demonstrates the potential consequences of ideological policy overriding practical knowledge.", "id": "fc08"}, {"front": "Cultural Revolution (1966–76)", "back": "A decade of political terror launched by Mao Zedong targeting intellectuals, traditional culture, and perceived political rivals. The Mao quotations ('Little Red Book') were distributed to hundreds of millions as instruments of ideological conformity. The Revolution disrupted education and Chinese society for a generation.", "id": "fc09"}, {"front": "Sino-Soviet Split", "back": "The break between the Soviet Union and the People's Republic of China that developed in the late 1950s over ideological differences and national interests. Mao rejected Soviet leadership of the international Communist movement and developed a Chinese form of Marxism centered on the peasantry. The Split complicated Cold War alignments and eventually led Mao to ally briefly with the United States in the 1970s.", "id": "fc10"}, {"front": "Ho Chi Minh", "back": "Vietnamese Communist leader who led the Viet Minh independence movement against French recolonization after World War II. Won the decisive Battle of Dien Bien Phu (1954), forcing French withdrawal. Led the Democratic Republic of Vietnam (North Vietnam) and would have won the 1956 reunification elections that the U.S. blocked. His movement represents indigenous anti-colonial struggle that the Cold War framework often obscured.", "id": "fc11"}, {"front": "Battle of Dien Bien Phu (1954)", "back": "Decisive military victory of the Viet Minh over French forces in May 1954, ending French colonial rule in Indochina. Led to the 1954 Geneva Accords dividing Vietnam temporarily at the 17th parallel. Demonstrated that a determined independence movement could defeat a European colonial army — a lesson the United States failed to apply to its subsequent Vietnam involvement.", "id": "fc12"}, {"front": "Geneva Accords (1954)", "back": "Agreement following France's defeat at Dien Bien Phu that temporarily divided Vietnam at the 17th parallel — Communist Democratic Republic in the north, American-backed Republic in the south — with reunification elections scheduled for 1956. The United States blocked the elections, fearing Ho Chi Minh would win, and escalated military support for the south.", "id": "fc13"}, {"front": "Cuban Missile Crisis (October 1962)", "back": "Thirteen-day confrontation triggered when American intelligence discovered Soviet nuclear missiles being installed in Cuba. Kennedy chose a naval quarantine; Khrushchev agreed to remove the missiles in exchange for a non-invasion pledge and a secret agreement to remove American Jupiter missiles from Turkey. The closest the Cold War came to nuclear exchange — resolved partly through mutual concessions and partly by luck.", "id": "fc14"}, {"front": "Fidel Castro", "back": "Cuban revolutionary leader whose 1959 socialist revolution brought Cuba into the Soviet orbit. The United States supported a disastrous CIA-organized Bay of Pigs invasion attempt (April 1961). Cuba's alignment with the Soviet Union led directly to the Cuban Missile Crisis of 1962.", "id": "fc15"}, {"front": "Bay of Pigs (April 1961)", "back": "A CIA-organized invasion of Cuba by Cuban exiles attempting to overthrow Fidel Castro — a disastrous failure that embarrassed the Kennedy administration and hardened Soviet-Cuban relations. Khrushchev cited the failed invasion as a reason for installing missiles in Cuba the following year.", "id": "fc16"}, {"front": "Washington–Moscow Hotline", "back": "A direct communication channel established between the White House and the Kremlin after the Cuban Missile Crisis. Intended to allow rapid leader-to-leader communication in future crises, reducing the risk of accidental war through miscommunication or delay.", "id": "fc17"}, {"front": "What made proxy wars particularly costly for populations in post-colonial states? (causation + Social theme)", "back": "Post-colonial states typically had weak governments, militaries dependent on superpower weapons, and populations with their own political conflicts independent of the superpower contest. Superpowers exploited, armed, and shaped these pre-existing conflicts. The result: millions of deaths among people pursuing their own political goals while the actual rival superpowers faced no direct military risk. Korea: ~1 million+ military dead. Vietnam: 1–2 million civilian deaths.", "id": "fc18"}, {"front": "How did Mao's Marxism differ from Soviet Marxism? (comparison)", "back": "Soviet Marxism centered the urban industrial proletariat as the revolutionary class, consistent with Marx's original theory. Mao 'developed a distinctively Chinese form of Marxism that centered the peasantry rather than the urban proletariat.' This reflected China's predominantly agrarian society and made the Communist revolution genuinely Chinese rather than a Soviet export — contributing to the eventual Sino-Soviet Split.", "id": "fc19"}, {"front": "Why is the 'proxy war' concept potentially misleading? (historiography)", "back": "The term implies local actors were mere instruments of superpower rivalry, erasing the agency of people who fought for their own goals. The source states: 'the soldiers who fought and died in Korea, Vietnam, Angola, Nicaragua, and Afghanistan were pursuing their own political goals — the superpower framing was imposed on, and often distorted, indigenous struggles.' The proxy label serves analytical clarity but risks dehumanizing local populations.", "id": "fc20"}, {"front": "SPICE-T: How does Vietnam illustrate the limits of technological superiority? (Technology + Political)", "back": "The United States deployed the world's most technologically advanced military in Vietnam — air power, helicopters, napalm, Agent Orange — yet was unable to achieve its political objectives. The source's conclusion: 'nuclear deterrence and technological superiority could not overcome a determined independence movement fighting on its own terrain.' Technology is not a sufficient determinant of political outcomes, especially when fighting forces with indigenous knowledge, local support, and strong motivation.", "id": "fc21"}, {"front": "SPICE-T: Cultural theme in the Mao quotations", "back": "The 'Little Red Book' was both a cultural and political instrument: distributed to hundreds of millions, it sought to replace traditional Chinese culture and intellectual traditions with Maoist ideology. The Cultural Revolution's targeting of 'intellectuals and traditional culture' demonstrates that revolutions are not only political but also cultural — they seek to transform how people think, what they value, and what history means.", "id": "fc22"}, {"front": "Compare the Korean War armistice outcome with the Vietnam War outcome", "back": "Korea: ended with an armistice (July 1953) near the original 38th parallel — the pre-war division restored. South Korea remained independent; containment achieved its goal at enormous cost. Vietnam: South Vietnam fell to Northern forces in April 1975 after U.S. withdrawal; reunified under Communist rule. Containment failed in Vietnam. Both wars demonstrate the limits of military power and the resilience of indigenous political movements, but with opposite results for the containment goal.", "id": "fc23"}, {"front": "Mao's concept: 'Political power grows out of the barrel of a gun'", "back": "Mao's principle that military force is the ultimate foundation of political authority. The key qualifier — 'the Party commands the gun, and the gun must never be allowed to command the Party' — reveals his concern about military independence from political control. This principle shaped Chinese Communist Party structure: the PLA remained under party, not military, command.", "id": "fc24"}, {"front": "What lesson did both superpowers draw from the Cuban Missile Crisis? (continuity/change)", "back": "The crisis prompted both sides to recognize that 'direct confrontation had to be avoided and that future competition had to be channeled into arenas (proxy wars, economic competition, diplomacy) where the nuclear threshold would not be crossed.' This led to the hotline, early arms control talks, and a general shift toward managed competition rather than brinkmanship — though proxy wars continued.", "id": "fc25"}, {"front": "Nikita Khrushchev", "back": "Soviet Premier who initiated the Cuban missile installation, seeking to defend Cuba and offset American Jupiter missiles in Turkey. His decision to secretly install missiles brought the world to the edge of nuclear war in October 1962. His agreement to remove the missiles — in exchange for concessions — ended the crisis but weakened his political standing within the Soviet leadership.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

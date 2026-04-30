@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Silk Roads", "back": "A network of overland and maritime trade routes linking East Asia, Central Asia, South Asia, the Middle East, and the Mediterranean basin, active roughly 2nd century BCE–15th century CE. They transmitted goods, religions, technologies, and diseases across Eurasia.", "id": "fc01"}, {"front": "Caravanserai", "back": "A roadside inn built along major trade routes in Central Asia, the Middle East, and North Africa, providing overnight shelter, water, stabling, and storage for merchants. Spaced roughly one day's journey apart (25–35 km), they were the institutional backbone of the Silk Road economy.", "id": "fc02"}, {"front": "What was the relay system on the Silk Roads?", "back": "A pattern in which goods changed hands multiple times at successive trading posts—a Chinese merchant sold to a Sogdian, who sold to a Persian, who sold to an Arab—rather than any single merchant crossing the full distance. Each handoff added cost but also value: translation, currency exchange, and security.", "id": "fc03"}, {"front": "Hawala system", "back": "A trust-based credit-transfer network developed by Muslim merchants in which a trader could deposit money with a broker in one city and withdraw an equivalent sum from a partner broker thousands of kilometers away, using only a written note as collateral. It eliminated the need to transport coin through dangerous territory.", "id": "fc04"}, {"front": "Sogdians", "back": "Iranian-speaking peoples from the oasis cities of Sogdia (modern Uzbekistan and Tajikistan) who were the paramount commercial middlemen of the Central Asian Silk Roads for centuries. They established diaspora colonies in Chinese cities and used a script serving commerce from China to the Crimea.", "id": "fc05"}, {"front": "Why was silk ideal for overland long-distance trade?", "back": "Silk combined extreme value with low weight—the ideal profile for overland transport, where bulk goods were prohibitively expensive to move. Chinese imperial workshops produced silk of unmatched quality, giving it a premium price that justified the high per-kilometer cost of caravan transport.", "id": "fc06"}, {"front": "Battle of Talas (751 CE)", "back": "A conflict between Abbasid Arab forces and the Tang Chinese army in Central Asia. Its most significant long-term consequence was the capture of Chinese paper-makers by Arab forces, leading to the spread of paper-making technology westward into the Islamic world and eventually to Europe.", "id": "fc07"}, {"front": "How did Buddhism spread along the Silk Roads?", "back": "Buddhism spread from South Asia northward and eastward via trade corridors, carried in part by merchants who funded monasteries and pilgrimage sites along the routes. The Dunhuang cave complex—containing thousands of Buddhist manuscripts in a dozen languages—is physical evidence of this religious traffic.", "id": "fc08"}, {"front": "Dunhuang", "back": "An oasis city at a critical junction on the Silk Roads in western China. Its cave complex, preserved by the desert, contains thousands of Buddhist manuscripts in multiple languages—a physical archive of the religious and commercial exchange that passed through Central Asia.", "id": "fc09"}, {"front": "What four Chinese technologies moved westward along the Silk Roads?", "back": "Paper-making, printing, gunpowder, and the magnetic compass. Each traveled from China through the Islamic world to Europe, transforming warfare (gunpowder), navigation (compass), and intellectual life (paper and printing) more profoundly than any luxury commodity.", "id": "fc10"}, {"front": "Chang'an (Xi'an)", "back": "The eastern terminus of the Silk Roads in China, capital of the Han and Tang dynasties. Caravans departed from here and routes bifurcated around the Taklimakan Desert before reconverging at Samarkand and Bukhara to the west.", "id": "fc11"}, {"front": "Samarkand", "back": "A major oasis city in Central Asia (modern Uzbekistan) where Silk Road routes converged after splitting around the Taklimakan Desert. It was a hub of Sogdian commercial activity and later one of the great cities of the Islamic world.", "id": "fc12"}, {"front": "How did the Islamic conquests of the 7th century change Silk Road commerce?", "back": "Arab and Persian Muslim merchants gradually replaced the Sogdians as the dominant commercial intermediaries on the overland routes. Arabic became a new commercial lingua franca, and the Islamic hawala credit system further integrated long-distance trade.", "id": "fc13"}, {"front": "Marco Polo", "back": "A Venetian merchant (1254–1324) who traveled to Kublai Khan's court in China (c. 1271–1295) using the Mongol Yam relay system and paiza letters of safe conduct. His account, dictated in a Genoese prison, became the most famous Western description of the Mongol Empire and East Asia.", "id": "fc14"}, {"front": "What goods moved eastward along the Silk Roads?", "back": "From west to east: Roman and Byzantine glassware, woolen textiles from the Islamic world, horses from Central Asia (the most militarily significant import for China), and silver and gold from Iranian and Afghan mines.", "id": "fc15"}, {"front": "What goods moved westward along the Silk Roads?", "back": "From east to west: silk, porcelain (especially blue-and-white ware), spices and aromatics from Southeast Asia, paper (after the Battle of Talas), and gunpowder weapons. Technologies—paper-making, printing, gunpowder, compass—also moved westward.", "id": "fc16"}, {"front": "Nestorian Christianity on the Silk Roads", "back": "A branch of early Christianity that spread eastward along Silk Road corridors. Small communities of Nestorian Christian merchants were documented in Tang China, illustrating the range of religious diffusion along the trade network.", "id": "fc17"}, {"front": "Why were Central Asian horses the most militarily significant import for China?", "back": "China's geography made breeding high-quality warhorses difficult domestically. Central Asian horses, especially from the Ferghana region, were essential for cavalry armies. Chinese dynasties traded silk at a premium to secure this military resource—sometimes as many as forty bolts per horse.", "id": "fc18"}, {"front": "Chinese blue-and-white porcelain — significance for cultural exchange", "back": "Silk Road-traded Chinese porcelain became the aesthetic inspiration for Iznik tiles in the Ottoman Empire and Delftware in the Netherlands centuries later—illustrating how commodity trade transmitted artistic styles and design traditions across Eurasian cultures.", "id": "fc19"}, {"front": "Why were Chinese merchants less prominent than Chinese goods on overland Silk Roads?", "back": "Confucian ideology ranked merchants below farmers in the social hierarchy, and Chinese governments sometimes discouraged merchant travel. The relay system also made individual long-distance travel unnecessary. Chinese merchants were more active in Southeast Asian maritime ports.", "id": "fc20"}, {"front": "SPICE-T: How do the Silk Roads exemplify the 'Technology' theme?", "back": "The Silk Roads transmitted four transformative Chinese technologies westward—paper-making, printing, gunpowder, and the magnetic compass—each reshaping the Islamic world and Europe. Technology diffusion via trade networks is a core SPICE-T connection for this period.", "id": "fc21"}, {"front": "SPICE-T: How do the Silk Roads exemplify the 'Cultural' theme?", "back": "Buddhism, Islam, and Nestorian Christianity all spread along Silk Road corridors, carried by merchants who funded monasteries and by the social networks of diasporic communities. The routes transmitted artistic styles (blue-and-white porcelain aesthetic) and languages (Sogdian script, Arabic).", "id": "fc22"}, {"front": "What is the significance of the term 'Silk Roads' being a 19th-century coinage?", "back": "The term 'Silk Roads' was coined by 19th-century German geographer Ferdinand von Richthofen. The routes themselves are far older (2nd century BCE onward). The modern label captures silk's fame but risks reducing a complex, multi-commodity, multi-directional exchange network to a single product.", "id": "fc23"}, {"front": "Continuity vs. Change: How did the Silk Roads change between 1200 and 1450?", "back": "Continuity: the relay system, caravanserai infrastructure, and multi-commodity trade persisted. Change: Mongol unification (13th c.) dramatically increased traffic volume and safety; Muslim merchants replaced Sogdians as primary intermediaries; gunpowder weapons spread westward via Mongol military channels.", "id": "fc24"}, {"front": "How did the Mongol Empire transform Silk Road trade in the 13th century?", "back": "By uniting the Eurasian steppe under a single political authority, the Mongols eliminated the fractured customs barriers and bandit threats that had previously fragmented overland trade. A merchant could now travel from the Black Sea to Beijing under one legal system—creating unprecedented commercial connectivity.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

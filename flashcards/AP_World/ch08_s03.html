@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 8, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Non-Aligned Movement (NAM)", "back": "Political project of newly independent and decolonized states that refused to join either Cold War bloc. Formally launched at the Belgrade Conference of 1961. Far from neutral passivity, the NAM was an active diplomatic strategy grounded in anti-colonialism, self-determination, and the belief that the Cold War's bipolar framework served great powers at the expense of the Global South.", "id": "fc01"}, {"front": "Bandung Conference (April 1955)", "back": "International conference in Bandung, Indonesia attended by twenty-nine African and Asian nations — the first large-scale gathering of postcolonial states without European colonial powers or superpowers. Produced the Bandung Communiqué asserting sovereignty, non-interference, and opposition to colonialism. Considered the founding event of the Non-Aligned Movement and a landmark assertion of Third World solidarity.", "id": "fc02"}, {"front": "Sukarno", "back": "Indonesian president who convened the 1955 Bandung Conference, positioning Indonesia as a leader of the postcolonial Third World. Indonesia's hosting of the conference expressed the claim that Asian and African peoples had the right and capacity to organize their own international institutions.", "id": "fc03"}, {"front": "Jawaharlal Nehru", "back": "India's first prime minister (1947–64) and the most intellectually sophisticated proponent of non-alignment. Argued newly independent nations had an obligation to remain outside Cold War blocs to preserve genuine foreign policy independence and serve as international mediators. Developed the panchsheel philosophy that became the NAM's philosophical backbone.", "id": "fc04"}, {"front": "Panchsheel", "back": "Five principles of peaceful coexistence developed by Nehru as the philosophical foundation of the Non-Aligned Movement: mutual respect for sovereignty, mutual non-aggression, mutual non-interference in internal affairs, equality, and peaceful coexistence. Became the NAM's diplomatic philosophy and shaped its approach to international relations.", "id": "fc05"}, {"front": "Gamal Abdel Nasser", "back": "Egyptian leader who demonstrated non-alignment's strategic possibilities through the Suez Crisis (1956). When the U.S. and Britain withdrew funding for the Aswan High Dam, Nasser nationalized the Suez Canal. When Britain, France, and Israel invaded, both superpowers opposed them — Nasser emerged victorious and became a hero of anti-colonial nationalism. Egypt received Soviet dam funding while remaining non-aligned.", "id": "fc06"}, {"front": "Suez Crisis (1956)", "back": "International confrontation triggered when Egypt's Nasser nationalized the Suez Canal after Western powers withdrew Aswan Dam funding. Britain, France, and Israel invaded Egypt — but were forced to withdraw when both the U.S. and Soviet Union opposed the operation. The crisis validated non-alignment as a strategy and made Nasser the pre-eminent leader of Arab nationalism.", "id": "fc07"}, {"front": "Aswan High Dam", "back": "Major Egyptian infrastructure project whose funding became a flashpoint of Cold War non-alignment strategy. The U.S. and Britain withdrew their offer to fund it (1956) after Egypt purchased weapons from Soviet-allied Czechoslovakia. Nasser's nationalization of the Suez Canal in response triggered the Suez Crisis; the dam was ultimately built with Soviet funding.", "id": "fc08"}, {"front": "Josip Broz Tito", "back": "Yugoslav Communist leader who was the only European Communist head of state to successfully defy Moscow. Yugoslavia had liberated itself from Nazi occupation through its own partisan movement without Soviet assistance, giving Tito independence Stalin could not easily override. When Stalin tried to bring Yugoslavia into line (1948), Tito expelled Soviet advisers. He was a principal organizer of the 1961 Belgrade Conference.", "id": "fc09"}, {"front": "Yugoslav path to socialism", "back": "Tito's independent Communist development model: following the 1948 break with Stalin, Yugoslavia charted its own socialist path without Soviet direction, experimenting with worker self-management and market socialism. It demonstrated that non-alignment was possible even for a Communist state, complicating the Cold War's binary division.", "id": "fc10"}, {"front": "Belgrade Conference (1961)", "back": "The conference that formally launched the Non-Aligned Movement, organized by Tito, Nehru, Nasser, Sukarno, and Nkrumah. The conference's founding statement articulated the NAM's commitment to anti-colonialism, sovereignty, and independence from both Cold War blocs. Tito's role demonstrated that non-alignment was possible for a European Communist state.", "id": "fc11"}, {"front": "Group of 77", "back": "Coalition of 77 developing nations (later expanded) that used NAM solidarity to push for a New International Economic Order (NIEO) in the early 1970s. Represents the extension of non-aligned political solidarity into the economic domain — demanding structural changes to the global economy, not just political recognition.", "id": "fc12"}, {"front": "New International Economic Order (NIEO)", "back": "A set of demands by the Group of 77 developing nations in the early 1970s for fairer terms of trade, debt relief, and technology transfer from wealthy to developing nations. Articulated a vision of economic sovereignty alongside political independence. Ultimately rejected by industrialized powers, but prefigured later debates about trade justice and development finance.", "id": "fc13"}, {"front": "Third World", "back": "Cold War-era term for nations that were neither in the Western (First World) nor Soviet (Second World) bloc — typically postcolonial nations in Asia, Africa, and Latin America. The term originally carried the sense of the 'third estate' (the commoners) claiming their rightful place — not merely a geographic designation but a political assertion of postcolonial solidarity.", "id": "fc14"}, {"front": "Bandung Communiqué's ten principles", "back": "Ten principles articulated at the 1955 Bandung Conference, centered on sovereignty, non-interference, opposition to colonialism, and the right of nations to defend themselves through individual or collective arrangements — the last principle a deliberate rejection of superpower pressure for exclusive alliance commitments.", "id": "fc15"}, {"front": "How was non-alignment an 'active' strategy rather than passive neutrality? (causation)", "back": "Non-aligned leaders extracted tangible benefits from both superpowers: Nasser obtained Soviet dam funding after U.S. withdrawal; India received aid from both superpowers; Tito extracted Western economic concessions by maintaining distance from Moscow. The NAM also used UN mechanisms to push for decolonization and condemn apartheid. Non-alignment was leverage, not passivity.", "id": "fc16"}, {"front": "What structural conditions made the Non-Aligned Movement possible? (causation)", "back": "The NAM became possible because: (1) decolonization created many newly independent states that were not bound to either superpower; (2) both superpowers competed for influence in the Global South, giving non-aligned states leverage; (3) leaders like Nehru, Nasser, and Tito had genuine popular legitimacy and enough military/political independence to resist superpower pressure.", "id": "fc17"}, {"front": "What were the primary limits of the Non-Aligned Movement? (change/continuity)", "back": "Limits: (1) many nominally non-aligned states accepted superpower aid under pressure (India in 1962); (2) regional conflicts among NAM members (India-Pakistan, Egypt-Israel, Ethiopia-Somalia) undermined Third World solidarity; (3) Soviet invasion of Afghanistan (1979) could not produce a unified NAM response; (4) the NIEO demands for fairer economic terms were rejected by industrialized powers.", "id": "fc18"}, {"front": "SPICE-T: How does the NAM connect Political and Economic themes?", "back": "The NAM began as a political strategy (refusing Cold War bloc alignment to maximize sovereignty) but extended into the Economic realm through the Group of 77's NIEO demands: fairer trade terms, debt relief, technology transfer. This connection reveals that postcolonial states recognized political independence was insufficient without economic sovereignty — colonial economic structures could survive formal decolonization.", "id": "fc19"}, {"front": "SPICE-T: How does the NAM illustrate the Cultural theme of anti-colonialism?", "back": "The Bandung Conference's Afro-Asian composition asserted that colonized peoples had 'the right and the capacity to organize their own international order' — a cultural and psychological claim, not just a political one. The NAM's solidarity was grounded in a shared experience of colonial subjugation that created common interests transcending Cold War ideology. Third World solidarity was both a political strategy and a cultural affirmation of postcolonial identity.", "id": "fc20"}, {"front": "Compare the Non-Aligned Movement to the alliance system of WWI (comparison)", "back": "The WWI alliance system (Triple Entente vs. Triple Alliance) drew nations into great-power conflicts regardless of their own interests — small states were obligated to follow their patrons into catastrophic war. The NAM was explicitly designed to prevent this: to preserve the right of newly independent states to pursue genuinely independent foreign policies rather than being automaticaly pulled into superpower conflicts. Both illustrate how alliance systems constrain state behavior.", "id": "fc21"}, {"front": "Why was Bandung (1955) historically significant beyond its immediate diplomatic outcomes?", "back": "Bandung was the first large-scale meeting of African and Asian states without European colonial powers or superpowers. Beyond its stated principles, it demonstrated: (1) that postcolonial solidarity could produce international institutions independent of Western direction; (2) that collectively, these states represented more than half the world's population; (3) that a 'Third World' political identity distinct from both Cold War blocs was viable.", "id": "fc22"}, {"front": "How did the Suez Crisis demonstrate that non-alignment could constrain even the most powerful states?", "back": "Britain, France, and Israel — three Western powers with strong military forces — were compelled to withdraw from Egypt because both superpowers (U.S. and USSR) opposed the operation. Nasser's strategy of non-alignment gave him access to both superpowers' opposition when needed. A state formally aligned with the West could not have leveraged Soviet opposition in this way. Non-alignment created strategic flexibility that alignment foreclosed.", "id": "fc23"}, {"front": "Organization of African Unity (OAU, 1963)", "back": "Pan-African organization founded in 1963 to coordinate African political cooperation. The OAU endorsed the principle of uti possidetis — accepting colonial-era borders as permanent — at its 1964 Cairo summit. The NAM used the OAU as a vehicle for anti-colonial solidarity, pushing the UN to condemn apartheid and racial discrimination in Rhodesia.", "id": "fc24"}, {"front": "Why did the NAM push the UN to accelerate decolonization and condemn apartheid?", "back": "The NAM's anti-colonial solidarity extended beyond individual states' independence to the systematic dismantling of all colonial and racist systems. By using the UN General Assembly (where newly independent states held growing numerical weight) to condemn apartheid in South Africa and Rhodesia, NAM states transformed their numerical majority in the UN into political pressure against racial colonial systems — demonstrating that postcolonial solidarity had institutional tools.", "id": "fc25"}, {"front": "What does the contrast between 'aligned' and 'non-aligned' actually describe? (historiography)", "back": "The source cautions that the categories describe 'tendencies rather than rigid divisions.' Formally aligned states (France, Romania) exercised independence; nominally non-aligned states accepted superpower aid. The categories are analytical tools, not fixed identities. This is an important AP historiographical point: historical categories simplify complex realities and must be interrogated rather than accepted uncritically.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

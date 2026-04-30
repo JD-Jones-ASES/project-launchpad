@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 9, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Bretton Woods system", "back": "The international monetary and trade system designed at the 1944 Bretton Woods conference by 44 Allied nations. Established the IMF and World Bank; pegged currencies to the U.S. dollar (convertible to gold at a fixed rate). Collapsed in 1971 when Nixon suspended dollar–gold convertibility.", "id": "fc01"}, {"front": "IMF (International Monetary Fund)", "back": "Created at Bretton Woods to provide short-term stabilization loans to countries facing balance-of-payments crises. From the 1980s onward, became associated with structural adjustment programs requiring borrowing nations to privatize, deregulate, liberalize trade, and cut public spending.", "id": "fc02"}, {"front": "World Bank", "back": "Originally the International Bank for Reconstruction and Development (IBRD), created at Bretton Woods to finance post-war reconstruction and development. Became a major funder of infrastructure and development projects in low-income nations, often alongside IMF conditionality.", "id": "fc03"}, {"front": "Structural adjustment", "back": "IMF and World Bank loan conditions in the 1980s–1990s requiring privatization, deficit reduction (often via cuts to health/education), trade liberalization, and deregulation. Proponents argued they promoted growth; critics said they dismantled safety nets and served Western creditors over local populations.", "id": "fc04"}, {"front": "United Nations (1945)", "back": "Founded October 1945 with 51 member states; grew to 193 by 2024. Security Council architecture gave veto power to five permanent members (U.S., Soviet Union/Russia, UK, France, China) — reflecting 1945 power realities. Critics note no permanent seat for Africa, Latin America, or South Asia.", "id": "fc05"}, {"front": "UN Security Council permanent five (P5)", "back": "The United States, Soviet Union/Russia, United Kingdom, France, and China — the five permanent Security Council members with veto power over binding resolutions. Critics from the Global South argue this structure enshrines the power of victorious colonial powers and excludes most of humanity's nations.", "id": "fc06"}, {"front": "UNHCR and the displacement crisis", "back": "The Office of the United Nations High Commissioner for Refugees administered camps and resettlement programs for over 100 million displaced persons by 2022 — itself a measure of the limits of the UN system's capacity to prevent conflict.", "id": "fc07"}, {"front": "GATT and the WTO", "back": "The General Agreement on Tariffs and Trade (GATT, 1947) lowered trade barriers and was replaced in 1995 by the World Trade Organization, which added formal dispute-resolution authority. By 2024, the WTO had 164 members representing over 98% of world trade.", "id": "fc08"}, {"front": "China's WTO accession (2001)", "back": "China's admission to the WTO in 2001 was 'particularly consequential': Chinese manufacturing exports grew exponentially, lifting hundreds of millions out of poverty in China while displacing manufacturing employment in the United States, Europe, and elsewhere — generating political backlash and economic nationalism in the 2010s.", "id": "fc09"}, {"front": "Globalization as contested integration", "back": "Post-1945 economic globalization was not natural or automatic — it resulted from deliberate policy choices by powerful nations. Institutions (IMF, World Bank, WTO) were designed primarily by and for wealthy nations. Countries exporting manufactured goods prospered more than those locked into raw-material exports.", "id": "fc10"}, {"front": "Terms of trade", "back": "The ratio of export prices to import prices for a country. The text notes that nations locked into exporting raw materials faced 'volatile commodity prices and deteriorating terms of trade' compared to nations exporting manufactured goods — a structural disadvantage built into global economic integration.", "id": "fc11"}, {"front": "European Coal and Steel Community (1952)", "back": "The first major step in European regional integration, creating a common market for coal and steel among six Western European nations. Its success led to the broader European Economic Community via the Treaty of Rome (1957), eventually evolving into the EU.", "id": "fc12"}, {"front": "Treaty of Rome (1957)", "back": "The founding treaty of the European Economic Community (EEC), which created a common market among six Western European nations. The first major expansion of post-ECSC integration; eventually evolved into the European Union.", "id": "fc13"}, {"front": "European Union (EU)", "back": "The most ambitious experiment in regional economic and political integration — a common market, customs union, single currency (euro, 1999), and supranational governance with its own parliament, court, and executive commission. 27 member states by 2024 after Brexit.", "id": "fc14"}, {"front": "Euro (1999)", "back": "The single currency introduced to eurozone member states in 1999. It created exchange stability but also exposed tensions: the 2008 financial crisis pitted richer northern members (Germany) against struggling southern periphery (Greece, Spain, Portugal, Italy) in a debate about austerity.", "id": "fc15"}, {"front": "Brexit (2020)", "back": "The United Kingdom's departure from the European Union in 2020 following a 2016 referendum vote to leave. The Brexit vote drew on critiques of globalization as a project that hollowed out working-class communities and surrendered sovereignty to unaccountable international institutions.", "id": "fc16"}, {"front": "Greek austerity crisis", "back": "During the 2008 financial crisis, EU/IMF creditors imposed austerity conditions on Greece that critics argued transferred sovereignty 'upward to institutions accountable primarily to financial markets rather than to citizens' — a symbol of the tension between democratic accountability and supranational technocratic governance.", "id": "fc17"}, {"front": "What motivated the post-1945 institutional architecture?", "back": "The founders of the UN, IMF, World Bank, and GATT were determined not to repeat 'the catastrophes of the preceding three decades' — World War I, the global Depression, World War II, and genocide (the Holocaust). Multilateral institutions were designed to manage conflict, stabilize currencies, and lower trade barriers.", "id": "fc18"}, {"front": "How did the IMF's role change between 1944 and the 1980s?", "back": "Originally: short-term balance-of-payments stabilization loans. By the 1980s: structural adjustment programs attaching long-term market-reform conditions to loans — requiring privatization, deregulation, trade liberalization, and public spending cuts. Critics saw this as a shift from neutral lender to imposer of a specific economic ideology.", "id": "fc19"}, {"front": "What does the EU's handling of Greece reveal about regional integration's limits?", "back": "The EU raised living standards across Eastern Europe and ended centuries of warfare among core members — but the Greek austerity crisis revealed deep tensions between richer and poorer members, and raised questions about whether integration had transferred democratic sovereignty to institutions accountable to financial markets.", "id": "fc20"}, {"front": "SPICE-T: Political theme in global institutions", "back": "The UN, IMF, WTO, and EU all represent the Political theme — new forms of multilateral and supranational governance that pooled or limited national sovereignty. The tension between national sovereignty and international institutional authority runs throughout the section.", "id": "fc21"}, {"front": "SPICE-T: Economic theme in globalization", "back": "The section's Economic theme centers on how deliberate policy choices (Bretton Woods, GATT/WTO) shaped who benefited from global integration. Nations exporting manufactured goods prospered; raw-material exporters were disadvantaged by terms of trade — showing that the form of economic participation determines outcomes.", "id": "fc22"}, {"front": "Nixon's suspension of dollar–gold convertibility (1971)", "back": "President Nixon's decision to end the U.S. dollar's convertibility to gold at a fixed rate, collapsing the Bretton Woods fixed-exchange-rate system. The IMF and World Bank survived and evolved, but the monetary architecture of 1944 was fundamentally changed.", "id": "fc23"}, {"front": "Compare the UN General Assembly and Security Council", "back": "The General Assembly: all 193 member states, one vote each — a forum for all nations, but resolutions are not binding. Security Council: 15 members, five permanent with veto power — binding enforcement authority. This structure gives disproportionate power to the P5 and excludes Africa, Latin America, and South Asia from permanent membership.", "id": "fc24"}, {"front": "Why did the rise of economic nationalism in the 2010s connect to WTO-era globalization?", "back": "China's WTO accession generated manufacturing job losses in the U.S., Europe, and elsewhere. Workers who benefited as consumers (cheaper goods) were devastated as workers (factory closures). Political entrepreneurs channeled this discontent into movements like Brexit, Trump's America First, and the National Rally in France.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

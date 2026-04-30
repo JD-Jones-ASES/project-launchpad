@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 3, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Core problem facing all land-based empires (military)", "back": "How to maintain an effective fighting force loyal to the central state rather than to regional lords, ethnic communities, or religious factions. The solution: controlled social mobility — recruiting soldiers from outside the existing power structure, training them in state institutions, and rewarding them with status tied to state service.", "id": "fc01"}, {"front": "Devshirme — definition and process", "back": "The Ottoman system of periodic conscription: Ottoman officials traveled through Christian villages in the Balkans and Anatolia, selecting boys (ages 8–18), who were taken from families, converted to Islam, and enrolled in the palace school (Enderun). Graduates became Janissaries or high officials.", "id": "fc02"}, {"front": "Enderun", "back": "The Ottoman palace school where devshirme recruits were educated in Turkish, Arabic, the Quran, military skills, and administration. The most talented graduates entered palace service or the Devshirme Corps as senior officials and army officers.", "id": "fc03"}, {"front": "Janissaries — characteristics and peak period", "back": "Elite full-time Ottoman infantry: full-time, housed in Istanbul barracks, paid regular salaries, trained constantly, early adopters of firearms. Considered the finest infantry in the world at their peak (15th–16th centuries). Distinctive white felt hats.", "id": "fc04"}, {"front": "Janissaries vs. feudal levies — key difference", "back": "Feudal levies showed up for a campaign and returned home; tribal warriors' loyalty was to their clan. Janissaries were permanent, professional, salaried, state-housed — and loyal to the Ottoman state rather than to seasonal or tribal obligations. This professionalism was revolutionary by 15th-century standards.", "id": "fc05"}, {"front": "Grand Vizier", "back": "The Ottoman Empire's most senior minister — effectively the prime minister. Frequently held by devshirme graduates from Christian peasant origins. Their lack of independent family, land, or tribal following made them controllably loyal to the sultan.", "id": "fc06"}, {"front": "Devshirme as social mobility", "back": "From the perspective of individual recruits and their families, the devshirme offered a path from obscure village life to imperial power. Graduates could become Grand Vizier. From the sultan's perspective: controlled loyalty — their power derived entirely from royal favor and could be removed at any moment.", "id": "fc07"}, {"front": "Janissary decline and abolition", "back": "In the 17th century, Janissary positions became hereditary (admitting Muslim-born recruits and sons of Janissaries). The corps lost professional discipline, became a conservative political faction that made and unmade sultans. Abolished in 1826 by Sultan Mahmud II (the 'Auspicious Incident' — they were massacred in their barracks).", "id": "fc08"}, {"front": "Sengoku period (Japan, 1467–1615)", "back": "'Warring States': a century of Japanese civil war in which regional lords (daimyō) competed for supremacy using their hereditary samurai retainers. Ended with Tokugawa Ieyasu's consolidation and the establishment of the Tokugawa shogunate (1603–1868).", "id": "fc09"}, {"front": "Tokugawa shogunate (1603–1868)", "back": "The military government that imposed two and a half centuries of internal peace on Japan following the Sengoku civil war. Governed through the shogun (military ruler), managing the daimyō through the sankin-kōtai system and a rigid social hierarchy.", "id": "fc10"}, {"front": "Daimyō", "back": "Regional lords of Japan who commanded samurai retainers and governed domains. During the Sengoku period they competed for supremacy. Under the Tokugawa, they were controlled through sankin-kōtai, financial drain, and the threat of attainder.", "id": "fc11"}, {"front": "Samurai", "back": "The hereditary warrior class of Japan, bound by the code of bushidō (loyalty, martial skill, acceptance of death without dishonor). Unlike devshirme recruits, samurai were born into their status — an inherited, not assigned, position. Their hereditary independence made them potentially dangerous to central authority.", "id": "fc12"}, {"front": "Bushidō ('Way of the Warrior')", "back": "The samurai code of conduct emphasizing loyalty to one's lord, martial skill, and the acceptance of death without dishonor. Provided the cultural-ideological framework for samurai identity and service.", "id": "fc13"}, {"front": "Sankin-kōtai ('Alternate Attendance')", "back": "The Tokugawa requirement that all daimyō spend alternating years in their home domains and in Edo (the shogunal capital). When daimyō were away, their families remained in Edo as effective hostages. Drained financial resources (two households), kept daimyō under surveillance, and prevented alliance-building.", "id": "fc14"}, {"front": "Tokugawa social hierarchy", "back": "A rigid four-class system: samurai at top, followed by peasants, artisans, and merchants (at the bottom despite growing wealth). Samurai were forbidden to engage in trade; their status depended on stipends from their lords, creating financial dependence. Merchants' growing wealth eventually made the hierarchy's logic 'increasingly absurd.'", "id": "fc15"}, {"front": "Rōnin", "back": "A masterless samurai — one whose lord had died or who had been dismissed from service. As the Tokugawa peace continued and wars ended, increasing numbers of samurai became rōnin (wandering, without employment), highlighting the structural obsolescence of a warrior class in a peacetime society.", "id": "fc16"}, {"front": "Samurai vs. devshirme — fundamental structural difference", "back": "Devshirme: non-hereditary, recruited from outside the power structure, total dependence on the sultan (social mobility from below). Samurai: hereditary status from above, but controlled by financial dependence on stipends and Tokugawa institutional restraints. Opposite entry mechanisms, same result: warrior class privileged but unable to threaten central power.", "id": "fc17"}, {"front": "Institutional calcification — meaning", "back": "The source's concept: military and political systems designed for one set of conditions 'tend to calcify into obstacles as conditions change.' Both the Janissaries (became hereditary political faction) and the samurai (became superfluous in peacetime) illustrate that the most effective control mechanism at one moment can become the greatest source of instability at the next.", "id": "fc18"}, {"front": "Compare sankin-kōtai and Versailles as tools of elite control.", "back": "Both required powerful elites to spend time near the ruler away from their home bases — preventing the buildup of independent power and alliances. Both drained elite financial resources (two households; expensive court life). Both made proximity to the ruler the currency of status. Different cultural forms, identical political logic.", "id": "fc19"}, {"front": "What SPICE-T theme MOST connects the devshirme, ghulam, and samurai systems?", "back": "Political + Social: All three were political solutions to the social problem of elite loyalty. They structured social mobility (devshirme, ghulam) or controlled hereditary status (samurai) to keep military classes simultaneously powerful and dependent. Social hierarchy was engineered by state institutions to serve political stability.", "id": "fc20"}, {"front": "Why is the devshirme paradoxically described as both coercive and an opportunity?", "back": "Coercive: boys were taken from families without consent, converted from Christianity to Islam, separated from their communities. Opportunity: a Christian peasant boy could rise to become Grand Vizier of one of the world's most powerful empires — social mobility unavailable through any other channel. Both aspects are real; neither cancels the other.", "id": "fc21"}, {"front": "Mahmud II and the 'Auspicious Incident' (1826)", "back": "Ottoman Sultan Mahmud II abolished the Janissary corps in 1826, having them massacred in their barracks. Called the 'Auspicious Incident.' Enabled military modernization on European lines without the political interference of a corps that had been deposing sultans for generations.", "id": "fc22"}, {"front": "How did long peace undermine the Tokugawa samurai system?", "back": "With no wars to fight, samurai lost their core function as warriors. They drifted into administrative roles, scholarship, or rōnin status. Their stipends shrank as the fiscal system strained, while the merchants they outranked grew wealthy through commerce. The social hierarchy justifying samurai superiority became economically meaningless.", "id": "fc23"}, {"front": "Controlled social mobility — definition as a political concept", "back": "Recruiting soldiers/officials from outside the existing power structure (or controlling an existing class through structural dependence), training them in state institutions, and rewarding them with status tied entirely to state service. Creates warriors loyal to the ruler because they have no alternative power base. Used by Ottomans (devshirme), Safavids (ghulam), and analogously by Tokugawa (samurai stipend dependence).", "id": "fc24"}, {"front": "Why did the Tokugawa forbid samurai from engaging in trade?", "back": "Samurai status was defined by warrior and administrative service, not commercial activity — trade was associated with the merchant class below them in the hierarchy. Forbidding trade maintained the status boundary between samurai and merchants. But it also made samurai entirely dependent on their lords' stipends, which was precisely the Tokugawa's political intention: financial dependence = loyalty.", "id": "fc25"}, {"front": "Broader truth about coercive military systems (source's conclusion)", "back": "'The most effective mechanism of control at one moment can become the greatest source of instability at the next.' Military systems designed for one political-military context calcify into obstacles when conditions change — illustrated by Janissary political factionalism and samurai structural obsolescence.", "id": "fc26"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP World History: Modern &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP World History: Modern &mdash; Chapter 1, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/AP_World.html">&larr; Back to AP World History: Modern</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Feudalism (European)", "back": "A system of political and social organization in which land grants (fiefs) were exchanged for military service and personal loyalty between lords and vassals. Emerged after Carolingian central authority collapsed in the 9th century. Historians treat it as an analytical category rather than a precise institution, since arrangements varied enormously by region and period.", "id": "fc01"}, {"front": "Vassal", "back": "A free man (typically a knight) who swore an oath of loyalty and military service to a more powerful lord (suzerain) in exchange for a grant of land called a fief. The lord–vassal bond was personal and reciprocal: the lord owed protection, justice, and maintenance; the vassal owed military service, counsel, and financial aid.", "id": "fc02"}, {"front": "Fief", "back": "A grant of land given by a lord to a vassal in exchange for military service and personal loyalty. The fief gave the vassal an economic base from which to equip and maintain himself as a mounted warrior (knight). The fief system was the economic foundation of the European feudal order.", "id": "fc03"}, {"front": "Serf", "back": "Agricultural laborer bound by custom and law to the land of their lord's estate (the manor). Unlike slaves, serfs could not legally be sold away from their land; unlike free peasants, they could not leave without the lord's permission. They owed labor service (typically 3 days/week), dues, and fees in exchange for access, mill/oven use, and physical protection.", "id": "fc04"}, {"front": "Manorialism", "back": "The economic system of medieval Western Europe in which the basic unit of agricultural production was the manor — a lord's estate worked by serfs. Manorialism described the exploitation of agricultural labor; feudalism described elite political-military relationships. The two systems reinforced each other and began to break down together in the 14th century, accelerated by the Black Death.", "id": "fc05"}, {"front": "Manor", "back": "The basic unit of the medieval European agricultural economy: a lord's estate combining his home farm (demesne), serfs' open-field strips, communal pasture and woodland, and the lord's mill and chapel. The manor was largely self-sufficient; surplus was consumed by the lord, donated to the Church as tithes, or exchanged in local markets.", "id": "fc06"}, {"front": "Demesne", "back": "The portion of the lord's manor worked directly for the lord's own use, as distinct from the strips in the open fields farmed by serfs for their own subsistence. Serfs typically owed labor service on the demesne as part of their obligations.", "id": "fc07"}, {"front": "Three-field system", "back": "Medieval European agricultural rotation in which arable land was divided into three parts: one planted in spring crops, one in fall crops, and one left fallow to recover. This system increased productivity compared to two-field rotation and was a key factor in European population growth in the high medieval period.", "id": "fc08"}, {"front": "Catholic Church as trans-European institution", "back": "In politically fragmented medieval Europe, the Church was the single institution with genuine trans-European reach: it controlled birth/marriage/death rituals, trained the only substantial literate class (clergy), administered the tithe (10% of agricultural production), and maintained a Europe-wide network of monasteries, cathedrals, and bishops.", "id": "fc09"}, {"front": "Tithe", "back": "A tenth of agricultural production donated to the Catholic Church, administered locally by parish priests and supporting the Church's institutional infrastructure. The tithe provided the Church with an independent economic base across all of Western Europe, reinforcing its trans-European institutional authority.", "id": "fc10"}, {"front": "Investiture Controversy (1076–1122)", "back": "The conflict between the Papacy and secular rulers over who had the authority to appoint Church officials. It established the principle that the Pope had ultimate authority over Church appointments — but in practice, kings and nobles continued to exercise enormous influence over the Church in their territories.", "id": "fc11"}, {"front": "Crusades (1095–1291)", "back": "Military expeditions to the Holy Land launched under Church leadership between 1095 and 1291. Represented the Church's most dramatic trans-European political mobilization. Also had major commercial and cultural consequences: opening new trade routes and bringing Western Europeans into sustained contact with Byzantine and Islamic civilizations.", "id": "fc12"}, {"front": "Carolingian collapse and the origins of feudalism", "back": "European feudalism emerged from the collapse of Carolingian central authority in the 9th and 10th centuries as Viking, Magyar, and Saracen raids made centralized defense impossible and local lords became the only effective source of protection. Feudal local arrangements were adaptive responses to a security vacuum.", "id": "fc13"}, {"front": "Knight (chevalier)", "back": "The European feudal warrior class — heavy cavalry armed with lance, sword, and armor — who served their lord in exchange for a fief. Knights were governed by the code of chivalry emphasizing loyalty to the lord, protection of the weak, and Christian piety.", "id": "fc14"}, {"front": "Chivalry", "back": "The European warrior code prescribing loyalty to the lord, protection of the weak, and Christian piety for the knightly class. Chivalry provided a moral framework for the feudal military relationship and parallels (though differs from) the Japanese bushido warrior code.", "id": "fc15"}, {"front": "Samurai", "back": "The Japanese warrior class serving lords (daimyo) under a strict code of honor (bushido), in exchange for land grants (early period) or stipends (later). The Japanese parallel to European knights — trained mounted warriors whose service underpinned the feudal political order.", "id": "fc16"}, {"front": "Daimyo", "back": "Japanese feudal lord who commanded the loyalty of samurai retainers, parallel to the European feudal lord. Daimyo controlled local territory through military power as the Heian imperial court's centralized authority declined.", "id": "fc17"}, {"front": "Bushido", "back": "The Japanese warrior code emphasizing loyalty to the lord, martial skill, discipline, and honorable death over surrender. Distinguished from European chivalry by framing samurai loyalty as an absolute personal obligation rather than a contractual relationship (which in theory could be broken).", "id": "fc18"}, {"front": "Joei Code (1232)", "back": "Early Kamakura-period legal code establishing basic samurai governance principles. Warrior law (buke-hō) operated alongside imperial court law — a dual legal system reflecting Japan's parallel feudal and imperial authority structures.", "id": "fc19"}, {"front": "Parallel institutional evolution — European vs. Japanese feudalism", "back": "Medieval Japan and Western Europe developed remarkably similar feudal arrangements (fragmented authority, warrior classes, personal loyalty bonds, warrior codes) through entirely independent processes — no contact or diffusion. The parallel development illustrates that similar historical conditions (absent central authority, need for local defense) can produce structurally similar solutions.", "id": "fc20"}, {"front": "Key SIMILARITY: European vs. Japanese feudalism", "back": "Both systems fragmented political authority among warrior-landholders, produced distinctive warrior codes (chivalry / bushido), and operated in the absence of strong central bureaucratic states. In both, political power was personal and local rather than institutional and centralized.", "id": "fc21"}, {"front": "Key DIFFERENCE: European vs. Japanese feudalism", "back": "The Catholic Church gave Western European feudalism a trans-regional religious authority structure (with no Japanese parallel — Buddhism was more subordinate to the shogunate). Also: European feudal loyalty bonds were theoretically contractual (oaths could be broken); Japanese samurai loyalty was framed as an absolute personal obligation.", "id": "fc22"}, {"front": "SPICE-T: What Political theme does European decentralization illustrate?", "back": "European feudal decentralization illustrates that political authority can be organized through personal loyalty bonds and hereditary land grants rather than bureaucratic institutions. It shows how state collapse (Rome) creates structural conditions for alternative political forms — and how those forms can later transition toward centralization as commercial economies develop.", "id": "fc23"}, {"front": "Why European feudalism was 'dynamic, not static'", "back": "By 1200, European feudalism was already evolving: population growth, trade revival, and new institutions (chartered towns, royal courts, universities) were creating conditions for more centralized governance. The system that would characterize early modern Europe was already forming in nascent form — feudalism's breakdown was not sudden but a long structural transition.", "id": "fc24"}, {"front": "Contextualization: Why did Europe lack a centralized bureaucratic state in 1200?", "back": "Three factors distinguished Europe from Song China or Dar al-Islam: (1) collapse of Roman imperial infrastructure eliminated the administrative base; (2) ecological and demographic constraints limited agricultural surplus needed to fund a bureaucratic state; (3) the absence of a developed commercial economy meant no tax base for professional administration. These were structural, not cultural, deficiencies.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>
