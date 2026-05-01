@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Progressive Era (c. 1900–1920)", "back": "Not a single movement but a loose coalition of overlapping reform crusades united by the conviction that industrial capitalism had produced problems too large for individuals to solve alone and that an activist government could remedy them. Included settlement-house workers, muckrakers, labor organizers, and politicians. Produced lasting constitutional amendments and the federal regulatory state.", "id": "fc01"}, {"front": "Muckrakers", "back": "Term applied by Theodore Roosevelt (from Bunyan's Pilgrim's Progress) to investigative journalists who exposed corruption and corporate abuse. Key figures: Ida Tarbell (Standard Oil), Lincoln Steffens (The Shame of the Cities), Upton Sinclair (The Jungle), Jacob Riis (How the Other Half Lives). Demonstrated that investigative journalism could translate public outrage into legislation.", "id": "fc02"}, {"front": "Ida Tarbell — The History of the Standard Oil Company (1904)", "back": "Serialized in McClure's Magazine; used internal documents, interviews, and traced specific business transactions to show how Rockefeller used secret railroad rebates, predatory pricing, and corporate espionage to build a monopoly controlling 91% of U.S. refinery capacity. Archival rather than polemical; directly contributed to the Supreme Court's 1911 breakup of Standard Oil.", "id": "fc03"}, {"front": "Upton Sinclair — The Jungle (1906)", "back": "Intended as a socialist expose of immigrant labor exploitation in Chicago meatpacking. Produced instead a middle-class consumer demand for food regulation. Sinclair's lament: 'I aimed at the public's heart and by accident hit it in the stomach.' Reveals whose interests the Progressive regulatory state primarily served.", "id": "fc04"}, {"front": "Lincoln Steffens — The Shame of the Cities (1904)", "back": "Exposed machine graft and bribery in St. Louis, Minneapolis, Pittsburgh, and New York. Most disturbing conclusion: citizens knew about the corruption and tolerated it — the shame belonged to the people, not just the machines. Targeted the complicity of democratic citizenship in corrupt governance.", "id": "fc05"}, {"front": "Pure Food and Drug Act (1906)", "back": "Prohibited manufacture, sale, or transportation of adulterated or misbranded food and drugs in interstate commerce. Companion to the Meat Inspection Act (1906). Created the federal regulatory apparatus that eventually became the FDA. Triggered by public outrage over The Jungle — though it addressed food safety for consumers, not labor exploitation for workers.", "id": "fc06"}, {"front": "Meat Inspection Act (1906)", "back": "Mandated federal inspection of meat-processing facilities and established sanitation standards. Passed alongside the Pure Food and Drug Act following Roosevelt's decision to send government investigators to the Chicago stockyards after The Jungle's publication. Both acts confirmed Sinclair's descriptions of conditions.", "id": "fc07"}, {"front": "Hepburn Act (1906)", "back": "Extended federal regulatory power to railroads, giving the Interstate Commerce Commission authority to set maximum railroad rates and inspect company books. First time a federal agency could impose binding rates on a private industry — establishing the principle of continuous regulatory authority over private business.", "id": "fc08"}, {"front": "Sixteenth Amendment (1913)", "back": "Authorized a federal income tax, overturning the 1895 Pollock ruling. Created the revenue base for expanded federal government. Shifted tax burden from tariffs (taxing consumption by all) toward graduated income tax (falling more heavily on the wealthy). Essential fiscal infrastructure for the Progressive administrative state.", "id": "fc09"}, {"front": "Seventeenth Amendment (1913)", "back": "Established direct election of U.S. senators by popular vote, replacing state legislature selection. Progressives argued the old system produced senators beholden to corporate interests controlling state machines. Aimed to make senators accountable to voters rather than to machine bosses.", "id": "fc10"}, {"front": "Eighteenth Amendment (1919) — Prohibition", "back": "Prohibited manufacture, sale, or transportation of intoxicating liquors. Supported by Protestant churches, the Anti-Saloon League, women's organizations, and rural reformers. Partly a genuine moral reform, partly a cultural crusade by native-born Protestant Americans against immigrant communities whose social lives centered on saloons. Repealed by the Twenty-First Amendment (1933) after generating bootlegging, organized crime, and disrespect for law.", "id": "fc11"}, {"front": "Nineteenth Amendment (1920)", "back": "Prohibited denying the right to vote on account of sex, completing a 72-year campaign begun at Seneca Falls (1848). A genuine democratic expansion — but one that in practice largely benefited white women, since Black women in the South continued to face the same disenfranchisement machinery (poll taxes, literacy tests, violence) as Black men.", "id": "fc12"}, {"front": "Sherman Antitrust Act (1890) — Progressive applications", "back": "Roosevelt filed 44 antitrust suits, breaking up Northern Securities (railroads), and eventually Standard Oil (1911) and American Tobacco Company. Established that the federal government could and would use law to dismantle private monopolies that corrupted markets and undermined competition.", "id": "fc13"}, {"front": "Federal Reserve (1913)", "back": "Created a central banking system to manage the money supply, provide lender-of-last-resort functions, and prevent the banking panics that had repeatedly destabilized the economy. Part of the first wave of Progressive regulatory agency creation alongside the Federal Trade Commission (1914).", "id": "fc14"}, {"front": "Federal Trade Commission (1914)", "back": "Created to investigate and prevent unfair methods of competition and deceptive business practices. Represented the Progressive administrative model: ongoing regulatory oversight by expert agency rather than case-by-case legislation.", "id": "fc15"}, {"front": "The Administrative State", "back": "The Progressive Era's most lasting achievement: federal regulatory agencies with broad authority to police private industry continuously through inspection, rate-setting, and rule-making. Before the Progressive Era, federal domestic role was confined to tariffs, land, and post office. After: FDA, ICC/Hepburn, Federal Reserve, FTC. Controversial from the start: business (unconstitutional), labor (serves business), progressives (essential).", "id": "fc16"}, {"front": "Triangle Shirtwaist Factory fire (March 25, 1911)", "back": "Fire at a New York garment factory killed 146 workers — mostly young immigrant women — because exits were locked and fire escapes were inadequate. Galvanized the labor movement and produced New York's Factory Investigating Commission, which enacted 56 labor-safety laws over four years. Illustrated the human cost of unregulated industrial labor.", "id": "fc17"}, {"front": "Settlement houses (Jane Addams / Hull House)", "back": "Institutions in immigrant urban neighborhoods where middle-class reformers lived and worked alongside poor residents, providing social services and documenting conditions. Hull House in Chicago (founded 1889) was the model. Settlement-house workers were crucial Progressive reformers who advocated for labor laws, immigrant rights, and urban sanitation — though often within a framework of middle-class cultural assumptions about what immigrants needed.", "id": "fc18"}, {"front": "Theodore Roosevelt — Progressive president", "back": "Mediated the 1902 anthracite coal strike (first president to intervene on labor's behalf without sending troops). Filed 44 antitrust suits. Used Antiquities Act for 18 national monuments. His 1912 Bull Moose campaign on 'New Nationalism' (using federal power to regulate corporate capitalism) drew more votes than incumbent Taft. Defined the progressive political tradition FDR inherited.", "id": "fc19"}, {"front": "Woodrow Wilson — New Freedom", "back": "Wilson's 1912 platform contrasted with Roosevelt's 'New Nationalism': where Roosevelt wanted regulated big business, Wilson wanted to break up monopolies and restore competition among small businesses. Wilson's presidency produced the Federal Reserve, FTC, and Clayton Antitrust Act. In practice, New Freedom and New Nationalism converged in expanding the administrative state.", "id": "fc20"}, {"front": "Limits of Progressive reform: race", "back": "The Progressive Era was largely silent on African American rights and often hostile to Black advancement. Woodrow Wilson re-segregated the federal civil service. Many Progressive reformers explicitly excluded Black Americans from their vision of the 'deserving public.' The reform movement's failure to confront Jim Crow was a structural limit on its democratic achievement.", "id": "fc21"}, {"front": "Limits of Progressive reform: class and ethnicity", "back": "Progressive reform primarily served middle-class white Protestant interests. The Jungle's real victims — Lithuanian and other immigrant workers — did not get the labor protections Sinclair sought. Prohibition targeted immigrant (Irish, Italian, German, Jewish) saloon culture. Immigration restriction laws were partly products of Progressive-era nativist thought.", "id": "fc22"}, {"front": "POL/ECO Theme: Progressive Era regulatory state", "back": "The Progressive Era transformed the relationship between government and the economy. Before 1900: federal domestic role limited to tariffs, land, post office. After: ongoing regulatory agencies (FDA, ICC, FRB, FTC) with continuous inspection and rate-setting authority. Created the institutional infrastructure that FDR would massively expand in the New Deal.", "id": "fc23"}, {"front": "HAPP: The Jungle (1906) as primary source", "back": "Historical context: unregulated Chicago meatpacking (confirmed by Roosevelt's investigators). Audience: Sinclair intended workers/socialists; actual legislative audience was middle-class consumers. Purpose: expose labor exploitation; effective purpose was food-safety alarm. Point of view: committed socialist who believed workers' plight was central — his lament reveals frustration that consumers, not workers, drove the legislative outcome.", "id": "fc24"}, {"front": "Comparison: First New Deal vs. Progressive Era regulatory state", "back": "The Progressive administrative state (1906–1914) created continuous regulatory oversight of private industry within the existing capitalist framework. The New Deal (1933–38) went further: the federal government became an insurer (FDIC, Social Security), an employer (WPA, CCC), and a direct economic actor (TVA). The Progressive Era built the framework; the New Deal expanded it into social insurance.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

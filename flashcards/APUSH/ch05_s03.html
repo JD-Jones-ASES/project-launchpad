@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Dred Scott v. Sandford (1857) — Three Holdings", "back": "(1) Black Americans — enslaved or free — were not citizens and had no standing to sue in federal court. (2) Congress had never had constitutional authority to ban slavery from territories (Missouri Compromise always unconstitutional). (3) Enslaved people were property protected by the Fifth Amendment's due process clause — a law depriving slaveholders of that property without due process was void.", "id": "fc01"}, {"front": "Chief Justice Roger Taney", "back": "Author of the 7–2 majority opinion in Dred Scott v. Sandford (1857). His historical argument — that the Constitution's framers understood Black people as 'beings of an inferior order' who possessed 'no rights which the white man was bound to respect' — was refuted by Justice Curtis's dissent. The decision is widely considered the most consequential constitutional disaster in American legal history.", "id": "fc02"}, {"front": "Justice Benjamin Curtis's Dred Scott dissent", "back": "Curtis demonstrated through exhaustive historical evidence that free Black men had in fact been citizens at the time of the Constitution's ratification — making Taney's historical argument untenable. Curtis resigned from the Court in protest after the decision. His dissent provided the factual ammunition Republicans used to delegitimize the ruling as judicial politics, not constitutional law.", "id": "fc03"}, {"front": "Why Dred Scott intensified rather than resolved the crisis", "back": "By declaring the Republican platform unconstitutional (Congress cannot ban slavery from territories) and stripping Black Americans of any citizenship claim, the decision: (1) removed the moderate Republican position as legally viable; (2) threatened popular sovereignty as well (if Congress can't ban, can territories?); (3) convinced many Northerners the Supreme Court had been captured by the 'slave power.' It made the crisis MORE explosive, not less.", "id": "fc04"}, {"front": "Freeport Doctrine", "back": "Douglas's response to Lincoln's 1858 Senate debate challenge about popular sovereignty after Dred Scott. Douglas argued that territorial residents could effectively exclude slavery by refusing to pass the slave codes needed to protect it — even if Congress couldn't formally ban slavery. This satisfied enough Northerners to help Douglas win the 1858 Senate race but infuriated Southern Democrats, destroying his 1860 presidential prospects.", "id": "fc05"}, {"front": "John Brown (1800–1859)", "back": "Radical abolitionist who believed slavery could be ended only by force. Supervised the Pottawatomie massacre (1856) in Kansas. Led the October 1859 raid on the Harpers Ferry federal arsenal with 21 men (16 white, 5 Black), intending to seize weapons and ignite a general slave insurrection. The raid failed within 36 hours; the enslaved population did not rise. Brown was captured, tried for treason, and hanged December 2, 1859.", "id": "fc06"}, {"front": "Why Harpers Ferry deepened sectional crisis despite military failure", "back": "The South's reaction was 'incandescent' — confirming fears of Northern intent to incite slave rebellion. The North's reaction was complex: Republican leaders condemned the raid, but Northern intellectuals like Ralph Waldo Emerson called Brown 'a new saint.' The contrasting reactions confirmed that the two sections were 'living in separate moral universes' — interpreting the same events through incompatible frameworks.", "id": "fc07"}, {"front": "Election of 1860 — four candidates", "back": "(1) Abraham Lincoln (Republican): free-soil, non-extension. (2) Stephen Douglas (Northern Democrat): popular sovereignty. (3) John C. Breckinridge (Southern Democrat): federal slave-code for territories. (4) John Bell (Constitutional Union): avoid the slavery issue. Result: Lincoln won 180 electoral votes entirely from free states; Deep South seceded before his March 4 inauguration.", "id": "fc08"}, {"front": "Lincoln's 1860 electoral victory — key facts", "back": "Lincoln won 180 electoral votes — entirely from free states. His name did not appear on the ballot in ten Southern states. He received 39.8% of the popular vote — a plurality, NOT a majority. He won decisively in the Electoral College because of the concentrated population of the free states. A majority of Americans had voted against him.", "id": "fc09"}, {"front": "Secession — constitutional argument", "back": "Southern secessionists used the compact theory: if the Constitution was a compact among sovereign states, states retained the right to withdraw when the federal government violated the compact's terms. Lincoln's counter-argument: the Constitution was a permanent instrument of the people, not a revocable contract among governments — no state could unilaterally dissolve a bond the people as a whole had created. The Civil War settled the question by force.", "id": "fc10"}, {"front": "Sequence of Deep South secession (1860–61)", "back": "South Carolina voted to leave in December 1860 (citing Lincoln's election). Mississippi, Florida, Alabama, Georgia, Louisiana, and Texas followed in January–February 1861. The Confederate States of America was organized at Montgomery, Alabama, in February 1861, with Jefferson Davis as president — before Lincoln was even inaugurated on March 4, 1861.", "id": "fc11"}, {"front": "Alexander Stephens's 'Cornerstone Speech' (1861)", "back": "Confederate Vice President Alexander Stephens declared slavery 'the corner-stone' of the Confederacy: 'its foundations are laid, its cornerstone rests, upon the great truth that the negro is not equal to the white man.' Primary source evidence directly contradicting the post-war 'Lost Cause' narrative that the Confederacy fought for constitutional principle rather than slavery.", "id": "fc12"}, {"front": "Fort Sumter (April 12, 1861)", "back": "Confederate forces opened fire on the Union garrison at Fort Sumter, South Carolina, beginning the Civil War. Lincoln had decided to resupply the fort (a decision that forced the Confederacy to choose between letting the Union maintain a federal position in Confederate territory or firing first). The Confederate decision to fire unified Northern opinion and allowed Lincoln to call for 75,000 volunteers.", "id": "fc13"}, {"front": "POL + NAT theme: Election of 1860 and secession", "back": "POL: The question was not which policy would prevail but whether the constitutional framework could survive a result one section refused to accept. NAT: The Confederacy constructed a new national identity explicitly grounded in racial slavery (Stephens's Cornerstone Speech), while the Union was about to undergo its own national identity transformation through the war and Emancipation Proclamation.", "id": "fc14"}, {"front": "Constitutional significance of Dred Scott for the Republican Party", "back": "If Congress had no power to ban slavery from territories (Taney's holding), the Republicans' central platform plank was unconstitutional. This left Republicans with a choice: accept the decision's logic and abandon their platform, or reject the decision's legitimacy and assert that the Court had been captured by the 'slave power.' Most Republicans chose the latter.", "id": "fc15"}, {"front": "Comparison: Northern vs. Southern reactions to John Brown", "back": "South: Brown's raid confirmed the worst fears about Northern intent — that abolitionists would incite slave rebellion, leading to race war. Most Southerners concluded coexistence in the Union was impossible. North: Republican leaders condemned the raid as illegal. But intellectuals like Emerson called Brown a saint; Northern newspapers noted he died at peace. The same event, two entirely different moral verdicts.", "id": "fc16"}, {"front": "Continuity/Change: How did the 1857–60 period differ from earlier sectional crises?", "back": "Earlier crises (Missouri Compromise 1820, Compromise 1850) produced institutional resolutions that both sides accepted — however reluctantly. The 1857–60 period produced no resolution: the Dred Scott decision closed off legislative options; Harpers Ferry made compromise feel like surrender to the other side; the 1860 election produced a result one section would not accept at all. The constitutional framework that had contained sectional competition had ceased to function.", "id": "fc17"}, {"front": "APUSH Key Concept: Dred Scott as constitutional rupture", "back": "Dred Scott attempted to settle the slavery question permanently in slavery's favor by embedding it in constitutional law. The effect was opposite: it invalidated the Republican platform, threatened popular sovereignty, stripped Black Americans of citizenship, and convinced many Northerners that the Court had been captured by the slave power. Rather than closing the question, it made it more explosive than ever.", "id": "fc18"}, {"front": "What did it mean that Lincoln won without a single Southern electoral vote?", "back": "It demonstrated that the political system had become so sectionalized that a candidate acceptable to one section had become intolerable to the other. The South's choices were to accept governance by a president whose party was committed to containing slavery, or to leave the Union. The Deep South chose the latter before Lincoln was inaugurated, illustrating that the constitutional framework could no longer absorb sectional electoral results.", "id": "fc19"}, {"front": "Robert E. Lee at Harpers Ferry", "back": "Colonel Robert E. Lee commanded the U.S. Marine detachment that stormed the Harpers Ferry armory and captured John Brown. Lee — who would later command the Confederate Army of Northern Virginia — was here acting as an instrument of federal authority to suppress a violent anti-slavery raid. The same officer who defended the Union at Harpers Ferry would be offered command of the Union Army in 1861 before choosing Virginia.", "id": "fc20"}, {"front": "Lincoln's first inaugural: 'We are not enemies, but friends'", "back": "Lincoln's conciliatory first inaugural address (March 4, 1861) combined a firm legal argument that secession was void and illegal with an appeal for reconciliation. It could not bridge the divide: seven states had already seceded, the Confederate government had been formed, and Fort Sumter was fired upon forty days later. Illustrates that rhetoric operates within structural constraints — by March 1861, the crisis had progressed beyond what words could address.", "id": "fc21"}, {"front": "Significance of the Harpers Ferry raid composition", "back": "Brown's raiding party of 21 men included both white and Black members (16 white, 5 Black). The interracial composition reflected Brown's view that anti-slavery struggle must be cross-racial — a position radical for its time. The source notes that the enslaved population 'did not rise,' suggesting that Brown's plan depended on an assumption about collective Black action that proved unrealistic in the face of overwhelming white military response.", "id": "fc22"}, {"front": "Constitutional Union Party (1860)", "back": "Fourth party in the 1860 election, running John Bell of Tennessee. Composed of former Whigs who refused to take a position on slavery, running on a platform of simply 'the Constitution, the Union, and the Enforcement of the Laws.' Won Virginia, Kentucky, and Tennessee — the Upper South border states — by appealing to voters who wanted to avoid the slavery question entirely. Illustrated that avoidance was no longer politically viable.", "id": "fc23"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

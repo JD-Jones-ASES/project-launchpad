@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Lincoln's 10% Plan (December 1863)", "back": "Proclamation of Amnesty and Reconstruction: a Confederate state could form a new government when 10% of its 1860 voters took a loyalty oath. New government had to ratify the Thirteenth Amendment and emancipate enslaved people. Did NOT require guarantees of Black civil or political rights, land redistribution, or punishment of Confederate leaders. Lincoln's priority: quick reunification, not transformation.", "id": "fc01"}, {"front": "Wade-Davis Bill (July 1864)", "back": "Congressional Reconstruction proposal requiring 50% (not 10%) of voters to take an oath before readmission, with stronger guarantees. Reflected Radical Republican insistence that Reconstruction was a legislative function. Lincoln pocket-vetoed it, leaving the constitutional question of executive vs. legislative authority over Reconstruction unresolved — until his assassination left it to Andrew Johnson.", "id": "fc02"}, {"front": "Andrew Johnson (1808–1875)", "back": "Tennessee Democrat who remained loyal to the Union but held deeply racist views about Black people's capacity for freedom. Became president after Lincoln's assassination (April 1865). His Presidential Reconstruction (1865–67) allowed former Confederates to resume political control, permitted the Black Codes, and vetoed the Civil Rights Act of 1866 — producing the constitutional confrontation with Congress that led to his impeachment.", "id": "fc03"}, {"front": "Black Codes", "back": "Comprehensive laws enacted under Johnson's Presidential Reconstruction (1865–67) regulating Black labor, movement, and civil rights to recreate the slave system's labor control under a different legal form. Mississippi required proof of employment each January or arrest for vagrancy; South Carolina restricted Black workers to agriculture or domestic service. Congress's response was the Civil Rights Act of 1866 and the Reconstruction Acts of 1867.", "id": "fc04"}, {"front": "Civil Rights Act of 1866", "back": "First major civil rights legislation in American history: granted citizenship to all persons born in the United States and guaranteed basic civil rights. Johnson vetoed it on states'-rights grounds. Congress overrode his veto — the first time in American history a major piece of legislation was enacted over a presidential veto. Congress then embedded civil rights in the Constitution (Fourteenth Amendment) to protect them from future vetoes.", "id": "fc05"}, {"front": "Reconstruction Acts of 1867", "back": "Divided the ten unreconstructed former Confederate states into five military districts governed by Union generals. Required each state to: (1) convene a constitutional convention with delegates elected by ALL male citizens including Black men; (2) ratify the Fourteenth Amendment; (3) provide for Black male suffrage in the new constitution before readmission. Johnson vetoed each Act; Congress overrode each veto.", "id": "fc06"}, {"front": "Tenure of Office Act (1867) and Johnson's impeachment", "back": "Forbade the president from removing Senate-confirmed officials without Senate approval. When Johnson defied the Act by removing Secretary of War Edwin Stanton, the House impeached him in February 1868 — the first presidential impeachment in American history. The Senate came within ONE vote of the two-thirds majority required to remove him. Johnson served out his term, hobbled by the confrontation.", "id": "fc07"}, {"front": "Thirteenth Amendment (ratified December 6, 1865)", "back": "Section 1: 'Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States...' Abolished slavery throughout the United States — overcoming the Emancipation Proclamation's geographic limits (border states and Union-held Confederate territory). The exception clause — 'as a punishment for crime' — was later exploited through convict leasing.", "id": "fc08"}, {"front": "Fourteenth Amendment (ratified July 9, 1868)", "back": "The most sweeping revision of the constitutional order since the original document. Key provisions: (1) Birthright citizenship — all persons born in the United States are citizens (overturning Dred Scott). (2) Due process clause — no state may deprive any person of life, liberty, or property without due process. (3) Equal protection clause — no state may deny any person equal protection of the laws. Became the constitutional basis for most twentieth-century civil rights law.", "id": "fc09"}, {"front": "Fifteenth Amendment (ratified February 3, 1870)", "back": "Prohibited denial of voting rights 'on account of race, color, or previous condition of servitude.' Did not explicitly prohibit poll taxes, literacy tests, or other non-racial mechanisms that achieved the same result. These mechanisms were used to disenfranchise Black voters in the post-Reconstruction South until the Voting Rights Act of 1965.", "id": "fc10"}, {"front": "Black officeholding during Radical Reconstruction", "back": "Between 1867 and 1877, approximately 2,000 Black men held elected office in the South. Sixteen served in Congress, including Hiram Revels and Blanche Bruce of Mississippi in the Senate. Black voters elected Black legislators, sheriffs, judges, and officeholders. Reconstruction state governments (biracial, not Black-dominated) established public school systems, built roads, revised tax codes, and enacted civil rights protections.", "id": "fc11"}, {"front": "Hiram Revels (1827–1901) and Blanche Bruce (1841–1898)", "back": "Both served as U.S. senators from Mississippi during Reconstruction — the only Black senators in the nineteenth century. Revels (elected 1870) filled the seat Jefferson Davis had vacated to become Confederate president — one of the Civil War's most pointed historical ironies. Bruce (elected 1874) served a full six-year term and chaired a Senate committee. Their elections demonstrate Black Southerners' sophisticated political organization.", "id": "fc12"}, {"front": "Freedmen's Bureau (1865–1872)", "back": "Bureau of Refugees, Freedmen, and Abandoned Lands. Distributed food rations, established hospitals and schools (supporting 1,000+), supervised labor contracts, and adjudicated disputes. First federal social-welfare agency in American history; first recognition that the federal government had an obligation to address consequences of slavery. Chronically underfunded; many agents sympathetic to planters. Abolished by Congress in 1872.", "id": "fc13"}, {"front": "Executive vs. legislative Reconstruction — constitutional question", "back": "Was Reconstruction an executive function (president's war powers → Lincoln's 10% Plan, Johnson's Presidential Reconstruction) or a legislative function (Congress's authority over admission of states → Wade-Davis Bill, Reconstruction Acts of 1867)? Lincoln's assassination left the question unresolved in his favor. Congress asserted legislative supremacy through the Reconstruction Acts, Tenure of Office Act, and Johnson's impeachment.", "id": "fc14"}, {"front": "Why Congress embedded civil rights in the Constitution", "back": "After overriding Johnson's veto of the Civil Rights Act (1866) — for the first time in American history — Congress embedded civil rights in the Fourteenth Amendment so no future president could veto it and no simple legislative majority could repeal it. Constitutional permanence was the strategy against political reversal. This was the correct instinct, though enforcement remained vulnerable to political abandonment.", "id": "fc15"}, {"front": "Thirteenth Amendment's exception clause and convict leasing", "back": "The clause 'except as a punishment for crime whereof the party shall have been duly convicted' allowed states to use convict leasing — arresting Black men on trivial or pretextual charges and leasing them to private employers (coal mines, turpentine camps, railroads) — to recreate coerced Black labor. The source calls it 'a loophole exploited for decades.' Convict leasing was not abolished in all states until the 1940s.", "id": "fc16"}, {"front": "Reconstruction state governments' achievements", "back": "Reconstruction state governments established the South's first public school systems (for both races), built roads and railroads, revised tax codes to shift burden toward large landowners, and enacted civil rights protections. These were real governing achievements — contradicting the Dunning School portrayal of Reconstruction as corrupt misrule. They were overthrown by organized violence and political abandonment, not by their own failures.", "id": "fc17"}, {"front": "Constitutional Revolution of Reconstruction — long-term significance", "back": "The Reconstruction Amendments' long-term significance exceeded what their framers anticipated: the Fourteenth Amendment's due process and equal protection clauses became the constitutional basis for Brown v. Board of Education (1954) and dozens of twentieth-century civil rights decisions. The gap between ratification (1868) and effective enforcement (1950s–60s) reveals: constitutional change creates frameworks for future struggles, not immediate realizations.", "id": "fc18"}, {"front": "Comparison: Lincoln's 10% Plan vs. Radical Reconstruction Acts", "back": "Lincoln's plan: 10% of 1860 voters take loyalty oath; ratify Thirteenth Amendment; no Black civil rights requirement; priority is quick reunification. Radical Reconstruction: military districts; ALL male citizens (including Black men) elect constitutional convention delegates; ratify Fourteenth Amendment; guarantee Black male suffrage before readmission. Different visions: Lincoln = rapid reunion; Radicals = structural transformation before reunion.", "id": "fc19"}, {"front": "POL + SOC theme: Presidential vs. Radical Reconstruction", "back": "POL: Who had authority to define citizenship and enforce it? Congressional vs. presidential Reconstruction was a constitutional struggle over the separation of powers with profound racial stakes. SOC: Reconstruction state governments created communities of interracial democratic governance — public schools, civil rights protections, biracial officeholding. These were genuine social transformations that the Redeemer governments would destroy by violence and fraud.", "id": "fc20"}, {"front": "APUSH Key Concept: Constitutional Revolution of Reconstruction", "back": "The 13th, 14th, and 15th Amendments constitute the most consequential revision of the American constitutional order since the original Constitution. Their long-term significance: the 14th's due process and equal protection clauses became the constitutional basis for twentieth-century civil rights law. Their immediate tragedy: the gap between promise and enforcement reveals the limits of constitutional change without sustained political will — the amendments could not enforce themselves.", "id": "fc21"}, {"front": "What did it mean that Johnson pardoned former Confederates by the thousands?", "back": "Johnson's pardon policy allowed the planter class to simply swear loyalty oaths and resume their political positions — the antebellum leadership returned to power within months. This directly undermined Reconstruction by restoring the political and social leaders of the Confederacy before any structural transformation could take hold. The Black Codes enacted by these returned Confederates were the immediate legislative consequence.", "id": "fc22"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

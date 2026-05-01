@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 1, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Reconquista", "back": "The centuries-long series of Christian military campaigns (c. 718–1492) to reclaim the Iberian Peninsula from Muslim political control. Culminating in the fall of Granada in January 1492, the Reconquista shaped a militant Spanish Catholic culture that celebrated holy war, rewarded soldiers with land and tribute, and developed legal frameworks for subordinating non-Christian peoples — all of which translated directly into Spanish behavior in the Americas.", "id": "fc01"}, {"front": "Hidalgo", "back": "A member of the Spanish minor nobility — the social class from which most conquistadores were drawn. Hidalgos sought honor, wealth, and social advancement through military service. The culture of hidalgo honor and the expectation of land and tribute as reward for military conquest carried the Reconquista's social logic directly into the Americas.", "id": "fc02"}, {"front": "Requerimiento", "back": "A legal document read aloud to indigenous peoples 'offering' them submission to the Spanish crown and the Church before a military attack was launched. The source calls it a 'legal fiction': it was performed regardless of whether indigenous peoples could understand it, creating a formal pretext for conquest. It carried the Reconquista's framework for subordinating non-Christians into the Americas.", "id": "fc03"}, {"front": "Conquistador", "back": "The Spanish term (literally, 'conqueror') for the soldiers and adventurers who led military campaigns subjugating indigenous civilizations in the Americas during the late fifteenth and sixteenth centuries. Most were minor nobles or commoners from Castile and Extremadura seeking honor, wealth, and social advancement. They operated under royal licenses (capitulaciones) granting the right to conquer territories in exchange for a share of spoils to the crown.", "id": "fc04"}, {"front": "Capitulación", "back": "A royal license issued by the Spanish crown authorizing a conquistador to conquer a specific territory. The capitulación was a legal contract: the conquistador funded and organized the expedition, bore the military risk, and received a share of the spoils and administrative authority; the crown received tribute and a share of the wealth while extending its empire at minimal direct cost.", "id": "fc05"}, {"front": "Lateen-rigged caravel", "back": "A ship design pioneered by Portuguese navigators that was capable of sailing against the wind and in shallow coastal waters. Developed under Prince Henry the Navigator, the caravel and accompanying advances in astronomy and navigation made open-ocean voyaging practically feasible — enabling Portuguese exploration of the African coast and, ultimately, transoceanic voyages to Asia and the Americas.", "id": "fc06"}, {"front": "Prince Henry the Navigator", "back": "The Portuguese royal patron who organized systematic exploration of the African coast beginning in the early fifteenth century. Under his direction, Portugal developed the lateen-rigged caravel and accumulated the astronomical and navigational data that made open-ocean navigation feasible — laying the technological foundation for Dias's rounding of the Cape of Good Hope (1488) and da Gama's voyage to India (1498).", "id": "fc07"}, {"front": "Treaty of Tordesillas (1494)", "back": "An agreement brokered by Pope Alexander VI that divided the non-European world between Spain and Portugal along a line roughly 370 leagues west of the Cape Verde Islands. Portugal received Brazil and the African and Asian trade routes; Spain claimed the vast remainder of the Americas. The treaty shaped the colonial map of the New World and underscored the role of papal authority in legitimizing European imperial claims.", "id": "fc08"}, {"front": "Hernán Cortés (c. 1485–1547)", "back": "Spanish conquistador who led the conquest of the Aztec Empire (1519–21) with roughly 500 soldiers, 16 horses, and a handful of cannon. His success rested less on military genius than on political maneuvering: forging alliances with Aztec subject peoples (especially the Tlaxcalans), manipulating indigenous political divisions, and exploiting epidemic disease. His Cartas de Relación to the Spanish crown are both a primary source for the conquest and a masterclass in self-promotion.", "id": "fc09"}, {"front": "Tlaxcalans and the logic of conquest alliance", "back": "An indigenous people of central Mexico who were subject to Aztec tribute extraction and became Cortés's most critical alliance partners. The Tlaxcalans supplied tens of thousands of indigenous warriors to the Spanish force — meaning the conquest of the Aztec Empire was as much a civil war among indigenous peoples as it was a foreign invasion. Their role illustrates how the Aztec Empire's tribute system created enemies who became Spanish assets.", "id": "fc10"}, {"front": "Noche Triste (June 1520)", "back": "A military disaster for Cortés in which nearly half of his Spanish force was killed during a retreat from Tenochtitlan. The episode is historically significant as evidence that the Spanish conquest was not inevitable: the outcome was contingent and could have failed. Cortés survived and reorganized, ultimately completing the siege of Tenochtitlan in August 1521 — but the Noche Triste demonstrates that 'Spanish invincibility' is a historical myth.", "id": "fc11"}, {"front": "The Fall of Tenochtitlan (August 1521)", "back": "The culmination of Cortés's conquest of the Aztec Empire, following a 75-day siege in which the besieged population suffered catastrophic casualties from both combat and epidemic. The city was largely demolished, and Mexico City was built atop its ruins. Emperor Cuauhtémoc was captured, tortured, and executed in 1525. The conquest eliminated the most powerful indigenous state in Mesoamerica and became the template for subsequent Spanish conquests.", "id": "fc12"}, {"front": "Francisco Pizarro and the conquest of the Inca", "back": "Spanish conquistador who led the conquest of the Inca Empire (1532–1572) with only 168 soldiers. He arrived when the Inca state was mid-collapse due to a succession war — itself triggered by the death of Emperor Huayna Capac, almost certainly from smallpox transmitted overland before any Spaniard reached Peru. At Cajamarca (November 1532), Pizarro captured Emperor Atahualpa, extracted a massive ransom in gold and silver, and then executed him anyway.", "id": "fc13"}, {"front": "Atahualpa at Cajamarca (1532)", "back": "The Inca emperor captured by Pizarro at Cajamarca in a surprise attack that killed thousands of his unarmed attendants. Atahualpa paid the largest ransom in history — a room filled with gold and silver — but was executed in August 1533. His death and the resulting political vacuum allowed Spanish forces to dismantle the Inca imperial structure, which never recovered its coherence.", "id": "fc14"}, {"front": "Role of epidemic disease in the Spanish conquests", "back": "Smallpox and other Old World diseases moved ahead of Spanish forces, devastating indigenous populations before decisive military confrontations. In Mexico, a smallpox outbreak in 1520 killed the reigning Aztec emperor Cuitláhuac and an unknowable share of the urban population before Tenochtitlan fell in 1521. In Peru, Huayna Capac's death (c. 1527) from smallpox transmitted overland from the Caribbean triggered the civil war Pizarro exploited at Cajamarca.", "id": "fc15"}, {"front": "Why did Columbus sail westward in 1492?", "back": "Columbus's westward voyage was in part a strategic response to Portugal's monopoly on the African coastal route to Asia. Funded by the Castilian crown, Columbus sought an alternative route to Asia's spices and trade goods. He never grasped the full geography of what he encountered, dying in 1506 still convinced he had reached the outskirts of Asia — but his voyages permanently breached the Americas' isolation from Afro-Eurasian exchange networks.", "id": "fc16"}, {"front": "The Structural Logic of Conquest (Key Concept)", "back": "The Spanish conquests succeeded not through military superiority alone but through the convergence of three factors: (1) epidemic disease had already weakened indigenous populations; (2) indigenous political divisions produced alliance partners who outnumbered Spanish forces; and (3) Reconquista ideology equipped Spaniards with a legal and religious framework for subjugating non-Christians. The conquests were contingent, not inevitable.", "id": "fc17"}, {"front": "January 1492 — three simultaneous events", "back": "Three events coincided in January–August 1492: (1) the fall of Granada — the last Muslim emirate on the Iberian Peninsula — completing the Reconquista; (2) the expulsion of the Jews of Spain; and (3) the commission of Columbus. The source argues these were not coincidental — all reflected the same militant Catholic ideology that would frame the conquest of the Americas.", "id": "fc18"}, {"front": "HAPP: How should students analyze Cortés's Letters of Relation as a primary source?", "back": "Point of View: Cortés wrote to the Spanish crown to justify his unauthorized expedition and maximize his political rewards. Purpose: Self-promotion and political lobbying, not neutral reporting. Audience: King Charles I of Spain. Historical Context: Cortés needed to transform an illegal private expedition into a celebrated royal service. The letters describe events selectively to present Cortés as a loyal, effective, and irreplaceable servant of the crown.", "id": "fc19"}, {"front": "Comparison: How did the Aztec and Inca conquests differ in their immediate triggers?", "back": "The Aztec conquest was primarily enabled by Aztec tributary subjects joining the Spanish alliance (political fracture from within); epidemic disease was a secondary accelerant. The Inca conquest was primarily enabled by a succession war triggered by the death of Huayna Capac (himself almost certainly a smallpox victim) — the political fracture was generational rather than the result of accumulated subject resentment, though epidemic disease was equally crucial in both cases.", "id": "fc20"}, {"front": "Continuity/Change: How did Reconquista practices transfer to the Americas?", "back": "The Reconquista created three elements that transferred directly: (1) holy war ideology authorizing violence against non-Christians; (2) the land-and-tribute reward system (encomienda in the Americas mirrored land grants to Reconquista soldiers); and (3) legal frameworks for subordinating non-Christians, including the requerimiento adapted from earlier Iberian legal instruments. The 'change' was scale: the Americas were vastly larger and the conquered populations far more numerous.", "id": "fc21"}, {"front": "Cuauhtémoc", "back": "The last Aztec emperor (r. 1520–1521), captured when Tenochtitlan fell in August 1521. He was tortured by Cortés's forces who sought to discover hidden Aztec treasure, and was eventually executed in 1525. His capture symbolized the complete military overthrow of the Aztec Triple Alliance and the beginning of the colonial period in central Mexico.", "id": "fc22"}, {"front": "Why couldn't Columbus achieve the political recognition he expected?", "back": "After the conquest, Cortés was appointed Governor of New Spain but spent his later years in legal battles with the Spanish crown over his authority and rewards, dying in 1547 without the recognition he believed his conquest merited. This reflects a structural tension in the capitulación system: the crown needed conquistadores to extend empire but feared they would become too powerful — rewarding them richly in treasure while limiting their independent political authority.", "id": "fc23"}, {"front": "SPICE-T: What Political theme does the Spanish conquest illustrate?", "back": "The conquests illustrate the Political theme through the role of state-building ideology (Reconquista holy war) and legal structure (capitulaciones, requerimiento) in organizing imperial expansion — and through the political fragility of the Aztec and Inca empires, whose tribute-based and dynastic structures created internal divisions that Spanish invaders exploited. Conquest was as much a political process as a military one.", "id": "fc24"}, {"front": "CED Concept: Contingency vs. inevitability in the Spanish conquest", "back": "The AP course emphasizes contingency over inevitability. The Spanish conquest nearly failed multiple times: Cortés lost half his force at the Noche Triste; Pizarro arrived into an already-collapsing empire. Success depended on a specific convergence of disease, political fracture, and military advantage at particular moments. Understanding contingency is essential for resisting the 'triumph narrative' that presents European conquest as predetermined or natural.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

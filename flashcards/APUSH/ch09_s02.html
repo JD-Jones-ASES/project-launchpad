@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 9, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Glasnost", "back": "Russian for 'openness.' Gorbachev's policy (from 1985) of relaxing censorship and permitting criticism of government. It allowed the articulation of long-suppressed grievances — about living standards, the Afghan war, and nationalist identity in Soviet republics — that proved uncontainable. Glasnost thus contributed to, rather than prevented, the dissolution of the USSR.", "id": "fc01"}, {"front": "Perestroika", "back": "Russian for 'restructuring.' Gorbachev's program (1986–87) to modernize the Soviet economy by introducing limited market mechanisms and decentralizing decision-making. Too limited to revive the economy, it disrupted the existing command system enough to produce shortages and instability without delivering compensating gains — accelerating Soviet decline rather than arresting it.", "id": "fc02"}, {"front": "Mikhail Gorbachev (1931–2022)", "back": "Soviet General Secretary from 1985, architect of glasnost and perestroika. His decision not to use military force to prop up Eastern European communist governments opened the door to the revolutions of 1989. Signed the INF Treaty with Reagan (1987); accepted German reunification within NATO. Awarded the Nobel Peace Prize in 1990. Resigned December 25, 1991, as the Soviet flag was lowered for the last time. Historians debate whether he sought to save communism or inadvertently destroyed it.", "id": "fc03"}, {"front": "INF Treaty (December 1987)", "back": "The Intermediate-Range Nuclear Forces Treaty, signed in Washington by Reagan and Gorbachev. The first arms-control agreement in history to eliminate an entire weapons class: all ground-launched ballistic and cruise missiles with ranges of 500–5,500 km. Required the destruction of 2,692 missiles and established intrusive on-site inspection. Confounded hardliners who had argued Soviets could never be trusted; marked a turning point in Cold War diplomacy.", "id": "fc04"}, {"front": "Revolutions of 1989", "back": "A cascade of popular revolutions that swept communist governments from power in Eastern Europe after Gorbachev signaled the Soviet Union would not intervene militarily. Poland (free elections, June 1989), Hungary (opened border with Austria, May 1989), Czechoslovakia's 'Velvet Revolution' (November, nearly bloodless), Romania (Ceausescu executed, Christmas 1989). The Berlin Wall fell November 9, 1989.", "id": "fc05"}, {"front": "Fall of the Berlin Wall (November 9, 1989)", "back": "The East German government, besieged by mass demonstrations and losing citizens through Hungary, announced at a confused press conference that travel restrictions were being lifted 'immediately.' Crowds gathered at checkpoints; border guards, lacking orders, stood aside. The Wall was breached. The defining image of the Cold War's end — not a diplomatic agreement but ordinary people acting before government authorization.", "id": "fc06"}, {"front": "German Reunification (October 3, 1990)", "back": "East and West Germany merged less than a year after the Berlin Wall fell. Gorbachev accepted reunification within NATO over the objections of his own hardliners and the private anxieties of Britain's Thatcher and France's Mitterrand, who worried about a reunified Germany's weight in Europe. Reunification marked the definitive end of the postwar European settlement.", "id": "fc07"}, {"front": "Dissolution of the USSR (December 25, 1991)", "back": "Gorbachev resigned on Christmas Day 1991; the Soviet flag was lowered over the Kremlin; fifteen successor states assumed territorial sovereignty. The August 1991 hardline coup had failed within three days, fatally discrediting the Communist Party. Baltic states had already declared independence. The Cold War ended not with nuclear war but with institutional collapse and a crowd of civilians.", "id": "fc08"}, {"front": "Unipolar Moment", "back": "The strategist Charles Krauthammer's term for the post-Cold War era (1991 onward) in which the United States was the world's only superpower — the largest economy, an unmatched military, a dominant cultural model. The paradox: American dominance did not translate into clear strategic purpose. Questions about when to intervene, under whose authority, and with what objectives defined the 1990s and remained unresolved on September 10, 2001.", "id": "fc09"}, {"front": "Francis Fukuyama and 'The End of History'", "back": "Fukuyama's 1989 argument that the Cold War's end represented the triumph of liberal democracy as the final form of human government — no further ideological evolution was possible. Critics note that the 'end of history' misread a transitional moment as a permanent endpoint; subsequent decades produced authoritarian resurgence, new forms of nationalism, and great-power competition that Fukuyama's framework had not anticipated.", "id": "fc10"}, {"front": "George H.W. Bush and the Persian Gulf War (1991)", "back": "When Iraq invaded Kuwait (August 1990), Bush assembled a 34-nation coalition, secured UN Security Council authorization, and launched Operation Desert Storm (January 1991). Kuwait was liberated in 43 days. Bush chose not to advance on Baghdad — a decision he defended as respecting the coalition's mandate. The Gulf War demonstrated American military power under favorable conditions: clear mandate, genuine coalition, limited objective, defined exit.", "id": "fc11"}, {"front": "Operation Desert Storm (January–February 1991)", "back": "The military campaign to liberate Kuwait from Iraqi occupation, commanded by General Norman Schwarzkopf. Began with an air campaign; 100-hour ground war followed. The campaign was remarkably swift — 43 days of combined operations. The source uses the Gulf War to define what favorable conditions for American military success look like, contrasting it implicitly with Vietnam and explicitly with the 2003 Iraq War.", "id": "fc12"}, {"front": "NAFTA (North American Free Trade Agreement, 1994)", "back": "Clinton's signature trade deal eliminating most tariffs between the United States, Canada, and Mexico — deepening North American economic integration. Generated fierce debate: supporters argued it reduced prices and created export markets; critics argued it displaced American manufacturing workers and allowed companies to relocate to lower-wage Mexico. NAFTA's legacy remains contested in American political economy.", "id": "fc13"}, {"front": "World Trade Organization (WTO, 1995)", "back": "Replaced GATT as the governing body for international trade rules, binding member nations to a multilateral trading regime with dispute-resolution mechanisms. WTO membership became the condition for normalized trade relations; China's accession in 2001 was a major turning point that significantly accelerated manufacturing offshoring from the United States.", "id": "fc14"}, {"front": "Somalia Intervention and 'Black Hawk Down' (1993)", "back": "Clinton's humanitarian intervention in Somalia ended when eighteen American soldiers were killed in Mogadishu (October 1993, depicted in the film 'Black Hawk Down'). The subsequent withdrawal emboldened adversaries — including Osama bin Laden — who interpreted American retreat under casualties as evidence that American will was fragile. The Somalia lesson contributed to later reluctance to intervene in Rwanda.", "id": "fc15"}, {"front": "Bosnia and Kosovo Interventions (1995, 1999)", "back": "Clinton used NATO air power to halt Serbian ethnic cleansing in Bosnia (Dayton Accords, 1995) and Kosovo (1999) without ground combat. The interventions halted the immediate killing but produced mixed long-term results — military intervention without durable political settlement paused conflicts without resolving them. Both involved NATO acting without UN Security Council authorization (Kosovo).", "id": "fc16"}, {"front": "Solidarity (Poland, 1989)", "back": "The Polish labor union and political movement led by Lech Walesa that had been suppressed by martial law in 1981. Free elections in June 1989 — the first in the Eastern Bloc since 1948 — produced a Solidarity-led government. Poland's peaceful transition was the first domino in the revolutions of 1989.", "id": "fc17"}, {"front": "The Reykjavik Summit (October 1986)", "back": "A dramatic summit between Reagan and Gorbachev in Iceland that nearly produced a sweeping agreement to eliminate all ballistic missiles. It fell short — Reagan refused to confine SDI to the laboratory — but laid the foundation for the INF Treaty signed the following year. Reykjavik demonstrated both the potential for breakthrough and the constraints that SDI imposed on negotiations.", "id": "fc18"}, {"front": "WOR Theme: The Paradox of the Unipolar Moment", "back": "The Cold War's end restructured the international order more rapidly than any previous transition since 1945. The United States found that dominance was not the same as control: absent a Soviet threat to focus coalition partners, multilateral cooperation required constant negotiation. The Gulf War showed what was possible with a clear mandate; Somalia, Bosnia, and Kosovo showed the limits of power without strategic clarity.", "id": "fc19"}, {"front": "POL Theme: Partisan Identity after the Cold War", "back": "The Cold War's end deprived both parties of their organizing foreign-policy assumption. Democrats defined by Cold War liberalism and Republicans defined by anti-communism both had to reconstruct their foreign-policy identities — a reconstruction that was still in progress when September 11 forced an abrupt clarification. The decade's ambiguity was not resolved; it was interrupted.", "id": "fc20"}, {"front": "Afghan War (Soviet, 1979–1989)", "back": "The Soviet invasion of Afghanistan in 1979, which became a decade-long quagmire that drained Soviet resources and morale. The war was a major factor in Gorbachev's conclusion that the Soviet system was 'not merely inefficient but structurally unsustainable.' The CIA-supported Mujahideen resistance (Reagan Doctrine) accelerated Soviet difficulties — and, as later became clear, also trained some of those who would become al-Qaeda operatives.", "id": "fc21"}, {"front": "Continuity/Change: From Détente to Unipolar Moment", "back": "Nixon's détente (1970s) accepted the Soviet Union as a permanent rival to be managed; Reagan's confrontational posture challenged Soviet power but also negotiated with it; the Soviet collapse produced a moment with no rival at all. The change: the entire strategic framework of the Cold War — containment, deterrence, balance of power — became obsolete in 1991. The continuity: the United States still faced the question of how to use its power internationally.", "id": "fc22"}, {"front": "Comparison: Gulf War (1991) vs. Iraq War (2003)", "back": "Gulf War: UN authorization, 34-nation coalition, limited objective (Kuwait liberation), defined exit, restraint on Baghdad. Result: military success. Iraq War: no UN authorization, smaller coalition, regime-change objective, no defined exit, advance to Baghdad. Result: military success followed by disastrous occupation. The source explicitly sets up this contrast to illustrate how political conditions shape military outcomes.", "id": "fc23"}, {"front": "Why did Britain and France privately oppose German reunification?", "back": "Both powers worried about a reunified Germany's weight in Europe — memories of two world wars and German industrial and demographic power made European neighbors anxious about a Germany that was no longer divided. Gorbachev accepted reunification anyway; the 1990 Two Plus Four Treaty provided the framework. The reunification debate illustrated how the Cold War's end forced all European powers to recalibrate their strategic assumptions.", "id": "fc24"}, {"front": "What was the 'peace dividend' and why was it limited?", "back": "The expectation that the Cold War's end would allow significant reductions in American defense spending, freeing resources for domestic investment. The dividend was real but limited: defense spending did decline in the 1990s (Clinton cut it), but the persistence of regional conflicts (Gulf War, Somalia, Bosnia, Kosovo) prevented the deep demilitarization some had expected. Security threats changed form rather than disappearing.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

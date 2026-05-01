@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 9, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Stagflation", "back": "The simultaneous occurrence of inflation and economic stagnation — a condition conventional Keynesian economics said could not coexist. It plagued the American economy through the 1970s, undermining the policy toolkit available to the Carter administration and creating the political opening for Reagan's 1980 campaign.", "id": "fc01"}, {"front": "Ronald Wilson Reagan (1911–2004)", "back": "40th president of the United States (1981–89). Former Hollywood actor and California governor, Reagan synthesized supply-side economics, Cold War anti-communism, and nostalgic cultural conservatism into a winning coalition. His 'Morning in America' 1984 re-election campaign capitalized on economic recovery. His rhetorical legacy — 'government is not the solution; government is the problem' — redefined American political debate for at least two decades.", "id": "fc02"}, {"front": "Reagan's Three-Stream Coalition of 1980", "back": "Reagan's winning coalition fused: (1) economic conservatives — business, Wall Street, anti-tax sentiment; (2) the religious right — evangelical Protestants and traditional Catholics mobilized by Roe v. Wade and cultural change; (3) neoconservatives — former liberals turned Cold War hawks who provided think-tank infrastructure (Heritage Foundation, AEI). Together they built a durable new electoral majority.", "id": "fc03"}, {"front": "Moral Majority", "back": "Jerry Falwell's political organization founded in 1979. It registered evangelical voters, raised money, and delivered a previously disengaged religious constituency into the Republican coalition. The Moral Majority exemplified the mobilization of the religious right as a political force, helping elect Reagan and reshaping the GOP's cultural identity.", "id": "fc04"}, {"front": "Neoconservatism", "back": "A political current formed by former liberals and Cold War hawks — many Jewish intellectuals like Irving Kristol, Norman Podhoretz, and Jeane Kirkpatrick — who believed the Democratic Party had gone soft on the Soviet Union. Neocons provided the journals, think tanks, and policy infrastructure that translated conservative sentiment into governing agendas, supplying Reagan's coalition with intellectual coherence.", "id": "fc05"}, {"front": "Supply-Side Economics", "back": "The theory that cutting taxes on upper-income earners and businesses stimulates investment, production, and ultimately enough growth to offset lost revenue ('the Laffer Curve' argument). Associated with economist Arthur Laffer and WSJ journalists like Jude Wanniski. Critics labeled it 'trickle-down economics,' arguing that benefits accrued primarily to the wealthy rather than to working and middle-class households.", "id": "fc06"}, {"front": "Reaganomics", "back": "Reagan's economic program: deep cuts in marginal tax rates (top rate 70%→50%→28%), deregulation of major industries, cuts in domestic social spending, and supply-side theory. Supporters credit it with ending 1970s stagflation and producing the 1983–90 expansion. Critics argue it tripled the national debt (~$1T→$2.9T), accelerated income inequality, and imposed austerity on programs for the poor.", "id": "fc07"}, {"front": "Economic Recovery Tax Act of 1981 (ERTA)", "back": "Reagan's signature tax legislation, reducing the top marginal income tax rate from 70% to 50% (later reduced to 28% by the Tax Reform Act of 1986) and cutting corporate taxes. ERTA was the legislative embodiment of supply-side theory and launched the fiscal restructuring that characterized the Reagan era.", "id": "fc08"}, {"front": "Laffer Curve", "back": "The graphical argument, associated with economist Arthur Laffer, that tax rates can be too high — that at some point, cutting taxes increases rather than decreases total revenue by stimulating economic activity. The curve was invoked to justify Reagan's tax cuts. Historians debate whether the cuts actually produced sufficient growth to offset the revenue lost, given the tripling of the national debt during the Reagan years.", "id": "fc09"}, {"front": "PATCO Strike and Reagan's Response (1981)", "back": "When the Professional Air Traffic Controllers Organization struck in August 1981, Reagan gave controllers 48 hours to return to work, then fired all 11,345 who refused. The action was a dramatic signal to the broader labor movement that the administration would not protect union power. Union membership, already declining since the 1950s, accelerated its decline through the 1980s.", "id": "fc10"}, {"front": "Reagan Doctrine", "back": "Reagan's foreign policy commitment to arming and supporting anti-communist insurgencies worldwide — UNITA in Angola, the Contras in Nicaragua, the Mujahideen in Afghanistan. It reflected Reagan's rejection of détente and his belief in rolling back Soviet influence rather than merely containing it.", "id": "fc11"}, {"front": "Strategic Defense Initiative (SDI) / 'Star Wars'", "back": "Reagan's 1983 proposal for a space-based missile-defense system capable of intercepting Soviet ICBMs before they reached American targets. Critics (calling it 'Star Wars') questioned the physics; but Soviet strategists took it seriously enough that fear of SDI became a major motivator for Soviet interest in arms-control negotiations, giving Reagan diplomatic leverage.", "id": "fc12"}, {"front": "Evil Empire Speech (1983)", "back": "Reagan's address to the National Association of Evangelicals, March 8, 1983, Orlando, Florida. Reagan labeled the Soviet Union an 'evil empire' and framed the Cold War as a struggle 'between right and wrong and good and evil.' Purpose: to recast anti-communism as moral witness for his evangelical base; to make Soviet conciliation appear morally cowardly. Historians debate whether the framing was sincere, strategic, or both.", "id": "fc13"}, {"front": "HAPP Analysis Framework", "back": "A sourcing framework for primary documents: Historical Context (when/where, surrounding events), Audience (who the source was addressed to), Purpose (what the author sought to accomplish), Point of View (the author's perspective, interests, and how those shape the document). Used throughout APUSH to analyze primary sources like the Evil Empire speech.", "id": "fc14"}, {"front": "Iran-Contra Affair (1986–87)", "back": "The Reagan administration secretly sold weapons to Iran (under an arms embargo) at inflated prices and diverted the profits to the Nicaraguan Contras in defiance of the Boland Amendment. Orchestrated by NSC staffer Oliver North. 14 officials indicted, 11 convicted. Reagan claimed ignorance of the fund diversion; congressional investigators were skeptical. Raised fundamental questions about executive power and covert operations that outlasted the Reagan years.", "id": "fc15"}, {"front": "Boland Amendment (1984)", "back": "Congressional legislation prohibiting federal agencies from using funds to support the Nicaraguan Contra rebels. The Reagan administration circumvented it through the Iran-Contra arrangement, triggering the administration's most serious constitutional crisis. The amendment illustrated Congress's attempt to use the power of the purse to limit covert executive action.", "id": "fc16"}, {"front": "Oliver North", "back": "National Security Council staffer who orchestrated the Iran-Contra arrangement — the covert sale of weapons to Iran and diversion of profits to the Nicaraguan Contras. North became a controversial public figure during the televised congressional hearings of 1987, simultaneously portrayed by supporters as a patriot and by critics as an official who operated outside constitutional limits.", "id": "fc17"}, {"front": "Deregulation (Reagan Era)", "back": "Reagan's removal or relaxation of federal rules governing industries: the Civil Aeronautics Board abolished (1984), the Fairness Doctrine rescinded (1987), savings and loan banking deregulated (contributing to the S&L crisis of the late 1980s, which cost taxpayers over $130 billion). Deregulation was a core component of Reaganomics alongside tax cuts.", "id": "fc18"}, {"front": "POL Theme: Reagan's Electoral Realignment", "back": "Reagan's 1980 coalition realigned American electoral politics as decisively as FDR's 1932 coalition. The South, once solidly Democratic since Reconstruction, completed its shift to Republican in the Reagan years. Economic libertarians, the religious right, and neoconservatives became the durable electoral base of the GOP — defining the Republican Party's identity for the next four decades.", "id": "fc19"}, {"front": "ARC Theme: Religion and Cold War Ideology", "back": "The Evil Empire speech illustrates how Reagan wove religious identity into Cold War politics. By framing the Soviet–American contest as a moral struggle, he transformed political allegiance into a form of moral witness for evangelical Christians — ensuring that cultural conservatism and political conservatism would remain tightly linked in American life through the following decades.", "id": "fc20"}, {"front": "Intermediate-Range Nuclear Forces (INF) Treaty (1987)", "back": "The first arms-control agreement in history to eliminate an entire class of nuclear weapons: all ground-launched ballistic and cruise missiles with ranges of 500–5,500 km. Signed by Reagan and Gorbachev. Required destruction of 2,692 missiles with intrusive on-site verification. Confounded hardliners who had argued the Soviets could never be trusted; showed Reagan's pragmatic adjustment of rhetoric to evidence.", "id": "fc21"}, {"front": "Savings and Loan Crisis", "back": "A financial crisis in the late 1980s caused in significant part by the deregulation of savings and loan banks in the early Reagan years. Freed from regulatory constraints, many S&Ls made risky investments that failed. The government bailout ultimately cost taxpayers over $130 billion — an early illustration of how deregulation could produce systemic financial risk.", "id": "fc22"}, {"front": "Continuity/Change: Reagan and the Conservative Movement", "back": "Reagan drew on a conservative tradition building since Goldwater's 1964 campaign, but transformed it: he made conservatism a governing majority rather than a minority movement. The change is structural — he shifted the ideological center of American politics so that no subsequent president (of either party) could govern by proposing large expansions of the federal government. This rhetorical and institutional legacy outlasted his presidency by decades.", "id": "fc23"}, {"front": "What was the 'malaise speech' and why did it matter for Reagan's election?", "back": "Carter's July 1979 address in which he described a national 'crisis of confidence' (though he never used 'malaise'). The speech was widely interpreted as a president blaming the public for the nation's problems rather than providing leadership. Reagan's 'Morning in America' optimism directly countered Carter's somber diagnosis, making Reagan's campaign simultaneously a policy alternative and an emotional contrast.", "id": "fc24"}, {"front": "Comparison: Reaganomics and the New Deal", "back": "The New Deal (FDR, 1930s) expanded the federal government's role as economic manager and safety-net provider. Reaganomics deliberately reversed that direction: cutting taxes, deregulating, and shrinking domestic spending. Both represented structural transformations of the government's relationship to the economy — the New Deal built the administrative state; Reaganomics challenged its legitimacy and partially dismantled it.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

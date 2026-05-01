@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 1, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Haudenosaunee (Iroquois Confederacy)", "back": "A league of five nations — Mohawk, Oneida, Onondaga, Cayuga, and Seneca — formed in the fifteenth century in the Eastern Woodlands. Governed by a council of fifty sachems who made decisions by consensus, the Confederacy was sophisticated enough that later historians proposed it as a partial model for elements of American federalism.", "id": "fc01"}, {"front": "Matrilineal society", "back": "A social system in which kinship, clan membership, and inheritance flow through the mother's line. Iroquois society was organized on matrilineal principles: women controlled the longhouses, managed food stores, and held decisive influence over the selection and removal of male sachems — standing in sharp contrast to the patrilineal societies of Europe.", "id": "fc02"}, {"front": "Three-sisters agriculture", "back": "The indigenous North American practice of intercropping corn, beans, and squash together in shared mounds. Corn provided structural support for climbing beans; beans fixed nitrogen to replenish soil fertility; squash's broad leaves retained moisture and suppressed weeds. The combination produced high caloric yields and supported large, sedentary village populations in the Eastern Woodlands.", "id": "fc03"}, {"front": "Mississippian culture", "back": "A complex of related chiefdoms that flourished in the river valleys of the present-day American Southeast and Midwest from approximately 800 to 1600 CE. Identified by large earthen platform mounds, intensive maize agriculture, and long-distance trade networks (the Southeastern Ceremonial Complex). Cahokia was the largest Mississippian center.", "id": "fc04"}, {"front": "Cahokia", "back": "The largest Mississippian city, located near the confluence of the Missouri and Mississippi rivers (near present-day East St. Louis). At its peak around 1050–1350 CE, it housed an estimated 10,000–20,000 people — larger than contemporary London — supported by intensive maize agriculture. Its central monument, Monks Mound, covered more ground than the Great Pyramid of Giza.", "id": "fc05"}, {"front": "Why did Cahokia collapse?", "back": "Archaeological evidence points to a combination of factors: prolonged drought that compromised the agricultural base, soil exhaustion from intensive farming, flooding, political fragmentation, and epidemic disease circulating in dense urban populations. Cahokia was abandoned between 1300 and 1400 CE — centuries before European contact — illustrating that indigenous civilizations rose and fell due to internal pressures.", "id": "fc06"}, {"front": "Ancestral Puebloans (Anasazi)", "back": "Peoples of the Colorado Plateau who built multi-story stone and adobe architecture beginning around 900 CE. Their most spectacular achievement was Pueblo Bonito in Chaco Canyon — a D-shaped structure of approximately 800 rooms across five stories, occupied 850–1150 CE, that functioned as a regional ceremonial and trade hub. Descendant communities include the modern Hopi, Zuni, and Acoma.", "id": "fc07"}, {"front": "Pueblo Bonito / Chaco Canyon", "back": "A D-shaped, five-story, approximately 800-room sandstone complex in Chaco Canyon, New Mexico, occupied c. 850–1150 CE. It served as the ceremonial and trade center of the Ancestral Puebloan world, with roads radiating outward for dozens of miles. Imported goods — turquoise, macaw feathers, copper bells — indicate connections reaching far south into Mesoamerica.", "id": "fc08"}, {"front": "Aztec Triple Alliance (Mexica / Tenochca state)", "back": "The dominant empire of central Mexico in 1491, governed from the island capital of Tenochtitlan built on Lake Texcoco. Founded in 1325, Tenochtitlan had grown to roughly 200,000 inhabitants by 1500 — the largest city in the Western Hemisphere. The state drew goods, labor, and tribute from subjugated peoples across Mesoamerica through an extensive tribute system.", "id": "fc09"}, {"front": "Tenochtitlan", "back": "The island capital of the Aztec Triple Alliance, built on Lake Texcoco and connected to the mainland by broad causeways. By 1500, it housed approximately 200,000 people, making it larger than any city in contemporary Spain. Floating gardens (chinampas) extended agricultural land into the lake; sophisticated hydraulic engineering enabled a city of this scale on water.", "id": "fc10"}, {"front": "Chinampas", "back": "Floating garden platforms constructed by Aztec engineers in the lakes surrounding Tenochtitlan. By extending agricultural land into the water, chinampas expanded food production to support a city of 200,000 people on an island. They exemplify the hydraulic engineering solutions that large, organized Mesoamerican states developed in response to their geographic environment.", "id": "fc11"}, {"front": "Inca Empire (Tawantinsuyu)", "back": "An empire stretching 6,000 miles from present-day Ecuador to central Chile, governed from the mountain capital of Cusco in the Andes. By 1491, the Inca had brought approximately ten million people under a single administrative structure — without alphabetic writing — using the quipu, a system of knotted strings encoding numerical and possibly narrative information.", "id": "fc12"}, {"front": "Quipu", "back": "A system of knotted strings used by the Inca Empire to encode numerical and possibly narrative information. The Inca administered approximately ten million people across 6,000 miles of Andean territory using quipus rather than alphabetic writing — demonstrating that administrative complexity could be achieved through culturally distinct information technologies.", "id": "fc13"}, {"front": "Pre-contact population of the Western Hemisphere", "back": "Estimates range from forty to one hundred million people inhabiting the Western Hemisphere in 1491, organized into hundreds of distinct nations, languages, and political systems. This demographic scale helps contextualize the catastrophic loss that followed European contact — and underscores that the Americas were far from 'empty' or 'wilderness' from any perspective.", "id": "fc14"}, {"front": "What did Plains peoples do before the arrival of horses?", "back": "Without horses (which arrived only in the late seventeenth century, introduced by the Spanish), Plains peoples who hunted bison did so on foot — driving herds off cliffs or into corrals using fire and coordinated human movement. They maintained sophisticated exchange networks with agricultural neighbors, trading meat and hides for corn and pottery.", "id": "fc15"}, {"front": "How did geography shape the Inca Empire's organization?", "back": "The vertical ecology of the Andes — coastal desert, highland plateau, and tropical jungle stacked within a few horizontal miles — produced the Inca empire's elaborate redistribution network, which moved goods between ecological zones too distant for any single community to exploit alone. Geographic challenge drove administrative innovation rather than limiting it.", "id": "fc16"}, {"front": "HAPP/SPICE-T: What Social theme does Iroquois matrilineal organization illustrate?", "back": "Iroquois matrilineal organization illustrates the Social theme — gender and kinship structures varied dramatically across cultures, and Iroquois women's control of longhouses, food stores, and sachem selection represented a fundamentally different allocation of social power than the patrilineal norms of European societies. This difference became a persistent source of cultural misunderstanding during colonization.", "id": "fc17"}, {"front": "SPICE-T: What Environmental/Geographic theme does three-sisters agriculture illustrate?", "back": "Three-sisters agriculture illustrates the Environmental (GEO) theme — indigenous peoples did not simply respond passively to their environment but actively managed it using sophisticated ecological knowledge. The mutual interdependence of corn, beans, and squash is an engineered system, reflecting deep understanding of nitrogen cycles, soil moisture, and plant relationships.", "id": "fc18"}, {"front": "Monks Mound (Cahokia)", "back": "The central monument of Cahokia, a massive earthen platform that covered more ground than the Great Pyramid of Giza. It served as the foundation for elite residences and ceremonial structures at the height of Mississippian civilization. Monks Mound is a physical reminder that pre-contact North America included monumental architecture rivaling that of other ancient civilizations.", "id": "fc19"}, {"front": "Why is the term 'Indian' described as a 'deliberate political distortion' rather than an accurate description?", "back": "The source argues that European categories like 'Indian' or 'savage' functioned as deliberate political distortions because they collapsed hundreds of distinct nations, languages, and political systems into a single undifferentiated category — erasing the genuine diversity of pre-contact societies in ways that served colonial ideologies of conquest and dispossession.", "id": "fc20"}, {"front": "What was the Southeastern Ceremonial Complex?", "back": "A network of long-distance trade exchange among Mississippian chiefdoms that moved copper ornaments, shells, and prestige goods across hundreds of miles. It demonstrates that Mississippian peoples maintained sophisticated interregional economic and ceremonial connections, and that the Mississippi Valley was an integrated cultural and economic zone long before European contact.", "id": "fc21"}, {"front": "Continuity/Change: How did the Ancestral Puebloan tradition continue after Chaco's collapse?", "back": "After the collapse of the Chaco system around the mid-twelfth century (attributed to prolonged drought), descendant communities — the modern Hopi, Zuni, Acoma, and other Pueblo peoples — moved to more defensible mesa-top and river-valley locations and continued the multi-story architectural tradition in adapted forms. When Spanish explorers arrived in the 1540s, flourishing Pueblo communities had maintained their way of life for centuries.", "id": "fc22"}, {"front": "Comparison: How did Eastern Woodlands agricultural societies differ from Plains hunter-gatherer societies?", "back": "Eastern Woodlands peoples like the Iroquois practiced sedentary agriculture (three-sisters), lived in permanent villages, and developed complex political systems like the Confederacy. Plains peoples were more mobile, organized into smaller bands, and subsisted primarily by hunting bison on foot. Both groups maintained exchange networks, but their fundamentally different subsistence strategies produced different social and political structures.", "id": "fc23"}, {"front": "What was the historical significance of Cahokia's size relative to European cities?", "back": "At its peak (c. 1050–1350 CE), Cahokia housed an estimated 10,000–20,000 people — larger than contemporary London. This comparison challenges Eurocentric assumptions about urban development and demonstrates that the Americas supported large urban populations centuries before European contact, though Cahokia had already declined and been abandoned by the time European explorers reached the Mississippi Valley.", "id": "fc24"}, {"front": "CED Concept: Regional diversity before 1492", "back": "The civilizations of pre-contact North and South America resist any single characterization. The Mississippian mound-builders, Pueblo architects, Iroquois Confederacy, Aztec tribute network, and Inca bureaucratic empire all represent distinct responses to distinct ecological and social environments. Recognizing this diversity is essential for understanding both what was lost in the demographic collapse after 1492 and why European categories like 'Indian' obscured rather than described reality.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

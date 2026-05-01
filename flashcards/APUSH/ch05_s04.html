@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Civil War mobilization — from volunteers to conscription", "back": "Both sides began with volunteers (Union called 75,000 ninety-day volunteers in April 1861). By 1862, volunteering had slowed. Confederacy passed the first national conscription act in American history (April 1862). Union followed with the Enrollment Act (March 1863), which allowed wealthy men to hire substitutes or pay $300 commutation — class exemptions that produced the New York Draft Riots.", "id": "fc01"}, {"front": "New York Draft Riots (July 1863)", "back": "Most deadly urban riot in American history, killing at least 119 people (estimates run higher). Working-class Irish immigrants — competing with free Black workers for unskilled labor — rioted for four days, attacking the city's Black community and burning the Colored Orphan Asylum. Suppressed only when Union troops (some fresh from Gettysburg) were rushed to the city. Revealed the depth of class and racial tensions within Northern society.", "id": "fc02"}, {"front": "Harriet Tubman (c. 1822–1913)", "back": "Born Araminta Ross into enslavement in Maryland. Escaped to Philadelphia in 1849. Made approximately 13 return trips into the South, guiding roughly 70 enslaved people to freedom. During the Civil War, worked as a Union spy and scout in South Carolina. Guided the Combahee River Raid (June 2, 1863), liberating more than 700 enslaved people — the only woman to lead an armed military raid during the Civil War.", "id": "fc03"}, {"front": "Combahee River Raid (June 2, 1863)", "back": "Union Army raid in South Carolina guided by Harriet Tubman's intelligence, commanded by Colonel James Montgomery. Liberated more than 700 enslaved people in a single operation — the largest single liberation of enslaved people by a Union military action. Demonstrates enslaved people as agents of their own liberation, not passive recipients of Northern action.", "id": "fc04"}, {"front": "United States Colored Troops (USCT)", "back": "Bureau of Colored Troops established May 1863 after the Emancipation Proclamation. Approximately 179,000–200,000 Black men served — about 10% of the total Union Army. Initially paid $10/month minus uniform deduction vs. $13/month for white soldiers; Congress equalized pay in June 1864 after sustained protest. About 40,000 USCT soldiers died, disproportionately from disease. Commanded almost exclusively by white officers.", "id": "fc05"}, {"front": "54th Massachusetts Infantry", "back": "Most iconic USCT unit, composed primarily of free Black Northerners. Its assault on Fort Wagner, South Carolina (July 1863), in which it suffered nearly 40% casualties, became the most celebrated instance of Black military valor. Demonstrated Black soldiers' capacity and commitment under fire in conditions where surrender could mean execution rather than prisoner-of-war status.", "id": "fc06"}, {"front": "Fort Pillow Massacre (April 1864)", "back": "Confederate cavalry under Nathan Bedford Forrest massacred Black Union soldiers who had surrendered at Fort Pillow, Tennessee. The Confederate Congress had declared in May 1863 that captured Black soldiers and their white officers would not be treated as prisoners of war. 'Remember Fort Pillow!' became a rallying cry intensifying Black soldiers' determination to fight. Connected Confederate racial ideology to battlefield conduct.", "id": "fc07"}, {"front": "Impressment (Confederate system)", "back": "Forced requisition of enslaved people from their owners for Confederate military labor — building fortifications, transporting supplies, serving officers. Practiced from the war's beginning; formalized by Confederate Congress in 1863. Enslaved people so impressed performed dangerous work for the Confederate war effort with no compensation. Jefferson Davis's controversial 1865 proposal to arm enslaved men would have offered freedom in exchange for military service.", "id": "fc08"}, {"front": "Confederate's central contradiction (late war)", "back": "By the final months of the war, Davis proposed arming enslaved men with freedom as the reward — a measure the source says would have 'admitted the Confederacy's central contradiction: a slave society fighting for the right to hold slaves.' If enslaved men would fight for freedom, they were not the permanent, suited-for-bondage beings the Confederate racial ideology insisted upon.", "id": "fc09"}, {"front": "Dorothea Dix and women's wartime roles", "back": "Dix organized the Union Army Nurse Corps. Clara Barton organized supply distribution and nursed battlefield wounded (later founding the American Red Cross). Women also entered clerical and government employment at unprecedented scale — the Treasury Department employed women as currency clerks when the war created massive demand. Confederate plantation mistresses managed enslaved workforces without husbands, while enslaved people's resistance (slowdowns, sabotage, flight) intensified.", "id": "fc10"}, {"front": "Revenue Acts of 1861 and 1862", "back": "Established the first federal income tax in American history (3–5% on incomes above $600) plus excise taxes. Created a Bureau of Internal Revenue. Reflected the war's fiscal demands but also established the principle that the federal government could tax income directly — a precedent that endured even after wartime tax rates were reduced.", "id": "fc11"}, {"front": "Homestead Act (1862)", "back": "Granted 160 acres of federal land to settlers who would improve it over five years — fulfilling the Republican promise that the West should belong to free labor, not slaveholders. One of the most significant federal land-distribution acts in American history, shaping settlement of the Great Plains. An antebellum Southern Democratic Congress would have blocked this; secession made it possible.", "id": "fc12"}, {"front": "Pacific Railway Act (1862)", "back": "Chartered the Union Pacific and Central Pacific railroads to build a transcontinental railroad, providing federal land grants and bond guarantees. The federal government now actively directed continental infrastructure — a role antebellum Democrats had insisted was beyond federal authority. The railroad was completed in 1869, connecting the continent and enabling industrial-scale settlement of the West.", "id": "fc13"}, {"front": "Morrill Land-Grant Act (1862)", "back": "Granted federal lands to states to fund agricultural and mechanical colleges — establishing the land-grant university system (now including universities like Cornell, MIT, and dozens of state universities). Federal investment in higher education for practical agriculture and engineering: antithetical to antebellum Democratic principles of limited federal economic involvement.", "id": "fc14"}, {"front": "National Banking Acts (1863–64)", "back": "Created a system of nationally chartered banks with standardized currency, replacing the chaos of state-bank notes in antebellum finance. The source notes: 'This was, in effect, the national banking system that Hamilton had sought in 1791 and Jackson had killed in 1832.' The political variable that made it possible: Southern Democrats had left Congress after secession.", "id": "fc15"}, {"front": "APUSH Key Concept: War as engine of federal power", "back": "Before 1861: no income tax, no national bank, no railroad policy, peacetime army fewer than 20,000. By 1865: army over 2 million, federal income tax, transcontinental railroad charter, national banking system, emancipation of 4 million enslaved people by executive decree. Most of these powers were exercised as 'military necessity' but proved permanent. The Civil War state was structurally different from its antebellum predecessor.", "id": "fc16"}, {"front": "First Confederate conscription act (April 1862)", "back": "The Confederacy passed the first national conscription act in American history — before the Union's Enrollment Act (March 1863). This ironic fact illustrates how war compelled expansion of governmental power even in a government that claimed to be fighting for states' rights and limited federal authority. Southern resistance to Confederate conscription was significant, especially from poorer non-slaveholding whites.", "id": "fc17"}, {"front": "Women's wartime Treasury employment", "back": "The Civil War created massive demand for currency counting that could not be met by the existing male workforce. The Treasury Department began employing women as currency clerks — a breakthrough into government employment previously closed to women. This represented structural change driven by wartime necessity: the government's need for labor overrode conventions restricting women to the domestic sphere.", "id": "fc18"}, {"front": "POL + SOC + NAT theme: Civil War transformation", "back": "POL: The largest peacetime federal government expansion in American history. SOC: Women entered new labor roles; nearly 200,000 Black soldiers served; both sections confronted the social organization of their societies under war pressure. NAT: Lincoln's Gettysburg framing called into existence a nation 'dedicated to the proposition that all men are created equal' — a national identity revision the war was enforcing through violence.", "id": "fc19"}, {"front": "Significance of USCT service for citizenship question", "back": "Black soldiers' service in the USCT created a powerful political argument for citizenship: men who had died for the Union could not be permanently denied its protections. Their service built the moral and political case for the Fourteenth Amendment (1868), which overturned Dred Scott and established birthright citizenship. The argument 'he who fights for the flag is entitled to its protection' became central to Radical Reconstruction.", "id": "fc20"}, {"front": "Enslaved people's wartime resistance and self-liberation", "back": "As Confederate male supervision declined (men in army), enslaved people's resistance intensified: slowdowns, sabotage, flight, and refusal increased on Confederate plantations. Approximately 180,000 enslaved people fled to Union lines after the Emancipation Proclamation, many enlisting as USCT soldiers. Enslaved people were not passive subjects of the war — they actively sought and created opportunities for liberation.", "id": "fc21"}, {"front": "Antietam (September 17, 1862) — significance", "back": "The bloodiest single day in American military history, with approximately 22,000 casualties on both sides. The Union's strategic (if costly) victory provided Lincoln the military occasion he had been waiting for to issue the preliminary Emancipation Proclamation (September 22, 1862). Secretary of State Seward had advised Lincoln to wait for a Union victory — without one, emancipation would look like desperation, not strength.", "id": "fc22"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

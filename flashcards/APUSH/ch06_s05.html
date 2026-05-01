@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 6, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Material Conditions Driving Populism", "back": "Wheat fell from $1.19/bushel (1881) to $0.49 (1894). Railroad freight rates were high and non-negotiable for farmers with no carrier alternatives. Mortgage debt ran at 8–12% compound interest. Deflationary monetary policy (gold standard) raised the real value of debts while lowering nominal crop prices. These structural conditions — not individual failure — created agrarian radicalism.", "id": "fc01"}, {"front": "Patrons of Husbandry (The Grange)", "back": "Founded 1867 by Oliver H. Kelley; originally fraternal and educational; became a political force during early 1870s economic distress. Backed Granger laws in Illinois, Minnesota, Wisconsin, and Iowa setting maximum railroad rates and grain elevator charges — the first significant state-level attempts to regulate the industrial economy. Initial Supreme Court validation in Munn v. Illinois (1877) was gutted by Wabash v. Illinois (1886).", "id": "fc02"}, {"front": "Granger Laws", "back": "State-level laws setting maximum railroad freight rates and grain elevator charges, backed by the Grange in the Midwest in the 1870s. Upheld in Munn v. Illinois (1877) — businesses 'affected with a public interest' could be regulated. Gutted by Wabash v. Illinois (1886) — states could not regulate interstate commerce, even within state borders. The Wabash ruling directly prompted the Interstate Commerce Act (1887).", "id": "fc03"}, {"front": "Farmers' Alliances", "back": "Successor to the Grange in the 1880s: Southern Alliance (Dallas) and Northern Alliance. Built cooperative warehouses and purchasing networks to bypass middlemen. Developed the sub-treasury plan. Employed traveling lecturers who explained structural causes of agricultural distress in sophisticated economic terms. The Alliances were the organizational foundation from which the Populist Party emerged in 1892.", "id": "fc04"}, {"front": "Crop-Lien System", "back": "Southern credit arrangement in which merchants extended credit to farmers (both Black and white sharecroppers and small landowners) with the future crop pledged as collateral. Interest rates were extremely high; prices for goods and credit were set by the creditor. Kept farmers in perpetual debt cycles. The Farmers' Alliance sub-treasury plan was designed specifically to circumvent this system by providing low-interest government credit against stored crops.", "id": "fc05"}, {"front": "Sub-Treasury Plan", "back": "Farmers' Alliance proposal for government-owned warehouses where farmers could store crops and borrow against them at low interest rates (1–2%), circumventing crop-lien merchants and high-interest private credit. A forerunner of the New Deal's commodity credit and storage programs. Never enacted in the Gilded Age; represented the most sophisticated structural solution in the Populist economic program.", "id": "fc06"}, {"front": "People's Party (Populist Party)", "back": "Third party formed at the Omaha, Nebraska, convention in July 1892. Adopted the Omaha Platform — the most comprehensive economic reform program in nineteenth-century American political history. Presidential candidate James B. Weaver won 8.5% of the popular vote and 22 electoral votes in 1892 — the first third-party electoral votes since the Republicans in 1856. Achieved its peak influence in the 1896 campaign before being absorbed into the Democratic coalition.", "id": "fc07"}, {"front": "Omaha Platform (1892)", "back": "The founding program of the People's Party: (1) free silver (16:1 coinage ratio); (2) direct election of senators; (3) graduated income tax; (4) government ownership of railroads, telegraph, and telephone; (5) sub-treasury plan for agricultural credit; (6) secret ballot and initiative/referendum; (7) eight-hour workday for government workers. Preamble by Ignatius Donnelly declared that 'the fruits of the toil of millions are boldly stolen to build up colossal fortunes for a few.'", "id": "fc08"}, {"front": "Free Silver", "back": "Populist monetary demand for unlimited coinage of silver at a 16:1 ratio to gold. The gold standard's deflationary effect had raised the real value of debts while lowering commodity prices. Coining silver would expand the money supply, raise commodity prices, ease debt repayment, and 'democratize credit' by ending East Coast financial control. Opponents (including urban industrial workers) feared inflation would raise consumer prices more than wages. Never enacted; the Gold Standard Act (1900) formally codified the gold standard.", "id": "fc09"}, {"front": "Crime of '73", "back": "Silverite name for the Coinage Act of 1873, which demonetized silver without significant public debate, effectively putting the U.S. on a de facto gold standard. Populists and silver advocates argued the act was a corrupt conspiracy by Eastern bankers to manipulate the money supply in favor of creditors at the expense of debtors. 'Crime of '73' framing positioned free silver as restoration of justice, not radical innovation.", "id": "fc10"}, {"front": "William Jennings Bryan (1860–1925)", "back": "Nebraska congressman who won the Democratic presidential nomination in 1896 with the Cross of Gold speech. 36 years old; virtually unknown nationally before the speech. Won both the Democratic and Populist nominations. Lost to McKinley 47%–51%. Democratic nominee again in 1900 and 1908 (both losses). Secretary of State under Wilson (1913–1915). The greatest orator of the Gilded Age and the political voice of agrarian radicalism.", "id": "fc11"}, {"front": "Cross of Gold Speech (July 9, 1896)", "back": "Bryan's peroration at the Democratic National Convention that won him the presidential nomination. Key claims: expanded definition of 'businessman' to include farmer, mine worker, country lawyer — not just East Coast financiers; framed gold standard as crucifixion of the producing classes; positioned free silver as justice for the majority against financial oligarchy. Final line: 'You shall not crucify mankind upon a cross of gold.' HAPP: Purpose = win nomination + crystallize agrarian grievance into moral frame.", "id": "fc12"}, {"front": "HAPP: Cross of Gold Speech (1896)", "back": "Historical context: 1896 Democratic Convention dominated by silver forces; Bryan 36, virtually unknown. Audience: Democratic convention delegates, predominantly silver-committed. Purpose: win presidential nomination; frame monetary question as moral/religious issue (crucifixion metaphor); expand coalition by broadening definition of 'producing classes.' Point of View: Bryan represented Plains and Southern farmer debt crisis; he spoke as a debtor-class advocate against East Coast creditor establishment.", "id": "fc13"}, {"front": "Mark Hanna", "back": "Ohio businessman and Republican political operative who managed McKinley's 1896 campaign. Raised an unprecedented $3.5 million (primarily from corporate donations) — roughly 10–20 times Bryan's resources. Pioneered modern campaign finance: systematic corporate fundraising in exchange for protective tariffs and friendly monetary policy. Hanna's organization reached industrial workers with the message that gold stability and high tariffs served their interests better than silver inflation.", "id": "fc14"}, {"front": "William McKinley", "back": "Republican presidential nominee 1896; won 51%–47% and 271 to 176 electoral votes over Bryan. Champion of high protective tariffs and the gold standard. Backed by Mark Hanna's corporate campaign finance. Successfully appealed to industrial workers and urban consumers in the Northeast and Midwest. His victory settled the gold standard question for a generation and marked the effective end of the Populist movement as an independent political force.", "id": "fc15"}, {"front": "Why Urban Industrial Workers Opposed Free Silver", "back": "Urban workers feared that expanding the money supply through silver coinage would raise the prices of manufactured goods they bought more than it would raise the wages they earned. McKinley's message — that a stable gold currency and high tariffs protected industrial prosperity and therefore workers' jobs — proved more persuasive to the immigrant factory workers of the Northeast and Midwest than Bryan's appeal to the producing classes. The urban-rural split destroyed Bryan's potential majority.", "id": "fc16"}, {"front": "Populist Fusion Strategy and Its Fatal Consequences", "back": "Populist leaders calculated that nominating Bryan alongside the Democrats offered the only realistic path to the presidency. Fatal outcome: by subordinating the broader Omaha Platform to the single issue of free silver and becoming an appendage of the Democratic Party, the Populists surrendered their organizational independence. After Bryan's defeat, the Populist Party had no independent base to rebuild from and disintegrated as an independent force.", "id": "fc17"}, {"front": "Populism's Long Legacy", "back": "Populist core demands enacted in modified form by Progressive Era: graduated income tax (16th Amendment, 1913), direct election of senators (17th Amendment, 1913), railroad regulation (Hepburn Act 1906), banking/currency reform (Federal Reserve Act 1913). The Populists identified structural problems correctly but were a generation too early — before the urban middle class experienced enough industrial system costs to join the coalition. Populism's defeat was the defeat of a political coalition, not of an intellectual framework.", "id": "fc18"}, {"front": "POL + WXT Theme: Election of 1896", "back": "The election was a contest over the political economy of industrial capitalism (WXT) staged through democratic institutions (POL). Bryan's coalition — Southern farmers, Plains debtors, silver miners — represented those bearing the costs of industrial capitalism. McKinley's coalition — manufacturers, financiers, and industrial workers persuaded by Hanna — represented the beneficiaries. McKinley's victory settled the political economy question for a generation: gold standard maintained; no fundamental restructuring of capital-labor relations.", "id": "fc19"}, {"front": "Munn v. Illinois (1877)", "back": "Supreme Court ruling upholding Illinois Granger laws as valid state regulation of grain elevator rates. Established that businesses 'affected with a public interest' could be regulated by the state. Later undermined by Wabash v. Illinois (1886), which held that states could not regulate interstate commerce — effectively limiting Munn's regulatory principle to intrastate operations.", "id": "fc20"}, {"front": "James B. Weaver", "back": "Populist presidential candidate in 1892; won 8.5% of the popular vote and 22 electoral votes (Iowa, Kansas, Colorado, Nevada). The first third-party electoral votes since the Republicans in 1856 — demonstrated that the Populist movement had genuine electoral strength and was growing, not simply a protest movement. Set the stage for the 1896 climax.", "id": "fc21"}, {"front": "Ignatius Donnelly", "back": "Minnesota editor who wrote the preamble to the Omaha Platform (1892). Famous lines: 'The fruits of the toil of millions are boldly stolen to build up colossal fortunes for a few, unprecedented in the history of mankind; and the possessors of these, in turn, despise the Republic and endanger liberty.' Framed Populism as restoration of republican government against oligarchy, not class warfare.", "id": "fc22"}, {"front": "Gold Standard Act (1900)", "back": "Formally codified the U.S. commitment to the gold standard following McKinley's 1896 victory. Settled the monetary question that had defined the 1890s political debates. Remained in force until the New Deal era, when FDR took the U.S. off the gold standard domestically (1933) and Nixon ended Bretton Woods convertibility (1971).", "id": "fc23"}, {"front": "Comparison: Populism vs. Progressive Era Reform", "back": "Populism (1890s): Rural, farmer-based; structural diagnosis of railroad monopoly, deflationary policy, crop-lien debt; demanded government ownership, free silver, cooperative credit. Progressive Era (1900s–1910s): Urban, middle-class-based; accepted industrial capitalism but demanded regulation; enacted Populist demands in modified form (income tax, direct elections, ICC strengthening, Federal Reserve). The Progressives built on the Populist intellectual framework with a more broadly viable political coalition.", "id": "fc24"}, {"front": "Continuity/Change: American Monetary Policy, 1873–1971", "back": "1873 (Crime of '73): U.S. moves to de facto gold standard. 1896: McKinley victory settles gold standard question for a generation. 1900 Gold Standard Act: formally codified. 1913 Federal Reserve Act: managed currency within gold framework. 1933: FDR takes U.S. off domestic gold standard. 1944 Bretton Woods: dollar-gold convertibility for international exchange. 1971 Nixon Shock: dollar-gold convertibility ends. The Populists' demand for monetary expansion was ultimately vindicated by the New Deal and the post-WWII managed currency system — just not through free silver.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 9, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "21st Century Demographic Transformation — Key Numbers", "back": "Latino share of U.S. population: 6.4% (1980) → 18.7% (2020) — now largest minority group. Asian American share: under 2% → over 6%. Non-Hispanic white share: ~80% → ~60%. Foreign-born share 2019: 13.7% — highest since early twentieth century immigration waves. Census Bureau projects non-Hispanic whites become a minority in the 2040s. Primary driver: Immigration and Nationality Act of 1965 shifting source regions from Europe to Latin America, Asia, Africa.", "id": "fc01"}, {"front": "Immigration and Nationality Act of 1965", "back": "Part of LBJ's Great Society legislation. Abolished the race-based national-origins quota system (in place since 1924, which favored Northern and Western European immigrants) and replaced it with preferences based on family reunification and occupational skills. Over subsequent decades, source regions shifted: European immigration fell sharply; Latin American, Asian, and African immigration rose. The Act transformed American demographics more profoundly than any legislation since the Naturalization Act of 1790.", "id": "fc02"}, {"front": "DACA (Deferred Action for Childhood Arrivals, 2012)", "back": "Obama executive program (June 2012) deferring deportation and granting work authorization to undocumented immigrants who arrived as children (before age 16), lived continuously in the U.S. since 2007, and met education/military requirements. ~800,000 enrolled ('Dreamers'). Trump administration announced termination (September 2017); courts blocked it; program remained in legal limbo. DACA exemplifies the broader immigration impasse: Congress repeatedly failed to pass comprehensive reform, leaving executive action — which lacks legislative durability — as the de facto policy.", "id": "fc03"}, {"front": "Defense of Marriage Act (DOMA, 1996)", "back": "Federal legislation defining marriage for federal purposes as the union of a man and a woman; at passage, no state recognized same-sex marriage. DOMA prevented same-sex couples married in states that later legalized it from accessing federal benefits. The Supreme Court struck down DOMA's core federal provision in United States v. Windsor (2013), leading directly to the Obergefell v. Hodges (2015) decision establishing a nationwide right to same-sex marriage.", "id": "fc04"}, {"front": "United States v. Windsor (2013)", "back": "Supreme Court decision striking down Section 3 of DOMA, which had denied federal benefits to same-sex couples married under state law. Edith Windsor, who had married her female partner in Canada, was denied the spousal estate tax exemption after her partner's death. Justice Kennedy wrote the 5–4 majority opinion. Windsor cleared the path for Obergefell two years later by establishing that the federal government could not discriminate against legally married same-sex couples.", "id": "fc05"}, {"front": "Obergefell v. Hodges (2015)", "back": "The Supreme Court, 5–4, held that the Fourteenth Amendment requires states to license marriages between same-sex couples and recognize same-sex marriages performed elsewhere. Justice Kennedy's majority relied on both Due Process (marriage as fundamental liberty right, defined by what interests it protects — liberty, dignity, family — not by who has historically enjoyed it) and Equal Protection. One of the most consequential civil-rights decisions since Brown v. Board of Education (1954). Dissenters (Roberts, Scalia, Thomas, Alito) argued the question should have been left to democratic processes.", "id": "fc06"}, {"front": "The Arc of American Constitutionalism", "back": "A pattern the source identifies across American history: rights denied by one branch of government are eventually vindicated by another. Reconstruction amendments → Brown overturning Plessy → Obergefell extending marriage equality. The arc has 'bent, however unevenly and however slowly, toward expanding the circle of people included within its protections.' The pattern does not guarantee progress on any specific issue; it describes a historical tendency, not an inevitable trajectory.", "id": "fc07"}, {"front": "Barack Obama — 2008 Election", "back": "First African American president, elected November 4, 2008. Won 365 electoral votes — largest popular vote share of any Democrat since LBJ (1964). Won Indiana and North Carolina. Record turnout among Black and young voters; commanding margins among college-educated whites. His election simultaneously represented historic civil-rights achievement AND accelerated polarization: Tea Party rise (2009), ACA passed without a single Republican vote (2010), birther conspiracy promoted by Donald Trump.", "id": "fc08"}, {"front": "Affordable Care Act (ACA, 2010)", "back": "Obama's landmark health-care legislation, signed March 2010. Established insurance exchanges, mandated coverage for pre-existing conditions, expanded Medicaid, and created an individual mandate to purchase coverage. Passed without a single Republican vote. Challenged in NFIB v. Sebelius (2012, upheld by Chief Justice Roberts) and King v. Burwell (2015, subsidies upheld). Became a defining battleground of partisan polarization; repeal attempts continued through the Trump years.", "id": "fc09"}, {"front": "Donald Trump — 2016 Election", "back": "Real estate developer and reality television personality, defeated Hillary Clinton 306–232 electoral votes while losing popular vote by 2.9 million. Campaign: immigration restriction (border wall), trade protectionism (NAFTA withdrawal, WTO challenges), NATO skepticism, and a style that dispensed with norms of bipartisan civility. Carried overwhelming margins in rural, less-educated, non-Hispanic white communities; Clinton won cities, college-educated whites, racial minorities. The 'diploma divide' replaced the 'gender gap' as the most salient demographic cleavage.", "id": "fc10"}, {"front": "The Diploma Divide (2016)", "back": "The gap between college-educated and non-college white voters in the 2016 election: Trump won non-college whites by 39 points; Clinton won college-educated whites. This educational polarization reflected a deeper geographic and cultural sorting of the parties: rural, small-town, and post-industrial communities aligned Republican; urban cores and suburban clusters aligned Democratic. The parties became political expressions of two distinct communities with incompatible visions of America.", "id": "fc11"}, {"front": "Geographic and Educational Party Sorting", "back": "By the 2010s, American political parties had sorted along cultural and educational lines so thoroughly that a Democratic senator from a rural state could no longer vote the same way as one from a coastal city, and vice versa. The parties became ideologically homogeneous in ways that made compromise rare — a Democratic senator could not afford the pragmatic deal-making that had defined the party of JFK or LBJ, and a Republican senator could not afford the moderate deal-making that had defined Eisenhower or Nixon.", "id": "fc12"}, {"front": "Birther Conspiracy Theory", "back": "The false claim, promoted prominently by Donald Trump from 2011 onward, that Barack Obama had not been born in the United States and was therefore constitutionally ineligible for the presidency. Trump eventually acknowledged in September 2016 that Obama was born in Hawaii. The birther conspiracy exemplified the 'extraordinary bitterness' of the political backlash against Obama's presidency and the role of social media in spreading unverified claims.", "id": "fc13"}, {"front": "NAT Theme: Who Counts as American?", "back": "The NAT (National Identity) theme across nine units: who counts as 'American' has been contested in every period, with the definition expanding — sometimes through law, sometimes through struggle — to include people previously excluded. From the three-fifths clause (1787) → abolition (1865) → women's suffrage (1920) → Civil Rights Act (1964) → Immigration Act (1965) → DACA (2012) → Obergefell (2015). The expansion has been neither linear nor complete — in every period, new exclusions arise as old ones are overcome.", "id": "fc14"}, {"front": "POL Theme: The Permanent Tension at the Heart of the Republic", "back": "The institutions that structure American political life — the Constitution, the courts, the party system — have been simultaneously the tools of exclusion and the arena in which inclusion has been fought for and sometimes won. The Civil War amendments gave formerly enslaved people constitutional rights that took another century to begin enforcing. The Supreme Court upheld Plessy for 58 years and then overturned it in Brown. The same institutions that maintain the gap between ideals and practice are the institutions through which that gap has been partially narrowed.", "id": "fc15"}, {"front": "SOC Theme: Material Conditions and Freedom", "back": "The material conditions of American life — wealth, labor, health, education, geography — determine access to the freedoms the republic promises. Those conditions have never been equally distributed. The same period that produced the digital revolution's billionaires produced 'deaths of despair' in deindustrializing communities. The same period that saw Obergefell also saw the opioid crisis. Social structures determine who can actually exercise the rights the Constitution declares.", "id": "fc16"}, {"front": "AP Exam: MC Strategy — Stimulus Is Everything", "back": "Every AP US History multiple-choice question is attached to a stimulus (document, image, map, data, cartoon). The correct answer is always inferable from the stimulus plus course content; never pure recall. Process: (1) Read the stimulus before the questions. (2) Identify source, date, and context. (3) Identify what the stimulus argues, implies, or omits. (4) Eliminate answers contradicting the stimulus. (5) Choose the answer most directly supported by stimulus evidence plus course content.", "id": "fc17"}, {"front": "AP Exam: SAQ Structure — A/B/C", "back": "Short-Answer Question structure: A (state a claim), B (provide specific historical evidence), C (explain the connection between A and B). No essay introduction; no narration; no conclusion. Make a claim, support it, explain it. Every sentence must be doing one of those three jobs. Maximum 4 sentences. Aim for precision and specificity over breadth.", "id": "fc18"}, {"front": "AP Exam: LEQ Rubric — The Six Points", "back": "Long Essay Question: Thesis (1 pt) — historically defensible claim with a line of reasoning. Contextualization (1 pt) — broader historical context that preceded and is causally connected to the argument. Evidence (2 pts) — specific evidence directly supporting the argument (1 pt for general, 2 pts for specific). Analysis/Reasoning (2 pts) — use of HAPP, comparison, continuity/change, or complexity. Single most common error: thesis without a line of reasoning.", "id": "fc19"}, {"front": "Final Synthesis: The Permanent Tension Across Nine Units", "back": "The source identifies one tension that has never been resolved across 534 years: the gap between the republic's declared principles and its actual practice. That gap has narrowed: abolition of slavery, extension of voting rights, Obergefell. It has not closed, and in some respects has widened. The study of American history is partly the study of why the gap exists, who has worked to close it, and who has profited from keeping it open.", "id": "fc20"}, {"front": "Historical Thinking: Categories as Constructs", "back": "The source's final argument: the categories through which we interpret the past — race, nation, democracy, liberty, progress — are historical constructs, made by human beings, and therefore remakeable by human beings. This is not relativism; it is historicism. Understanding that these categories were created (and by whom, and for whose benefit) is the prerequisite for evaluating whether they are accurate, just, or worth preserving.", "id": "fc21"}, {"front": "Black Lives Matter Movement", "back": "A decentralized social movement founded in 2013 following the acquittal of George Zimmerman in the killing of Trayvon Martin. Gained national prominence following the police killing of Michael Brown in Ferguson, Missouri (2014), and subsequent high-profile police killings. BLM mobilized through social media and organized protests across hundreds of cities. The movement's demands centered on police accountability, racial justice, and an end to systemic racism — and generated intense political backlash as well as significant policy debates.", "id": "fc22"}, {"front": "Comparison: Obama 2008 and Trump 2016 Coalitions", "back": "Obama (2008): unusually broad coalition — industrial Midwest, New South, Mountain West; record Black and young voter turnout; won college-educated whites by small margin. Trump (2016): concentrated in rural, small-town, post-industrial communities; won non-college whites by 39 points; lost popular vote by 2.9M. Both results reflected ongoing geographic sorting of the parties. The 'diploma divide' of 2016 replaced the 'gender gap' as the defining demographic cleavage in American electoral politics.", "id": "fc23"}, {"front": "CED Synthesis Theme: WXT Traced Across All 9 Units", "back": "WXT (Work, Exchange, and Technology) across nine units: Unit 1–2: agricultural economies, tribute systems, slave trade as economic foundation. Unit 3: colonial mercantilism, triangular trade. Unit 4: market revolution, rise of wage labor. Unit 5: slave economy vs. free labor. Unit 6: Industrial Revolution, Gilded Age. Unit 7: Progressive Era regulation, consumer economy. Unit 8: WWII industrial mobilization, postwar prosperity. Unit 9: globalization, digital revolution, financialization, inequality. Recurring question: who captures the gains of technological and economic change? Who bears the costs?", "id": "fc24"}, {"front": "Why did both the 2008 and 2016 elections represent turning points in American political history?", "back": "2008: First election of a Black president in a country whose Constitution once defined enslaved persons as three-fifths of a person. Represented the furthest expansion of the electorate's acceptance of a candidate whose very existence challenged the country's racial history. 2016: First election in which a major-party candidate openly contested the norms of democratic competition; first election of a president who lost the popular vote since 2000; exposed the depth of geographic, educational, and cultural sorting that made the parties incompatible communities. Both were turning points; their long-run significance remained actively debated.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

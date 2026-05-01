@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 3, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Articles of Confederation", "back": "The first American national government (adopted 1777, ratified 1781), creating a 'firm league of friendship' among thirteen sovereign states rather than a national government. Each state retained sovereignty. Congress had no taxation power, no commerce power, no executive branch, and could not enforce its own decisions. Deliberately designed to prevent the abuses of British centralized authority — and in doing so built a government incapable of governing.", "id": "fc01"}, {"front": "Articles of Confederation — Key Weaknesses", "back": "1. No power to levy taxes — could only requisition money from states (which ignored requests). 2. No power to regulate commerce — states erected tariff barriers against each other. 3. Nine of thirteen states required for major decisions; unanimous consent for amendments. 4. No executive branch to enforce decisions. 5. Could not pay war debts or field a reliable army.", "id": "fc02"}, {"front": "Northwest Ordinance (1787)", "back": "The Confederation Congress's most durable achievement: established a process for organizing the territory north of the Ohio River into new states with the same rights as the original thirteen. Crucially, banned slavery in the Northwest Territory — the first federal restriction on slavery's geographic expansion. Created the template for westward expansion used until the Civil War.", "id": "fc03"}, {"front": "Shays' Rebellion (1786–87)", "back": "Armed uprising in western Massachusetts led by debt-burdened farmers and veterans (including former Continental Army captain Daniel Shays) who forcibly closed courts to prevent debt judgments and attempted to seize the federal arsenal at Springfield. Alarmed the propertied class; convinced Washington, Madison, and others that the Articles were inadequate; directly accelerated the calling of the Philadelphia Convention.", "id": "fc04"}, {"front": "Why did Shays' Rebellion terrify property owners?", "back": "It demonstrated that democratic majorities in state legislatures might enact inflationary monetary policies or debtor relief that would destroy property rights — and that the Confederation government had no power to suppress armed domestic resistance. The rebellion revealed the Confederation's inability to maintain domestic order, confirming that fundamental structural reform was necessary.", "id": "fc05"}, {"front": "Philadelphia Convention (1787)", "back": "Fifty-five delegates convened in May 1787, officially to revise the Articles of Confederation. Within days, the Virginia Plan (largely by Madison) proposed replacing the Articles entirely with a genuinely national government having independent taxing power, a bicameral legislature, an executive branch, and a judiciary. The Convention became a constitutional revolution.", "id": "fc06"}, {"front": "Virginia Plan", "back": "Proposal drafted largely by James Madison at the Philadelphia Convention; proposed replacing the Articles with a national government featuring: independent taxing power, a bicameral legislature apportioned by population, an executive branch, and a federal judiciary. It favored large states and provided the working document around which the Convention debated.", "id": "fc07"}, {"front": "Great Compromise (Connecticut Compromise)", "back": "Proposed by Connecticut delegate Roger Sherman at the Philadelphia Convention; resolved the large-state vs. small-state conflict by creating a bicameral Congress: the House of Representatives apportioned by population (favoring large states), and the Senate with two seats per state regardless of size (protecting small states). The foundational structural compromise of the Constitution.", "id": "fc08"}, {"front": "Three-Fifths Compromise", "back": "Resolved the dispute over counting enslaved people for congressional apportionment: each enslaved person counted as three-fifths of a free person for both apportionment and direct taxation. Southern states gained substantial extra representation in Congress (and Electoral College votes) for the next seventy years, amplifying slaveholder political power far beyond what their free population warranted.", "id": "fc09"}, {"front": "Slave Trade Compromise", "back": "Prohibited Congress from banning the importation of enslaved people before 1808 — a twenty-year protection of the international slave trade. The price of Southern states' participation in the new union. Several Northern delegates had wanted Congress to be able to ban the trade immediately; Southern delegates threatened to leave the Convention if such power were granted.", "id": "fc10"}, {"front": "Sovereignty — Articles vs. Constitution", "back": "Under the Articles: sovereignty resided in the individual states. Under the Constitution: sovereignty resided in 'the People' — meaning the federal government could act directly on individual citizens rather than going through state governments. This transfer of sovereignty was the Convention's central achievement — giving the federal government tools to tax, regulate commerce, and enforce law.", "id": "fc11"}, {"front": "Enumerated Powers (Article I, Section 8)", "back": "The Constitution limits Congress to powers explicitly listed (enumerated) in Article I, Section 8: taxation, borrowing, commerce regulation, coinage, post offices, patents, federal courts, war, military — plus the elastic 'necessary and proper' clause. The enumerated powers structure replaced the Articles' even weaker grant of very limited authority.", "id": "fc12"}, {"front": "Necessary and Proper Clause", "back": "Constitutional provision (Article I, Section 8) authorizing Congress to make all laws 'necessary and proper' for executing its enumerated powers. Anti-Federalists called it a blank check that would swallow states' reserved powers. Federalists (especially Hamilton) used it to justify the National Bank. The clause became the basis of 'implied powers' doctrine and federal expansion.", "id": "fc13"}, {"front": "Supremacy Clause", "back": "Constitutional provision establishing federal law as 'the supreme law of the land' — binding on all state judges even where state law conflicts. A fundamental departure from the Articles, under which states could and did ignore federal requisitions. The supremacy clause gave the new federal government the legal authority to prevail over state law.", "id": "fc14"}, {"front": "James Madison — 'Father of the Constitution'", "back": "Primary drafter of the Virginia Plan; a leading voice for constitutional reform at the Philadelphia Convention; co-author of the Federalist Papers defending the Constitution during ratification. Madison's vision: a large republic with separated powers and competing factions would protect liberty better than small republics vulnerable to majority tyranny.", "id": "fc15"}, {"front": "The Constitution as Compromise with Slavery", "back": "The Constitution embedded multiple protections for slavery: Three-Fifths Compromise (extra representation for slaveholders), Slave Trade Compromise (no congressional action until 1808), and the Fugitive Slave Clause (requiring return of escaped enslaved people). The same document that created a viable nation simultaneously protected an institution incompatible with the equal liberty it proclaimed.", "id": "fc16"}, {"front": "Roger Sherman", "back": "Connecticut delegate to the Philadelphia Convention who proposed the Great Compromise (Connecticut Compromise) — creating the bicameral Congress with a population-based House and an equal-representation Senate. His compromise rescued the Convention from deadlock between large and small states.", "id": "fc17"}, {"front": "CED Theme: POL — What was the Constitutional Convention's central achievement?", "back": "The transfer of sovereignty: under the Articles, sovereignty resided in the states; under the Constitution, it resided in 'the People,' meaning the federal government could act directly on individual citizens. The taxing power, commerce power, and supremacy clause gave the new government tools the Confederation entirely lacked — enabling it to govern rather than merely request.", "id": "fc18"}, {"front": "Compare/Contrast: Articles vs. Constitution", "back": "Articles: state sovereignty; no taxation power; no commerce regulation; no executive; supermajority required for decisions; unanimous amendment. Constitution: popular sovereignty; congressional taxing power; interstate commerce regulation; executive branch; simple majority for most legislation; supermajority amendment process (Article V). The Constitution solved every major structural defect of the Articles.", "id": "fc19"}, {"front": "Continuity/Change: What continuity connected the Articles to the Constitution?", "back": "Continuity: both preserved the federal structure (states retained substantial autonomy); both protected slavery (though the Constitution entrenched it more firmly); the Northwest Ordinance's model of territorial expansion carried forward. Change: sovereignty transferred from states to 'the People'; new powers of taxation and commerce; independent executive and judiciary; supremacy clause made federal law binding.", "id": "fc20"}, {"front": "Amendment Process (Article V)", "back": "The Constitution requires a supermajority to amend — two-thirds of Congress (or a constitutional convention called by two-thirds of states) to propose, three-fourths of states to ratify. Designed to prevent impulsive changes while not making change impossible. Significantly easier than the Articles' unanimous consent requirement, but still a high bar.", "id": "fc21"}, {"front": "Why did small states resist the Virginia Plan?", "back": "The Virginia Plan apportioned the legislature by population — giving large states (Virginia, Pennsylvania, Massachusetts) dominant legislative power. Small states (Delaware, New Jersey, Connecticut) feared they would be permanently outvoted. New Jersey countered with a unicameral legislature with equal state representation. The Great Compromise split the difference with a bicameral Congress.", "id": "fc22"}, {"front": "HAPP: Articles of Confederation, Article II — Point of View", "back": "The revolutionaries who drafted the Articles had just fought a war against a distant central government that taxed without consent and quartered troops without permission. Article II's explicit retention of state sovereignty reflects this lived experience: they deliberately built a government incapable of those specific abuses — and in doing so built one incapable of governing effectively.", "id": "fc23"}, {"front": "Daniel Shays", "back": "Former Continental Army captain who led approximately 1,200 armed men in an attempt to seize the federal arsenal at Springfield, Massachusetts (January 1787), as part of the larger farmer debt-resistance movement. State militia suppressed the rebellion. His name became synonymous with the dangers of democratic excess and governmental weakness under the Articles.", "id": "fc24"}, {"front": "Fugitive Slave Clause", "back": "Constitutional provision (Article IV, Section 2) requiring that persons 'held to service or labor' (enslaved people) who escaped to free states must be returned to their enslavers. One of the Constitution's three slavery-protecting provisions alongside the Three-Fifths and Slave Trade Compromises; made the federal government an enforcement mechanism for slaveholders' property rights.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

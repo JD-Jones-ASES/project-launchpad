@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "The 1920s — the decade's central tension", "back": "Not simply 'the Jazz Age' but a sustained struggle between two visions of America: one urban, pluralist, and comfortable with rapid change; the other rural, Protestant, and determined to defend a cultural order it felt slipping away. Neither side was a caricature; neither simply won. The decade's significance is the conflict itself and what it reveals about consensus fragility in a heterogeneous democracy.", "id": "fc01"}, {"front": "The Flapper", "back": "Young women of the 1920s who bobbed their hair, wore short skirts, smoked cigarettes, and danced in public — a visible rejection of Victorian gender conventions. Produced by mass consumer culture (automobile, radio, film, advertising) that challenged traditional authority structures. Embodied the decade's gender-norm disruption.", "id": "fc02"}, {"front": "Mass consumer culture of the 1920s", "back": "The automobile (Ford's Model T made car ownership accessible to the middle class), radio, motion pictures, and national advertising created a shared mass culture that cut across regional and ethnic lines and challenged traditional authority structures. The material basis for the 1920s cultural revolution.", "id": "fc03"}, {"front": "Jazz — cultural meaning and controversy", "back": "Born in African American musical traditions of New Orleans and Chicago; became the decade's defining sound. For enthusiasts: modernity, improvisation, individual expression, interracial creativity. For critics: racial contamination and moral license. Its origins in Black musical culture made jazz a target for white traditionalists who saw the 1920s cultural revolution as, in part, a racial threat.", "id": "fc04"}, {"front": "Harlem Renaissance (c. 1920–1935)", "back": "The most significant flowering of African American artistic and intellectual culture the nation had yet produced. The Great Migration concentrated Black artists, writers, musicians, and intellectuals in Harlem, creating a self-conscious cultural movement asserting Black dignity, creativity, and full humanity amid Jim Crow, lynching, and disenfranchisement.", "id": "fc05"}, {"front": "Langston Hughes", "back": "The Harlem Renaissance's most memorable poetic voice. Wrote in vernacular Black speech and insisted that Black life was worthy of serious literary attention. His poetry challenged both white literary conventions and the expectation that Black art should conform to respectability politics.", "id": "fc06"}, {"front": "Zora Neale Hurston", "back": "Harlem Renaissance writer who brought anthropological training and lyric precision to fiction rooted in Southern Black folk culture. Her work — including Their Eyes Were Watching God — documented the richness and complexity of Black vernacular life at a moment when that culture was under constant assault.", "id": "fc07"}, {"front": "Louis Armstrong", "back": "Jazz musician who transformed New Orleans collective improvisation into a virtuoso art form that would spread American music around the world. His technical mastery and expressive range made jazz a globally recognized American art form, the cultural export that would define the twentieth century.", "id": "fc08"}, {"front": "Lost Generation", "back": "American writers (Hemingway, Fitzgerald) who had experienced WWI's trauma and found 1920s commercial optimism shallow and dishonest. F. Scott Fitzgerald's The Great Gatsby (1925) offered a 'mordant critique of a society that had sacrificed a generation to industrial warfare and replaced genuine meaning with conspicuous consumption.'", "id": "fc09"}, {"front": "Prohibition — policy mechanics and failure", "back": "Eighteenth Amendment (effective January 1920) prohibited manufacture, sale, and transportation of intoxicating liquors. Supported by Protestant churches, Anti-Saloon League, women's organizations, rural communities. Produced bootlegging, organized crime (Al Capone in Chicago), corrupted law enforcement, and widespread disrespect for law. Repealed by Twenty-First Amendment (1933). A spectacular policy failure demonstrating the limits of legislating cultural behavior.", "id": "fc10"}, {"front": "Prohibition as nativist cultural crusade", "back": "Prohibition was partly a genuine moral reform and partly a cultural crusade by native-born Protestant Americans against immigrant communities (Irish, Italian, German, Eastern European Jewish) whose social lives centered on saloons. The law encoded a cultural hierarchy in which Protestant temperance values were privileged over immigrant social traditions.", "id": "fc11"}, {"front": "Second Ku Klux Klan", "back": "Re-founded in 1915 at Stone Mountain, Georgia, partly inspired by D.W. Griffith's Birth of a Nation. Expanded beyond anti-Black violence to target Catholics, Jews, immigrants, and perceived moral deviants. Peak: ~4 million members c. 1924; controlled state governorships; significant political influence. Collapsed after leader David Stephenson's 1925 rape-and-murder conviction — internal corruption, not external resistance.", "id": "fc12"}, {"front": "Birth of a Nation (1915, D.W. Griffith)", "back": "Silent film that presented Klan terrorism during Reconstruction as heroic. Its release was associated with the refounding of the Klan at Stone Mountain, Georgia. The film demonstrates how popular culture can provide ideological sanction and recruiting material for hate movements — and how artistic achievement and moral bankruptcy can coexist.", "id": "fc13"}, {"front": "Scopes Trial (1925)", "back": "Tennessee teacher John T. Scopes prosecuted under a state law banning the teaching of evolution. William Jennings Bryan prosecuted; Clarence Darrow defended. Trial became a national cultural spectacle. Darrow put Bryan on the stand as a Bible expert and exposed contradictions in literal Genesis reading. Scopes convicted and fined $100 (later overturned on technicality). National press portrayed fundamentalism as backward — but Bryan had won the legal case.", "id": "fc14"}, {"front": "William Jennings Bryan — multiple roles", "back": "Three-time Democratic presidential candidate; Populist hero who advocated for farmers and debtors; anti-imperialist (opposed Philippines annexation); prosecuted Scopes on biblical literalist grounds; died five days after the trial. His career illustrates the complex overlap of progressive and traditionalist positions — Bryan was simultaneously anti-corporate and anti-evolution.", "id": "fc15"}, {"front": "Emergency Quota Act (1921)", "back": "Limited annual immigration from any country to 3% of that country's nationals in the U.S. in 1910. First significant legislative restriction on immigration by national origin. Set the framework for the more restrictive 1924 National Origins Act.", "id": "fc16"}, {"front": "National Origins Act (1924)", "back": "Reduced immigration quota to 2% and changed the baseline to 1890 (before mass Southern and Eastern European immigration). Virtually shut down immigration from Italy, Poland, Russia, and other predominantly Catholic and Jewish countries. Asian immigration cut to near zero; act explicitly excluded most Asian immigrants. Encoded a racial hierarchy of desirable vs. undesirable immigrants that shaped U.S. policy for four decades.", "id": "fc17"}, {"front": "Sacco and Vanzetti case (1920–27)", "back": "Italian immigrants and self-declared anarchists convicted of murder and robbery in Massachusetts on evidence historians consider thin and circumstantial. Seven-year legal ordeal attracted worldwide attention. Defenders argued they were convicted for politics and ethnicity; supporters of verdict argued jury evaluated evidence fairly. Executed August 23, 1927. Crystallized the decade's nativist anxieties and the danger of conflating political identity with criminal guilt.", "id": "fc18"}, {"front": "Great Migration — demographic context for Harlem Renaissance", "back": "The mass movement of Black Southerners to northern cities (primarily 1910s–1920s) in response to Jim Crow violence and economic opportunity in northern industry. Created the critical mass of artists, intellectuals, and working people in Harlem that made the Renaissance possible. Also created the urban Black communities that became targets of northern racism and housing discrimination.", "id": "fc19"}, {"front": "NAT Theme: Competing visions of American identity in the 1920s", "back": "Modernists: urban, pluralist, ethnically diverse America as the true American future. Traditionalists: Protestant, Anglo-Saxon, rural America as the authentic American identity under threat. Neither side lacked democratic legitimacy; both were responding to real changes. The NAT theme — who belongs to America? — was the decade's central cultural question.", "id": "fc20"}, {"front": "SOC Theme: Gender disruption in the 1920s", "back": "The flapper embodied a visible challenge to Victorian gender norms. Women's entry into consumer culture (spending, leisure, public space) challenged the ideology of separate spheres. But the decade also saw intense backlash: Klan targeted women who violated Protestant moral order; Prohibition's temperance politics were partly about controlling women's behavior through controlling the saloon environment.", "id": "fc21"}, {"front": "Harlem Renaissance vs. Jim Crow — the contradictory 1920s", "back": "The Harlem Renaissance asserted Black dignity and full humanity at the same historical moment that Jim Crow segregation, lynching, and political disenfranchisement continued in the South and discriminatory barriers persisted in the North. Cultural achievement did not translate into political equality — the gap between cultural progress and political oppression is central to understanding the period.", "id": "fc22"}, {"front": "Al Capone and Prohibition's unintended consequences", "back": "The illegal alcohol trade produced organized crime empires — Al Capone in Chicago became a celebrity gangster with a criminal organization generating millions in revenue. Capone's rise illustrates how prohibition of a commodity with sustained demand creates black markets that enrich criminal enterprises and corrupt law enforcement. A law enforcement and civic disaster.", "id": "fc23"}, {"front": "Comparison: 1920s cultural clashes and later culture wars", "back": "The 1920s urban-rural, modernist-traditionalist conflict recurs in American political culture. The specific issues change (evolution → abortion, immigration restriction → immigration enforcement), but the structural pattern — rapid social change producing traditionalist backlash organized around religious and national identity — is a durable feature of American democratic politics. The 1920s provide the template.", "id": "fc24"}, {"front": "HAPP: 'Charleston at the Capitol' photograph (c. 1926)", "back": "Historical context: 1920s challenge to Victorian gender propriety; women's suffrage just granted (1920). Audience: general public, newspaper readers. Purpose: likely documentary journalism; choice of Capitol as backdrop signals deliberate politics of public space. Point of view: the image itself asserts women's right to occupy political space and perform previously proscribed gender behaviors in the nation's civic center — a statement about expanded female citizenship.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

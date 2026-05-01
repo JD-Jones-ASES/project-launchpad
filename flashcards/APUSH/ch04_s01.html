@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 4, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Revolution of 1800", "back": "Jefferson's label for his election victory — the first peaceful transfer of power between rival political parties in American history. The Federalists yielded the executive branch to the Democratic-Republicans, validating the Constitution's institutional design. Jefferson's presidency then confounded his own strict-constructionist ideology, most dramatically through the Louisiana Purchase.", "id": "fc01"}, {"front": "Louisiana Purchase (1803)", "back": "The acquisition of approximately 828,000 square miles of territory west of the Mississippi from France for roughly $15 million (about 3 cents per acre). It doubled the land area of the United States. Jefferson had constitutional scruples — the document granted no explicit authority to purchase foreign territory — but proceeded pragmatically. The indigenous nations whose homelands lay within the ceded territory were not consulted or compensated.", "id": "fc02"}, {"front": "Strict construction vs. loose construction", "back": "Strict construction (Jefferson's stated view) held that the federal government could only exercise powers explicitly named in the Constitution. Loose/broad construction (Hamilton's and Marshall's view) held that the government possessed powers implied by its enumerated grants. The Louisiana Purchase illustrated strict construction's limits in practice; McCulloch v. Maryland settled the debate in favor of broad construction.", "id": "fc03"}, {"front": "Haitian Revolution and the Louisiana Purchase", "back": "The Haitian Revolution (1791–1804) — in which enslaved people defeated French forces and established the first Black republic in the Western Hemisphere — destroyed Napoleon's Caribbean empire. Since Louisiana was meant to supply that empire, its strategic rationale evaporated. Napoleon, facing renewed war with Britain and needing funds, offered the entire territory to the United States. The Haitian Revolution was thus a prerequisite for the Louisiana Purchase.", "id": "fc04"}, {"front": "Lewis and Clark Expedition (Corps of Discovery, 1804–06)", "back": "Commissioned by Jefferson to explore and map the Louisiana Purchase, led by Meriwether Lewis and William Clark. The expedition traveled roughly 8,000 miles to the Pacific coast, produced the first systematic botanical and geographical survey of the interior, and gathered information on dozens of indigenous nations. Sacagawea, a Shoshone woman, served as interpreter and guide. Its significance was 'as much symbolic as scientific': it asserted American claim over a continent already densely inhabited.", "id": "fc05"}, {"front": "Sacagawea", "back": "A Shoshone woman who joined the Lewis and Clark Expedition in present-day North Dakota, serving as interpreter and guide through the western reaches of the journey. Her presence facilitated relations with indigenous peoples the Corps encountered. Her role illustrates the expedition's reliance on indigenous knowledge while simultaneously asserting American sovereignty over indigenous homelands.", "id": "fc06"}, {"front": "War of 1812 — causes", "back": "Three primary causes: (1) British impressment of American sailors — roughly 6,000 Americans were forced into Royal Navy service between 1800 and 1812; (2) British support for indigenous resistance to American expansion in the Northwest Territory; (3) congressional 'War Hawks' from the South and West seeking to annex Canada and expel British influence from North America.", "id": "fc07"}, {"front": "War of 1812 — consequences", "back": "The Treaty of Ghent (1814) restored the pre-war status quo: no territorial gains, no resolution of impressment. Despite the draw, significant consequences included: (1) destruction of the military capacity of Northwest indigenous nations — Tecumseh's confederacy was broken; (2) acceleration of American manufacturing by cutting off British imports; (3) a burst of nationalist feeling that briefly dissolved partisan divisions.", "id": "fc08"}, {"front": "Tecumseh", "back": "Shawnee leader who built a multi-tribal confederacy to resist American expansion into the Northwest Territory. He allied with the British during the War of 1812 and died at the Battle of the Thames (1813). His death effectively ended organized indigenous military resistance in the Northwest Territory, opening the region to American settlement.", "id": "fc09"}, {"front": "Era of Good Feelings", "back": "The period approximately 1816–1824, characterized by the collapse of organized Federalist opposition and apparent unity under President James Monroe (who ran nearly unopposed in 1820). Historians have debunked the label: it coincided with the Missouri Crisis of 1820, which exposed deep sectional tensions over slavery, and the Panic of 1819, the nation's first major financial crisis. The 'good feelings' masked rather than resolved fundamental divisions.", "id": "fc10"}, {"front": "Missouri Compromise (1820)", "back": "The congressional settlement of the first major slavery crisis: Missouri admitted as a slave state, Maine as a free state, and slavery prohibited north of the 36°30' parallel in the remaining Louisiana Purchase territory. Jefferson called the debate 'a fire bell in the night.' The Compromise revealed that slavery was capable of shattering national unity and that sectionalism had become the dominant structural fact of American politics.", "id": "fc11"}, {"front": "Chief Justice John Marshall (1801–1835)", "back": "Appointed by John Adams in the final days of his presidency. A committed Federalist, Marshall built a nationalist legal tradition over 34 years on the bench — outlasting Jefferson, Madison, Monroe, and Adams. His jurisprudence consistently advanced federal power, national economic integration, and constitutional supremacy over state legislation. His two landmark cases of the Jeffersonian era were Marbury v. Madison and McCulloch v. Maryland.", "id": "fc12"}, {"front": "Marbury v. Madison (1803)", "back": "Marshall's ruling that William Marbury was entitled to his judicial commission but that the Supreme Court lacked jurisdiction to compel its delivery (because the relevant Judiciary Act provision was unconstitutional). The ruling established judicial review — the authority of federal courts to invalidate legislation conflicting with the Constitution. Politically shrewd: it ruled against Jefferson's enemy while establishing a power Jefferson could not directly challenge.", "id": "fc13"}, {"front": "Judicial review", "back": "The authority of federal courts to invalidate laws that conflict with the Constitution, established in Marbury v. Madison (1803). Not explicitly mentioned in the Constitution, but Marshall argued it was implicit: 'It is emphatically the province and duty of the judicial department to say what the law is.' Never successfully challenged, judicial review made the Supreme Court co-equal with the legislative and executive branches in constitutional interpretation.", "id": "fc14"}, {"front": "McCulloch v. Maryland (1819)", "back": "Marshall's ruling that (1) Congress had constitutional authority to charter the Second Bank of the United States under the Necessary and Proper Clause, and (2) Maryland could not tax the Bank because 'the power to tax involves the power to destroy.' Established the doctrine of implied powers and federal supremacy. Directly attacked Jeffersonian strict construction and states'-rights doctrine, anticipating the nullification controversy and Civil War arguments.", "id": "fc15"}, {"front": "Implied powers", "back": "The doctrine, established in McCulloch v. Maryland (1819), that the federal government possesses powers reasonably implied by the Constitution's enumerated grants, even if not explicitly listed. Marshall interpreted 'necessary' in the Necessary and Proper Clause to mean 'useful' or 'conducive to' — not 'absolutely indispensable.' This settled the Hamilton-Jefferson debate about federal power in Hamilton's favor and laid the foundation for expansive congressional authority.", "id": "fc16"}, {"front": "Necessary and Proper Clause", "back": "Article I, Section 8 of the Constitution, which grants Congress the power to make 'all Laws which shall be necessary and proper for carrying into Execution' its enumerated powers. Marshall's interpretation in McCulloch v. Maryland defined 'necessary' as 'useful' rather than 'absolutely indispensable,' dramatically expanding the range of congressional action the Constitution could authorize.", "id": "fc17"}, {"front": "HAPP Analysis: Marbury v. Madison opinion (1803)", "back": "Historical context: Written 2 years after Jefferson's victory; Marshall and Jefferson were political opponents. Audience: Formally the parties; practically the political nation and posterity. Author's purpose: Assert judicial authority as final constitutional interpreter while avoiding a confrontation Jefferson could win. Point of view: Committed Federalist who believed in strong national government and judicial independence — his 'province and duty' language was deliberately expansive.", "id": "fc18"}, {"front": "Jefferson's constitutional contradiction", "back": "Jefferson publicly championed strict construction — the view that the federal government could only act on powers explicitly granted by the Constitution. The Louisiana Purchase (1803) was the most dramatic violation of this principle: the Constitution nowhere authorized buying foreign territory, yet Jefferson proceeded. He rationalized it as 'a necessary departure from theory in service of a greater end.' His presidency demonstrated that even ideological leaders bend principle to pragmatic necessity.", "id": "fc19"}, {"front": "Battle of New Orleans (January 1815)", "back": "General Andrew Jackson's decisive defeat of a larger British force, producing the War of 1812's most celebrated American victory. Fought two weeks after the Treaty of Ghent had already ended the war — news had not yet reached the front. The victory made Jackson a national hero and launched his political career, ultimately leading to his 1828 presidential election.", "id": "fc20"}, {"front": "Sectionalism", "back": "Political loyalty and conflict organized around geographic regions (Northeast, South, West) rather than national interest. Identified in this period as 'the dominant structural fact of American politics' after the Missouri Compromise of 1820 revealed how sharply the slavery question divided the nation. Sectionalism would intensify throughout the antebellum period, driving the republic toward Civil War.", "id": "fc21"}, {"front": "CED Theme: POL + ARC — The Marshall Court's Institutional Durability", "back": "The Framers' decision to grant federal judges lifetime tenure (ARC — institutional design) insulated Marshall from electoral pressure and allowed him to build a nationalist legal tradition across 34 years (POL — political consequences). This architectural choice proved to be the Federalists' most durable institution, shaping constitutional law through the Jacksonian era and beyond. Institutional design shapes political outcomes across generations.", "id": "fc22"}, {"front": "Continuity/Change: How did the Louisiana Purchase change American expansion?", "back": "Before 1803, American territory was bounded by the Mississippi River. The Louisiana Purchase doubled the land area in a single transaction, opening the trans-Mississippi West to settlement and commerce. It also set a precedent of pragmatic constitutional interpretation that would justify future expansions. The purchase accelerated the eventual displacement of indigenous nations whose homelands lay within the ceded territory — none of whom were consulted.", "id": "fc23"}, {"front": "Comparison: Marbury v. Madison vs. McCulloch v. Maryland", "back": "Both cases advanced federal power, but on different dimensions. Marbury established judicial review — the Court's authority to interpret the Constitution as supreme law, making the judiciary co-equal with Congress and the executive. McCulloch established implied powers and federal supremacy — Congress can act beyond explicitly listed powers, and states cannot use their powers to nullify federal instrumentalities. Together they built the legal architecture of American constitutional government.", "id": "fc24"}, {"front": "Why was the Marshall Court the Federalists' most durable institution?", "back": "After Jefferson's 1800 victory swept Federalists from the executive and Congress, the judiciary became the last Federalist stronghold. Marshall's 34-year tenure (1801–35) allowed him to build a body of nationalist precedent that survived Jeffersonian Republicanism and Jacksonian Democracy alike. The Court's small size, lifetime tenure, and insulation from popular majorities made it the institution through which Federalist constitutional principles outlasted the Federalist Party itself.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

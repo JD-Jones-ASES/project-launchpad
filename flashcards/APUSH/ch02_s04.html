@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 2, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Middle Colonies", "back": "New York, New Jersey, Pennsylvania, and Delaware — the band of colonies between the Chesapeake and New England. Distinguished by ethnic diversity, religious pluralism, and mixed-grain economies balanced between farming and Atlantic commerce. Home to Dutch Calvinists, English Quakers, German Lutherans and Pietists, Scots-Irish Presbyterians, Sephardic Jews, and Swedish Lutherans. Coexisted without systematic enforcement of doctrinal uniformity — a third colonial model distinct from both plantation South and Puritan North.", "id": "fc01"}, {"front": "Quakers (Society of Friends)", "back": "A radical Protestant movement founded by George Fox in England in the 1640s. Core belief: the direct experience of God (the 'Inner Light') in every human soul, without mediation of clergy, sacraments, or scripture alone. Practices: refused to bow or doff hats (rejecting class hierarchy), refused oaths (rejecting legal hierarchy), opposed war, extended equal voice to women in meetings. Persecuted in England and Massachusetts; provided in Pennsylvania the first colonial society where they could practice freely. Early leaders of abolitionism.", "id": "fc02"}, {"front": "Inner Light (Quaker theology)", "back": "The Quaker belief that every human soul contains a direct experience of God's presence, without need for clergy, sacraments, or external authority. This theological premise had radical social implications: if every person contains the divine equally, then class hierarchy (hat-doffing), gender hierarchy (women's exclusion from speaking), and racial hierarchy (slaveholding) are all incompatible with genuine faith. The Inner Light theology directly generated Quaker positions on equality, pacifism, and eventually abolitionism.", "id": "fc03"}, {"front": "William Penn (1644–1718)", "back": "Son of Admiral William Penn; converted to Quakerism and imprisoned multiple times in England for his beliefs. Received the Pennsylvania charter in 1681 as payment of a crown debt to his father. Designed Pennsylvania around Quaker convictions: freedom of worship for all believers, no established church, representative assembly. Negotiated extensively with the Lenape, purchasing land rather than claiming it by royal grant. His 'Holy Experiment' produced the most prosperous and diverse mainland colony by the 1750s.", "id": "fc04"}, {"front": "Frame of Government (Pennsylvania, 1682)", "back": "William Penn's founding constitutional document for Pennsylvania. Guaranteed freedom of worship to all who believed in God, barred any established church, and created a representative assembly. Each provision translated a Quaker principle into law: religious liberty (Inner Light; faith coerced is no faith), no establishment (equality before God; no hierarchy), representative governance (consent of governed). Created the legal template for religious pluralism that the First Amendment would replicate at the national level.", "id": "fc05"}, {"front": "\"Holy Experiment\"", "back": "William Penn's term for his Pennsylvania colony — the most self-conscious attempt in colonial history to build a society around the principle of religious liberty. Penn's Frame of Government (1682) guaranteed freedom of worship for all believers in God, barred established churches, and created representative governance. Attracted massive immigration from across Europe. By the 1750s, Pennsylvania was the most prosperous and diverse mainland colony — the 'Holy Experiment' succeeded beyond Penn's own ability to manage it politically.", "id": "fc06"}, {"front": "New Netherland / New Amsterdam", "back": "The Dutch West India Company colony established in the 1620s along the Hudson River, with its commercial center at New Amsterdam (present-day Manhattan). Never densely populated; interest was trade, not settlement. Genuinely diverse: New Amsterdam in the 1640s counted speakers of at least eighteen languages. Dutch Reformed Church was established, but mercantile priorities discouraged religious persecution. Jews arrived 1654. English conquest 1664; renamed New York by James, Duke of York.", "id": "fc07"}, {"front": "Peter Stuyvesant (Director of New Netherland, 1647–64)", "back": "The authoritarian director-general of New Netherland who tried to expel Jewish arrivals in 1654, was overruled by the Amsterdam Jewish community that held West India Company shares, and surrendered the colony to England in 1664 without a fight when his population showed no enthusiasm for war. Stuyvesant's tenure illustrates the tension between the director's personal religious conservatism and the company's commercial priorities — a tension resolved consistently in favor of commerce.", "id": "fc08"}, {"front": "Lenape (Delaware people)", "back": "The Algonquian-speaking indigenous people inhabiting the Delaware Valley region where William Penn established Pennsylvania. Penn purchased land from the Lenape rather than claiming it by royal grant — a practice his Quaker contemporaries praised as a departure from the standard colonial expropriation model. Penn negotiated directly with Lenape leaders. Relations deteriorated after Penn's era; the 1737 Walking Purchase, carried out by Penn's sons, dispossessed the Lenape of vast territory through deception.", "id": "fc09"}, {"front": "Philadelphia", "back": "Founded by William Penn in 1682; became by the 1750s the largest city in British North America. A commercial hub whose print culture, philosophical societies, and cosmopolitan merchant class made it the intellectual center of the mainland colonies. The source argues that Benjamin Franklin's career as printer, scientist, civic entrepreneur, and diplomat is 'incomprehensible outside the Philadelphia that Penn's design had created' — the constitutional framework of religious liberty attracted the diverse, commercially active population that made Philadelphia thrive.", "id": "fc10"}, {"front": "Benjamin Franklin and Philadelphia", "back": "Franklin's career — printer, scientist, inventor, civic organizer, diplomat — exemplifies the middle-colony model. His polymath achievements required a society with: a vibrant print market (religious and intellectual diversity generating demand for ideas), commercial networks (Atlantic trade), civic culture (philosophical societies, fire companies, libraries), and cosmopolitan openness. The source argues these conditions were created by Penn's constitutional design and the diverse immigration it attracted.", "id": "fc11"}, {"front": "English Conquest of New Netherland (1664)", "back": "English warships sailed into New Amsterdam's harbor and demanded surrender; Stuyvesant submitted without a fight when his population showed no enthusiasm for war. King Charles II granted the territory to his brother James, Duke of York; the colony and city were renamed New York. English rule preserved Dutch land titles, the Dutch Reformed Church, and merchant commercial networks — making the transition less disruptive than it might appear and retaining New York's distinctive commercial cosmopolitanism.", "id": "fc12"}, {"front": "Dutch West India Company", "back": "The joint-stock enterprise that established New Netherland in the 1620s. Unlike the Virginia Company (which sought settlement and agricultural profit), the Dutch West India Company's primary interest was trade. Its mercantile priorities discouraged religious persecution — bigotry was bad for business. This commercial logic, not principled toleration, produced New Netherland's genuine diversity. The company's Amsterdam Jewish shareholders overruled Stuyvesant's attempt to expel Jewish settlers in 1654.", "id": "fc13"}, {"front": "\"Faith coerced is no faith at all\" (Penn)", "back": "A principle articulated by William Penn in The Great Case of Liberty of Conscience (1670), arguing that genuine religious belief cannot be produced by legal compulsion — it can only arise from individual conscience. This principle was the theological foundation of Penn's argument for religious liberty and his prohibition of an established church in Pennsylvania. It anticipated the First Amendment's Establishment Clause and influenced later liberal thought on the relationship between religion and civil authority.", "id": "fc14"}, {"front": "Ethnic and Religious Diversity of Middle Colonies", "back": "The middle colonies were home to: Dutch Calvinists (especially New York), English and Welsh Quakers (Pennsylvania), German Lutherans, Mennonites, Amish, and Pietists (Pennsylvania), Scots-Irish Presbyterians (throughout), Sephardic Jews (New York and Newport), and Swedish Lutherans (Delaware Valley). No single denomination dominated; coexistence was the norm. This diversity was partly accidental (Dutch commercial tolerance), partly designed (Penn's Frame of Government), and partly inevitable (too many groups to enforce uniformity).", "id": "fc15"}, {"front": "Compare: Three Colonial Regions c. 1700", "back": "Chesapeake: tobacco monoculture, plantation slavery, oligarchic self-governance (House of Burgesses), Anglican establishment (weak enforcement). New England: diversified agriculture, indenture/family labor (not slavery as primary system), covenanted democratic-yet-coercive governance, Congregationalist establishment. Middle Colonies: mixed-grain economy and Atlantic commerce, ethnic/religious diversity, no established church, no plantation slavery (though enslaved people present), representative governance tolerating dissent. Middle colonies' third model points toward the First Amendment template.", "id": "fc16"}, {"front": "Quakers and Abolitionism", "back": "Quakers were early leaders of the American abolitionist movement because their theology directly implied that slaveholding was incompatible with belief in the Inner Light. If every human soul equally contains the divine, then treating any person as property denies their spiritual equality. The Germantown Quaker Protest (1688) was the first formal antislavery petition in North America. Quaker abolitionism intensified through the colonial era; Pennsylvania's Gradual Abolition Act (1780) was the first such law in American history.", "id": "fc17"}, {"front": "The Great Case of Liberty of Conscience (Penn, 1670)", "back": "A political tract by William Penn arguing that faith coerced by law is not genuine faith, and that civil authority has no legitimate role in compelling religious belief. Written while Penn was imprisoned in England for his Quaker beliefs, it articulated the philosophical foundation for his later Pennsylvania constitution. The argument influenced later Enlightenment thinking about religious liberty and the proper limits of state power in religious matters.", "id": "fc18"}, {"front": "How did commerce produce tolerance in New Netherland?", "back": "The Dutch West India Company's primary interest was trade, not theological purity. Religious persecution that drove away useful merchants, skilled artisans, and investors was bad for business. Therefore, the company tolerated diversity that no European state or Puritan colony would have permitted — not from conviction but from calculation. New Amsterdam in the 1640s counted eighteen languages because traders and settlers of many backgrounds were commercially valuable. This commercial logic is an important alternative explanation for toleration alongside Penn's principled model.", "id": "fc19"}, {"front": "First Amendment connection to Middle Colonies", "back": "The source argues: 'The separation of church and state is not a Puritan inheritance; it is a middle-colony inheritance.' Penn's Frame of Government (1682) barred any established church and guaranteed freedom of worship — the template for the First Amendment's Establishment and Free Exercise Clauses. New York's commercial cosmopolitanism contributed the tradition of tolerating difference for practical reasons. Together, these middle-colony precedents — not Puritan covenant theology, which joined church and state — provided the model for the First Amendment.", "id": "fc20"}, {"front": "\"Pluralism as a Colonial Achievement\" (key concept)", "back": "The source argues that the middle colonies' religious pluralism was not passive or accidental but was: (1) deliberately designed — Penn's Frame of Government; (2) commercially necessary — Dutch mercantile logic; and (3) practically compelled — too ethnically diverse to enforce uniformity. Whatever its origins, pluralism created the template — freedom of worship, no established church, competing denominations coexisting — later replicated in the First Amendment. Religious pluralism was a colonial achievement, not an inevitable outcome.", "id": "fc21"}, {"front": "Scots-Irish in the Middle Colonies", "back": "Presbyterian settlers from Scotland and Ulster (Northern Ireland) who settled throughout the middle colonies and beyond, particularly on the frontiers of Pennsylvania and later into the Appalachian backcountry. Scots-Irish Presbyterians brought a Calvinist tradition that valued literacy (to read scripture), congregational governance (elected elders), and fierce independence. Their migration patterns helped define the social geography of colonial America's interior and shaped the culture of the Appalachian frontier.", "id": "fc22"}, {"front": "German Pietists and Mennonites in Pennsylvania", "back": "Religious communities from the German-speaking lands who sought refuge in Penn's Pennsylvania: Mennonites, Amish, German Reformed, Lutherans, Dunkers, and Moravians. Attracted by Penn's genuine guarantee of religious freedom unavailable at home in Europe. They settled in the Pennsylvania interior (later called the 'Pennsylvania Dutch' country). German immigration contributed to making Pennsylvania the most populous and prosperous mainland colony by the 1750s.", "id": "fc23"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

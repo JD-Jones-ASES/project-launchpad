@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 3, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "First Continental Congress (1774)", "back": "Emergency meeting of delegates from twelve colonies (Georgia absent) called to coordinate resistance to the Coercive Acts. Drafted a Declaration of Rights, organized the Continental Association trade boycott, and agreed to reconvene if Britain did not relent — setting the institutional foundation for the Second Continental Congress.", "id": "fc01"}, {"front": "Second Continental Congress (1775–1781)", "back": "Became the de facto government of the revolutionary United States: raised the Continental Army, appointed Washington as commander, issued paper currency (Continentals), negotiated the French alliance (1778), and adopted the Declaration of Independence (1776) and Articles of Confederation (1777). Had no formal taxation power — a structural weakness fatal to war finances.", "id": "fc02"}, {"front": "Olive Branch Petition (July 1775)", "back": "A petition from the Second Continental Congress to King George III pleading for reconciliation while the Congress simultaneously raised an army. George III rejected it without reading it and declared the colonies in rebellion — closing the path to reconciliation and accelerating the push toward independence.", "id": "fc03"}, {"front": "Hessian Mercenaries", "back": "Approximately 30,000 German soldiers hired by George III to supplement British forces against the colonists. For many colonists, the use of mercenaries confirmed that the king was not a misguided father figure but an active military aggressor — making the language of loyalty increasingly difficult to sustain.", "id": "fc04"}, {"front": "Thomas Paine", "back": "English-born immigrant who arrived in America in 1774 and published Common Sense (January 1776). His outsider status — no inherited loyalty to the Crown — allowed him to attack monarchy with a directness that colonial-born writers hesitated to employ. Sold 100,000–500,000 copies in its first year in a population of roughly 2.5 million.", "id": "fc05"}, {"front": "Common Sense (January 1776)", "back": "Forty-seven-page pamphlet by Thomas Paine that transformed the debate for independence. Its strategic innovation: while previous colonial arguments targeted Parliament's specific acts, Paine attacked the monarchy itself and the institution of hereditary rule — closing off the option of reconciliation and making independence a positive vision, not merely a rejection of grievances.", "id": "fc06"}, {"front": "Paine's Attack on Monarchy", "back": "Paine argued that kings were an absurdity — government by birth was as irrational as choosing a physician because his father was one. He called the British constitution 'imperfect, subject to convulsions' and cast reconciliation as 'childish' — the clinging of a grown person to a parent who no longer deserved loyalty. This reframed independence as adult maturity, not rebellion.", "id": "fc07"}, {"front": "HAPP — Common Sense (1776): Historical Context", "back": "Written six months after Lexington and Concord and just before Congress took up independence; King George III had declared the colonies in rebellion (August 1775) and hired Hessian mercenaries. The reconciliation option was rapidly closing, creating an audience ready to hear the case for independence.", "id": "fc08"}, {"front": "HAPP — Common Sense (1776): Audience and Purpose", "back": "Audience: ordinary colonists — Paine deliberately wrote in plain English, avoiding Latin-laced legal rhetoric, to reach the broadest possible readership. Purpose: to recast reconciliation as childishness and independence as adult maturity; to shift the debate from parliamentary rights to the legitimacy of monarchy itself.", "id": "fc09"}, {"front": "HAPP — Common Sense (1776): Point of View", "back": "Paine was an English-born radical who arrived in America in 1774 — no inherited loyalty to the Crown. This allowed him to attack monarchy with a directness that colonial-born writers, raised to revere British institutions, hesitated to employ. His outsider perspective was a rhetorical asset.", "id": "fc10"}, {"front": "Popular Sovereignty", "back": "The principle that government derives its legitimate authority from the consent of the governed — the people are the ultimate source of political power. Central to both Common Sense and the Declaration of Independence; contrasted with hereditary rule (monarchy) and divine right. Later institutionalized in the Constitution's opening 'We the People.'", "id": "fc11"}, {"front": "Committee of Five", "back": "The committee appointed by Congress to draft a formal declaration of independence, including John Adams, Benjamin Franklin, and Thomas Jefferson. Jefferson did most of the writing over seventeen days, drawing on Locke's social-contract theory, colonial petition rhetoric, and his own drafting genius.", "id": "fc12"}, {"front": "Thomas Jefferson and the Declaration", "back": "Jefferson, a Virginia planter-lawyer, drafted the Declaration in seventeen days. He drew on Locke's social contract theory to establish the theoretical foundation (unalienable rights, consent of the governed, right to alter or abolish destructive government) and listed twenty-seven charges against George III to justify independence from Britain — targeting the king because allegiance to Britain ran through the Crown.", "id": "fc13"}, {"front": "Unalienable Rights", "back": "Rights held to be inherent to all persons and impossible to surrender or take away — 'life, liberty, and the pursuit of happiness' in the Declaration's formulation (adapting Locke's 'life, liberty, and property'). The Declaration's claim that these rights were 'self-evident' and 'endowed by their Creator' grounded American political theory in natural law rather than English common law alone.", "id": "fc14"}, {"front": "Social Contract Theory (Locke)", "back": "John Locke's argument (Second Treatise, 1689) that governments are created by consent to protect natural rights; when a government becomes destructive of those ends, the people retain the right to alter or abolish it. Jefferson incorporated this framework directly into the Declaration's preamble — making Locke the philosophical foundation of American independence.", "id": "fc15"}, {"front": "Declaration of Independence — Structure", "back": "Two-part structure: (1) Preamble: philosophical foundation — unalienable rights, consent of the governed, right to alter or abolish destructive government. (2) Indictment: twenty-seven specific charges against George III (not Parliament), establishing the factual basis for independence. The king was targeted because colonial allegiance to Britain ran through the Crown.", "id": "fc16"}, {"front": "The Declaration's 'Breathtaking Contradiction'", "back": "The Declaration proclaimed all men created equal while its most prominent signatories — including Jefferson — owned enslaved human beings. Jefferson's original draft condemned the slave trade; Congress struck it. This gap between rhetoric and reality became the central tension of the next two centuries — later exploited by abolitionists, suffragists, and Civil Rights leaders to demand fulfillment of the Declaration's promise.", "id": "fc17"}, {"front": "Richard Henry Lee's Resolution (June 1776)", "back": "Virginia delegate Richard Henry Lee introduced the resolution declaring the colonies 'free and independent states,' which prompted the appointment of the Committee of Five to draft a formal declaration. Lee's resolution provided the legal act; Jefferson's Declaration provided the philosophical justification.", "id": "fc18"}, {"front": "The Declaration's Universal Claim", "back": "The Declaration advanced a claim broader than colonial rights: that the rights it enumerated belonged not just to English colonists but to all people. This universality inspired revolutions in France, Haiti, and Latin America within a generation — and provided the language through which enslaved people, women, and later civil rights advocates demanded inclusion in the republic.", "id": "fc19"}, {"front": "Continental Currency (Continentals)", "back": "Paper money issued by the Second Continental Congress to finance the war. Because Congress lacked taxation power and depended on voluntary state contributions, the currency depreciated so rapidly that 'not worth a Continental' entered the language as a synonym for worthlessness — a warning of the fiscal dangers of a government without taxation authority.", "id": "fc20"}, {"front": "Compare/Contrast: Paine vs. Dickinson on Independence", "back": "John Dickinson (Letters from a Pennsylvania Farmer, 1767–68) argued against specific parliamentary taxes while remaining committed to reconciliation within the empire. Thomas Paine (Common Sense, 1776) argued that monarchy itself was illegitimate and reconciliation was impossible — representing the shift from reform to revolution.", "id": "fc21"}, {"front": "CED Theme: Culture and Society (CUL) — How did Common Sense use print culture?", "back": "Paine exploited colonial print culture — newspapers, pamphlets, coffeehouses — to reach an estimated 100,000–500,000 readers in a population of 2.5 million. He deliberately wrote in plain English rather than learned legal prose, democratizing the independence argument and making it accessible to artisans, farmers, and the literate public beyond the colonial elite.", "id": "fc22"}, {"front": "Continuity/Change: How did the target of colonial protest shift between 1765 and 1776?", "back": "From 1765 to 1773, colonial protest targeted Parliament's specific acts (Stamp Act, Townshend Acts, Tea Act). By 1776, Paine and the Declaration shifted the target to the king himself and the institution of hereditary monarchy. This shift from Parliament to Crown was essential to the logic of independence: allegiance to Britain ran through the Crown, not Parliament.", "id": "fc23"}, {"front": "Lexington and Concord (April 19, 1775)", "back": "Massachusetts militiamen exchanged fire with British regulars — 'the shot heard round the world.' Within weeks, colonial forces laid siege to Boston and the Second Continental Congress convened. The outbreak of violence preceded the formal intellectual case for independence by nearly a year — the war began before the arguing was finished.", "id": "fc24"}, {"front": "Why did Congress delete Jefferson's slave trade condemnation?", "back": "Southern states (particularly South Carolina and Georgia) would not support a declaration that condemned the slave trade — protection of slavery was more important to them than internal consistency with the Declaration's principles. The deletion was a political compromise that preserved Southern support for independence while embedding a fundamental contradiction in the founding document.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

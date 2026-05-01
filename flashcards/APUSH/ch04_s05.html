@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 4, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Immediatism", "back": "The demand for the immediate, unconditional abolition of slavery without compensation to slaveholders and without deportation of freed people. Introduced into the American antislavery movement by William Lloyd Garrison with the launch of The Liberator (January 1, 1831). Distinguished from earlier antislavery efforts (American Colonization Society's gradual emancipation and resettlement in Africa) by its refusal of all compromise, delay, or deportation. Most enslaved and free Black Americans had already rejected colonization as racist and impractical.", "id": "fc01"}, {"front": "William Lloyd Garrison", "back": "Massachusetts journalist who launched The Liberator on January 1, 1831, demanding immediate, unconditional abolition. Called the Constitution 'a covenant with death and an agreement with hell' because of its accommodations of slavery (Three-Fifths Compromise, Fugitive Slave Clause, protection of the international slave trade until 1808). Burned copies of the Constitution at public meetings; called for Northern secession. Co-founded the American Anti-Slavery Society (1833). Later broke with Douglass over the Constitution's antislavery potential.", "id": "fc02"}, {"front": "The Liberator", "back": "William Lloyd Garrison's antislavery newspaper, launched January 1, 1831. Opening statement: 'I will be as harsh as truth, and as uncompromising as justice... I will not equivocate — I will not excuse — I will not retreat a single inch — AND I WILL BE HEARD.' The paper's uncompromising immediatism represented a decisive break with earlier gradualist antislavery efforts and made Garrison the most visible and controversial white abolitionist of his generation.", "id": "fc03"}, {"front": "American Anti-Slavery Society (1833)", "back": "Founded by Garrison, Arthur and Lewis Tappan, and others. Within five years had more than 1,000 local chapters and over 100,000 members. Organized petition campaigns flooding Congress with antislavery petitions (until the House's gag rule, 1836); printed and distributed antislavery literature; sponsored lecture tours; worked to shift Northern public opinion. Its institutional success depended on organizational techniques pioneered by the temperance movement.", "id": "fc04"}, {"front": "Gag rule (1836–1844)", "back": "House of Representatives rule automatically tabling antislavery petitions without debate. Adopted in 1836; abolished in 1844 (through John Quincy Adams's persistent efforts). The gag rule backfired: it made antislavery a First Amendment issue that Northern voters who were indifferent to slavery's morality could nonetheless oppose on free speech and petition grounds. It expanded the antislavery coalition by converting a moral argument into a constitutional rights argument.", "id": "fc05"}, {"front": "Frederick Douglass (c. 1818–1895)", "back": "Born Frederick Bailey, enslaved on Maryland's Eastern Shore. Taught himself to read against his enslavers' prohibition — 'the first step toward freedom.' Escaped in 1838 disguised as a free Black sailor. Published Narrative of the Life of Frederick Douglass, an American Slave (1845) — an international bestseller. Founded The North Star in Rochester (1847). The most photographed American of the 19th century. Broke with Garrison over the Constitution's antislavery potential. Spoke for women's suffrage at Seneca Falls. Advised Lincoln during the Civil War.", "id": "fc06"}, {"front": "Narrative of the Life of Frederick Douglass (1845)", "back": "Douglass's autobiography, published 1845. An international bestseller and a foundational text of American literature. Demonstrated through specific, analyzed testimony that slavery was systematically degrading — not just to the enslaved but to the enslavers, their children, and society itself. After publication, Douglass's escape identity was exposed, requiring him to spend two years in Britain (where supporters purchased his legal freedom). The Narrative's combination of personal testimony and systematic moral analysis made it the abolitionist movement's most powerful single document.", "id": "fc07"}, {"front": "Sojourner Truth", "back": "Born Isabella Baumfree in New York; freed by the state's 1827 emancipation. Became a commanding presence on the antislavery and women's rights lecture circuit. Her 1851 'Ain't I a Woman?' speech challenged the ideology of female fragility that underpinned both the defense of slavery and the limits on women's rights: she had worked as hard, borne as much, and suffered as greatly as any man, yet was told she needed to be protected. Her argument exposed the cult of domesticity as applicable only to privileged white women.", "id": "fc08"}, {"front": "World Anti-Slavery Convention (London, 1840)", "back": "The convention that crystallized the connection between abolitionism and women's rights for Lucretia Mott and Elizabeth Cady Stanton. Both women traveled to London to attend, only to be barred from the convention floor because of their sex and forced to observe from a curtained gallery. The humiliation demonstrated to them that the arguments against slavery could be made, with equal force, for women's rights. Eight years later, they organized the Seneca Falls Convention (1848).", "id": "fc09"}, {"front": "Elizabeth Cady Stanton (1815–1902)", "back": "Born in Johnstown, New York; educated alongside her father's male law students. Recognized from childhood the legal disabilities of coverture: upon marriage, a woman's legal identity merged with her husband's, eliminating her right to own property, sign contracts, retain earnings, or maintain custody of her children. Co-organized the Seneca Falls Convention with Lucretia Mott; drafted the Declaration of Sentiments; insisted (over Mott's reservations) on including women's suffrage. Collaborated with Susan B. Anthony for 50 years in the suffrage movement. Died 18 years before the 19th Amendment (1920).", "id": "fc10"}, {"front": "Seneca Falls Convention (July 19–20, 1848)", "back": "The first women's rights convention in the United States, held at a Methodist chapel in Seneca Falls, New York. Organized by Stanton and Mott. Attended by roughly 300 people, about 40 of them men. The central document was Stanton's Declaration of Sentiments. The convention adopted 12 resolutions, 11 unanimously. The 12th — demanding women's suffrage — passed narrowly, with Frederick Douglass's crucial support, over Mott's objection that it was too radical to be politically viable.", "id": "fc11"}, {"front": "Declaration of Sentiments (1848)", "back": "The founding document of the American women's rights movement, drafted by Elizabeth Cady Stanton. A deliberate echo of Jefferson's Declaration of Independence: 'all men and women are created equal' replaced 'all men are created equal'; the list of colonial grievances against King George was replaced by a list of men's grievances against women — denial of the vote, exclusion from education and professions, legal subordination in marriage, and the double standard. The rhetorical strategy: use the founding document's logic to expose the republic's inconsistency.", "id": "fc12"}, {"front": "Lucretia Mott", "back": "Quaker minister and abolitionist; co-organizer of the Seneca Falls Convention with Stanton. She had organized the convention from the London Anti-Slavery Convention exclusion experience (1840). At Seneca Falls, she objected to including women's suffrage in the resolutions as too radical to be politically viable. Stanton prevailed with Douglass's support. Mott's caution about suffrage illustrated how even committed reformers could disagree about the pace and scope of radical demands.", "id": "fc13"}, {"front": "Coverture — legal context", "back": "The common-law doctrine by which a woman's legal identity merged with her husband's upon marriage, eliminating her independent legal standing: no right to own property, sign contracts, retain earnings, or maintain custody of her children. The Declaration of Sentiments listed coverture-based grievances as central to its indictment. Stanton had recognized the doctrine's implications from childhood, watching her father's law practice. Coverture was a central target of the women's rights movement for the next century.", "id": "fc14"}, {"front": "Two revolutions, one logic", "back": "The abolitionist and women's rights movements were not parallel but intersecting. Women became politically conscious through abolitionist organizing; abolitionists found in the women's movement a test of their universalist principles. Both used the Declaration of Independence as their founding text — Garrison against slavery's existence, Stanton against women's legal subordination. Both confronted the same fundamental contradiction: a republic founded on 'all men are created equal' had excluded most of humanity from the equality it proclaimed.", "id": "fc15"}, {"front": "American Colonization Society (1816) vs. immediatism", "back": "American Colonization Society: proposed gradually emancipating enslaved people and resettling them in Africa (colony of Liberia). Rejected by most enslaved and free Black Americans as racist (implying Black people could not be equal citizens) and impractical (mass deportation of millions). Garrison's immediatism rejected all three elements: rejected gradualism (demanded immediate action), rejected compensation to slaveholders (who had no right to be compensated), and rejected deportation (freed people belonged in America, the country they had built).", "id": "fc16"}, {"front": "The Grimké sisters (Angelina and Sarah)", "back": "White Southern women from a slaveholding family who became the abolitionist movement's most effective public advocates. Their credibility came from direct personal knowledge of slavery's operation from the inside. Angelina's Appeal to the Christian Women of the South (1836) addressed the women who ran Southern plantations. Their public lecturing was itself controversial — women speaking to 'promiscuous' (mixed-gender) audiences violated convention — turning their advocacy into an argument for women's right to speak publicly on political questions.", "id": "fc17"}, {"front": "SOC + POL Theme: Operating outside the formal political system", "back": "Both the abolitionist and women's rights movements operated outside the formal political system — women could not vote; Black Americans had limited or no ballot access. Both responded by building alternative political institutions: voluntary associations, lecture circuits, reform newspapers, petition campaigns. These alternative institutions could generate political pressure (the gag rule response) and shift public opinion. The movements illustrate how groups excluded from formal politics can create political power through civil society institutions.", "id": "fc18"}, {"front": "HAPP: Douglass's Narrative (1845)", "back": "Historical context: Published 7 years after Douglass's escape; the abolitionist movement was building but slavery was constitutionally entrenched. Audience: Northern white readers who might be persuaded; international readers (British edition). Author's purpose: Testify to slavery's systematic brutality; demonstrate Black intellectual capacity and humanity; counter pro-slavery arguments about enslaved people's contentment; expose how slavery degraded enslavers as well as the enslaved. Point of view: A formerly enslaved person analyzing the system from the inside with both emotional authority and analytical precision.", "id": "fc19"}, {"front": "Continuity/Change: How did the Seneca Falls Declaration change women's rights history?", "back": "Before 1848: Women's rights grievances existed but no organized national movement and no foundational document articulating a comprehensive program. After Seneca Falls: The Declaration of Sentiments became the movement's founding text, suffrage became a central demand, and the 1848 convention established a model for subsequent women's rights gatherings. The Declaration's explicitly political framing — using Jefferson's language against itself — set the terms for women's rights advocacy for the next 72 years until the 19th Amendment (1920).", "id": "fc20"}, {"front": "Douglass vs. Garrison on the Constitution", "back": "Garrison called the Constitution 'a covenant with death' — irremediably pro-slavery; required Northern secession. Douglass eventually broke with Garrison and argued the Constitution could be read as an antislavery document: its preamble ('to secure the blessings of liberty'), its due process guarantees, and its failure to name slavery explicitly gave it antislavery potential. The difference had practical implications: Garrison's view foreclosed political action within existing institutions; Douglass's view permitted working within the political system to end slavery.", "id": "fc21"}, {"front": "Comparison: Abolitionists vs. women's rights advocates — common strategies", "back": "Both movements used: (1) voluntary associations outside formal government; (2) lecture circuits featuring personal testimony (Douglass, Truth, Stanton); (3) reform newspapers (The Liberator, The North Star, Seneca Falls Declaration as pamphlet); (4) petition campaigns to legislatures (antislavery petitions → gag rule; women's rights petitions to state legislatures for property and contract reforms). Both movements were excluded from the formal political system and both responded by building alternative political institutions.", "id": "fc22"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

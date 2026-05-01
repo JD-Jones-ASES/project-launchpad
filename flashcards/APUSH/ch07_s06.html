@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Neutrality Acts (1935, 1936, 1937)", "back": "Congressional response to the Nye Committee's conclusion that WWI entry had been engineered by 'merchants of death' — munitions makers and bankers profiting from Allied contracts. Prohibited arms sales and loans to belligerent nations; forbade American travel on belligerent ships. The lesson: entanglement must be prevented by law, not presidential will. Progressively overridden by events 1939–41.", "id": "fc01"}, {"front": "Gerald Nye Committee (1934)", "back": "Senate committee that concluded American entry into WWI had been engineered by munitions makers and bankers ('merchants of death') who profited from Allied contracts. Its conclusions were partially accurate and deeply influential — providing the ideological basis for the Neutrality Acts and isolationist foreign policy of the 1930s.", "id": "fc02"}, {"front": "Destroyers for Bases Agreement (September 1940)", "back": "Executive agreement (bypassing Congress) transferring 50 aging American destroyers to Britain in exchange for naval base rights in the Western Hemisphere. Stretched the Neutrality Acts to their legal limit. Demonstrates Roosevelt's use of executive flexibility to assist Britain before formal Lend-Lease — and Congress's limits as a check on presidential foreign policy in crisis.", "id": "fc03"}, {"front": "Lend-Lease Act (March 1941)", "back": "Authorized the president to lend, lease, or transfer war materials to any nation whose defense he deemed vital to American defense. Abandoned the 'cash and carry' pretense of neutrality; made the United States the 'arsenal of democracy.' Provided ~$50 billion to Allied nations over the war (roughly $750 billion in 2020 dollars). By fall 1941, American destroyers were convoying Lend-Lease shipments and exchanging fire with German submarines — an undeclared naval war.", "id": "fc04"}, {"front": "Pearl Harbor (December 7, 1941)", "back": "'A date which will live in infamy.' Japan's surprise attack on the American naval base: 2,403 killed; 8 battleships, 3 cruisers, 3 destroyers damaged or destroyed; ~200 aircraft destroyed. Formally brought the U.S. into WWII. Key strategic note: American carriers were not in harbor — their survival was essential to Midway.", "id": "fc05"}, {"front": "American carriers not at Pearl Harbor", "back": "The Japanese attack at Pearl Harbor struck the battleship fleet but missed the aircraft carriers, which were at sea. This proved decisive: in WWII Pacific warfare, carriers replaced battleships as the decisive naval weapon. The survival of USS Enterprise, Lexington, and Saratoga made the American recovery at Midway possible six months later.", "id": "fc06"}, {"front": "Industrial mobilization — scale and speed", "back": "American industrial mobilization 1941–45 was without precedent. GNP rose from $1.1 trillion (1940) to $2.2 trillion (1944). Unemployment: 14.6% (1940) → 1.2% (1944). By 1944, U.S. was producing more military hardware than all Axis powers combined. Kaiser Shipyards reduced Liberty ship construction from 355 days to 42 days average (once: 4 days, 15 hours).", "id": "fc07"}, {"front": "War Production Board", "back": "Federal agency coordinating the conversion of civilian industry to military production. Automobile factories retooled to produce tanks, trucks, and aircraft. Exemplified the wartime federal government's capacity to direct industrial production toward military goals — a capacity that became the foundation of the permanent military-industrial complex.", "id": "fc08"}, {"front": "Battle of Midway (June 1942)", "back": "American naval and air forces, having broken Japanese naval codes, ambushed a Japanese carrier fleet and destroyed four fleet carriers — the core of Japanese naval air power. Ended Japanese offensive capability in the Pacific. The turning point of the Pacific War: from this point, Japan was strategically on the defensive.", "id": "fc09"}, {"front": "Island-hopping strategy", "back": "American Pacific strategy: bypass heavily defended Japanese island garrisons, seize strategically positioned islands from which bombers could reach Japan, and cut Japanese supply lines. Key battles: Guadalcanal (1942–43), Saipan (1944), Iwo Jima and Okinawa (1945). Extraordinarily bloody: Okinawa cost ~12,000 American dead and ~110,000 Japanese soldiers killed.", "id": "fc10"}, {"front": "Operation Torch (North Africa, November 1942)", "back": "First major American operation in the European theater; landed U.S. and British forces in Morocco and Algeria. Drove German-Italian forces from North Africa by May 1943. Proved American forces could operate in the European theater but also revealed significant tactical deficiencies (Battle of Kasserine Pass) that required training reforms before D-Day.", "id": "fc11"}, {"front": "Operation Overlord / D-Day (June 6, 1944)", "back": "The largest amphibious operation in military history: ~156,000 American, British, Canadian, and Allied troops landed on five beaches on the Normandy coast. Supreme commander: General Dwight D. Eisenhower. U.S. suffered ~6,600 casualties on June 6 alone; Omaha Beach saw the bloodiest fighting. Liberation of Paris: August 25. German surrender (V-E Day): May 8, 1945.", "id": "fc12"}, {"front": "General Dwight D. Eisenhower", "back": "Supreme Allied Commander in Europe; commanded Operation Overlord (D-Day). Later 34th President (1953–61), in which capacity he delivered the 1961 farewell address warning of the permanent military-industrial complex — the institutional legacy of the WWII mobilization he had commanded.", "id": "fc13"}, {"front": "V-E Day and V-J Day", "back": "V-E Day (Victory in Europe): May 8, 1945 — Germany surrendered. V-J Day (Victory over Japan): August 15, 1945 (announced) / September 2, 1945 (formal surrender aboard USS Missouri). The formal WWII endpoints; the Pacific surrender followed the atomic bombs on Hiroshima (August 6) and Nagasaki (August 9).", "id": "fc14"}, {"front": "Manhattan Project", "back": "Secret federal research and development program coordinating physicist J. Robert Oppenheimer at Los Alamos, New Mexico; also facilities at Oak Ridge (Tennessee) and Hanford (Washington). Employed 130,000 people; cost ~$2 billion. Initiated after Leo Szilard's warning (transmitted to Roosevelt by Einstein, 1939) that Germany might be developing a nuclear bomb. First test (Trinity): July 16, 1945, New Mexico.", "id": "fc15"}, {"front": "Hiroshima and Nagasaki", "back": "August 6, 1945: Enola Gay dropped 'Little Boy' (uranium bomb) on Hiroshima; ~70,000 killed instantly. August 9: 'Fat Man' (plutonium bomb) on Nagasaki; ~40,000 killed instantly. Tens of thousands more died from radiation. Japan announced surrender August 15. Context: military planners projected hundreds of thousands of American deaths and millions of Japanese dead from a land invasion.", "id": "fc16"}, {"front": "J. Robert Oppenheimer", "back": "Physics director of the Manhattan Project at Los Alamos. After the Trinity test, reportedly recalled the Hindu scripture: 'Now I am become Death, the destroyer of worlds.' His later opposition to hydrogen bomb development led to security clearance revocation during McCarthyism — his career connecting WWII mobilization to Cold War civil liberties.", "id": "fc17"}, {"front": "WWII full employment vs. New Deal partial recovery", "back": "Unemployment: 25% (1933) → 14.6% (1940, after 7 years of New Deal) → 1.2% (1944). WWII achieved what the New Deal could not: full employment through unprecedented deficit spending ($9.5B → $92.7B federal spending; income tax rates to 94% on highest incomes). Keynesian conclusion: New Deal was right in mechanism, insufficient in scale.", "id": "fc18"}, {"front": "Military-industrial complex — origins in WWII", "back": "WWII created an unprecedented federal capacity to direct industrial and scientific production toward military goals. After 1945, this capacity did not disappear — Cold War demand kept it institutionalized. Eisenhower's 1961 farewell address warned of the 'military-industrial complex,' the permanent intersection of military demand, corporate production, and federal contracting that WWII had created.", "id": "fc19"}, {"front": "WOR Theme: Arsenal of Democracy and global power", "back": "WWII established the United States as the world's dominant military-industrial power. The combination of geographic isolation (not bombed), industrial capacity (doubled GNP 1940–44), atomic monopoly (1945–49), and massive Allied material provision through Lend-Lease positioned the U.S. as the dominant postwar power — the WOR theme's most significant development of the century.", "id": "fc20"}, {"front": "Comparison: WWI mobilization vs. WWII mobilization", "back": "WWI: selective service drafted 3 million; mobilization was rapid but smaller. WWII: 16 million served; GNP doubled; $50 billion in Lend-Lease; Manhattan Project; $2.2 trillion GNP; War Production Board redirected entire civilian economy. WWII mobilization was qualitatively different — it achieved full employment, defeated two industrial powers simultaneously, and created the institutional framework for permanent military-industrial capacity.", "id": "fc21"}, {"front": "Battle of the Bulge (December 1944 – January 1945)", "back": "Germany's last major offensive in the West; initially broke through Allied lines in Belgium and Luxembourg; eventually repelled. Demonstrated the resilience of Allied forces and the exhaustion of German reserves. After the Bulge's defeat, the Allied drive to Germany accelerated to the Rhine and beyond, culminating in Germany's May 8, 1945 surrender.", "id": "fc22"}, {"front": "Okinawa — last major Pacific battle", "back": "Battle of Okinawa (April–June 1945): ~12,000 American dead, 36 ships sunk, ~110,000 Japanese soldiers and ~100,000 Okinawan civilians killed. The extraordinarily high casualty rates at Okinawa — particularly the large civilian deaths — directly informed the casualty projections for a land invasion of the Japanese home islands, providing the strategic context for the atomic bomb decision.", "id": "fc23"}, {"front": "Leo Szilard and Albert Einstein — Manhattan Project origins", "back": "Hungarian physicist Leo Szilard drafted the August 1939 letter (signed by Einstein) warning President Roosevelt that Germany might be developing a nuclear bomb and urging American research. Einstein's celebrity gave the letter access to Roosevelt. The letter initiated the chain that became the Manhattan Project — a rare instance of scientists shaping national security policy through direct presidential communication.", "id": "fc24"}, {"front": "HAPP: Mushroom cloud over Hiroshima photograph (1945)", "back": "Historical context: the Pacific War, land-invasion casualty projections, Japanese military resistance, Soviet entry into war against Japan. Audience: global — Allied and Axis populations, military commanders, political leaders. Purpose: documentary; became symbol of both destructive power of modern warfare and the moral burden of nuclear stewardship. Point of view: U.S. Army Air Forces photographer — institutional perspective; the image's meaning was subsequently contested between those who saw it as justified victory and those who saw it as atrocity.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Alfred Thayer Mahan", "back": "Naval strategist whose The Influence of Sea Power Upon History (1890) argued that national greatness required a powerful navy and overseas bases. His ideas directly shaped the expansionist agenda of the 1890s and influenced Theodore Roosevelt, Henry Cabot Lodge, and American naval buildup.", "id": "fc01"}, {"front": "Yellow Press", "back": "Sensationalist journalism of the 1890s associated with Pulitzer's New York World and Hearst's New York Journal. Used lurid headlines and emotionally charged stories to maximize circulation and inflamed public opinion against Spain, helping build pressure for the Spanish-American War. Represents mass media's power to shape foreign-policy decisions.", "id": "fc02"}, {"front": "Reconcentrado policy", "back": "Spanish General Weyler's tactic of herding Cuban civilians into fortified camps, where tens of thousands died of disease and starvation. Generated genuine humanitarian outrage in the United States in the 1890s and was used to justify American intervention — then later echoed by U.S. forces in the Philippines.", "id": "fc03"}, {"front": "USS Maine explosion (February 15, 1898)", "back": "The battleship USS Maine exploded in Havana Harbor, killing 266 American sailors. The Yellow Press blamed Spain; later investigation suggested an accidental internal explosion. Hearst's 'Remember the Maine!' campaign converted the explosion into a war cry, illustrating how media can drive foreign-policy decisions ahead of evidence.", "id": "fc04"}, {"front": "Treaty of Paris (1898)", "back": "Peace treaty ending the Spanish-American War. Spain ceded Puerto Rico, Guam, and the Philippines to the United States (for $20 million) and recognized Cuban independence. The formal instrument of American overseas empire, immediately generating debate about whether the Constitution 'followed the flag' into new territories.", "id": "fc05"}, {"front": "Platt Amendment (1901)", "back": "Amendment to the Cuban constitution, insisted on by the United States, that reserved the American right to intervene in Cuban affairs and established the naval base at Guantánamo Bay. Made Cuban 'independence' nominal — a protectorate in practice — and served as the template for the Roosevelt Corollary.", "id": "fc06"}, {"front": "Emilio Aguinaldo", "back": "Filipino nationalist leader who had fought against Spanish rule and initially welcomed American support. When the United States refused to grant Philippine independence and chose colonial governance instead, Aguinaldo led the armed resistance in the Philippine-American War (1899–1902).", "id": "fc07"}, {"front": "Philippine-American War (1899–1902)", "back": "The prolonged, brutal colonial war fought after the United States chose to govern the Philippines rather than grant independence. Approximately 200,000 Filipino civilians died from war-related disease and famine; 4,200 American soldiers were killed. American forces used reconcentrado-style tactics — directly contradicting the humanitarian justification for the Spanish-American War.", "id": "fc08"}, {"front": "Anti-Imperialist League", "back": "Coalition founded in 1898 opposing American overseas empire. Members included Grover Cleveland, Andrew Carnegie, Jane Addams, Samuel Gompers, and Mark Twain. Argued that governing colonial subjects without consent violated the Declaration of Independence's consent-of-the-governed principle.", "id": "fc09"}, {"front": "Mark Twain and The War Prayer", "back": "Twain became the Anti-Imperialist League's most prominent voice. His unpublished satire The War Prayer imagined a messenger from God revealing what a prayer for military victory truly meant — the death and suffering of the enemy's families. His editors refused to publish it during his lifetime, fearing public reaction.", "id": "fc10"}, {"front": "Open Door Notes (1899–1900)", "back": "Secretary of State John Hay's proposal that all major powers agree to equal commercial access to China's markets, with no power holding exclusive rights. Established a template for American foreign policy: commercial expansionism framed as opposition to exclusive privilege, American interest dressed in the language of universal principle. Largely unenforceable.", "id": "fc11"}, {"front": "Spheres of influence in China", "back": "The system by which European powers and Japan carved exclusive commercial and political zones within the weakened Qing dynasty's territory, threatening to exclude American traders. Hay's Open Door Notes were a direct response, proposing equal access as an alternative to exclusive territorial division.", "id": "fc12"}, {"front": "Theodore Roosevelt (1858–1919) — key facts", "back": "Ordered Dewey to engage Spain before war was declared; led Rough Riders at San Juan Hill; became president (1901–09); 44 antitrust suits; built Panama Canal; Nobel Peace Prize (1906); Roosevelt Corollary to Monroe Doctrine; National Forest system. Embodied the era's paradox: progressive reformer at home, imperialist abroad.", "id": "fc13"}, {"front": "Roosevelt Corollary (1904)", "back": "Roosevelt's addition to the Monroe Doctrine claiming the United States' right to intervene in Latin American nations that could not manage their own affairs. Extended the Platt Amendment model hemisphere-wide, asserting American policing authority over the Western Hemisphere — the doctrine that justified repeated U.S. interventions in the Caribbean and Central America.", "id": "fc14"}, {"front": "Battle of Manila Bay (May 1, 1898)", "back": "Commodore George Dewey destroyed the Spanish Pacific Fleet in Manila Bay without losing a single American sailor. Secured U.S. control of the Philippines even before the land campaign in Cuba was concluded. Dewey had been pre-positioned by Roosevelt as Assistant Secretary of the Navy before the war was officially declared.", "id": "fc15"}, {"front": "Rough Riders / San Juan Hill (July 1898)", "back": "Theodore Roosevelt's volunteer cavalry regiment that fought alongside regular Army troops up San Juan Hill in Cuba. Made Roosevelt a national war hero and launched his political career. The battle was part of the larger Santiago campaign that forced Spain to sue for peace.", "id": "fc16"}, {"front": "Does the Constitution 'follow the flag'?", "back": "The constitutional question triggered by the Treaty of Paris (1898): did Americans acquire in new territories the same constitutional rights as citizens on the mainland? The Insular Cases (1901) gave a muddled answer, distinguishing 'incorporated' territories (eventual statehood likely) from 'unincorporated' ones (constitutionally ambiguous). The question was never fully resolved.", "id": "fc17"}, {"front": "William Jennings Bryan's anti-imperialist argument", "back": "Three-time Democratic presidential candidate who argued that governing colonial subjects without their consent was a direct betrayal of the Declaration of Independence's foundational claim that just powers derive from the consent of the governed. Connected American imperial expansion to the foundational contradiction of the republic.", "id": "fc18"}, {"front": "Commodore George Dewey", "back": "American naval commander whose destruction of the Spanish Pacific Fleet at Manila Bay on May 1, 1898, opened the door to American acquisition of the Philippines. Dewey had been pre-positioned by Roosevelt (then Assistant Secretary of the Navy) in anticipation of war, demonstrating how war planners shaped events before official declarations.", "id": "fc19"}, {"front": "NAT Theme: What kind of nation debate", "back": "The Spanish-American War and its aftermath triggered a fundamental debate about American identity (NAT theme): Were Americans a republic that spread democracy or an empire that governed subject peoples? The imperialist answer (civilizing mission, national greatness) clashed directly with the anti-imperialist answer (consent of the governed, no colonial rule). That debate was never fully resolved.", "id": "fc20"}, {"front": "WOR Theme: American entry into the imperial club", "back": "By acquiring the Philippines, Puerto Rico, and Guam, the United States joined the European powers in formal imperial competition at precisely the moment when global empire-building was reshaping the international order. This transformed American foreign policy from continental to global, setting patterns that would persist through the twentieth century.", "id": "fc21"}, {"front": "John Hay", "back": "Secretary of State who called the Spanish-American War 'a splendid little war' and authored the Open Door Notes (1899–1900). The juxtaposition captures the era: the same man who celebrated the quick, cheap colonial war also designed the framework for informal commercial empire in Asia.", "id": "fc22"}, {"front": "Comparison: Reconcentrado in Cuba vs. Philippines", "back": "Spain's reconcentrado policy in Cuba (herding civilians into fortified camps) was cited as humanitarian justification for the Spanish-American War. American forces later used similar tactics in the Philippines against Aguinaldo's resistance. This continuity strips away the humanitarian framing and reveals imperial logic operating in both cases.", "id": "fc23"}, {"front": "442nd Regimental Combat Team (context for later sections)", "back": "Although the 442nd fought in WWII, its existence connects back to the imperial era's racial logic: Nisei soldiers whose families were interned served to prove loyalty to a nation that had imprisoned their parents. The regiment became the most decorated unit of its size in Army history — a contradiction rooted in the racial hierarchies established during the imperial era.", "id": "fc24"}, {"front": "Continuity/Change: Continental to overseas empire", "back": "Before 1898, American expansion was continental (Louisiana Purchase, Texas, California). After 1898, it became overseas (Philippines, Puerto Rico, Guam, Hawaii). This was not a break from expansionism but a transformation of its form — from settler-colonial land acquisition to naval-colonial overseas governance. The ideological justifications (civilizing mission, racial hierarchy) overlapped significantly.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

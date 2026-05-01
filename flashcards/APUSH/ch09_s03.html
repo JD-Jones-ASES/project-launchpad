@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 9, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Globalization (economic definition)", "back": "The accelerating integration of national economies into a single world market, enabled by falling tariff barriers, containerized shipping, and telecommunications. In the American context, globalization particularly refers to the movement of manufacturing production to lower-wage locations (Mexico, China, Southeast Asia), beginning in the 1970s and accelerating after NAFTA (1994) and China's WTO entry (2001). Benefits (lower prices, export markets) were broadly distributed; costs (manufacturing job loss, community devastation) were geographically concentrated.", "id": "fc01"}, {"front": "Digital Revolution — key origin story", "back": "January 1975: Altair 8800 personal computer kit on cover of Popular Electronics. Bill Gates and Paul Allen write an operating system → Microsoft. 1976: Steve Jobs and Steve Wozniak build the Apple I → Apple Computer. The PC revolution emerged from a specific American ecosystem combining research universities, venture capital, and a countercultural ethic of individual empowerment through technology — not from large corporations.", "id": "fc02"}, {"front": "ARPANET and the Internet", "back": "The Internet developed from ARPANET, a 1969 Defense Department research project. It became a civilian infrastructure and then, with Tim Berners-Lee's invention of the World Wide Web in 1991, a platform for commerce, communication, and culture. Netscape browser (1994) made the Web accessible to non-technical users. Amazon (1994), eBay (1995), Google (1998) defined new forms of commerce.", "id": "fc03"}, {"front": "Dot-Com Bubble (1995–2000)", "back": "Speculative frenzy around Internet companies in the late 1990s; Silicon Valley became the center of global investment imagination. The bubble collapsed March 2000, destroying an estimated $1.7 trillion in market capitalization. Key insight: the crash was severe, but it 'did not slow the underlying technological transformation' — separating speculative excess from durable technological change.", "id": "fc04"}, {"front": "Smartphone Era (2007–present)", "back": "Apple's iPhone (2007) inaugurated the smartphone era, compressing the PC and Internet into a pocket device that also served as camera, map, and social media portal. Social media platforms — Facebook (2004), Twitter (2006), YouTube (2005), Instagram (2010) — created new forms of public communication whose full political consequences were not yet understood at the time of their invention.", "id": "fc05"}, {"front": "Financialization", "back": "The structural shift in which the financial sector (banking, insurance, asset management, derivatives) grows in size and profitability relative to manufacturing. Between 1979 and 2010, the financial sector's share of corporate profits rose from ~16% to ~28%; manufacturing fell correspondingly. Accelerated by Reagan-era deregulation, shareholder-value ideology, and complex financial instruments. The 2008 financial crisis was a product of financialization's excesses.", "id": "fc06"}, {"front": "Deindustrialization", "back": "The sharp decline in American manufacturing employment: ~19.6 million jobs in 1979; ~11.5 million by 2010 — a loss of eight million in three decades. Caused by automation, offshoring (especially after China's WTO accession), and the strong dollar making imports cheap and exports expensive. Devastated steel, auto, and textile communities: unemployment, population loss, declining tax bases, opioid addiction, and 'deaths of despair.'", "id": "fc07"}, {"front": "Deaths of Despair", "back": "Term coined by economists Anne Case and Angus Deaton for mortality spikes in deindustrializing communities — deaths from opioid overdose, suicide, and alcohol-related disease. These 'deaths of despair' reflected the multi-dimensional consequences of economic community destruction beyond simple unemployment: loss of purpose, social networks, and community institutions. Concentrated geographically in former manufacturing regions.", "id": "fc08"}, {"front": "Productivity-Pay Gap", "back": "The divergence between rising worker productivity and stagnant wages for most workers in the bottom four-fifths of the income distribution, 1979–2010. Workers produced more but real wages barely grew; gains from productivity increases accrued disproportionately to capital owners and highly compensated executives. The gap is one of the defining economic facts of the late twentieth and early twenty-first centuries.", "id": "fc09"}, {"front": "Income Inequality Data (1980–2019)", "back": "Share of national income held by the top 1%: rose from ~10% (1980) to over 20% (2019). Share of total wealth held by the top 1%: rose from ~27% to over 35%. Median household income, adjusted for inflation, barely grew for most Americans below the top quintile between 1979 and 2010. The United States became dramatically richer in aggregate and dramatically more unequal in distribution.", "id": "fc10"}, {"front": "Subprime Mortgage Crisis (2007–08)", "back": "Trigger of the 2008 financial crisis: lenders issued millions of subprime mortgages (to borrowers with weak credit, often at adjustable rates) and packaged them into complex securities sold to investors worldwide. When housing prices fell from 2006 and defaults rose, the securities lost value rapidly. Institutions holding them became suddenly insolvent. The mechanism: securitization spread risk too widely to contain.", "id": "fc11"}, {"front": "Lehman Brothers Collapse (September 15, 2008)", "back": "A 158-year-old investment bank, Lehman filed for bankruptcy on September 15, 2008 — the largest in American history. The collapse froze credit markets and triggered the worst financial crisis since the Great Depression. The stock market lost over half its value. The economy shed 8.7 million jobs between December 2007 and June 2009. Lehman's collapse is the moment the 2008 crisis became fully systemic.", "id": "fc12"}, {"front": "TARP — Troubled Asset Relief Program (2008)", "back": "The Emergency Economic Stabilization Act (October 2008) created TARP — $700 billion to recapitalize major financial institutions. The federal response was 'the largest peacetime intervention in the American economy since the New Deal.' Critics from the left: no bankers prosecuted. Critics from the right: bailing out institutions that should have failed creates moral hazard.", "id": "fc13"}, {"front": "American Recovery and Reinvestment Act (2009)", "back": "The Obama administration's $787 billion fiscal stimulus (February 2009), combining tax cuts, infrastructure spending, aid to states, and extended unemployment benefits. Designed to arrest the recession and seed long-term economic recovery. Supporters credit it with preventing a second Great Depression; critics argued it was too small or too weighted toward temporary spending.", "id": "fc14"}, {"front": "Dodd-Frank Wall Street Reform Act (2010)", "back": "July 2010 legislation establishing the Consumer Financial Protection Bureau (CFPB), imposing new capital requirements on systemically important financial institutions, and creating mechanisms to monitor systemic risk. Critics from the left: no major banker prosecuted. Critics from the right: compliance costs burdened smaller banks and hindered recovery. Long-term regulatory response to the 2008 crisis.", "id": "fc15"}, {"front": "Tea Party Movement (2009–10)", "back": "Emerged in early 2009, organized around opposition to government spending, the TARP bailout, and the Obama health-care agenda. Local organizations pressured Republican officeholders and fielded candidates in the 2010 midterms — Republicans gained 63 House seats, their largest midterm gain since 1938. Combined fiscal conservatism and populist anti-establishment energy; accelerated GOP polarization toward its most conservative base.", "id": "fc16"}, {"front": "Occupy Wall Street (2011)", "back": "Began September 2011, Zuccotti Park, New York City. Slogan: 'We are the 99%' — framing inequality explicitly in terms of wealth concentration in the top 1%. Deliberately leaderless; refused to articulate specific policy demands — intellectually vibrant but organizationally fragile. Camps cleared by police by late 2011. Legacy: elevated income inequality from marginal to central subject of mainstream political discourse.", "id": "fc17"}, {"front": "Shareholder-Value Ideology", "back": "The management philosophy (dominant from the 1980s onward) that corporations' primary obligation is maximizing returns to shareholders, redirecting corporate profits toward dividends and stock buybacks rather than wages, worker benefits, and long-term investment. A driver of both financialization and the productivity-pay gap: executives were compensated with stock options, aligning their incentives with stock price rather than wage growth.", "id": "fc18"}, {"front": "China's WTO Accession (2001)", "back": "China's entry into the World Trade Organization in December 2001 granted it permanent normal trade relations with the United States. This significantly accelerated manufacturing offshoring: Chinese wages were far below American wages, and WTO membership reduced tariff barriers that had previously limited imports. Economists estimate China's WTO entry accounts for a significant share of American manufacturing job losses in the 2000s.", "id": "fc19"}, {"front": "WXT Theme: Two Revolutions, Unequal Consequences", "back": "The digital revolution and globalization illustrate a recurring American pattern: technological revolutions create enormous wealth but do not distribute it evenly. The CED WXT theme asks students to trace who captures the gains and who bears the costs. In this era: gains concentrated in the financial sector, tech companies, and high-skill workers; costs concentrated in manufacturing communities through deindustrialization and the productivity-pay gap.", "id": "fc20"}, {"front": "SOC Theme: Inequality and Life Outcomes", "back": "Widening wealth inequality produced structural social consequences: educational attainment increasingly tracks with income, which tracks with life expectancy, health outcomes, community stability, and political participation. Geographic sorting — wealthy Americans clustering in prosperous regions, working-class Americans in deindustrializing regions — reinforced economic inequality with spatial and social separation.", "id": "fc21"}, {"front": "Comparison: Gilded Age vs. Digital Era Inequality", "back": "Both eras: technological revolution producing Carnegie/Rockefeller (Gilded Age) and Amazon/Apple (digital era) alongside social devastation — Haymarket and Homestead (Gilded Age), deaths of despair and opioid crisis (digital era). Both eras: political mobilization around distributional grievances — Progressive Movement (Gilded Age), Tea Party/Occupy/2016 elections (digital era). The recurring pattern: who captures technological gains and who bears costs is a political choice, not an economic inevitability.", "id": "fc22"}, {"front": "Consumer Financial Protection Bureau (CFPB)", "back": "Created by the Dodd-Frank Act (2010), the CFPB is an independent federal agency with authority to regulate consumer financial products and services — mortgages, credit cards, student loans. It was a direct institutional response to the predatory lending that contributed to the 2008 crisis. Its existence and powers have been contested by Republicans who argue it lacks sufficient congressional oversight.", "id": "fc23"}, {"front": "What is the 'World Wide Web' and how did it differ from the Internet?", "back": "The Internet is the physical network of interconnected computers (developed from ARPANET, 1969). The World Wide Web is the software layer — the system of linked documents and resources accessible through browsers — invented by Tim Berners-Lee in 1991. The Web made the Internet usable by non-technical users and enabled e-commerce, social media, and the digital economy. The Internet is the infrastructure; the Web is the interface.", "id": "fc24"}, {"front": "Mortgage-Backed Securities and Credit Default Swaps", "back": "Key financial instruments of the financialization era. Mortgage-backed securities (MBS) bundled individual mortgages into tradable investment products, distributing mortgage risk throughout the global financial system. Credit default swaps (CDS) were insurance-like instruments betting on whether borrowers would default. Both obscured the accumulation of subprime risk until housing prices fell, when the complex chains of exposure suddenly collapsed.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

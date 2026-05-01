@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 4, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Andrew Jackson (1767–1845)", "back": "Seventh president (1829–37). Born in the Carolina backcountry; orphaned by the Revolutionary War; self-made lawyer turned wealthy planter and slaveholder (up to 150 enslaved people at the Hermitage). Military hero (Battle of New Orleans, 1815). As president: expanded executive power, destroyed the Second Bank of the United States, confronted South Carolina over nullification, and oversaw the ethnic cleansing of the Cherokee, Choctaw, Chickasaw, Creek, and Seminole nations. His legacy encapsulates the paradox of Jacksonian democracy.", "id": "fc01"}, {"front": "The Paradox of Jacksonian Democracy", "back": "Jacksonian democracy was simultaneously the most extensive expansion of white male political rights in American history and the era of Indian removal, slave-labor entrenchment, and women's legal subordination. Universal white male suffrage was achieved precisely as indigenous peoples were dispossessed, enslaved people's bondage deepened, and women remained subject to coverture. The 'common man' whose sovereignty Jacksonian rhetoric celebrated was explicitly white. Indian removal was not an aberration — it was a constitutive act of Jacksonian political economy.", "id": "fc02"}, {"front": "Universal white male suffrage", "back": "By 1840, nearly all states had abolished property and taxpaying qualifications for white male voting — qualifications that had existed in most states in 1800. Voter participation in presidential elections rose from roughly 27% in 1824 to over 80% of eligible voters (white males) by 1840. The United States became the most formally democratic polity for white men in the world. But this democratization excluded women, Black Americans in most states, and was financed by the dispossession of indigenous peoples.", "id": "fc03"}, {"front": "Spoils system (rotation in office)", "back": "The practice of distributing government appointments to party loyalists after an election, based on party loyalty rather than merit. Named after Senator Marcy's 1832 phrase: 'to the victor belong the spoils.' Jackson defended it as democratic and anti-elitist — rotating offices prevented an entrenched bureaucratic class. Critics (Henry Clay, Daniel Webster) argued it corrupted government by rewarding loyalty over competence. The Pendleton Act (1883) eventually replaced most spoils appointments with merit-based civil service examinations.", "id": "fc04"}, {"front": "Bank War (1832–36)", "back": "Jackson's campaign against the Second Bank of the United States (chartered 1816). Jackson regarded the Bank as a 'monster institution' concentrating power in Eastern financial elites and foreign shareholders. When Congress rechartered the Bank early in 1832 (a political maneuver by Henry Clay), Jackson vetoed the bill in a populist manifesto framing the issue as class war. He then withdrew federal deposits and distributed them among state 'pet banks,' destroying the institution. Consequence: the speculative land boom of the mid-1830s and the Panic of 1837.", "id": "fc05"}, {"front": "Jackson's Bank Veto Message (1832) — HAPP", "back": "Historical context: Clay orchestrated the early recharter as an election-year issue to damage Jackson; Jackson used the veto to appeal to agrarian and working-class voters. Audience: ostensibly Congress; practically the American electorate. Author's purpose: defeat the recharter, mobilize populist opposition to financial elites, frame the election as common men vs. money power. Point of view: Jackson as champion of ordinary farmers, debtors, and the South/West against Eastern and foreign financial power — a populist rather than constitutional argument.", "id": "fc06"}, {"front": "Nullification Crisis (1832–33)", "back": "South Carolina passed an Ordinance of Nullification declaring the federal tariffs of 1828 and 1832 void within state borders, based on Calhoun's nullification doctrine. Jackson, despite his general states'-rights sympathies, called nullification treason, issued a Proclamation to the People of South Carolina, requested a Force Act from Congress, and privately threatened to hang Calhoun. A compromise tariff by Henry Clay defused the crisis. The underlying argument — that states could unilaterally nullify federal law — resurfaced as secession in 1861.", "id": "fc07"}, {"front": "Nullification doctrine", "back": "The constitutional argument, developed principally by John C. Calhoun of South Carolina, that individual states possess the sovereign authority to declare a federal law unconstitutional and refuse to enforce it within their borders. First articulated in the Virginia and Kentucky Resolutions (1798, authored by Jefferson and Madison). Applied to the tariff in South Carolina's Ordinance of Nullification (1832). Jackson rejected it as treason. The Civil War definitively settled the question: states cannot nullify federal law or secede.", "id": "fc08"}, {"front": "John C. Calhoun", "back": "Vice president under both Adams and Jackson (rare); senator from South Carolina. The leading intellectual architect of the nullification doctrine — the argument that states retain sovereign authority to void federal laws they deem unconstitutional. Broke with Jackson over the tariff and nullification. Represented the Southern states'-rights position that would eventually justify secession. Jackson privately threatened to hang him during the Nullification Crisis.", "id": "fc09"}, {"front": "Five Civilized Tribes", "back": "The Cherokee, Choctaw, Chickasaw, Creek, and Seminole nations of the southeastern United States. Called 'civilized' by Americans because they had adopted many European American cultural practices. The Cherokee in particular had developed Sequoyah's syllabary (1821), a constitutional government, English-language schools, and a newspaper (The Cherokee Phoenix). Despite these accommodations, their lands were coveted for cotton cultivation, and all five nations were targeted for removal under the Indian Removal Act (1830).", "id": "fc10"}, {"front": "Sequoyah and the Cherokee syllabary", "back": "Sequoyah created the Cherokee syllabary in 1821 — a writing system representing the Cherokee language — without knowing how to read or write English. Within years, the majority of Cherokee were literate in their own language. The syllabary enabled the Cherokee Phoenix newspaper and a literate civic culture. The Cherokee's cultural and political development demonstrated that accommodation to American society offered no protection against dispossession when white settlers wanted their land.", "id": "fc11"}, {"front": "Worcester v. Georgia (1832)", "back": "Supreme Court case in which Chief Justice Marshall ruled that the Cherokee Nation was a 'domestic dependent nation' with treaty rights that Georgia could not abrogate, and that federal authority — not state authority — governed relations with indigenous nations. Jackson refused to enforce the ruling. Whether or not he said 'John Marshall has made his decision; now let him enforce it,' his administration's conduct was consistent with the sentiment. Illustrated the judiciary's limit: courts establish principles but cannot enforce them without executive cooperation.", "id": "fc12"}, {"front": "Indian Removal Act (1830)", "back": "Congressional legislation authorizing the president to negotiate removal treaties exchanging eastern tribal lands for territory west of the Mississippi River. Technically called for voluntary treaties and compensation. In practice: accomplished through fraudulent treaties (signed by unauthorized minority factions), military coercion, and political pressure that left indigenous nations no viable alternative. The distinction between 'voluntary' and 'forced' removal was legally meaningful but practically meaningless.", "id": "fc13"}, {"front": "Trail of Tears (Nunna daul Tsuny, 1838–39)", "back": "The forced march of approximately 16,000 Cherokee from their Georgia, Alabama, and Tennessee homelands to present-day Oklahoma under U.S. Army escort. The Cherokee name means 'the trail where they cried.' Approximately 4,000 died of exposure, disease, and starvation, primarily the elderly and the very young. Other tribes suffered comparable mortality during their own removals. The Seminole fought a seven-year war (1835–42) against removal; some were never removed. The Trail of Tears is now recognized as an act of ethnic cleansing.", "id": "fc14"}, {"front": "The Seminole Wars", "back": "The Second Seminole War (1835–42) was the most prolonged and costly military conflict of the Indian removal era. The Seminole, led by leaders including Osceola, resisted removal for seven years in the Florida swamps. The war cost the U.S. government millions of dollars and resulted in hundreds of American military deaths. Some Seminole were never removed and remained in Florida. Their resistance illustrated that removal was not universal and that its execution required sustained military force.", "id": "fc15"}, {"front": "Martin Van Buren and the Albany Regency", "back": "Jackson's key political organizer and the architect of the Democratic Party's organizational machinery. Van Buren and the 'Albany Regency' (his New York political machine) pioneered techniques of party organization, voter mobilization, and the spoils system that became the model of 19th-century American machine politics. Van Buren succeeded Jackson as president (1837) and faced the Panic of 1837 — partly caused by the very bank policies he had helped engineer.", "id": "fc16"}, {"front": "Henry Clay and the Whig Party", "back": "Jackson's leading political opponent. Clay orchestrated the Bank recharter bill in 1832 as an election-year issue and was defeated by Jackson. He arranged the compromise tariff that defused the Nullification Crisis (1833). Clay's 'American System' (protective tariff, national bank, internal improvements) represented a positive Hamiltonian program for federal economic development that contrasted sharply with Jackson's Jeffersonian agrarian rhetoric. The Whig Party formed in opposition to 'King Andrew' Jackson's perceived executive overreach.", "id": "fc17"}, {"front": "Whig Party", "back": "The political party that formed in opposition to Andrew Jackson (nicknamed 'King Andrew' by critics who compared his use of executive power to monarchy). Led by Henry Clay and Daniel Webster. The Whig platform favored the national bank, protective tariffs, and federal internal improvements — the 'American System.' Opposed the spoils system as corrupt. Elected presidents William Henry Harrison (1840) and Zachary Taylor (1848). The party dissolved in the 1850s over the slavery question.", "id": "fc18"}, {"front": "Continuity/Change: How did Jacksonian democracy change American politics?", "back": "Before 1828: elections were elite affairs with limited voter participation (27% in 1824), organized around personal networks rather than party machinery. By 1840: mass democracy — 80%+ turnout among white male eligible voters, organized political parties with national machinery, the spoils system, and mass media campaigns (log cabin campaigns). The Democratic Party pioneered techniques of voter mobilization that defined 19th-century American politics. The change was real for white men; the continuity was the exclusion of all others.", "id": "fc19"}, {"front": "Comparison: Nullification Crisis vs. Indian Removal", "back": "Both tested the boundaries of federal power in Jackson's presidency. In the Nullification Crisis: Jackson invoked federal supremacy, threatened military force, and called nullification treason — defending the Union against state defiance. In Indian removal: Jackson refused to enforce the Supreme Court's federal ruling (Worcester v. Georgia), allowing Georgia's state laws to stand over Cherokee treaty rights. The difference reveals Jackson's priorities: the Union's integrity mattered; Cherokee treaty rights did not — when Southern white political support was at stake.", "id": "fc20"}, {"front": "Panic of 1837", "back": "The worst economic depression the United States had yet experienced, following the speculative land boom of the mid-1830s. Partly caused by Jackson's destruction of the Second Bank of the United States and the subsequent inflation and speculation enabled by state 'pet banks.' Van Buren inherited the crisis as president. The Panic illustrated the unintended consequences of the Bank War: removing a centralizing financial institution contributed to economic instability, not the agrarian prosperity Jackson had promised.", "id": "fc21"}, {"front": "Tariff of Abominations (1828)", "back": "A high protective tariff that Southerners called the 'Tariff of Abominations' because it benefited Northern manufacturers while raising the cost of goods for Southern consumers who depended on imported manufactured products. It triggered South Carolina's Ordinance of Nullification (1832). The tariff debate illustrated the regional economic antagonisms produced by the market revolution: Northern manufacturing interests sought protection; Southern planters, dependent on exports and imports, sought free trade.", "id": "fc22"}, {"front": "POL Theme: The limits of popular sovereignty", "back": "Jacksonian democracy expanded popular sovereignty for white men while simultaneously limiting it for others. The expansion of white male suffrage (POL) was politically inseparable from Indian removal (which opened land for white settlement) and the entrenchment of slavery (which organized Southern political economy). 'The people' in Jacksonian rhetoric was a racial construct. Political participation's expansion and racial/gendered exclusion were not contradictory — they were mutually constitutive features of the same political order.", "id": "fc23"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

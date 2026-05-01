@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 8, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "McCarthyism", "back": "The practice of making sweeping, often unsubstantiated accusations of communist subversion, associated with Senator Joseph McCarthy (R-WI) and the political climate of the early 1950s. Its methods included guilt by association, innuendo, and refusal to allow accused individuals to confront their accusers. McCarthy was censured by the Senate in December 1954 and died in 1957, but the blacklists and loyalty requirements he helped institutionalize outlasted him.", "id": "fc01"}, {"front": "Second Red Scare", "back": "The post-World War II wave of anti-communist anxiety in the United States (late 1940s–mid 1950s), driven by a series of real shocks: the Soviet atomic bomb (1949), the fall of China to Mao (1949), the Alger Hiss conviction (1950), and the Rosenberg executions (1953). It created fertile ground for McCarthyism's accusations and loyalty investigations.", "id": "fc02"}, {"front": "HUAC (House Un-American Activities Committee)", "back": "Established in 1938, HUAC became the instrument of the Second Red Scare. Its 1947 investigation of the Hollywood film industry led to the Hollywood Ten's imprisonment for contempt of Congress and a studio blacklist that barred hundreds of writers, directors, and performers. Its methods — guilt by association, demands for naming names — defined McCarthyism's approach.", "id": "fc03"}, {"front": "Hollywood Ten", "back": "Ten Hollywood screenwriters and directors (including Dalton Trumbo and John Howard Lawson) who in 1947 refused to answer HUAC's questions about Communist Party membership, citing First Amendment protections. Convicted of contempt of Congress and imprisoned; the studios responded with a blacklist that eventually barred hundreds from employment.", "id": "fc04"}, {"front": "Alger Hiss Case (1950)", "back": "Alger Hiss, a senior State Department official, was convicted of perjury in 1950 for denying he had passed classified documents to Soviet agents. The case — and HUAC's role in uncovering it — seemed to validate McCarthyism's warnings about communist infiltration of the government, though subsequent historians debate the extent of Soviet penetration.", "id": "fc05"}, {"front": "Julius and Ethel Rosenberg (1953)", "back": "Convicted of conspiracy to commit espionage for passing atomic bomb secrets to the Soviet Union; executed in June 1953. The case intensified Cold War anxiety and provided apparent confirmation that Soviet espionage was a genuine threat — the real kernel of truth within which McCarthyism's distortions operated.", "id": "fc06"}, {"front": "Army-McCarthy Hearings (1954)", "back": "Nationally televised Senate hearings into McCarthy's charges that the US Army was riddled with communist sympathizers. Attorney Joseph Welch's quiet rebuke — 'Have you no sense of decency, sir, at long last?' — crystallized public revulsion at McCarthy's bullying. Approximately 20 million viewers watched; the Senate voted to censure McCarthy in December 1954.", "id": "fc07"}, {"front": "GI Bill (Servicemen's Readjustment Act of 1944)", "back": "Federal legislation providing returning WWII veterans with low-interest home loans, college tuition subsidies, and unemployment insurance. Transformed American society: nearly 8 million veterans used the education benefit by 1956; subsidized mortgages fueled massive suburbanization. However, discriminatory implementation largely excluded Black veterans, deepening the racial wealth gap.", "id": "fc08"}, {"front": "Levittown", "back": "A planned suburban community built by developer William Levitt using assembly-line construction methods — 17,000 identical houses on Long Island, New York (and later Pennsylvania). It industrialized homebuilding and made homeownership available to working-class white families. Levittown's leases initially prohibited sale or rental to non-white residents, making it a symbol of racially exclusive suburban prosperity.", "id": "fc09"}, {"front": "Redlining", "back": "The systematic denial of mortgages and insurance to residents of predominantly Black neighborhoods, formalized by federal Home Owners' Loan Corporation (HOLC) maps that color-coded neighborhoods as 'declining' investment risks. Combined with GI Bill mortgage subsidies for white veterans, redlining trapped African Americans in urban rental housing while subsidizing white suburban homeownership — a structural mechanism of wealth inequality.", "id": "fc10"}, {"front": "The Affluent Society (1958)", "back": "Economist John Kenneth Galbraith's book identifying the central paradox of 1950s American prosperity: Americans had mastered the production of private consumer goods while systematically neglecting public goods — schools, parks, mass transit, urban infrastructure. Galbraith's critique anticipated the reform arguments of the Great Society era.", "id": "fc11"}, {"front": "Baby Boom (1946–1964)", "back": "The surge in births following World War II, peaking in 1957 at over four million births in a single year. The baby boom drove consumer demand for housing, schools, pediatric care, toys, and eventually colleges. It created the large cohort of young Americans who would become the college-age population of the 1960s — the generation that led the counterculture and antiwar movements.", "id": "fc12"}, {"front": "Television (1950s impact)", "back": "Television spread with unprecedented speed: fewer than 200,000 households had sets in 1948; by 1960, 90% did. Its political significance: Eisenhower's 1952 campaign was the first to use TV advertising; the Army-McCarthy hearings showed television could expose character, not just report events; the civil rights movement would later use it to broadcast Southern brutality into Northern living rooms.", "id": "fc13"}, {"front": "Federal-Aid Highway Act (1956)", "back": "Legislation authorizing a $25 billion interstate highway system — the largest public works project in American history to that point. Built 41,000 miles of limited-access freeway connecting suburbs and cities. It accelerated suburbanization and automobile culture but also displaced communities — disproportionately African American and immigrant neighborhoods — that stood in the path of new routes.", "id": "fc14"}, {"front": "Beat Generation", "back": "A small but culturally significant group of writers (Jack Kerouac, Allen Ginsberg, William Burroughs) who rejected postwar suburban conformity, gathering in Greenwich Village and San Francisco. Their work anticipated the counterculture, campus antiwar movement, and youth rebellion against consumer culture that exploded in the following decade. The Beats were critics, not mass organizers.", "id": "fc15"}, {"front": "Feminine Mystique (Friedan, 1963)", "back": "Betty Friedan's 1963 book naming the 'problem that has no name' — the frustration of educated women confined to domestic roles in postwar suburbia. It crystallized second-wave feminism politically. HAPP note: Friedan's audience was educated, white, middle-class women — a limitation her critics (notably bell hooks) identified as excluding working-class women and women of color who never had the luxury of choosing domesticity.", "id": "fc16"}, {"front": "ARC Theme: How Neutral Architecture Produces Unequal Outcomes", "back": "The GI Bill's race-neutral language filtered through local discriminatory institutions (banks, universities, local housing administrators) produced racialized outcomes: white families gained homeownership wealth through appreciated equity; Black families were trapped in rental housing. By the 1970s, the racial wealth gap was in large part a product of 1940s housing policy — institutional racism without explicitly racist statute.", "id": "fc17"}, {"front": "SOC Theme: 1950s Conformity as Seedbed of 1960s Protest", "back": "The 1950s enforced conformism through McCarthyite loyalty requirements, suburban monoculture, television's sanitized normalcy, and the relegation of women to domesticity. Each of these pressures produced the social protest of the following decade: civil rights, feminism, counterculture, and campus antiwar movements all drew energy from the dissonance between America's democratic self-image and its undemocratic practice.", "id": "fc18"}, {"front": "POL Theme: McCarthyism and Political Suppression", "back": "McCarthyism suppressed political dissent not primarily through formal law but through the social and economic costs of accusation: blacklists, loyalty oaths, career destruction, public shaming. It illustrates how democratic governments can chill political speech without formal censorship — a pattern relevant to understanding the limits of constitutional protections in times of national anxiety.", "id": "fc19"}, {"front": "The 1950s Consensus vs. Dissenting View", "back": "Standard view: rising living standards, stable families, Cold War unity, GI Bill democratizing opportunity. Dissenting view: suffocating conformism — women pushed from wartime work into domesticity; African Americans under legal apartheid; homosexuality criminalized; loyalty oaths suppressing dissent; prosperity real but distributed unequally and excluded by design from Black and Brown Americans. The gap between these views explains the 1960s upheaval.", "id": "fc20"}, {"front": "Cold War Anxiety and Postwar Prosperity — Connection", "back": "The 1950s combined unprecedented material abundance (for white middle-class Americans) and pervasive psychological anxiety (Soviet bomb, espionage, nuclear annihilation). McCarthyism was not an aberration from the 1950s mainstream — it was the dark underside of the same ideological consensus that made Levittown and the baby boom possible. Both reflected the Cold War atmosphere that demanded conformity.", "id": "fc21"}, {"front": "Racial Wealth Gap: Historical Roots", "back": "By the 1970s, the racial wealth gap was in large part a product of 1940s–50s housing policy: GI Bill mortgage subsidies went overwhelmingly to white veterans; redlining denied mortgages to Black applicants; suburban appreciation built wealth for white families while Black families remained renters. This wealth gap — not merely income — persisted across generations as home equity was transferred through inheritance.", "id": "fc22"}, {"front": "Comparison: McCarthyism and the First Red Scare (1919–20)", "back": "Both red scares exploited post-war anxieties, targeted political dissidents, and resulted in civil liberties violations. The First Red Scare (1919–20, Palmer Raids) followed WWI and the Russian Revolution; McCarthyism followed WWII and the Soviet bomb. Both illustrated how wartime and Cold War anxieties could override constitutional protections — and both receded once the specific anxieties that generated them subsided.", "id": "fc23"}, {"front": "Senator Joseph McCarthy's Senate Censure (December 1954)", "back": "The Senate voted to censure McCarthy after the Army-McCarthy hearings exposed his methods to a national television audience. The censure did not repudiate the broader anti-communist movement but ended McCarthy's personal influence. The blacklists and loyalty oaths he helped institutionalize outlasted him — indicating that McCarthyism as a system was not dependent on McCarthy as an individual.", "id": "fc24"}, {"front": "AP Causation: Why Did the Affluent Society Produce the Protest Movements of the 1960s?", "back": "Rising expectations: postwar prosperity raised hopes that the GI Bill's democratization of education and homeownership would extend to all Americans. When it demonstrably did not — when the gap between democratic promise and Jim Crow reality became glaring — the conditions for protest were set. The 1960s movements were not protests against poverty but against the failure to fulfill the promise of postwar abundance.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

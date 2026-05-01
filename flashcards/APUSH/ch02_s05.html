@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 2, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Mercantilism", "back": "Not a unified economic theory but a set of widely shared assumptions about national wealth and imperial competition. Core premise: wealth is finite and zero-sum — what England gains, France or Spain loses. Colonies exist to enrich the mother country: supplying raw materials she cannot produce, providing captive markets for manufactured goods, and generating customs revenue. This logic directly justified the Navigation Acts' exclusionary regulation of colonial trade.", "id": "fc01"}, {"front": "Navigation Acts", "back": "A series of English (later British) parliamentary statutes beginning in 1651, elaborated in 1660, 1663, and beyond. Core provisions: (1) enumerated colonial goods (tobacco, sugar, rice, indigo, naval stores) could only be sold to England or other English colonies; (2) all colonial trade must be carried in English or colonial ships; (3) European goods could reach the colonies only through English middlemen. Benefited English merchants; imposed costs on colonial producers. Enforcement was lax (salutary neglect) before 1763.", "id": "fc02"}, {"front": "Enumerated Goods", "back": "Colonial commodities listed in the Navigation Acts that could only be exported to England or other English colonies: tobacco, sugar, rice, indigo, naval stores (tar, pitch, masts). Enumeration prevented colonial planters from selling to higher-paying European buyers, directing profits to English merchants. The list was a direct expression of mercantilist logic — capturing the most valuable colonial exports for the mother country's benefit.", "id": "fc03"}, {"front": "Triangular Trade (Imperial Context)", "back": "The Atlantic commercial circuit linking England, West Africa, and the Americas. Classic form: manufactured goods (textiles, firearms, iron) → West Africa → enslaved captives (Middle Passage) → Americas → colonial commodities (sugar, tobacco, rice, rum) → England. New England variant: rum → West Africa → enslaved people to Caribbean → molasses → New England — deliberately cutting out English middlemen and technically violating the Molasses Act of 1733. The trade's complexity defied the Navigation Acts' geometric simplicity.", "id": "fc04"}, {"front": "Molasses Act (1733)", "back": "A British parliamentary statute imposing duties on molasses, rum, and sugar imported to the colonies from non-British Caribbean islands, designed to redirect colonial molasses trade from the cheaper French Caribbean to the more expensive British Caribbean. Largely unenforced under salutary neglect — New England merchants continued buying cheaper French molasses and running their own triangular trade with impunity. Its replacement (the Sugar Act, 1764) with actual enforcement was a major colonial grievance.", "id": "fc05"}, {"front": "Salutary Neglect", "back": "The informal British policy — most associated with Prime Minister Robert Walpole's ministry (1721–42) — of allowing American colonies wide latitude in self-governance and commercial affairs while avoiding strict enforcement of imperial regulations. 'Salutary' because it avoided costly confrontations with colonial assemblies. Its unintended consequence: colonial assemblies accumulated experience, precedent, and expectation of legislative autonomy, making Parliament's post-1763 reassertion of authority feel like an arbitrary usurpation rather than a legitimate restoration of imperial prerogative.", "id": "fc06"}, {"front": "Robert Walpole (Prime Minister, 1721–42)", "back": "The British prime minister most associated with the policy of salutary neglect. Walpole's ministry prioritized domestic stability and commercial growth over strict enforcement of colonial regulations. His practical approach — 'let sleeping dogs lie' — gave colonial assemblies two decades of uncontested legislative practice. This period of neglect became the foundation of colonial expectations of autonomy that would make post-1763 parliamentary assertion so explosive.", "id": "fc07"}, {"front": "Colonial Assemblies (accumulated power)", "back": "By the 1750s, the Virginia House of Burgesses, Massachusetts General Court, and Pennsylvania Assembly had been exercising effective legislative authority for decades under salutary neglect. They controlled governors' salaries (financial leverage), passed their own tax laws, and understood themselves as local equivalents of Parliament. When Parliament challenged their authority after 1763, it confronted not passive subjects but politically experienced legislators with their own deeply held theory of constitutional rights.", "id": "fc08"}, {"front": "First Great Awakening", "back": "A wave of dramatic religious revivals sweeping the mainland colonies in the early 1740s, though building since the 1730s. Key figures: Jonathan Edwards (Northampton, Connecticut/Massachusetts) preaching intense Calvinist theology; George Whitefield (itinerant English minister) drawing crowds of thousands to outdoor meetings. Distinguished established clergy (Old Lights) from revivalists (New Lights). Founded new colleges (Princeton, Brown, Dartmouth, Rutgers). The first mass communications event in American history — Whitefield reached audiences across all thirteen colonies.", "id": "fc09"}, {"front": "Jonathan Edwards (1703–1758)", "back": "Connecticut/Massachusetts Calvinist minister; pastor at Northampton, MA. His 1741 sermon 'Sinners in the Hands of an Angry God' depicted divine wrath suspended over unregenerate sinners in vivid detail, reducing entire congregations to weeping and terror. Edwards preached a demanding, emotionally intense theology that emphasized God's absolute sovereignty and human sinfulness. One of colonial America's greatest theological intellects; later became president of Princeton. A key figure of the New England Great Awakening.", "id": "fc10"}, {"front": "George Whitefield (1714–1770)", "back": "English minister with extraordinary theatrical preaching voice; traveled from Georgia to New England between 1739 and 1770 on multiple tours, drawing crowds of thousands to outdoor meetings. His itinerant preaching challenged established clergy who could not match his emotional power. Preached to servants, women, and enslaved people as well as the propertied — bypassing church hierarchies. Owned enslaved people and advocated introducing slavery into Georgia, illustrating the Awakening's internal contradictions on race.", "id": "fc11"}, {"front": "New Lights vs. Old Lights", "back": "The Great Awakening's dividing line: New Lights embraced revival — emotionally intense, itinerant preaching, direct appeal to conversion experience, challenge to established clergy. Old Lights defended established ecclesiastical authority, educated ordained ministry, and orderly worship. The New Light / Old Light split cut across denominational lines — fracturing Congregationalist New England, Presbyterian Pennsylvania, and Anglican Virginia simultaneously. New Light denominations founded revivalist colleges (Princeton, Brown, Dartmouth, Rutgers).", "id": "fc12"}, {"front": "\"Sinners in the Hands of an Angry God\" (1741)", "back": "Jonathan Edwards' famous 1741 sermon depicting God's wrath as the only thing suspending unregenerate sinners over the pit of hell. Delivered at Enfield, Connecticut, it reportedly reduced the congregation to weeping and crying out. The sermon exemplifies the Great Awakening's emotional intensity — it aimed not to inform but to terrify the audience into experiencing the reality of their spiritual danger. It is the most widely cited example of New Light preaching style.", "id": "fc13"}, {"front": "Great Awakening and Democratic Culture", "back": "The Awakening modeled a new relationship between speaker and audience: the itinerant minister earned his following through persuasion and emotional appeal, not through institutional authority. Ordinary colonists — servants, women, the unpropertied — experienced the freedom to evaluate and choose their own spiritual authority. This cultural training in popular democratic judgment made revolutionary rhetoric legible and compelling when it arrived: people who had already chosen their own minister were culturally prepared to choose their own political allegiance.", "id": "fc14"}, {"front": "Great Awakening and Slavery's Contradictions", "back": "The Awakening generated internal contradictions about slavery. Some revivalists argued that the logic of equal spiritual dignity (every soul equally capable of receiving grace) must extend to enslaved people. Others — including Whitefield, who owned enslaved people and supported introducing slavery into Georgia — reconciled theology with economic interest through what the source calls 'mental gymnastics.' Result: the Awakening 'planted seeds of antislavery sentiment without delivering the fruit' — an early instance of American religious culture's fraught relationship with racial bondage.", "id": "fc15"}, {"front": "Revivalist Colleges (Great Awakening Legacy)", "back": "New Light denominations founded colleges to train a new kind of minister — one who preached from the heart rather than the manuscript: Princeton (Presbyterian, 1746), Dartmouth (Congregationalist, 1769), Brown (Baptist, 1764), Rutgers (Dutch Reformed, 1766). These institutions supplemented the older Harvard (1636) and Yale (1701), which were associated with the Old Light establishment. The colleges represent the Awakening's institutional legacy — transforming emotional revival into permanent educational infrastructure.", "id": "fc16"}, {"front": "Triangular Trade: New England Variant", "back": "Rather than the classic England → Africa → Americas triangle, New England merchants ran their own circuit: rum (produced in New England from Caribbean molasses) → West Africa → enslaved people to the Caribbean → molasses back to New England. This route deliberately cut out English middlemen and technically violated the Molasses Act of 1733. It operated with impunity under salutary neglect — illustrating that colonial merchants were active economic agents who exploited regulatory gaps, not passive participants in a closed imperial system.", "id": "fc17"}, {"front": "Zero-Sum Wealth (Mercantilist Core)", "back": "The foundational mercantilist assumption that national wealth is finite: any increase in one nation's wealth necessarily comes at the expense of a rival's. This premise justified colonialism (colonies exist to enrich the mother country), the Navigation Acts (ensure England captures the gains of colonial trade), and imperial competition (wars over trading rights, colonial territories). It was challenged by Adam Smith's The Wealth of Nations (1776), which argued that free trade creates mutual gains rather than transferring wealth between competitors.", "id": "fc18"}, {"front": "By 1754: Three Overlapping Forces Shaping the Colonies", "back": "(1) Navigation Acts and triangular trade: integrated colonies into British imperial economy → real wealth for English merchants + real resentment among colonial producers. (2) Salutary neglect: gave colonial assemblies a century of practice in self-governance → entrenched expectation of representative authority. (3) Great Awakening: created shared evangelical culture crossing colonial boundaries, trained colonists in popular democratic judgment, produced the first mass communications event in American history. Together, these made 1763–76 a collision of prepared adversaries.", "id": "fc19"}, {"front": "\"The Empire Held Together Because It Had Not Yet Tried to Assert Itself\"", "back": "The source's key analytical observation about the pre-1763 colonial situation: the British Empire worked not because it was tightly integrated and efficiently governed but because it exercised minimal control. Colonial self-governance, commercial evasion, and evangelical culture had all developed in the space created by inaction. When Parliament decided, after 1763, to assert control and collect revenue, it discovered that its American colonies had developed into politically experienced, culturally cohesive, constitutionally assertive societies that would not passively accept a sudden tightening of imperial authority.", "id": "fc20"}, {"front": "Connect: Salutary Neglect → Revolutionary Crisis", "back": "Salutary neglect (c. 1700–1763) → colonial assemblies accumulate legislative experience and constitutional expectations → Parliament imposes Stamp Act (1765) after Seven Years' War debt → colonists experience this as usurpation, not legitimate authority → colonial arguments draw on 150 years of self-governance practice. The Revolution did not arise from a sudden awakening of libertarian ideology; it arose from the collision between Parliament's new assertion of authority and the entrenched constitutional expectations that salutary neglect had cultivated.", "id": "fc21"}, {"front": "Comparison: Mercantilism vs. Free Trade", "back": "Mercantilism (colonial era): wealth is finite and zero-sum; colonies exist to enrich the mother country; trade should be controlled to ensure the mother country captures the gains; Navigation Acts enforce this logic. Free trade (Adam Smith, Wealth of Nations, 1776): voluntary exchange creates mutual gains for both parties; specialization and comparative advantage increase total wealth; government interference distorts natural markets. The colonial tension between mercantilist imperial regulation and colonial commercial freedom anticipated this theoretical debate.", "id": "fc22"}, {"front": "Great Awakening as \"First Mass Communications Event\"", "back": "The source describes Whitefield's preaching tours as reaching audiences across all thirteen colonies — 'one of the few things that did.' Before the Awakening, colonial regions were largely isolated from each other: different economies, religions, political cultures, and ethnicities. Whitefield's tours created a shared emotional and cultural reference point across these divisions. This intercolonial cultural experience is an important precondition for the intercolonial political solidarity that would emerge in the 1760s–70s.", "id": "fc23"}, {"front": "Itinerant Preacher", "back": "A minister who traveled from community to community rather than serving a fixed congregation. Whitefield's itinerancy was key to the Great Awakening's geographic reach and social impact: he bypassed established churches (which had fixed congregations and ordained clergy) to preach wherever crowds gathered, including outdoors. The itinerant model challenged established clergy's institutional monopoly on spiritual authority — anyone who could draw a crowd and move hearts could preach, regardless of institutional credentials.", "id": "fc24"}, {"front": "Naval Stores", "back": "Forest products essential to the age of sail: tar, pitch, resin, turpentine, and timber used for ship construction and maintenance. Naval stores were among the enumerated goods under the Navigation Acts, required to be sold only to England. New England and the Carolinas were the primary North American sources of naval stores. Their enumeration reflected England's strategic interest in securing domestic ship-supply sources, reducing dependence on Baltic suppliers that could be cut off by European wars.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

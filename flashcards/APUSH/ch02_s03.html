@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 2, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Puritans", "back": "Reformed Protestants who believed the Church of England remained irremediably corrupt and needed to be 'purified' of Catholic remnants. Massachusetts Bay Puritans intended to build a model Christian commonwealth in America. They were theologically Calvinist (predestination, covenant), politically engaged (self-governing congregations), and socially demanding (communal responsibility for members' behavior). Distinct from Separatists (Pilgrims), who wanted complete separation from the Church of England.", "id": "fc01"}, {"front": "The Covenant (Puritan theology)", "back": "A binding agreement between God and a community of believers. Massachusetts Bay's founders understood themselves as a new Israel, collectively covenanted to establish a godly society. The corporate (communal) understanding of the covenant meant God's displeasure at individual sin would fall on the entire community — justifying communal surveillance of individuals' behavior and making religious deviance a public danger, not merely a personal failing.", "id": "fc02"}, {"front": "John Winthrop (1588–1649)", "back": "Governor of Massachusetts Bay, elected twelve times; Suffolk gentry, trained as a lawyer. Delivered the 'city upon a hill' sermon aboard the Arbella (1630), framing the colony as an exemplary community watched by the world. His governance balanced authoritarian religious discipline with grudging concession to representative governance (the General Court). His phrase has been selectively invoked by American leaders ever since, typically stripped of its original demands for communal self-sacrifice.", "id": "fc03"}, {"front": "\"City upon a Hill\"", "back": "Phrase from John Winthrop's 1630 lay sermon 'A Model of Christian Charity,' drawn from Matthew 5:14. It framed Massachusetts Bay as an exemplary Christian community watched by the world — implying that the colony's success or failure would illuminate the path for a corrupt England to follow. The phrase was a demand for communal self-sacrifice; it has been repeatedly invoked by U.S. presidents (notably Ronald Reagan) stripped of that original covenantal weight.", "id": "fc04"}, {"front": "Congregationalism", "back": "The church governance structure of Puritan New England, placing authority in the gathered congregation rather than in bishops or external hierarchy. Each town's congregation was self-governing: it chose its own minister, managed its own finances, and admitted members through conversion testimony. Men who governed their churches also governed their towns through elected town meetings — making Congregationalism the training ground for New England's democratic political culture.", "id": "fc05"}, {"front": "Roger Williams (c. 1603–1683)", "back": "Puritan minister banished from Massachusetts in 1636 for two unacceptable arguments: (1) civil authorities had no right to punish violations of religious duties (implied church-state separation); (2) the king could not grant land he did not own — only indigenous peoples could sell their territory. Founded Providence (1636) and Rhode Island as a colony of religious tolerance. Purchased land from the Narragansett rather than seizing it — an exceptional colonial practice.", "id": "fc06"}, {"front": "Anne Hutchinson (1591–1643)", "back": "Massachusetts Bay midwife and spiritual counselor who hosted popular sermon-discussion meetings drawing large audiences including prominent men. An antinomian: she believed true saints received direct revelation from the Holy Spirit and were not bound by the moral law. This undermined ministers' authority. Tried for sedition in 1637, she demolished her prosecutors' arguments before claiming divine revelation. Banished to Rhode Island, later killed in a conflict with the Wappinger people in 1643.", "id": "fc07"}, {"front": "Antinomianism", "back": "The theological belief that true Christians, having received grace, are not bound by the moral law as a guide to salvation or evidence of election. Anne Hutchinson's 'covenant of grace' theology was antinomian: it held that the Holy Spirit revealed grace directly to saints, bypassing the need for ministers whose visible piety was supposed to provide evidence of their election. The Puritan authorities found this threatening because it made ordained ministerial authority irrelevant.", "id": "fc08"}, {"front": "Half-Way Covenant (1662)", "back": "A compromise adopted by a Massachusetts synod allowing the children of 'halfway members' (baptized but not fully converted) to have their own children baptized. As the founding generation aged, fewer second-generation Puritans reported the dramatic conversion experiences required for full membership. The Half-Way Covenant preserved church-community connection at the cost of theological rigor, marking the beginning of a slow dilution of the original Puritan vision.", "id": "fc09"}, {"front": "Metacom / King Philip (d. 1676)", "back": "Wampanoag sachem (leader) who formed a broad indigenous alliance across Massachusetts, Plymouth, and Rhode Island and launched devastating attacks on English settlements in 1675 — a war the English called King Philip's War (1675–78). The war was triggered by decades of land dispossession and the encirclement of indigenous nations by expanding colonial settlements. Metacom was killed in August 1676; his death ended organized indigenous military resistance in southern New England.", "id": "fc10"}, {"front": "King Philip's War (1675–78)", "back": "The bloodiest conflict per capita in American history, fought between English colonists and a broad indigenous coalition led by Metacom (King Philip) across Massachusetts, Plymouth, and Rhode Island. Roughly 600 English colonists killed; proportionally more indigenous people died. The war broke the military power of New England's indigenous nations, opening vast territories to colonial expansion, and traumatized colonial communities in ways that contributed to the Salem witch trial crisis of 1692.", "id": "fc11"}, {"front": "Salem Witch Trials (1692)", "back": "A crisis in Salem Village, Massachusetts, in which over 200 people were accused of witchcraft, 19 were hanged, 1 was pressed to death, and several died in prison. Erupted in a community traumatized by King Philip's War, economic stress, and anxiety about declining piety. Debates continue about whether the trials primarily reflected gender tensions, land disputes, or war trauma. Ended when accusations reached prominent people including the governor's wife. Judge Samuel Sewall publicly apologized in 1697.", "id": "fc12"}, {"front": "Mayflower Compact (1620)", "back": "A brief document signed by the Pilgrim (Separatist) men aboard the Mayflower at Cape Cod, establishing a 'civil Body Politick' with authority to make laws. Created out of necessity: the Pilgrims had been blown off course from their Virginia destination and had no charter for Plymouth. The compact created political authority from the consent of the governed in the absence of any external grant — making it one of the first acts of self-governance in English North America.", "id": "fc13"}, {"front": "Pilgrims vs. Puritans", "back": "Pilgrims (Separatists): Calvinists who wanted complete separation from the Church of England; sailed on the Mayflower (1620); founded Plymouth Colony; signed the Mayflower Compact. Puritans: Calvinists who wanted to reform the Church of England from within; sailed on the Arbella (1630); founded Massachusetts Bay; led by John Winthrop. Both were Reformed Protestants, but Separatists abandoned hope for the English church while Puritans still intended to model reform for England.", "id": "fc14"}, {"front": "The Puritan Paradox", "back": "The contradiction embedded in Puritan New England: the same congregationalist tradition that trained men in democratic deliberation and established that legitimate authority required consent of the governed also expelled dissenters (Williams, Hutchinson), hanged alleged witches, and waged devastating war against indigenous peoples. Democracy and coercion were not opposites — both expressed the conviction that the community as a whole bore responsibility for maintaining the covenant with God.", "id": "fc15"}, {"front": "Town Meeting (New England)", "back": "The primary unit of direct democratic governance in Puritan New England, in which admitted male community members deliberated and voted on local laws, taxation, and administration. The source argues that Congregationalist church governance — training men to speak, vote, and hold ministers accountable — was the cultural foundation of this political institution. New England's town meeting tradition became a model for colonial and later American participatory democracy.", "id": "fc16"}, {"front": "Massachusetts General Court", "back": "The elected representative assembly of Massachusetts Bay Colony, established as a grudging concession to the principle of representative governance by Governor Winthrop. It became the legislative authority for the colony. The General Court was the body that tried Anne Hutchinson for sedition in 1637 — illustrating how the same institution could embody both representative governance and religious orthodoxy's coercive power.", "id": "fc17"}, {"front": "How did Congregationalism shape colonial political culture?", "back": "By training ordinary men in democratic deliberation before they exercised it politically. The same men who chose their minister, voted on church finances, and admitted members through collective decision also governed their towns through elected meetings. The habit of self-governance — of holding leaders accountable to the community, of making collective decisions through deliberation — was practiced weekly in church before it was exercised in the political arena. This cultural training mattered enormously in the colonial resistance movement after 1765.", "id": "fc18"}, {"front": "Compare: Puritan New England vs. Chesapeake Self-Governance", "back": "Both New England and the Chesapeake developed traditions of self-governance, but from different roots. New England's grew from Congregationalist covenant theology: communities were self-governing because they were collectively responsible to God. The Chesapeake's grew from planter property interests: the House of Burgesses defended wealthy planters' commercial autonomy from crown interference. New England's self-governance was communal; the Chesapeake's was oligarchic. Both would contribute to the Revolutionary argument against parliamentary authority.", "id": "fc19"}, {"front": "\"City upon a Hill\" — original meaning vs. later use", "back": "Original (1630): A communal covenant demanding self-sacrifice, submission to God's law, and collective moral responsibility. Failure would bring divine judgment on the entire community. Later use (Reagan era, etc.): America as an exemplary beacon of freedom — stripped of the original communal demands, theological weight, and covenantal obligations. AP exam tip: demonstrating awareness of how founding texts are selectively deployed over time is evidence of sophisticated historical thinking.", "id": "fc20"}, {"front": "Arbella (1630)", "back": "The flagship of the Winthrop Fleet that carried John Winthrop and approximately 700 Puritans to Massachusetts Bay. Winthrop delivered his 'city upon a hill' sermon during the crossing. The 1630 migration was much larger than the 1620 Pilgrim voyage (102 on the Mayflower) and established the demographic and institutional foundation of Puritan New England — the migration that made Massachusetts Bay, in a generation, the most intensely literate and theologically sophisticated society in colonial North America.", "id": "fc21"}, {"front": "Narragansett (Roger Williams connection)", "back": "An Algonquian-speaking indigenous people of Rhode Island. Roger Williams, uniquely among major colonial leaders, purchased land from the Narragansett rather than claiming it by royal grant — a practice his Quaker contemporaries praised. This purchase-based rather than seizure-based approach to indigenous land stands in marked contrast to the expropriation model followed throughout the rest of colonial North America and in the Puritan settlements Williams had fled.", "id": "fc22"}, {"front": "Connection: Salem Witch Trials → Regional Trauma", "back": "The Salem witch trials did not occur in an isolated community of religious hysteria. They occurred in a region traumatized by: (1) King Philip's War (1675–78), which had devastated communities and shattered confidence in the Puritan covenant; (2) economic stress from tobacco-price fluctuations and land disputes; (3) anxieties about declining piety signaled by the Half-Way Covenant and falling church membership. The trials were a symptom of compound social stress, not simply theological extremism.", "id": "fc23"}, {"front": "Wampanoag (historical context)", "back": "An Algonquian-speaking indigenous people of present-day southeastern Massachusetts and Rhode Island. The Wampanoag, under their sachem Massasoit, provided crucial assistance to Plymouth Colony's survival in its early years. Massasoit's son Metacom (King Philip) led the 1675–78 war against English expansion that had dispossessed his people of their land over decades. The Wampanoag are also notable as the hosts of the 1621 harvest celebration later mythologized as the 'first Thanksgiving.'", "id": "fc24"}, {"front": "Judge Samuel Sewall and the Salem Apology (1697)", "back": "Samuel Sewall, one of the judges who presided over the Salem witch trials in 1692, publicly apologized in 1697 — standing before his congregation while the minister read his statement of guilt and sorrow. The source notes this as 'one of the rare moments of colonial self-criticism.' Sewall's apology is historically notable not only for its personal humility but for establishing a precedent of public accountability for injustice — rare in any era of colonial governance.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 6, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "New Immigration (1880–1924)", "back": "25 million immigrants entered the U.S. between 1880 and 1920 — the largest wave in American history to that point. Shifted from northwestern European sources (old immigrants: Germany, Ireland, Britain, Scandinavia) to southern and eastern European sources: Italians, Poles, Russians, Hungarians, Jews fleeing Russian pogroms. More than 2 million Eastern European Jews arrived 1880–1910 — the largest refugee migration in American history.", "id": "fc01"}, {"front": "Old Immigrants vs. New Immigrants", "back": "Old: pre-1880, predominantly northwestern European (German, Irish, British, Scandinavian), Protestant, often with capital or skills, often rural settlement. New: post-1880, predominantly southern and eastern European (Italian, Polish, Russian, Hungarian, Greek), often Catholic/Eastern Orthodox/Jewish, often without capital, concentrated in urban industrial neighborhoods. The distinction was loaded with racial pseudoscience and ethnic prejudice; nativists called new immigrants racially inferior and unassimilable.", "id": "fc02"}, {"front": "Russian Pogroms and Jewish Immigration", "back": "Organized anti-Jewish massacres and systematic legal persecution in the Russian Empire's Pale of Settlement drove over 2 million Eastern European Jews to the United States between 1880 and 1910 — the largest refugee migration in American history. Most settled in New York's Lower East Side, where they built a dense community of synagogues, mutual aid societies (landsmanshaftn), labor unions, and Yiddish-language press.", "id": "fc03"}, {"front": "Ellis Island", "back": "Gateway for approximately 12 million European immigrants between 1892 and 1954. Processing varied sharply by class: first- and second-class passengers were processed on ship; steerage passengers were examined by physicians and interrogated by inspectors, sometimes detained for days. About 2% were ultimately deported. Simultaneously the threshold of hope and the face of American bureaucratic power over the dispossessed.", "id": "fc04"}, {"front": "Angel Island", "back": "Entry point for Chinese and other Asian immigrants in San Francisco Bay. Conditions deliberately designed to discourage entry: detentions lasting weeks or months (far longer than Ellis Island); elaborate 'paper son' examinations intended to catch immigrants claiming false family ties to U.S.-born citizens. Many Chinese detainees carved poems of anguish and hope into the barrack walls — discovered 1970, the most direct testimony of the Angel Island experience.", "id": "fc05"}, {"front": "Chinese Exclusion Act (1882)", "back": "The only American law to bar immigration explicitly by nationality and race. Ended most legal Chinese immigration; Chinese who could claim exempt status (merchants, students, teachers, diplomats, U.S.-born citizens) still faced the deliberately hostile processing regime at Angel Island. Reflected and reinforced the racial hierarchy of American immigration policy — Chinese workers were legally excluded from naturalized citizenship regardless of length of residence.", "id": "fc06"}, {"front": "Nativism", "back": "Ideology privileging established (white, Protestant, native-born) residents over immigrants and ethnic minorities. Combined economic anxiety (immigrants depress wages) with racial pseudoscience (certain ethnic groups are inherently inferior or unassimilable) and cultural/religious antagonism (Catholics, Jews, Eastern Orthodox cannot sustain self-government). Embodied in the American Protective Association (1887), Madison Grant's The Passing of the Great Race (1916), Chinese Exclusion Act (1882), and Immigration Restriction Act (1924).", "id": "fc07"}, {"front": "Tenement Housing", "back": "Dominant housing form for the urban poor in industrial cities. Dumbbell tenements (designed to technically comply with 1879 NYC air-shaft regulation while maximizing density): five to seven stories, four apartments per floor, three rooms each, families of 5–10 per unit, shared hallway toilets, single floor tap or street hydrant for water, inadequate ventilation and lighting. Conditions so severe that tuberculosis, typhoid, and infant mortality rates were catastrophic in immigrant districts.", "id": "fc08"}, {"front": "Jacob Riis and How the Other Half Lives (1890)", "back": "Danish-born journalist who used flash photography to document New York tenement conditions. Shocked middle-class readers; contributed to tenement reform legislation. Framing problem: presented immigrants as objects of sympathy and reform rather than as agents of their own lives — missed the churches, mutual aid societies, synagogues, and union halls immigrants had built. An important document in progressive reform history and an example of the limits of middle-class reformist framing.", "id": "fc09"}, {"front": "Ethnic Enclaves", "back": "Clusters of immigrants from the same nationality or region in specific urban neighborhoods: Little Italy, Jewish Lower East Side, Greektown, Polish Hill, Chinatown. Functions: (1) information networks for jobs and housing; (2) familiar language, food, and religious institutions; (3) kin networks cushioning arrival shock; (4) business credit for co-ethnics excluded from mainstream banks. Maintained cultural distinctiveness across generations while providing economic entry points.", "id": "fc10"}, {"front": "Mutual Aid Society", "back": "The welfare institution at the heart of immigrant community life. Italian società di mutuo soccorso, Jewish landsmanshaftn (organized by hometown of origin), Polish Catholic societies — all provided sick benefits, death insurance, small loans, and social community. 'These organizations were the welfare state of the working class in an era when the federal and state governments provided virtually nothing.' Illustrates immigrant agency and the minimal-government character of Gilded Age social policy.", "id": "fc11"}, {"front": "Padrone System", "back": "Ethnic labor-brokerage arrangement, typically involving Italian men in construction and unskilled labor: an ethnic broker (padrone) recruited and supervised immigrant workers, extracting commissions while providing employers with a reliable labor supply. Exploited co-ethnic loyalty while providing an economic entry point for newly arrived workers. Similar contractor networks organized the Jewish garment industry in New York.", "id": "fc12"}, {"front": "Political Machine", "back": "Urban political organization maintaining power through systematic exchange of government jobs, city contracts, and social services for voter loyalty. Ward captains delivered services (employment, legal help, charity, coal, food) in exchange for reliable votes. Tammany Hall (New York), Pendergast organization (Kansas City), Republican machine (Philadelphia) were major Gilded Age examples. Simultaneously provided genuine social services and extracted systematic corruption from city budgets.", "id": "fc13"}, {"front": "Tammany Hall", "back": "Democratic Party organization dominating New York City politics through most of the Gilded Age. Leader Boss Tweed (1860s–1870s) stole an estimated $30–200 million before being jailed 1871. Provided crucial services to immigrant working class: jobs, legal intervention, food, coal, entertainment. Maintained power through systematic graft on city contracts. Reformers condemned it as corrupt; defenders noted it served those middle-class reform politics ignored. Exemplifies the machine's dual reality.", "id": "fc14"}, {"front": "Boss William 'Boss' Tweed", "back": "Tammany Hall leader who stole an estimated $30–200 million from New York City before being jailed in 1871. His downfall was accelerated by Thomas Nast's political cartoons in Harper's Weekly, which exposed his corruption to a mass audience. Tweed's fall illustrates both the scale of machine corruption and the power of political journalism as a tool of accountability.", "id": "fc15"}, {"front": "Settlement House Movement", "back": "Educated middle-class reformers — predominantly women — moved into poor urban neighborhoods to provide services and study conditions. Hull House (Jane Addams and Ellen Gates Starr, Chicago 1889) offered kindergartens, art studio, gymnasium, music school, day nursery, adult education. Important contribution: Hull-House Maps and Papers (1895), pioneering sociological documentation of urban poverty. Paternalism: implicit assumption that reformers would uplift immigrants rather than learn from them.", "id": "fc16"}, {"front": "Jane Addams (1860–1935)", "back": "Co-founder of Hull House (1889) with Ellen Gates Starr. Pioneer of social work and urban sociology. Hull-House Maps and Papers (1895) documented neighborhood conditions with statistical rigor. Later became a leader of the women's suffrage movement and anti-war movement; Nobel Peace Prize (1931). One of the most significant reform figures produced by the Gilded Age urban crisis.", "id": "fc17"}, {"front": "Hull-House Maps and Papers (1895)", "back": "Pioneering sociological study produced by Hull House residents, documenting with statistical rigor the living and working conditions of the Chicago Near West Side immigrant neighborhood. Contributed to the Progressive Era tradition of social science research as a tool of reform advocacy. Represents the settlement house movement's most important intellectual contribution beyond immediate service provision.", "id": "fc18"}, {"front": "The Melting Pot Metaphor", "back": "Popularized by Israel Zangwill's 1908 play; described a desired process of cultural fusion into undifferentiated American identity — not an observed reality. What actually happened was more complex: partial assimilation, persistent ethnic identity, structural racism slowing assimilation for groups racialized as non-white (Chinese, southern Italians, Jews), and political nativism eventually closing the immigration door before full integration could occur.", "id": "fc19"}, {"front": "National Origins Act (1924)", "back": "Immigration restriction legislation assigning quotas designed to preserve the existing ethnic composition of the American population — effectively favoring northwestern European immigrants and severely restricting southern and eastern European immigration. Encoded nativist racial pseudoscience into federal law; effectively ended the mass immigration that had transformed American cities between 1880 and 1920.", "id": "fc20"}, {"front": "Racial Hierarchy in the Gilded Age Labor Market", "back": "The industrial economy's labor hierarchy was explicitly ethnic and racial: native-born white Protestants in management and skilled positions; Irish and German (old immigrants) in semi-skilled trades; southern and eastern European new immigrants in the most dangerous, lowest-paid, least-skilled work; Chinese workers in legally constrained niches (laundry, restaurant, railroad). This stratification was actively maintained by employers using ethnic divisions to prevent working-class solidarity.", "id": "fc21"}, {"front": "MIG + SOC Theme: New Immigration", "back": "The 25 million immigrants of 1880–1924 represent the most dramatic demographic event in American history (MIG). Their social consequences (SOC) structured the industrial working class: immigrant labor filled the most dangerous and lowest-paid industrial positions; ethnic enclaves maintained cultural distinctiveness; mutual aid societies created self-organized welfare. The tension between nativism and immigrant community-building generated the political conflicts that defined Progressive Era urban politics.", "id": "fc22"}, {"front": "Comparison: Ellis Island vs. Angel Island Processing", "back": "Ellis Island (European immigrants): Class differential — first/second class processed on ship; steerage examined and interrogated; ~2% deported; general presumption of admissibility. Angel Island (Chinese immigrants): Deliberately designed to discourage entry; weeks/months of detention; elaborate 'paper son' exams; barracks poems document the experience. Difference reflects Chinese Exclusion Act's racial exclusion embedded in the institutional design of entry processing.", "id": "fc23"}, {"front": "Continuity/Change: Government Social Provision, 1890–1935", "back": "CONTINUITY (through 1920s): Federal and state governments provided virtually no social welfare; mutual aid societies and political machines filled the gap. CHANGE (New Deal, 1930s): Social Security Act (1935), unemployment insurance, federal relief programs created the actual welfare state — doing systematically what machines and mutual aid societies had done locally, informally, and contingently. The New Deal welfare state was in part a response to the inadequacy documented by Gilded Age reformers.", "id": "fc24"}, {"front": "Paper Son System", "back": "Immigration strategy used by Chinese immigrants to enter the U.S. despite the Chinese Exclusion Act by claiming to be the sons (or daughters) of U.S.-born citizens — a status that exempted them from exclusion. Because birth records in China were difficult to verify, elaborate interrogation protocols at Angel Island (the 'paper son' examinations) were designed to catch false claims. The system required migrants to memorize detailed family information about their claimed identity.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

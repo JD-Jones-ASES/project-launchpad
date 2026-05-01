@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Virginia Company of London", "back": "A joint-stock enterprise chartered by the English crown that sponsored the 1607 Jamestown settlement. Investors expected commercial returns, not colonization for its own sake. The company dissolved in 1624 when the crown converted Virginia into a royal colony, but its institutional legacy — the headright system and the House of Burgesses — persisted.", "id": "fc01"}, {"front": "Powhatan Confederacy", "back": "A powerful alliance of Algonquian-speaking peoples led by the paramount chief Powhatan, occupying the Virginia tidewater region when English settlers arrived in 1607. The confederacy initially traded with and sometimes sustained Jamestown, but tobacco cultivation's westward expansion of English settlement brought escalating conflict that culminated in major wars in 1622 and 1644.", "id": "fc02"}, {"front": "Nicotiana tabacum", "back": "A milder Caribbean tobacco strain cultivated by John Rolfe beginning around 1612. English consumers preferred it to the harsher indigenous Virginia tobacco; Rolfe's hybrid captured a market previously monopolized by Spanish imports. By 1617 it was Virginia's principal export, transforming the Chesapeake's economic prospects and making labor the organizing political question of the colony.", "id": "fc03"}, {"front": "Headright System", "back": "A land-grant mechanism introduced by the Virginia Company in 1618. Any person who paid for their own or another's passage to Virginia received fifty acres. Wealthy planters who imported multiple indentured servants accumulated land proportionally to their capital investment. The system solved the labor shortage while concentrating landholding in the hands of those already wealthy — producing the tidewater planter elite.", "id": "fc04"}, {"front": "Indentured Servitude", "back": "A labor contract in which a poor migrant agreed to work without wages for four to seven years in exchange for transatlantic passage, food, shelter, and clothing. At term's end, the servant received 'freedom dues' (money, tools, sometimes land). Indentured servants were the dominant Chesapeake labor force from the 1630s through the 1670s and could be bought, sold, and physically punished. Their freedom created the volatile class that produced Bacon's Rebellion.", "id": "fc05"}, {"front": "House of Burgesses", "back": "The first representative assembly in English America, authorized by the Virginia Company in 1619. Twenty-two elected delegates gathered in the Jamestown church to deliberate on local laws. It survived the dissolution of the Virginia Company and established the precedent that English colonists had the right to participate in their own governance — a principle that would underpin colonial resistance to Parliament after 1763.", "id": "fc06"}, {"front": "\"Starving Time\" (1609–10)", "back": "A catastrophic period following Captain John Smith's departure from Virginia in 1609, during which the colony was reduced to eating horses, rats, and at least one documented case of a human corpse. The episode exposed the gap between the Virginia Company's promotional promises and the brutal reality of Chesapeake settlement, and underscored that survival depended on agricultural labor, not gold.", "id": "fc07"}, {"front": "Captain John Smith", "back": "The forceful military leader of Jamestown in 1608–09 whose dictate 'he that will not work shall not eat' imposed minimal agricultural discipline on a colony dominated by gentlemen unaccustomed to labor. His departure for England in 1609 precipitated the starving time. Smith's leadership is often credited with sustaining Jamestown through its most precarious early phase, though his self-promotional writings exaggerated his role.", "id": "fc08"}, {"front": "Bacon's Rebellion (1676)", "back": "An armed uprising led by Nathaniel Bacon against Virginia Governor William Berkeley. Landless former servants, poor whites, and some enslaved people attacked indigenous peoples on the frontier, then turned on the colonial government itself. Bacon burned Jamestown to the ground before dying of dysentery. The rebellion's political lesson — that poor free white men were an existential threat to planter authority — accelerated the shift to African chattel slavery.", "id": "fc09"}, {"front": "Nathaniel Bacon (c. 1647–1676)", "back": "Cambridge-educated English planter who arrived in Virginia in 1674 and became the voice of frontier grievances against Governor Berkeley's tidewater favoritism. His 1676 coalition of poor whites, indentured servants, and enslaved Africans seized control of Virginia before his sudden death from dysentery. His rebellion exposed class conflict in colonial Virginia and prompted the planter elite's shift to race-based chattel slavery as a political solution.", "id": "fc10"}, {"front": "Governor William Berkeley", "back": "Royal governor of Virginia who maintained a profitable trade network with the Powhatan Confederacy, giving him strong incentives to avoid frontier war. His favoritism toward the tidewater elite and protection of indigenous trade partners — at the expense of landless settlers who wanted indigenous land — made him the focus of Bacon's Rebellion. His brutal reprisals after the rebellion were criticized even by King Charles II.", "id": "fc11"}, {"front": "Tidewater Planter Elite", "back": "The wealthy landholding class in the eastern coastal plain (tidewater) region of Virginia and Maryland who controlled both the land and the House of Burgesses. Their political dominance gave colonial self-government a distinctly oligarchic character. After Bacon's Rebellion exposed their vulnerability to a class of free poor whites, they shifted to African chattel slavery to create a labor force that posed no equivalent political threat.", "id": "fc12"}, {"front": "Freedom Dues", "back": "Compensation paid to indentured servants upon completion of their contract term: typically a small sum of money, tools, and sometimes land. As Virginia's best land filled up in the mid-seventeenth century, freedom dues provided less and less genuine opportunity, producing a growing class of frustrated former servants who had fulfilled their obligations but could not establish themselves economically — the social fuel of Bacon's Rebellion.", "id": "fc13"}, {"front": "\"City upon a Hill\" (Chesapeake context)", "back": "While John Winthrop's phrase describes New England, its contrast with Chesapeake origins is instructive for AP comparisons. Virginia was founded for profit (Virginia Company), not religious idealism. The Chesapeake's self-governance tradition emerged not from covenantal theology but from planter interests — the House of Burgesses defended property rights and commercial autonomy, not godly community.", "id": "fc14"}, {"front": "Soil Exhaustion and Indigenous Dispossession", "back": "Tobacco depleted soil nutrients rapidly, requiring planters to clear new land every few years. This structural feature of monoculture agriculture drove continual westward expansion onto land held by indigenous peoples. The source argues this made indigenous dispossession 'not merely a byproduct but a structural requirement of the plantation economy' — territorial expansion was economically compelled, not merely opportunistic.", "id": "fc15"}, {"front": "Point Comfort, 1619", "back": "The site where, in August 1619, a Dutch warship sold 'twenty and odd' Africans to Virginia planters — the first documented Africans in English North America. Their initial legal status was ambiguous: some, like Anthony Johnson, eventually gained freedom and property. This ambiguity would be progressively eliminated by the Virginia slave codes enacted from 1662 to 1705.", "id": "fc16"}, {"front": "Joint-Stock Company", "back": "A business organization in which investors pool capital by purchasing shares, sharing both profits and losses. The Virginia Company of London was a joint-stock enterprise; it allowed merchants to fund risky colonial ventures without any single investor bearing the full cost of failure. This model shaped early Virginia's orientation toward profit extraction rather than genuine settlement.", "id": "fc17"}, {"front": "WXT Theme: Tobacco and the Atlantic Economy", "back": "AP CED Work, Exchange, and Technology (WXT) theme: Tobacco integrated the Chesapeake into a transatlantic commodity chain connecting London merchants, Dutch shippers, and West African slave traders. The headright system commodified both land and human migration as units of capital accumulation. Soil exhaustion made indigenous land dispossession a structural economic requirement — illustrating how exchange systems shape social and political outcomes far beyond their immediate commercial purpose.", "id": "fc18"}, {"front": "\"A Racial Solution to a Class Problem\"", "back": "Historians' characterization of the planter elite's post-Bacon strategy. Rather than addressing the genuine economic grievances of poor white men (landlessness, low tobacco prices), planters chose to replace European indentured labor with African chattel slavery. This transformation elevated all white colonists above all African Americans regardless of economic status, giving even landless poor whites a racial stake in the system — defusing class conflict by redirecting it into racial hierarchy.", "id": "fc19"}, {"front": "Royal Colony Transition (Virginia, 1624)", "back": "The crown's dissolution of the Virginia Company and conversion of Virginia into a royal colony, following the company's financial failures and the 1622 Powhatan attack that killed roughly 400 colonists. Royal governance replaced corporate governance, but the House of Burgesses — originally a company innovation — survived. Virginia's transformation into a crown colony set the template for later royal colonial governance across British North America.", "id": "fc20"}, {"front": "Compare: Chesapeake vs. New England Origins", "back": "Chesapeake (Jamestown 1607): founded for profit by a joint-stock company; predominantly male, young, indentured laborers; monoculture tobacco economy; self-governance rooted in planter property interests. New England (Plymouth 1620, Massachusetts Bay 1630): founded for religious refuge; family-based migration; diversified economy; self-governance rooted in covenant theology and congregational church governance. Contrasting origins shaped two distinct regional political cultures.", "id": "fc21"}, {"front": "Continuity/Change: Tobacco and Virginia, 1612–1676", "back": "Change: Virginia shifted from failed gold-seeking venture to durable plantation economy within a decade of Rolfe's tobacco cultivation. Continuity: The reliance on a single cash crop persisted throughout the period, driving consistent patterns of soil exhaustion, westward expansion, labor exploitation, and wealth concentration. The tobacco economy's structural features — not just its product — were the continuity that shaped seventeenth-century Chesapeake development.", "id": "fc22"}, {"front": "What political lesson did planters draw from Bacon's Rebellion?", "back": "That a labor system built on temporary white servitude inevitably produced, as its byproduct, a growing population of freed men who were poor, armed, and politically volatile. The solution was to replace time-limited indenture with permanent, heritable chattel slavery — creating a labor force that could never accumulate the political power to threaten the planter class, and simultaneously constructing racial solidarity across class lines among white Virginians.", "id": "fc23"}, {"front": "Anthony Johnson", "back": "An African man who arrived in Virginia as a servant in the 1620s, earned his freedom, acquired land, and himself held servants — illustrating the early ambiguity of racial status before Virginia's slave codes systematically racialized servitude. Johnson's trajectory was possible in the 1630s–40s; by the 1660s–70s, the legislative construction of race-based slavery would have made it impossible.", "id": "fc24"}, {"front": "How did the headright system create long-term social tension?", "back": "Short-term solution: attracted labor and immigrants needed for tobacco cultivation. Long-term tension: concentrated land in the hands of wealthy planters who could afford to import many servants, while the servants themselves — once free — found the best land already claimed. This produced a growing class of landless free men who resented the planter elite's dominance of both land and the House of Burgesses, ultimately erupting in Bacon's Rebellion.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

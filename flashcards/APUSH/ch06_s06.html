@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 6, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Gilded Age Voter Turnout Paradox", "back": "Presidential elections drew 70–80% of eligible voters — higher than any subsequent period in American history. Yet governmental accomplishment was low: dominant parties were evenly matched and focused on patronage, tariffs, and currency, not the structural economic questions the Populists raised. High turnout reflected party-mobilized partisan loyalty, not policy achievement. The federal government remained small, primarily distributing patronage and revenue to connected industries.", "id": "fc01"}, {"front": "Spoils System", "back": "'To the victor belong the spoils' — attributed to Senator William Marcy (1832). Every change of administration brought wholesale turnover in federal appointments (postmasters, customs collectors, Indian agents). Federal employees were expected to contribute a percentage of their salaries to the party and perform campaign work. New York and other major port customs houses were notorious for bloated payrolls and systematic corruption.", "id": "fc02"}, {"front": "Assassination of President Garfield (1881)", "back": "President James Garfield was shot in July 1881 by Charles Guiteau, a disappointed office seeker who had been denied a patronage appointment. His assassination catalyzed civil service reform by making the spoils system's human costs vivid to the public and Congress. The Pendleton Civil Service Act was passed in January 1883 — the direct institutional response to Garfield's death.", "id": "fc03"}, {"front": "Pendleton Civil Service Act (1883)", "back": "Established competitive merit examinations for a portion of federal positions (initially ~10%), creating a 'classified service' appointed on exam performance rather than party loyalty. Prohibited collection of political assessments from covered employees. Key self-reinforcing mechanism: incoming administrations could classify additional positions to protect their own appointees — driving expansion from 10% (1883) to 50%+ (1900) to nearly all positions by mid-20th century. Foundation of the modern U.S. civil service.", "id": "fc04"}, {"front": "Civil Service Commission", "back": "Created by the Pendleton Act (1883) to administer competitive examinations for classified federal positions. Represented the first systematic displacement of patronage with merit in the federal government. Its expansion over subsequent decades gradually transformed the federal workforce from a spoils-based to a merit-based system — the central institutional achievement of the Gilded Age civil service reform movement.", "id": "fc05"}, {"front": "Gilded Age Tariff Politics", "back": "The tariff was the central domestic policy question of the era. With no income tax (until the 16th Amendment, 1913), tariffs on imports provided nearly all federal revenue. High tariffs (averaging 40–50%) protected American manufacturers from foreign competition. Republicans championed high tariffs; Democrats (representing the South) attacked them as taxes on consumers. McKinley Tariff (1890): 48% average — Republican high-water mark. Wilson-Gorman Tariff (1894): modest reduction; attached income tax struck down in Pollock (1895).", "id": "fc06"}, {"front": "Pollock v. Farmers' Loan and Trust Co. (1895)", "back": "Supreme Court struck down the income tax provision attached to the Wilson-Gorman Tariff (1894) as an unconstitutional direct tax. The ruling blocked the income tax and made the 16th Amendment (1913) necessary. One of several Gilded Age Supreme Court decisions that consistently aligned the judiciary with capital against structural economic reform.", "id": "fc07"}, {"front": "Jim Crow Laws", "back": "Southern state laws mandating racial segregation of public facilities beginning with railroad cars (Mississippi 1888; Louisiana 1890) and spreading to schools, parks, restaurants, hotels, theaters, hospitals, and virtually all public spaces. Created a dual society of racially separate facilities — formally 'equal' but in practice systematically inferior for Black citizens in funding, quality, and access. Constitutionalized by Plessy v. Ferguson (1896); overturned by Brown v. Board of Education (1954).", "id": "fc08"}, {"front": "Plessy v. Ferguson (1896)", "back": "Supreme Court upheld Louisiana's Separate Car Act 7–1, establishing 'separate but equal' as constitutional doctrine. Homer Plessy (7/8 European, 1/8 African American; appeared white) was arrested for refusing to leave a whites-only car in a deliberate test case organized by the New Orleans Citizens' Committee. Majority (Justice Brown): 14th Amendment did not intend to enforce social equality; segregation reflects natural social distinction; inferiority is merely Plessy's own perception. Dissent (Justice Harlan): 'The Constitution is color-blind.' Overturned by Brown v. Board (1954).", "id": "fc09"}, {"front": "Separate But Equal Doctrine", "back": "Legal principle from Plessy v. Ferguson (1896): racially segregated public facilities do not violate Equal Protection so long as the separate facilities are materially equivalent. In practice, Black facilities under Jim Crow were never equal — schools, hospitals, parks, and transportation received systematically lower funding. Overturned in Brown v. Board of Education (1954), which held that racial separation in education was 'inherently unequal' regardless of material comparability.", "id": "fc10"}, {"front": "Justice John Marshall Harlan's Dissent (Plessy, 1896)", "back": "'The Constitution is color-blind, and neither knows nor tolerates classes among citizens.' Harlan argued the Separate Car Act was 'inconsistent with the personal liberty of citizens, white and black' and 'hostile to both the spirit and letter' of the post-Civil War amendments. Sole dissenter. Vindicated by Brown v. Board (1954) 58 years later. The dissent's existence demonstrates that the Plessy majority's decision was a choice, not a product of historical inevitability — Harlan offered the constitutionally correct alternative in 1896.", "id": "fc11"}, {"front": "Homer Plessy", "back": "New Orleans Creole resident who was seven-eighths European and one-eighth African American (and appeared white). Deliberately arrested in June 1892 for refusing to leave a whites-only Louisiana Railroad car, in a test case organized by the New Orleans Citizens' Committee. His racial appearance was strategically significant: if someone who appeared white could be legally classified as Black and segregated, Louisiana's racial classification system was exposed as arbitrary social construction.", "id": "fc12"}, {"front": "New Orleans Citizens' Committee", "back": "Group of Creole civil rights activists who organized the deliberate Plessy test case to challenge Louisiana's Separate Car Act (1890). Demonstrates that organized civil rights activism predated the NAACP by two decades. The committee's strategic litigation model anticipated the NAACP Legal Defense Fund's approach in the twentieth century. The case's defeat in the Supreme Court illustrates the limits of legal challenge in the absence of political power.", "id": "fc13"}, {"front": "Disenfranchisement Mechanisms (Post-1877 South)", "back": "After Reconstruction's end, Southern 'Redemption' governments used three categories of tools to eliminate Black political participation: (1) VIOLENCE: KKK and successor organizations; (2) FRAUD: stuffed ballot boxes, stolen elections; (3) LAW: poll taxes, literacy tests, and grandfather clauses that effectively excluded Black voters while formally complying with the 15th Amendment's prohibition on explicit racial discrimination. By the 1890s, Black political participation in the South had been effectively suppressed.", "id": "fc14"}, {"front": "Booker T. Washington and the Atlanta Compromise (1895)", "back": "Washington's 1895 speech appeared to accept social segregation in exchange for economic opportunity — industrial education, economic self-improvement, tactful non-confrontation of racial hierarchy. Won approval of white philanthropists and politicians. Contested by Du Bois and later the NAACP, who argued that accepting segregation precluded the political power necessary for genuine economic advancement. The 'Atlanta Compromise' framing captures the Faustian bargain at its core.", "id": "fc15"}, {"front": "W.E.B. Du Bois and the NAACP", "back": "Du Bois's The Souls of Black Folk (1903) articulated an unambiguous demand for full civil and political equality, directly challenging Washington's accommodationism. Co-founded the NAACP (1909), which pursued full equality through legal challenges, political advocacy, and public education. The Du Bois vs. Washington debate defines the strategic divide between accommodationism and confrontationism that recurs throughout civil rights history.", "id": "fc16"}, {"front": "Ida B. Wells (1862–1931)", "back": "Journalist born into slavery; launched a sustained investigative campaign against lynching after 1882. Published Southern Horrors (1892) and A Red Record (1895) documenting 700+ lynchings in a decade and exposing the sexual-assault pretext as systematically fabricated. Campaigned internationally for federal anti-lynching legislation. Congress refused to act (Southern Democrats filibustered every bill). Wells established the template for investigative civil rights journalism that would characterize the next century.", "id": "fc17"}, {"front": "Lynching and the Failure of Federal Anti-Lynching Legislation", "back": "Extrajudicial mob murder of Black men (primarily in the South), often on fabricated sexual assault charges. Ida B. Wells documented 700+ in the decade after 1882. Wells campaigned for federal legislation; Congress refused to act — Southern Democrats filibustered every attempt through the twentieth century (the first federal anti-lynching bill was not passed until 2022). Illustrates the structural relationship between Senate procedure and the maintenance of racial terror.", "id": "fc18"}, {"front": "Brown v. Board of Education (1954)", "back": "Supreme Court ruled unanimously that racial segregation in public education was 'inherently unequal' regardless of physical comparability of facilities, overturning Plessy v. Ferguson's 'separate but equal' doctrine. Marked the end of the constitutional era Plessy had opened in 1896 — nearly 60 years during which the Court's doctrine provided the constitutional shield for Jim Crow. Vindicates Harlan's 1896 dissent.", "id": "fc19"}, {"front": "Plessy v. Ferguson's Significance as a 'Closing Off'", "back": "Plessy did not create Jim Crow; it constitutionalized and protected it. What Plessy closed off: the 14th Amendment's Equal Protection Clause as a federal legal mechanism for challenging racial segregation. For nearly 58 years, the 'separate but equal' doctrine served as the constitutional shield behind which the South maintained racial apartheid. The period from 1877 (end of Reconstruction) to 1954 (Brown) is sometimes called the 'long Reconstruction failure.'", "id": "fc20"}, {"front": "POL + SOC Theme: Gilded Age Political System", "back": "The Gilded Age political system illustrates the relationship between political institutions (POL) and social hierarchy (SOC). Patronage and tariff politics served party organizations and connected industries. Populist challenge was defeated (1896). Civil service reform was genuine but limited. And Plessy demonstrated that formal legal equality was provisional: when racial equality conflicted with white Southern Democrats' political interests and the Court's 14th Amendment interpretation, formal equality yielded to racial hierarchy.", "id": "fc21"}, {"front": "Three Gilded Age Structural Settlements", "back": "The Gilded Age settled three structural questions: (1) in favor of industrial capital — Populists defeated in 1896; (2) of electoral machine politics — civil service reform limited to some positions; (3) of racial segregation — Plessy (1896) constitutionalized Jim Crow. All three were renegotiated in subsequent eras: Progressive Era and New Deal addressed #1 and #2; Civil Rights Movement and Brown addressed #3.", "id": "fc22"}, {"front": "'Long Reconstruction Failure' (1877–1954)", "back": "Historians' term for the period between the collapse of federal enforcement of Black civil rights after 1877 and their eventual restoration after Brown v. Board (1954). The period encompasses the construction of Jim Crow, the constitutional authorization of Plessy, the failure of federal anti-lynching legislation, and the systematic exclusion of Black Southerners from political and economic life. Plessy was the constitutional linchpin of this era.", "id": "fc23"}, {"front": "McKinley Tariff (1890) vs. Wilson-Gorman Tariff (1894)", "back": "McKinley Tariff (1890): raised average rates to 48% — Republican high-water mark of the era; intensely controversial; contributed to Democratic victories in 1890 midterms. Wilson-Gorman Tariff (1894): Democratic reduction under Cleveland; attached an income tax (struck down by Pollock 1895). The tariff debate consumed enormous congressional energy while leaving structural questions of industrial concentration and labor rights largely unaddressed.", "id": "fc24"}, {"front": "Continuity/Change: Race and Law, 1865–1954", "back": "CHANGE (1865–1877): 13th, 14th, 15th Amendments; federal enforcement of civil rights during Reconstruction. CHANGE/REVERSAL (1877–1896): withdrawal of federal troops; Reconstruction's end; disenfranchisement; Jim Crow laws. CONSTITUTIONAL ENTRENCHMENT (1896): Plessy v. Ferguson 'separate but equal.' CONTINUITY (1896–1954): Jim Crow constitutional; federal anti-lynching legislation blocked. CHANGE (1954): Brown overturns Plessy. FULL CHANGE (1964–1965): Civil Rights Act and Voting Rights Act restore the Reconstruction amendments' promise.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

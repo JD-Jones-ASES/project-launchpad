@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 1, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Encomienda", "back": "The Spanish colonial labor system in which the crown 'entrusted' a specified number of indigenous people to a Spanish colonizer (encomendero), who was entitled to their labor and tribute in exchange for the obligation to Christianize them and provide military protection. In theory a reciprocal paternalistic arrangement; in practice, forced labor of a particularly brutal variety. Formally restructured by the New Laws of 1542 but continued in modified form as the repartimiento.", "id": "fc01"}, {"front": "Encomendero", "back": "A Spanish colonizer granted an encomienda — the right to extract labor and tribute from a specified number of indigenous people. Encomenderos worked indigenous laborers in mines and on agricultural estates with little regard for survival. The contradiction embedded in their legal obligation to Christianize the workers they were killing in mines was one of the moral contradictions that fueled Las Casas's advocacy.", "id": "fc02"}, {"front": "Repartimiento", "back": "The labor system that evolved from the encomienda as indigenous populations collapsed. Colonial officials drafted rotating cohorts of indigenous workers for specific projects, especially mining. The repartimiento distributed the labor burden more broadly across the remaining indigenous population but preserved the coercive character of the encomienda. Indigenous slavery never disappeared entirely and continued in disguised forms throughout the colonial period.", "id": "fc03"}, {"front": "New Laws of 1542", "back": "Royal legislation promulgated under pressure from Las Casas's advocacy that theoretically prohibited new encomiendas and ended indigenous slavery. The New Laws represented the crown's attempt to reassert authority over colonial labor practices that were destroying the labor supply. In practice, colonial encomenderos resisted the laws fiercely, and Las Casas died in 1566 'having seen most of his legal reforms circumvented by colonial realities.'", "id": "fc04"}, {"front": "Casta system", "back": "The intricate racial classification system elaborated by the Spanish crown to assign legal status, tax obligations, occupational restrictions, and social standing according to ancestry. Its tiers ranged from peninsulares (Spanish-born) at the top through criollos, mestizos, mulattoes, and further mixed-race categories, to indigenous people and enslaved Africans at the base. The source describes it as 'not an accurate description of social reality' but 'a powerful ideological instrument for organizing inequality.'", "id": "fc05"}, {"front": "Peninsulares", "back": "Spanish-born colonists at the top of the casta hierarchy; they claimed the highest positions in church, government, and commerce in Spanish colonial society. The distinction between peninsulares and criollos — both of 'full Spanish descent' but one born in Spain, the other in the Americas — became a significant source of colonial social tension and eventually political conflict.", "id": "fc06"}, {"front": "Criollos (Creoles)", "back": "People of full Spanish descent born in the Americas; below peninsulares in the casta hierarchy. Criollos could hold significant wealth and economic power but were formally excluded from the highest royal offices — a structural grievance that the source identifies as eventually fueling the independence movements of the nineteenth century across Latin America.", "id": "fc07"}, {"front": "Mestizos, mulattoes, and other mixed-race casta categories", "back": "Intermediate categories in the colonial casta hierarchy. Mestizos: of mixed Spanish-indigenous ancestry. Mulattoes: of mixed Spanish-African ancestry. Zambos, castizos, moriscos, and other sub-categories each designated a different mixture of the three 'founding' racial groups with varying legal disabilities. Colonial casta paintings depicted these categories in paired family scenes — functioning as both social documentation and ideological justification.", "id": "fc08"}, {"front": "Casta paintings", "back": "Colonial artworks (especially from eighteenth-century Mexico) depicting sixteen racial combinations produced by mixing between Spanish, indigenous, and African lineages. Each painting labeled the racial status of offspring based on parental combinations. The source describes them as functioning both as 'documents of colonial social taxonomy' and 'demonstrations of the system's internal logic' — race visualized as visible, classifiable, and transmissible across generations.", "id": "fc09"}, {"front": "Bartolomé de Las Casas (1484–1566)", "back": "Dominican friar and the most important critic of the encomienda system within the Spanish world. Born in Seville, he initially participated in the colonial economy as an encomendero, then converted to indigenous advocacy around 1514. His Brief Account (1542) pressured the crown toward the New Laws; at Valladolid (1550–51) he debated Sepúlveda. His writings shaped later critiques of empire and are considered early contributions to human rights discourse. He died having seen most reforms circumvented.", "id": "fc10"}, {"front": "Brevísima Relación de la Destrucción de las Indias (Brief Account, 1542)", "back": "Las Casas's polemical account of Spanish atrocities in the Americas, addressed to King Charles I of Spain. Its purpose was unambiguously political — to pressure the crown to abolish the encomienda and substitute peaceful missionary conversion for military subjugation. The graphic violence of the descriptions was deliberate: Las Casas wanted to force the king to confront what was being done in the crown's name. Published 1552; foundational in human rights history.", "id": "fc11"}, {"front": "Juan Ginés de Sepúlveda", "back": "A humanist scholar and the opponent of Las Casas at the Valladolid Debate. He argued that indigenous peoples were 'natural slaves' in the Aristotelian sense — beings whose inferior rationality made subjugation by a superior culture both legitimate and beneficial. His argument rested on four claims: indigenous idolatry and human sacrifice justified war; their 'barbarism' made them natural subjects for civilizing rule; conquest protected innocent victims from cannibalism; and conquest spread Christianity.", "id": "fc12"}, {"front": "Valladolid Debate (1550–1551)", "back": "A formal theological and philosophical debate convened by the Spanish crown — which suspended the conquest of the Americas for its duration — to determine whether continued conquest was morally justifiable. Held before a panel of fourteen theologians; the two principals were Las Casas and Sepúlveda. Neither man was declared the winner; the debate produced no resolution. Its historical significance lies in being the first formal governmental proceeding in any colonial empire in which the rights of colonized people were seriously debated.", "id": "fc13"}, {"front": "Aristotelian 'natural slave' theory and Sepúlveda's application", "back": "Aristotle's concept (in the Politics) that some humans are by nature suited to be ruled rather than to rule — that their inferior rationality makes subjugation by more rational peoples both legitimate and beneficial. Sepúlveda applied this framework to indigenous Americans, arguing their practices (idolatry, human sacrifice, 'barbarism') demonstrated the inferior rationality that justified conquest. Las Casas rejected the application entirely by asserting universal human rational capacity.", "id": "fc14"}, {"front": "Las Casas's point of view — strengths and limitations", "back": "Las Casas's strength: his eyewitness testimony as a former encomendero gave his account unique authority and credibility. His limitation: he remained a European Dominican friar whose ultimate goal was indigenous Christianization, not indigenous sovereignty. He did not question Spain's right to colonize the Americas; he questioned the methods — peaceful missionary conversion vs. military conquest. From the perspective of indigenous peoples, this distinction may have been secondary to the shared colonial outcome.", "id": "fc15"}, {"front": "Mercury amalgamation at Potosí", "back": "The industrial process used to extract silver from ore at Potosí's mines; it exposed indigenous workers to toxic mercury vapor, collapsed their lungs, and produced life expectancies measurable in months. Potosí is the clearest documented instance of encomienda/repartimiento labor being murderous in the most literal sense — and of the contradiction that the system accelerated the very demographic collapse it depended upon.", "id": "fc16"}, {"front": "What was the colonial labor crisis that drove the encomienda system's development?", "back": "The biological catastrophe of the Columbian Exchange (virgin-soil epidemics) left Spanish colonizers with a severe labor crisis. The indigenous populations on whom they had planned to build a tribute economy were dying at incomprehensible rates. The encomienda was the colonial response — attempting to extract labor from a collapsing population while simultaneously providing the ideological justification (Christianization) required by Spanish law and Church authority.", "id": "fc17"}, {"front": "Why did enslaved Africans replace indigenous laborers?", "back": "As indigenous populations collapsed from epidemic disease and encomienda labor conditions, the colonial labor supply collapsed with them. The Spanish colonial economy imported enslaved Africans to replace indigenous workers — especially in Caribbean agriculture and mining. This demographic substitution drove the growth of the transatlantic slave trade and the racial complexity of colonial society that the casta system attempted to taxonomize and manage.", "id": "fc18"}, {"front": "HAPP: How should the Brief Account be analyzed as a primary source?", "back": "Historical Context: Written in 1542, fifty years into colonialism; Taino were essentially extinct; New Laws were being debated. Audience: King Charles I — the one institution with power to end encomienda. Purpose: political pressure to abolish encomienda and substitute peaceful conversion. Point of View: former encomendero with eyewitness authority, but whose ultimate goal was Christianization, not indigenous sovereignty — strengthening credibility on what happened while limiting perspective on what should replace it.", "id": "fc19"}, {"front": "Comparison: Las Casas vs. Sepúlveda on indigenous humanity", "back": "Sepúlveda: indigenous peoples are 'natural slaves' — beings of inferior rationality whose subjugation by more rational peoples is legitimate and beneficial; conquest spreads Christianity (highest good). Las Casas: all humans possess rational souls regardless of cultural practices (natural law argument); indigenous cultures are sophisticated; only peaceful persuasion is legitimate conversion; actual conquest is documented brutality, not benevolent civilization. Key difference: Sepúlveda denied indigenous rationality; Las Casas affirmed universal human equality while still serving the colonial project's missionary goal.", "id": "fc20"}, {"front": "Continuity/Change: How did the encomienda evolve into the repartimiento?", "back": "Continuity: Both systems rested on coerced indigenous labor extracted under Spanish authority; both served the colonial economy's need for cheap labor in mines and agricultural estates; both operated under the legal fiction of crown authorization and Christian mission. Change: The encomienda granted a fixed group of indigenous people to a specific encomendero indefinitely; the repartimiento rotated labor obligations among cohorts, distributing the burden more broadly as populations collapsed — adapting the system to demographic catastrophe without abandoning coercion.", "id": "fc21"}, {"front": "The central contradiction of Spanish colonialism (Key Concept)", "back": "The Spanish colonial project simultaneously needed indigenous labor (to mine silver and work estates) and indigenous Christianization (as the moral and legal justification for the encomienda grant). Yet the conditions of that labor made Christianization impossible — workers died too fast — and accelerated the demographic collapse that threatened the labor supply itself. Las Casas identified this contradiction but could not resolve it because he accepted Spanish colonialism's missionary premise while rejecting its methods.", "id": "fc22"}, {"front": "SPICE-T: What Social theme does the casta system illustrate?", "back": "The casta system illustrates the Social theme through the construction of racial hierarchy as a colonial organizing principle. Race was produced (not discovered) by colonialism — the casta categories did not reflect biological reality but created legal, economic, and social realities. The system shows how social inequality can be institutionalized through classification: assigning tax burdens, occupational restrictions, and social standing to categories defined by colonial power, not by the people categorized.", "id": "fc23"}, {"front": "SPICE-T: What Cultural/Intellectual theme does the Valladolid Debate illustrate?", "back": "The Valladolid Debate illustrates the Cultural/Intellectual theme: it demonstrates that the ideas of natural human equality and universal rights could be articulated within the institutional structures of a colonial empire — and that those ideas survived to influence later generations. The debate also illustrates the tension between religious ideology (Christianity's universalist claim that all humans have souls) and colonial practice (treating indigenous people as available for exploitation).", "id": "fc24"}, {"front": "Why did the Valladolid Debate produce no resolution?", "back": "Neither Las Casas nor Sepúlveda was declared the winner by the panel of theologians, and the Spanish crown did not issue a ruling ending the conquest. The most likely reason: the colonial economy was too dependent on coerced indigenous labor for any ruling that validated Las Casas's position to be practically implementable. The contradiction Las Casas identified — that colonial economics undermined its own moral justifications — was real, and the crown could not resolve it through philosophical debate.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

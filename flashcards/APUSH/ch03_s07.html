@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 3, Section 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Washington's Farewell Address (September 19, 1796)", "back": "Published (not delivered) in the Philadelphia American Daily Advertiser. Drafted with Hamilton's substantial help but expressing Washington's own settled convictions. Contained two warnings: (1) against the spirit of party/faction, and (2) against permanent alliances with foreign nations. Both were immediately overtaken by events but became canonical wisdom invoked in every subsequent generation of American political debate.", "id": "fc01"}, {"front": "Warning Against Parties (Farewell Address)", "back": "Washington warned that organized parties were structurally dangerous to republican government: they elevated faction loyalty above national interest, invited foreign manipulation (France backing Republicans, Britain the Federalists), and could produce 'frightful despotism' through alternating revenge cycles. Immediately overtaken by the organized 1800 campaign — but became the standard against which Americans measure partisan excess.", "id": "fc02"}, {"front": "Warning Against Permanent Alliances (Farewell Address)", "back": "Washington advised steering clear of 'permanent alliances with any portion of the foreign world' while encouraging commercial relations. The United States should maintain a 'respectable defensive posture' and use temporary alliances for specific emergencies. This doctrine shaped American foreign policy for the next century: Monroe Doctrine (1823), nineteenth-century European neutrality, and the tradition of suspicion toward binding international commitments.", "id": "fc03"}, {"front": "HAPP — Farewell Address (1796): Historical Context", "back": "Written after eight years dominated by partisan conflict (Federalists vs. emerging Democratic-Republicans) and foreign policy crises (Jay's Treaty, undeclared Quasi-War with France). France and Britain were both attempting to manipulate American domestic politics to serve their strategic interests — Washington had watched foreign powers exploit American factional divisions throughout his presidency.", "id": "fc04"}, {"front": "HAPP — Farewell Address (1796): Audience and Purpose", "back": "Audience: the American public and political leaders of both parties; published not spoken — aimed at posterity as much as 1796 readers. Purpose: to warn against organized factions and entangling foreign alliances — the twin dangers Washington believed most threatened republican survival — and to establish his legacy as the founder who identified these dangers at the republic's birth.", "id": "fc05"}, {"front": "HAPP — Farewell Address (1796): Point of View", "back": "Washington had spent eight years watching Hamilton and Jefferson destroy cabinet unity and fill the press with venom he found personally devastating. His anti-party warning reflects personal experience as much as abstract principle. His Virginian background (agricultural economy less dependent on Atlantic commercial entanglements than New England's) also shaped the anti-alliance isolationist impulse.", "id": "fc06"}, {"front": "Two-Term Tradition", "back": "Washington established the two-term tradition by voluntary retirement in 1797 — not by constitutional requirement. His choice proved the republic did not depend on any single man's continued presence. The tradition held for 144 years until FDR broke it in 1940. The Twenty-Second Amendment (1951) made the two-term limit a constitutional requirement after FDR's four-term presidency.", "id": "fc07"}, {"front": "Election of 1800", "back": "John Adams (Federalist) vs. Thomas Jefferson and Aaron Burr (Democratic-Republicans). The campaign was brutal: Federalist papers called Jefferson an atheist and Jacobin; Republican papers called Adams a monarchist. What made it dangerous was not rhetoric but the constitutional mechanism — the original Constitution's lack of separate presidential/vice-presidential ballots produced a Jefferson-Burr tie at 73 electoral votes each.", "id": "fc08"}, {"front": "Electoral College Tie of 1800", "back": "All 73 Democratic-Republican electors voted for both Jefferson AND Burr, producing a tie — because the original Constitution had no separate ballots for president and vice president. The tie went to the Federalist-controlled House of Representatives. After 36 ballots and several days of genuine constitutional crisis, the House chose Jefferson on February 17, 1801.", "id": "fc09"}, {"front": "Aaron Burr", "back": "New York Democratic-Republican who tied Jefferson in the 1800 electoral vote and threw the election into the House. Hamilton intervened against Burr, viewing him as an 'unprincipled opportunist more dangerous to the republic' than Jefferson. Burr served as vice president (1801–05) but killed Hamilton in their 1804 duel — ending both men's political careers, fatally for Hamilton.", "id": "fc10"}, {"front": "Hamilton's 1800 Intervention", "back": "Despite despising Jefferson, Hamilton worked to ensure the House chose Jefferson over Burr, whom he regarded as an unprincipled opportunist dangerous to the republic. The source calls this 'an act of political and eventually fatal personal courage' — the enmity it created with Burr contributed to the 1804 duel that killed Hamilton. Hamilton chose institutional integrity over personal advantage.", "id": "fc11"}, {"front": "Revolution of 1800", "back": "Jefferson's phrase for his own election: he believed the electorate had rejected the Federalists' drift toward consolidated power and aristocratic governance and restored the republican principles of 1776. Genuinely revolutionary: first peaceful transfer of executive power between opposing parties in republican history. Not fully revolutionary: Hamilton's financial architecture survived intact; governing required pragmatism over ideology.", "id": "fc12"}, {"front": "Peaceful Transfer of Power (1801)", "back": "Jefferson's inauguration on March 4, 1801, marked the first peaceful transfer of executive power between opposing political parties in the history of republican government — a genuine precedent, and one whose value is most visible in the moments it has been threatened. Washington had established that one man leaving power was constitutional; Jefferson and Adams established that one PARTY leaving power peacefully was republican.", "id": "fc13"}, {"front": "Twelfth Amendment (1804)", "back": "Redesigned the Electoral College to require separate ballots for president and vice president — correcting the constitutional defect that produced the 1800 Jefferson-Burr tie. Passed by the Democratic-Republican-dominated Congress after 1800 to prevent future crises arising from partisan coordination. The 1800 election's near-failure drove the amendment.", "id": "fc14"}, {"front": "Federalists' End and Legacy", "back": "By 1800, Federalists were in political retreat and never again won the presidency. But their legacy was durable: Hamilton's financial architecture (national debt, Bank, U.S. credit) survived Jefferson's presidency. The two-party system became permanent American electoral structure. The debate over loose vs. strict construction became the organizing question of constitutional argument for two centuries.", "id": "fc15"}, {"front": "Louisiana Purchase (1803) — Ideological Pragmatism", "back": "Jefferson authorized the Louisiana Purchase — the single largest expansion of federal power in the early republic — despite spending a decade arguing the Constitution permitted only what it explicitly stated. Jefferson found, like every ideologue who takes office, that governing required pragmatism. The Purchase is the paradigmatic example of the gap between constitutional philosophy and the demands of executive governance.", "id": "fc16"}, {"front": "Three Institutional Foundations of the 1790s", "back": "1. Two-party system: Federalists and Democratic-Republicans established the template for organized partisan competition that has characterized every subsequent election. 2. Judicial review: articulated in Federalist No. 78; widely assumed by 1800; established in practice by Marbury v. Madison (1803). 3. Peaceful transfer of power: the 1800 election, though it nearly failed, established that elections — not armies — determine who governs.", "id": "fc17"}, {"front": "Monroe Doctrine (1823) — Connection to Farewell Address", "back": "President Monroe's 1823 declaration that the Western Hemisphere was closed to further European colonization drew explicitly on Washington's Farewell Address tradition: no permanent entanglement in European affairs; the Americas as a separate sphere. Washington's distinction between commercial relations (permitted) and political alliances (discouraged) provided the framework Monroe institutionalized into formal doctrine.", "id": "fc18"}, {"front": "CED Theme: POL — Why did the election of 1800 matter beyond Jefferson's victory?", "back": "The election of 1800 proved that elections, not armies, could determine who governed — a precedent whose value is most visible in the moments it has been threatened. By accepting defeat and leaving office peacefully, John Adams demonstrated that constitutional institutions could channel partisan competition without producing civil war. This was a genuinely novel achievement in 1800 and remains the foundation of American democratic legitimacy.", "id": "fc19"}, {"front": "Compare/Contrast: Washington's Farewell vs. Jefferson's 'Revolution of 1800'", "back": "Washington warned against parties and predicted they would produce factional despotism. Jefferson called his election a revolution that restored republican principles. Both were right: Washington correctly diagnosed parties' dangers (the 1800 crisis nearly produced the despotism he warned about), and Jefferson correctly identified that a peaceful partisan power transfer was genuinely revolutionary. The tension between the two perspectives defines the early republic's ambiguity.", "id": "fc20"}, {"front": "Continuity/Change: The Federalist Legacy after 1800", "back": "Change: Federalists lost the presidency permanently; Democratic-Republicans dominated national politics for two decades. Continuity: Hamilton's financial architecture (debt consolidation, Bank of the United States, creditworthiness) survived. The constitutional debate Hamilton and Jefferson fought in the 1790s — loose vs. strict construction — became the organizing framework for American constitutional argument in every subsequent era.", "id": "fc21"}, {"front": "Washington as 'Indispensable Man'", "back": "Washington's unique prestige held the constitutional experiment together while the new government established its legitimacy. By 1797 he was exhausted by partisan attacks and chose to retire. His retirement was as constitutionally important as his service: it proved republican government could survive the loss of its founding hero. The republic that depended on one man's presence was not yet a republic.", "id": "fc22"}, {"front": "Foreign Policy During the 1790s — Pattern", "back": "Britain and France's ongoing war (from 1793) consistently threatened American neutrality: Jay's Treaty (1794) — pro-British perception → French retaliation → XYZ Affair → Quasi-War. Washington and Adams sought neutrality; partisan divisions (Federalists pro-British, Democratic-Republicans pro-French) made unified foreign policy impossible. Washington's Farewell Address was partly a response to this foreign manipulation of American domestic politics.", "id": "fc23"}, {"front": "Marbury v. Madison (1803) — Connection to Federalist No. 78", "back": "Chief Justice John Marshall's 1803 decision established judicial review in practice, fulfilling the theoretical foundation Hamilton had laid in Federalist No. 78. Marshall — a Federalist — used a Democratic-Republican victory over a Federalist patronage appointment to establish the principle that courts could invalidate unconstitutional acts, embedding Hamiltonian constitutional theory into precedent under Jefferson's watch.", "id": "fc24"}, {"front": "What made the Election of 1800 a genuine 'revolution' by world standards?", "back": "In 1800, virtually every major state in the world was governed by hereditary monarchy; peaceful transfer of power between organized competing parties was historically unprecedented in republican government. The election's resolution — after 36 House ballots, genuine constitutional crisis, and Hamilton's personal intervention — established that the American republic could channel partisan competition without violence. This was revolutionary by the standards of world history in 1800.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

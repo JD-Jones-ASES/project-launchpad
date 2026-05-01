@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "WWII home-front central contradiction", "back": "The war that the United States fought against fascism and racial hierarchy abroad was waged by a nation that practiced racial hierarchy at home — in the armed forces, in war industries, in federal housing policy, and in the forced relocation and imprisonment of its own citizens based solely on their ancestry. The Double V campaign gave this contradiction its most precise articulation.", "id": "fc01"}, {"front": "Executive Order 9066 (February 19, 1942)", "back": "Signed by FDR ten weeks after Pearl Harbor, authorizing military commanders to designate areas from which persons might be excluded. Applied specifically to Japanese Americans on the West Coast. Approximately 120,000 people of Japanese ancestry removed from their homes — 62% were American citizens (Nisei born in the United States). Confined in ten internment camps in remote inland locations.", "id": "fc02"}, {"front": "General DeWitt's actual reasoning for internment", "back": "'The Japanese race is an enemy race and while many second and third generation Japanese born on United States soil...have become Americanized, the racial strains are undiluted.' The FBI and naval intelligence had both reported no organized security threat from the Japanese American community. DeWitt's 'military necessity' argument was racism, not intelligence.", "id": "fc03"}, {"front": "Nisei", "back": "Second-generation Japanese Americans — born in the United States as citizens. Approximately 62% of the 120,000 people interned under EO 9066 were Nisei American citizens. Despite internment, approximately 33,000 Japanese Americans (including many Nisei) served in the U.S. military during the war.", "id": "fc04"}, {"front": "Internment camps — locations and conditions", "back": "Ten camps in remote inland locations: Manzanar and Tule Lake (California), Minidoka (Idaho), Heart Mountain (Wyoming), and others. Families given days to dispose of businesses, homes, and property. Property losses: $1.3–6.2 billion in current dollars. Internees lived in barracks behind barbed wire, guarded by armed soldiers.", "id": "fc05"}, {"front": "Korematsu v. United States (1944)", "back": "Supreme Court upheld Japanese American exclusion orders. Justice Hugo Black: 'pressing public necessity may sometimes justify the existence of such restrictions.' Justice Frank Murphy's dissent: called it 'a legalization of racism.' The decision upheld a policy based on race without individual evidence of disloyalty. Explicitly overruled by the Supreme Court in Trump v. Hawaii (2018): 'gravely wrong the day it was decided.'", "id": "fc06"}, {"front": "Civil Liberties Act (1988)", "back": "Congress formally apologized for Japanese American internment and awarded $20,000 in reparations to each surviving internee. Forty-six years after EO 9066, the U.S. government acknowledged that internment was a constitutional failure driven by racial prejudice rather than military necessity.", "id": "fc07"}, {"front": "Trump v. Hawaii (2018)", "back": "Supreme Court decision explicitly overruling Korematsu v. United States, calling it 'gravely wrong the day it was decided.' Seventy-four years after the original decision, the Court acknowledged that racial security policy was constitutionally indefensible — while simultaneously upholding a travel ban in the same opinion, illustrating that the pattern the source identifies has not been fully resolved.", "id": "fc08"}, {"front": "442nd Regimental Combat Team", "back": "Unit composed entirely of Nisei soldiers that became the most decorated unit of its size in U.S. Army history. Fought in Italy and France. Their families were interned while they served. The 442nd's record directly refuted the military's racial ideology that Black and Japanese American soldiers were less capable — a central piece of evidence for postwar desegregation.", "id": "fc09"}, {"front": "Bracero Program (1942–64)", "back": "Bilateral agreement between the United States and Mexico bringing Mexican agricultural workers (braceros — 'those who work with their arms') to the United States under temporary contracts. At wartime peak: ~200,000 per year. Total: ~4.6 million workers over 22 years. Contracts theoretically guaranteed minimum wages, decent housing, and return transportation. Enforcement was minimal; workers who complained risked deportation. Reshaped demographics of agricultural California and Texas.", "id": "fc10"}, {"front": "Bracero Program — migration network legacy", "back": "The program persisted until 1964 and created migration networks and social ties that anchored subsequent Mexican immigration — documented and undocumented — for the rest of the century. A wartime labor solution that produced one of the most significant demographic transformations of twentieth-century America.", "id": "fc11"}, {"front": "Rosie the Riveter", "back": "J. Howard Miller's iconic poster of a woman flexing her arm with the caption 'We Can Do It!' became the symbol of women's wartime industrial labor. Part of a coordinated War Manpower Commission and propaganda campaign actively recruiting women into factory jobs previously defined as male. The numbers: women in paid workforce rose from 27% (1940) to 37% (1945).", "id": "fc12"}, {"front": "Women in wartime industry — the double transformation", "back": "Women operated welding equipment, assembled aircraft, built ships, worked in munitions factories. Black women entered defense plants for the first time in significant numbers. Wages higher than any previous women's work; skills were real. BUT: the transformation was temporary by design — the same government and media apparatus that recruited women then ran a campaign to return them to domestic roles. ~2 million women left or were displaced from industrial jobs 1945–46.", "id": "fc13"}, {"front": "Postwar reversal of women's industrial employment", "back": "'Many had not wanted to leave.' The gap between wartime experience (higher wages, real skills, workplace presence) and postwar ideology (domesticity, separate spheres) became one of the structural tensions that produced the second wave of feminism in the 1960s. Betty Friedan's The Feminine Mystique (1963) documented the specific frustration of women who had tasted industrial equality and been told to abandon it.", "id": "fc14"}, {"front": "Double V Campaign", "back": "Launched by the Pittsburgh Courier (leading Black newspaper) in February 1942: victory over fascism abroad and victory over racism at home. The clearest contemporary articulation of the WWII home-front contradiction. It was a demand that the democratic principles for which the war was being fought be applied to the citizens doing the fighting — the most succinct expression of the civil rights argument of the era.", "id": "fc15"}, {"front": "African Americans' 'bitterly paradoxical position' in WWII", "back": "The nation asked African Americans to fight against fascist racial hierarchy while subjecting them to Jim Crow segregation in the armed forces, discrimination in war industries, exclusion from New Deal benefits, and racial violence at home. The Double V campaign named this paradox. The military records of the Tuskegee Airmen and 761st Tank Battalion disproved its racial ideology.", "id": "fc16"}, {"front": "Tuskegee Airmen (332nd Fighter Group / 477th Bombardment Group)", "back": "Black pilots who flew over 15,000 individual sorties in the European and Mediterranean theaters. Credited with never losing a bomber to enemy fighters while on escort duty — a record no other escort fighter group claimed. Systematically disproved the military ideology that Black soldiers were less capable in combat roles. Trained at Tuskegee, Alabama.", "id": "fc17"}, {"front": "761st Tank Battalion — 'Black Panthers'", "back": "Black armored unit that trained at Camp Hood and fought across France, Belgium, and Germany. Requested by General Patton. Their combat record — like the Tuskegee Airmen's — directly refuted the racial ideology used to justify military segregation. Along with the 442nd, the 761st's record provided the most powerful factual argument for desegregation.", "id": "fc18"}, {"front": "Military segregation ideology and its refutation", "back": "The armed forces' racial ideology held that Black soldiers were less capable in combat roles and should be assigned to labor battalions, supply depots, and support positions. The Tuskegee Airmen and 761st Tank Battalion systematically disproved this. Their records became the evidential foundation for the postwar desegregation argument — and for Truman's EO 9981 (1948).", "id": "fc19"}, {"front": "Executive Order 9981 (1948) — Truman desegregates armed forces", "back": "Truman's order desegregating the armed forces — one of the first executive actions of the civil rights era. Taken partly in response to A. Philip Randolph's threat to organize a Black draft resistance movement. Connected the WWII military record to postwar civil rights: African American soldiers' documented performance was the moral case; Randolph's threatened resistance was the political lever.", "id": "fc20"}, {"front": "A. Philip Randolph", "back": "Labor leader and civil rights organizer who threatened to organize Black draft resistance unless Truman desegregated the armed forces. His 1941 threat to march on Washington had previously forced FDR to sign Executive Order 8802 (banning racial discrimination in defense industries and federal agencies). Demonstrates that political leverage — not only moral argument — was required to produce civil rights executive action.", "id": "fc21"}, {"front": "SOC + WOR + NAT Theme: WWII home front", "back": "The three themes intersect at the WWII home front: The WOR mission was explicitly democratic (defeat fascist racial hierarchy). The SOC reality was segregated armed forces, interned Japanese Americans, excluded Black workers, and displaced women. The NAT question — who belongs to the nation and on what terms — was answered differently for different groups. The gap between the WOR democratic mission and the SOC domestic reality is the central historical tension the source identifies.", "id": "fc22"}, {"front": "Property losses from internment", "back": "Japanese American families given days to dispose of businesses, homes, and property before reporting to assembly centers. Property losses estimated at $1.3 to $6.2 billion in current dollars. The economic destruction was compounded by the impossibility of forced selling under duress: businesses sold for pennies on the dollar, farms abandoned, homes lost. The Civil Liberties Act's $20,000 per survivor in 1988 was a symbolic acknowledgment, not full restitution.", "id": "fc23"}, {"front": "HAPP: Korematsu v. United States (1944) — Justice Murphy's dissent", "back": "Historical context: WWII, Pearl Harbor 2.5 years earlier, EO 9066, West Coast exclusion orders, FBI reports of no organized threat. Audience: legal community, future courts. Purpose: dissent from majority opinion upholding exclusion as constitutional. Point of view: Murphy writing from a civil liberties absolutist position — his 'legalization of racism' characterization proved prescient; the Court explicitly adopted his view 74 years later in Trump v. Hawaii (2018).", "id": "fc24"}, {"front": "Comparison: Internment and German/Italian Americans", "back": "The United States was simultaneously at war with Germany and Italy — but German and Italian Americans were not subjected to mass internment. Individual German and Italian nationals were detained; but no mass race-based exclusion orders applied to them. This comparison makes the racial basis of the Japanese American internment explicit: the threat of enemy-origin civilians was evaluated differently by race, not by evidence of individual disloyalty.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

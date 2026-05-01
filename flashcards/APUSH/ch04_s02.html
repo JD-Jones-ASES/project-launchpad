@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 4, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Market Revolution", "back": "The transformation of the U.S. economy from largely self-sufficient household production to participation in regional and national markets organized around wage labor, cash crops, and manufactured goods (approximately 1800–1860). Driven by transportation improvements (canals, railroads), technological innovations (cotton gin, power loom, interchangeable parts), and expansion of credit and banking. It remade class structures, redefined gender roles, generated urban poverty alongside middle-class prosperity, and sharpened sectional specialization.", "id": "fc01"}, {"front": "Erie Canal (completed 1825)", "back": "363-mile canal from Albany (Hudson River) to Buffalo (Lake Erie), built over eight years under Governor DeWitt Clinton of New York. Reduced freight costs from Buffalo to New York City from $100/ton to $4/ton — a 96% reduction. Paid back its entire construction cost in tolls within a decade. Destroyed the economic isolation of the interior; made New York City the nation's dominant commercial hub. Its deeper significance: a structural integration of the Northeast and Great Lakes basin into a single market economy.", "id": "fc02"}, {"front": "Railroad revolution", "back": "By 1840 the U.S. had 3,328 miles of railroad track; by 1850, more than 9,000. Railroads surpassed canals because they operated year-round (canals froze), could reach areas without navigable water, and moved freight and passengers faster. Secondary effects: stimulated iron and steel industries, demanded standardized time zones, and pushed commercial agriculture's frontier westward faster than wagon roads. The railroad was 'a new spatial logic for the economy,' not simply a faster canal.", "id": "fc03"}, {"front": "Cotton gin (1793, Eli Whitney)", "back": "A machine that mechanized the separation of cotton fiber from seeds, increasing one worker's cleaning output from roughly 1 pound/day to 50 pounds/day. Its effect was paradoxical: by making cotton vastly more profitable to cultivate at scale, it dramatically increased the demand for enslaved labor rather than replacing it. Cotton production grew from ~3,000 bales in 1790 to 4.5 million bales in 1860. By the 1840s, cotton was more than half the value of all U.S. exports — the 'King Cotton' economy.", "id": "fc04"}, {"front": "Internal slave trade", "back": "After the international slave trade was banned in 1808, the internal trade grew into a massive commercial system. Approximately 700,000 people were moved from the Upper South (Virginia, Maryland, Kentucky) to the Deep South (Alabama, Mississippi, Louisiana) between 1820 and 1860 to supply the cotton-growing labor demand. Families were separated; communities destroyed. The market revolution applied its logic of commodification to human beings — enslaved people became the primary capital investment of Southern planters.", "id": "fc05"}, {"front": "Lowell mill system", "back": "Large integrated textile mills built at Lowell, Massachusetts beginning in 1822 by the Boston Associates. Originally employed young women from New England farm families ('mill girls') who lived in company boarding houses and worked 12–14 hours/day. Initially celebrated as a model of industrial benevolence. By the 1830s: speed-up (faster machinery), stretch-out (more looms per worker), and wage cuts. By the 1840s: Irish immigrant workers replaced mill girls, creating a more vulnerable and desperate workforce.", "id": "fc06"}, {"front": "Speed-up and stretch-out", "back": "Labor intensification practices introduced in Lowell mills in the 1830s: the speed-up increased machinery speeds; the stretch-out required workers to tend more looms simultaneously. Combined with wage cuts during market downturns, these changes transformed the Lowell system from its benevolent origins into a typical industrial labor regime. Lowell mill girls struck in 1834 and 1836 in response — among the earliest industrial strikes in American history.", "id": "fc07"}, {"front": "Cult of domesticity", "back": "The 19th-century ideology dominant in middle-class Northern culture (c. 1820s–Civil War) that assigned men to the competitive 'public sphere' of market work and women to a private domestic sphere of home, family, and moral cultivation. Simultaneously elevated women's moral status (as more virtuous and pious) and confined them legally and economically: married women could not own property, sign contracts, or vote. Applied primarily to middle-class white women; enslaved women, immigrant workers, and frontier women contradicted its premises entirely.", "id": "fc08"}, {"front": "Coverture", "back": "The common-law doctrine by which a woman's legal identity merged with her husband's upon marriage, extinguishing her right to own property, sign contracts, retain earnings, or maintain custody of children. Coverture underpinned the cult of domesticity's legal dimension and was a central target of the women's rights movement. The Seneca Falls Declaration (1848) listed coverture-based grievances as central to its indictment of male legal domination.", "id": "fc09"}, {"front": "The salaried middle class", "back": "A new social stratum created by the market revolution: clerks, managers, lawyers, doctors, ministers, and shopkeepers who neither owned significant productive property nor sold manual labor. Middle-class identity was defined through consumption, respectability, and visible markers of refinement (carpeted parlors, pianos, wives who managed households without physical labor). Middle-class prosperity was real but rested on cheap Southern slave-grown cotton and cheaply made Northern factory goods.", "id": "fc10"}, {"front": "Regional specialization and interdependence", "back": "The market revolution produced three distinct but interdependent regional economies: the Northeast (manufacturing, finance, commercial farming), the South (slave-grown staples: cotton, tobacco, rice, sugar), and the West (grain, livestock, raw materials). Each region needed the others — Southern cotton fed Northern mills; Northern credit financed Southern plantations; Western wheat fed Eastern cities. But each also developed distinct labor systems, social structures, and political interests. Economic integration produced structural conditions for sectional conflict, not harmony.", "id": "fc11"}, {"front": "King Cotton", "back": "The phrase describing the dominance of cotton in the Southern economy and American export trade. By the 1840s, cotton accounted for more than half the value of all American exports. Southern planters invested capital not in factories or banks but in land and enslaved people, whose value rose with cotton demand. The King Cotton economy locked the South into a plantation system that deepened slavery's entrenchment and made the region hostile to the tariffs and economic policies that benefited Northern manufacturing.", "id": "fc12"}, {"front": "Boston Associates", "back": "The group of merchant capitalists who financed and built the Lowell mill system beginning in 1822. They represented the transition from mercantile to industrial capitalism in New England — investing commercial profits into manufacturing infrastructure rather than trade. Their integrated mill system (combining spinning, weaving, and finishing under one roof) was a major organizational innovation in American industrial history.", "id": "fc13"}, {"front": "Permanent propertyless proletariat", "back": "The market revolution created, for the first time in American history, a permanent class of workers without property who depended entirely on wage labor. The Lowell ideologizers had promised wage labor would be temporary — a transitional phase before marriage or farm purchase. By the 1840s, poverty was structural, not merely personal, and mill work was a permanent condition for Irish immigrant workers who had no alternative. This new class formation is one of the market revolution's central social consequences.", "id": "fc14"}, {"front": "WXT Theme: Transportation and market integration", "back": "Work, Exchange, and Technology (WXT) is the primary CED theme for the market revolution. The Erie Canal (1825) reduced freight costs by 96%; railroads then superseded canals by 1850, with over 9,000 miles of track. These transportation improvements — combined with the cotton gin, power loom, and interchangeable parts — integrated regional markets and drove the transition from subsistence to commercial production. Technology and infrastructure reshaped both what was produced and who could participate in exchange.", "id": "fc15"}, {"front": "SOC Theme: Class formation in the market revolution", "back": "Social Structures (SOC) is the second CED theme: the market revolution created an industrial working class (permanent wage laborers, mostly Irish immigrants by the 1840s), a salaried middle class (defined by consumption and professional employment), and entrenched the racial stratification of the plantation economy. Gender roles were reshaped — cult of domesticity for middle-class white women; factory labor for immigrant women; enslaved labor for Black women. Economic change and social change moved together.", "id": "fc16"}, {"front": "Interchangeable parts", "back": "A manufacturing innovation — associated with Eli Whitney's government musket contracts and later with Lowell mill machinery — in which component parts were manufactured to uniform specifications so they could be swapped without individual fitting. Interchangeable parts made mass production possible, reduced skilled labor requirements, and enabled faster repair of machinery. Combined with the power loom and other innovations, they drove the productivity gains of American industrialization.", "id": "fc17"}, {"front": "Comparison: Lowell mill girls vs. Irish immigrant workers", "back": "Lowell mill girls (1820s–1840s): New England farm daughters, temporary workers, lived in supervised boarding houses, could invoke 'republican rhetoric of citizenship' in strikes. Irish immigrant workers (1840s–): Driven from Ireland by the potato famine, more desperate, less likely to have alternatives, less able to invoke republican rhetoric, more vulnerable to dismissal. The replacement of one workforce with the other illustrates how the market revolution's labor regime hardened as management faced a more exploitable workforce.", "id": "fc18"}, {"front": "Continuity/Change: Household production to market participation", "back": "In 1800: most Americans lived in self-sufficient farming households that produced most of what they consumed and purchased very little. By 1848: those same geographic spaces were threaded with canals, turnpikes, and railroads; inhabitants worked for wages or sold cash crops; goods were manufactured in factories. This transformation — from household to market production — is the fundamental economic change of the first half of the 19th century, reshaping class, gender, and regional identity.", "id": "fc19"}, {"front": "\"Railroad time\" and standardization", "back": "Before railroads, each community used local solar time. The railroad's scheduling requirements made standardized time zones a practical necessity — 'railroad time' eventually replaced local solar time across the nation. This is an example of how transportation infrastructure imposed social and organizational change beyond its primary economic function. Standardized time is one of the railroads' 'profound secondary effects' on American society.", "id": "fc20"}, {"front": "Why did the market revolution deepen rather than alleviate slavery?", "back": "The market revolution deepened slavery through three mechanisms: (1) the cotton gin made large-scale cotton cultivation enormously profitable, expanding the demand for enslaved labor; (2) the international slave trade's abolition (1808) meant this demand had to be met through the internal trade, which grew into a massive commercial system; (3) Southern planters invested capital in land and enslaved people rather than factories, locking the South into a plantation economy that made slavery its central institution. The market's commodification logic applied to human beings.", "id": "fc21"}, {"front": "DeWitt Clinton and 'Clinton's Big Ditch'", "back": "Governor DeWitt Clinton of New York championed the Erie Canal project against skeptics who mocked it as 'Clinton's Big Ditch.' The canal required raising boats more than 500 feet across the Appalachian terrain through 83 locks along its 363-mile length. Its success — paying back construction costs within a decade and transforming New York City into the nation's dominant commercial hub — vindicated Clinton's vision and established the model of state-financed infrastructure investment.", "id": "fc22"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

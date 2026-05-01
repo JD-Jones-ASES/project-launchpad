@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Abraham Lincoln (1809–1865) — career arc", "back": "Born in Kentucky log cabin; self-educated in Indiana and Illinois. Illinois legislator; one term in Congress (1847–49). Returned to prominence by Kansas-Nebraska Act; Lincoln-Douglas debates (1858) made him a national figure. Won 1860 Republican nomination and election. Navigated political and military crises with 'strategic patience and rhetorical genius.' Assassinated by John Wilkes Booth at Ford's Theatre, April 14, 1865 — five days after Lee's Appomattox surrender.", "id": "fc01"}, {"front": "Lincoln's three motivations for the Emancipation Proclamation", "back": "(1) Military necessity: depriving the Confederacy of its primary labor force by encouraging enslaved people to defect. (2) Diplomatic necessity: preventing British and French recognition of the Confederacy by transforming the war into an explicit anti-slavery struggle. (3) Political reality: maintaining Radical Republican support while not alienating border states.", "id": "fc02"}, {"front": "Antietam (September 17, 1862) and emancipation timing", "back": "Bloodiest single day in American military history — approximately 22,000 casualties on both sides. Lincoln had been waiting for a Union victory before issuing the preliminary Emancipation Proclamation (Secretary Seward's advice: without a military victory, emancipation would look like an act of desperation). Antietam provided that occasion. Preliminary proclamation issued September 22, 1862.", "id": "fc03"}, {"front": "Emancipation Proclamation — geographic limits and their rationale", "back": "Applied only to states 'in rebellion' — explicitly EXEMPTING border states (Kentucky, Missouri, Maryland, Delaware) and Confederate areas already under Union control. About 750,000–800,000 enslaved people in exempted areas were not immediately freed. Lincoln's justification: the Proclamation was a military order under his commander-in-chief powers, not general emancipation legislation (which would require a constitutional amendment).", "id": "fc04"}, {"front": "Emancipation Proclamation — actual achievements", "back": "(1) ~180,000 enslaved people fled to Union lines in months after Jan. 1, many enlisting as USCT soldiers. (2) Made British and French recognition of the Confederacy politically impossible. (3) Transformed the war's character into an explicit anti-slavery struggle. (4) Set in motion the political logic culminating in the Thirteenth Amendment.", "id": "fc05"}, {"front": "Constitutional basis for the Emancipation Proclamation", "back": "Lincoln claimed the Proclamation as a military measure under his commander-in-chief powers — depriving the Confederacy of enslaved labor was a legitimate military objective. He believed general emancipation legislation would require a constitutional amendment. The Thirteenth Amendment (1865) accomplished what the Proclamation could not constitutionally do: abolish slavery throughout the United States, including in border states and Union-controlled Confederate areas.", "id": "fc06"}, {"front": "Gettysburg Address — '87 years ago' rhetorical move", "back": "'Four score and seven years ago' dates the nation's founding to 1776 (Declaration of Independence), not 1787 (Constitution). The nation's founding promise was equality ('all men are created equal'), not constitutional self-government. This dating has constitutional implications: if the founding promise was equality, the Constitution's accommodation of slavery was not the fulfillment of the founding but a betrayal of it — a rhetorical revolution that redefined what the war was about.", "id": "fc07"}, {"front": "Gettysburg Address — HAPP analysis", "back": "Historical context: November 1863, four months after Gettysburg (turning-point Union victory), ten months after Emancipation Proclamation. Audience: 15,000 at cemetery dedication + Northern public via newspapers. Purpose: redefine the war as a struggle for 'a new birth of freedom,' not merely a constitutional dispute over union. Point of view: Lincoln as president and commander-in-chief, using the Declaration (not Constitution) as the war's moral foundation.", "id": "fc08"}, {"front": "Gettysburg Address — 272 words, two-minute speech", "back": "Delivered November 19, 1863 at the dedication of the Soldiers' National Cemetery at Gettysburg, Pennsylvania. At 272 words and approximately two minutes, it was far shorter than the main address by Edward Everett (two hours). Yet Lincoln's speech endured as the definitive expression of the war's meaning. Its brevity was rhetorical economy: every word worked.", "id": "fc09"}, {"front": "Second Inaugural Address — theological argument", "back": "March 4, 1865 — delivered knowing Confederate defeat was imminent. Central argument: both sides prayed to the same God; neither prayer was answered as asked; perhaps slavery's destruction, with all its terrible cost, was the price the nation paid for two and a half centuries of enslaved labor. Acknowledged NATIONAL moral culpability — North as well as South — refusing the comfortable narrative that only the South was guilty.", "id": "fc10"}, {"front": "'With malice toward none, with charity for all'", "back": "The closing of Lincoln's Second Inaugural (March 1865). The full sentence: 'With malice toward none, with charity for all, with firmness in the right as God gives us to see the right, let us strive on to finish the work we are in, to bind up the nation's wounds.' Often cited as defining Lincoln's intended approach to Reconstruction — lenient and reconciliatory. Lincoln's assassination left this vision to be implemented by Andrew Johnson, with very different results.", "id": "fc11"}, {"front": "Lincoln's three war documents and their distinct contributions", "back": "(1) Emancipation Proclamation: converted military necessity into moral purpose — the war became a war for freedom. (2) Gettysburg Address: redefined the nation's founding promise from constitutional self-government to human equality, using the Declaration of Independence. (3) Second Inaugural: acknowledged national moral culpability for slavery, North and South, refusing triumphalism. Together they created the interpretive framework for American historical argument ever since.", "id": "fc12"}, {"front": "Lincoln's evolving position — from 'unionist' to 'emancipationist'", "back": "Lincoln did not enter the war as an emancipationist: his first inaugural promised no interference with slavery where it existed; his initial war aim was Union preservation. By the war's midpoint, he had issued the most consequential executive order in American history. The change was driven not by evolving personal conviction alone but by military, diplomatic, and political necessity — illustrating how war compels political positions that peacetime makes impossible.", "id": "fc13"}, {"front": "Battle of Gettysburg (July 1–3, 1863)", "back": "Turning point of the Eastern war: Lee's second invasion of the North was repulsed with approximately 51,000 total casualties. The Confederate Army of Northern Virginia never recovered its offensive capacity after Gettysburg. The battle's cemetery provided Lincoln the occasion for the Address, delivered November 19, 1863. The same date saw Vicksburg fall (July 4), giving the Union control of the Mississippi River — the Western theater's turning point.", "id": "fc14"}, {"front": "Why Seward advised Lincoln to delay the Emancipation Proclamation", "back": "Secretary of State William Seward argued that a proclamation issued after a string of Union military failures would look like 'the last shriek on the retreat' — an act of desperation rather than strength. By waiting for Antietam's outcome (Sept. 17, 1862) and then issuing the preliminary proclamation (Sept. 22), Lincoln could present emancipation as a confident policy of a government capable of enforcing it.", "id": "fc15"}, {"front": "APUSH Key Concept: Lincoln's rhetorical revolution", "back": "Lincoln's war presidency documents performed a fundamental revision of what the Civil War was about. The Proclamation made it a war for freedom. The Gettysburg Address made it a war for equality (grounded in the Declaration, not the Constitution). The Second Inaugural made it a war whose cost reflected national moral responsibility for slavery. Together, these three documents created an interpretive framework that shaped how Americans understand their history.", "id": "fc16"}, {"front": "Comparison: Emancipation Proclamation vs. Thirteenth Amendment", "back": "Proclamation: executive order under commander-in-chief powers; applied only to rebel states; approximately 750,000–800,000 enslaved people exempted; effective while Lincoln held military authority over rebel states. Thirteenth Amendment: constitutional amendment; abolished slavery throughout the United States; no geographic exceptions except as punishment for crime; permanent change to constitutional text; ratified December 6, 1865.", "id": "fc17"}, {"front": "Diplomatic significance of the Emancipation Proclamation", "back": "Britain and France had been considering recognizing the Confederacy; British textile mills needed Southern cotton; the ruling classes of both nations had economic interests in Confederate success. By transforming the war into an explicit anti-slavery struggle, Lincoln made European intervention politically impossible in countries where public opinion strongly opposed slavery. British and French workers rallied against recognition; their governments backed down.", "id": "fc18"}, {"front": "Why Lincoln's assassination matters for Reconstruction", "back": "Lincoln was assassinated April 14, 1865 — five days after Lee's Appomattox surrender and before Reconstruction had begun in earnest. His death left Reconstruction in the hands of Andrew Johnson, a Tennessee Democrat with deeply racist views about Black people's capacity for freedom. The contrast between Lincoln's intended approach (moral seriousness about slavery's wrongs + reconciliatory spirit) and Johnson's application (reconciliation without moral reckoning) shaped the Reconstruction era's tragedy.", "id": "fc19"}, {"front": "Continuity/Change: How Lincoln changed what the Civil War was 'about'", "back": "When it began (1861): a constitutional dispute about union — Lincoln promised no interference with slavery. After Antietam (1862): a military and moral struggle against slavery's Confederate support system. After Gettysburg Address (1863): a war for equality, grounded in the Declaration of Independence. By Second Inaugural (1865): a national moral reckoning with the crime of slavery. Each document marked a stage in this transformation.", "id": "fc20"}, {"front": "What is the 'new birth of freedom' in the Gettysburg Address?", "back": "Lincoln's phrase 'a new birth of freedom' implies that the existing nation had failed to fulfill its founding promise — that freedom needed to be born again through the war's sacrifice. This was a radical reframing: the war was not preserving an existing freedom but creating a new one by finally extending the Declaration's promise of equality to those the founding had excluded. It implied that the Constitution's accommodation of slavery had been a betrayal of the true founding.", "id": "fc21"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

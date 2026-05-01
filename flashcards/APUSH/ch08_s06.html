@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 8, Section 6</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Vietnamization", "back": "Nixon's strategy for withdrawing American troops from Vietnam by gradually transferring combat responsibility to South Vietnamese (ARVN) forces. The strategy extended the war by four years while allowing Nixon to claim progress toward ending it. American forces withdrew but South Vietnamese forces were ultimately unable to resist North Vietnam without American air support — Saigon fell in April 1975.", "id": "fc01"}, {"front": "Silent Majority (November 1969)", "back": "Nixon's November 1969 address claiming that a 'silent majority' of patriotic, law-abiding Americans supported the war and resented the antiwar protesters. Politically effective: it framed the movement as a minority imposing on a patient mainstream and pioneered the culture-war framing that would define American conservative politics for decades — positioning traditional values against cultural elites.", "id": "fc02"}, {"front": "Kent State (May 4, 1970)", "back": "National Guard troops shot and killed four students at Kent State University in Ohio during protests against Nixon's secret bombing of Cambodia. The killings provoked the largest campus strike in American history — more than 450 colleges closed or went on strike. Kent State became a symbol of the war's domestic costs and the Nixon administration's treatment of dissent.", "id": "fc03"}, {"front": "Nixon's Opening to China (February 1972)", "back": "Nixon's visit to Beijing in February 1972 ended 23 years of US non-recognition of the People's Republic of China. Working with National Security Advisor Henry Kissinger, it exploited the Sino-Soviet split and altered the global balance of power. One of the Cold War's most dramatic diplomatic moments — a conservative anti-communist president was uniquely positioned to make the opening without accusations of being 'soft on communism.'", "id": "fc04"}, {"front": "Détente", "back": "Nixon-Kissinger policy of managing, rather than confronting, the Soviet Union. Key agreements: SALT I (1972) limiting strategic nuclear missiles, normalized trade, acceptance of Soviet influence in Eastern Europe in exchange for Soviet restraint elsewhere. Represented a tacit recognition that the US could not roll back Soviet power and must instead stabilize coexistence — a departure from Kennan's original containment and NSC-68's military escalation.", "id": "fc05"}, {"front": "SALT I (1972)", "back": "Strategic Arms Limitation Talks agreement signed in May 1972 by Nixon and Brezhnev; limited the number of strategic ballistic missile launchers for both the US and USSR. The first major arms control agreement of the Cold War, it institutionalized the concept of nuclear parity and established that the two superpowers could negotiate mutually beneficial constraints on their arsenals — a pillar of détente.", "id": "fc06"}, {"front": "Watergate Scandal", "back": "The political scandal that forced Nixon's resignation (August 8, 1974). Began with a June 17, 1972 break-in at the Democratic National Committee headquarters by Nixon re-election campaign operatives. Expanded to reveal illegal wiretapping, 'enemies lists,' CIA/FBI/IRS misuse against political opponents, and obstruction of justice. Investigated by Senate Select Committee, special prosecutors (Cox, Jaworski), and the Washington Post (Woodward and Bernstein).", "id": "fc07"}, {"front": "United States v. Nixon (1974)", "back": "Unanimous (8-0) Supreme Court ruling that Nixon must surrender subpoenaed White House tape recordings — executive privilege was not absolute. The ruling produced the 'smoking gun' tape of June 23, 1972, proving Nixon had ordered the CIA to obstruct the FBI investigation. Facing certain impeachment and conviction, Nixon resigned August 8, 1974 — the first and only presidential resignation in American history.", "id": "fc08"}, {"front": "Executive Privilege", "back": "The president's claim to keep communications within the executive branch confidential. United States v. Nixon (1974) ruled that executive privilege was not absolute — it had limits and could not be used to obstruct a criminal investigation. The ruling established the principle that the president is not above the law, a precedent with lasting significance for executive accountability.", "id": "fc09"}, {"front": "'Smoking Gun' Tape (June 23, 1972)", "back": "White House tape recording of a conversation between Nixon and Chief of Staff H.R. Haldeman on June 23, 1972 — six days after the Watergate break-in — proving Nixon had ordered the CIA to obstruct the FBI investigation. Its release (following the Supreme Court's ruling in United States v. Nixon) removed the last political support for Nixon and made his resignation inevitable.", "id": "fc10"}, {"front": "Gerald Ford's Pardon of Nixon (September 1974)", "back": "Ford's decision to pardon Nixon — removing the possibility of criminal prosecution — was politically devastating, widely seen as placing the president above the law. Ford argued the country needed to move forward rather than undergo a criminal trial. The pardon almost certainly cost Ford the 1976 election. It generated enduring debate about whether presidents and former presidents are truly accountable to the same legal system as ordinary citizens.", "id": "fc11"}, {"front": "Stagflation", "back": "The simultaneous occurrence of high inflation, high unemployment, and slow or negative economic growth — a combination that standard Keynesian economics (which assumed a trade-off between inflation and unemployment, the Phillips Curve) could not explain or prescribe remedies for. Dominated the American economy through much of the 1970s; discredited Keynesian consensus and created the intellectual opening for supply-side economics and Reagan's 1981 tax cuts.", "id": "fc12"}, {"front": "OPEC Oil Embargo (October 1973)", "back": "The Organization of Petroleum Exporting Countries cut off oil exports to the United States and other nations that had supported Israel in the Yom Kippur War. Oil prices quadrupled within months; gasoline lines wound around city blocks. Combined with Vietnam-era spending, the embargo accelerated inflation and contributed to the 1974–75 recession. A second oil shock came with the Iranian Revolution (1979).", "id": "fc13"}, {"front": "Nixon Shock (August 1971)", "back": "Nixon's decision to take the United States off the gold standard — ending the Bretton Woods system (1944) that had pegged the dollar to gold at $35/ounce and governed international finance since World War II. Removing this constraint on money creation contributed to the inflationary spiral of the 1970s. Combined with the OPEC oil shock and Vietnam-era deficits to produce stagflation.", "id": "fc14"}, {"front": "Bretton Woods System (1944)", "back": "International monetary framework established in 1944 pegging major currencies to the US dollar, which was convertible to gold at $35/ounce. Governed international finance from 1944 to 1971. Nixon's abandonment of gold convertibility (the 'Nixon Shock,' August 1971) ended the system and removed the constraint on US money creation, contributing to the inflationary pressures of the 1970s.", "id": "fc15"}, {"front": "Camp David Accords (1978)", "back": "Carter brokered a peace treaty between Egyptian President Anwar Sadat and Israeli Prime Minister Menachem Begin, producing the first peace treaty between Israel and an Arab nation. The accords were Carter's most significant foreign policy achievement. Sadat's willingness to negotiate cost him his life (assassinated 1981) and isolated Egypt from the Arab world, but the Egyptian-Israeli peace has endured.", "id": "fc16"}, {"front": "Iranian Revolution (1979) and the Hostage Crisis", "back": "The Iranian Revolution overthrew the American-backed Shah Mohammad Reza Pahlavi and brought Ayatollah Khomeini to power. In November 1979, Iranian students stormed the US Embassy in Tehran and took 66 Americans hostage for 444 days. Carter's failure to secure their release — and the disastrous failed rescue attempt (Operation Eagle Claw, April 1980) — defined his presidency and directly contributed to Reagan's 1980 victory.", "id": "fc17"}, {"front": "Carter's 'Crisis of Confidence' Speech (July 1979)", "back": "Carter's nationally televised address diagnosing a 'malaise' (a word he did not use) rooted in materialism, lost confidence in government, and eroded common purpose. Both diagnostically accurate and politically disastrous — Americans wanted solutions, not diagnoses. The speech became a symbol of Carter's inability to provide the political leadership the country's crises required, despite the accuracy of his diagnosis.", "id": "fc18"}, {"front": "War Powers Resolution (1973)", "back": "Congressional legislation requiring the president to notify Congress within 48 hours of committing US forces to combat and limiting deployments to 60 days without congressional authorization. Passed over Nixon's veto in response to Vietnam. Critics argue it inadequately constrained executive war-making power; presidents since its passage have generally treated it as unconstitutional rather than binding.", "id": "fc19"}, {"front": "POL + WOR Theme: Watergate and Foreign Policy", "back": "The CED theme connection: Watergate paralyzed American foreign policy at a critical juncture — détente's architects could not sustain their approach after the Soviet invasion of Afghanistan (December 1979). The Iranian Revolution demonstrated the limits of a Cold War foreign policy that had supported authoritarian governments (the Shah) purely on anti-communist grounds, creating the anti-American radicalism it was designed to prevent.", "id": "fc20"}, {"front": "Key Concept: Crisis of Confidence → Conservative Opening", "back": "The convergence of Vietnam, Watergate, stagflation, and the Iran hostage crisis shattered the governing consensus that the federal government could manage the economy, contain communism, and expand social provision. Public trust in government fell from 75% (mid-1960s) to below 25% by 1980. The political reaction was not a demand for new progressive solutions but for less government, lower taxes, and assertive nationalism — exactly Reagan's 1980 program.", "id": "fc21"}, {"front": "The Pentagon Papers (1971)", "back": "Classified Defense Department history of US involvement in Vietnam, leaked to the New York Times by Daniel Ellsberg. Revealed that the government had systematically deceived the public and Congress about the war's prospects. Nixon's attempt to suppress publication led to the Supreme Court ruling in New York Times v. United States (1971) that the government could not impose prior restraint on the press — a landmark First Amendment ruling.", "id": "fc22"}, {"front": "Comparison: Nixon's Foreign Policy Achievements vs. Domestic Abuses", "back": "Nixon's foreign policy was genuinely significant: China opening, SALT I, détente. His domestic political conduct was criminal: illegal wiretapping, enemies lists, misuse of CIA/FBI/IRS, obstruction of justice. This paradox — historic foreign policy achievements alongside unprecedented domestic constitutional abuse — defines Nixon's historical legacy and illustrates that foreign policy success cannot redeem domestic lawlessness.", "id": "fc23"}, {"front": "AP Causation: Why Did Stagflation Discredit Keynesian Economics?", "back": "Keynesian economics prescribed: use government spending to stimulate demand in recessions (causing inflation to rise as unemployment falls) or reduce spending to fight inflation (causing unemployment to rise). Stagflation made both policies self-defeating: stimulating demand to reduce unemployment worsened inflation; reducing spending to fight inflation worsened unemployment. The simultaneous occurrence of both problems violated the theoretical trade-off Keynesian policy depended on.", "id": "fc24"}, {"front": "Continuity/Change: From Containment to Détente to Reagan's Rollback", "back": "The arc of Cold War strategy: Kennan's political-economic containment (1946) → NSC-68's military containment (1950) → détente's managed coexistence (1972) → Carter's collapse of détente (Afghanistan, 1979) → Reagan's return to rollback/confrontation (1980s). Each phase responded to the perceived failures of the previous one; détente represented the peak of accommodation, Reagan its rejection. The basic debate between Kennan's original concept and its military interpretations never fully resolved.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

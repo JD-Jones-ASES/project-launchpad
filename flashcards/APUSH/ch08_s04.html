@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 8, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Civil Rights Act of 1964", "back": "Landmark federal legislation signed by President Johnson on July 2, 1964, after overcoming the longest Senate filibuster in history (57 days). Title II: prohibited discrimination in public accommodations. Title VI: prohibited racial discrimination in federally funded programs. Title VII: prohibited employment discrimination on the basis of race, sex, religion, or national origin and created the EEOC. The inclusion of 'sex' was partly accidental and became the foundation for decades of sex discrimination litigation.", "id": "fc01"}, {"front": "Voting Rights Act of 1965", "back": "Federal legislation signed by President Johnson on August 6, 1965, eliminating discriminatory barriers to Black voting. Catalyzed by 'Bloody Sunday' at Selma's Edmund Pettus Bridge (March 7, 1965). Suspended literacy tests and other discriminatory qualifications in covered jurisdictions; provided for federal examiners to oversee elections. Black voter registration in the Deep South rose from ~29% (1964) to 52% (1967). Reauthorized multiple times; key provision struck down in Shelby County v. Holder (2013).", "id": "fc02"}, {"front": "24th Amendment (ratified January 1964)", "back": "Constitutional amendment abolishing the poll tax in federal elections. Combined with the Voting Rights Act of 1965, it removed the formal instruments of Black disenfranchisement erected in Southern states since the 1890s — a key mechanism of the post-Reconstruction white supremacist political order.", "id": "fc03"}, {"front": "EEOC (Equal Employment Opportunity Commission)", "back": "Federal agency created by Title VII of the Civil Rights Act of 1964 to enforce prohibitions on employment discrimination based on race, sex, religion, or national origin. Its creation institutionalized anti-discrimination enforcement in the workplace and provided the mechanism through which both racial and gender discrimination could be legally challenged.", "id": "fc04"}, {"front": "Bloody Sunday (March 7, 1965)", "back": "State troopers attacked 600 peaceful marchers on the Edmund Pettus Bridge in Selma, Alabama. Television broadcast images of the attack produced one of the largest outpourings of public support the movement had ever generated, directly catalyzing the Voting Rights Act of 1965. A classic demonstration of the movement's strategic logic: provoked violence generating national moral pressure.", "id": "fc05"}, {"front": "Watts Uprising (August 1965)", "back": "Six days of rioting in the Watts neighborhood of Los Angeles, triggered five days after the Voting Rights Act was signed by a confrontation between police and a Black motorist. Left 34 dead, over 1,000 injured, 3,500 arrested; required 14,000 National Guard troops. Demonstrated to stunned white liberals that legislative victory had not resolved the racial crisis — the conditions of Northern and Western Black urban life remained untouched by civil rights legislation.", "id": "fc06"}, {"front": "Kerner Commission (1968)", "back": "President Johnson's commission appointed to investigate the urban uprisings. Reported that the United States was 'moving toward two societies, one black, one white — separate and unequal.' Found the cause was not Black pathology but white racism embedded in housing policy, employment discrimination, and urban under-investment. Johnson, distracted by Vietnam, largely shelved the report — the political timing was poor.", "id": "fc07"}, {"front": "Malcolm X (1925–1965)", "back": "Born Malcolm Little in Omaha; converted to the Nation of Islam while in prison; became its most prominent spokesman by the early 1960s. Argued that integration into white supremacist society was co-optation, not liberation; advocated Black self-determination, economic independence, and pride. Rejected nonviolent integrationism — 'by any means necessary.' Assassinated February 1965 by Nation of Islam members (with whom he had broken). His posthumous Autobiography profoundly shaped the Black Power generation.", "id": "fc08"}, {"front": "Nation of Islam", "back": "African American religious organization that combined Black nationalist politics with a heterodox Islamic theology; led during Malcolm X's era by Elijah Muhammad. The NOI advocated Black separatism and self-reliance, rejecting integration as a goal. Malcolm's break with the NOI in 1964 (following a pilgrimage to Mecca that expanded his religious perspective) led to his assassination by NOI members in February 1965.", "id": "fc09"}, {"front": "Black Power (Stokely Carmichael, 1966)", "back": "A deliberately ambiguous phrase called by Stokely Carmichael (SNCC) during the March Against Fear in Mississippi in 1966. Encompassed a spectrum of meanings: community control, Black electoral power, cultural pride (Black Arts Movement), economic self-sufficiency, and at its edges, armed self-defense. Signaled the movement's shift beyond legal desegregation toward economic and political power — 'legal equality without power is insufficient.'", "id": "fc10"}, {"front": "Black Panther Party (founded Oakland, 1966)", "back": "Organization founded by Huey Newton and Bobby Seale in Oakland, California in 1966. Armed themselves for community defense against police violence. Established community programs (free breakfast for children, health clinics, legal aid). Drew on Malcolm X's self-defense philosophy and Marxist analysis. Represented the most radical tendency of Black Power. Faced sustained FBI COINTELPRO harassment and internal violence that destroyed the organization by the early 1970s.", "id": "fc11"}, {"front": "Stokely Carmichael", "back": "SNCC chairman who replaced John Lewis in 1966 and called for 'Black Power' during the March Against Fear in Mississippi, marking the organization's shift away from integrationism. Later joined the Black Panther Party briefly before moving to Guinea-Conakry, Africa. His call for Black Power was both a political strategy and a cultural declaration — insisting that Black people must be the primary agents of their own liberation.", "id": "fc12"}, {"front": "Nonviolent Integration vs. Black Power — Key Comparison", "back": "Strategic goal: Integration sought entry into existing society on equal terms; Black Power sought transformation of economic and political structures, or separatism. Tactics: Integration used peaceful demonstrations and legal action; Black Power emphasized community self-determination, electoral mobilization, and (in some tendencies) armed self-defense. White allies: Integration welcomed interracial coalitions; Black Power organizations moved toward Black-only leadership. Both emerged from the same experience of white resistance; both produced lasting institutional achievements.", "id": "fc13"}, {"front": "King's Evolution: Beyond Civil Rights to Economic Justice", "back": "In his final years, King moved from a focus on legal segregation to a critique of economic inequality and the Vietnam War. His 1967 'Beyond Vietnam' speech at Riverside Church cost him significant support among white liberals and the civil rights establishment. He was in Memphis in April 1968 supporting a strike by Black sanitation workers — an economic justice campaign — when he was assassinated. His evolution illustrates that 'civil rights' as a frame was always inadequate to the full scope of Black liberation.", "id": "fc14"}, {"front": "Assassination of Martin Luther King Jr. (April 4, 1968)", "back": "King was assassinated by James Earl Ray in Memphis on April 4, 1968, while supporting a sanitation workers' strike. Uprisings erupted in more than 100 American cities; 39 people died. The riots following King's murder were a measure of the accumulated rage between the movement's legislative achievements and the daily conditions of Black urban life — demonstrating that the movement's victories had not resolved the crisis.", "id": "fc15"}, {"front": "Title VII and Sex Discrimination", "back": "The inclusion of 'sex' as a prohibited basis for employment discrimination in Title VII of the Civil Rights Act of 1964 was partly accidental (a last-minute addition intended by opponents to kill the bill) and partly the product of women activists' lobbying. It became the legal foundation for decades of sex discrimination litigation and for the Equal Employment Opportunity Commission's enforcement of gender equity in the workplace.", "id": "fc16"}, {"front": "Autobiography of Malcolm X (1965)", "back": "Written with Alex Haley and published posthumously after Malcolm's February 1965 assassination. Became one of the most influential political texts of the 1960s and 1970s, shaping the Black Power generation's articulation of Black dignity, critique of liberalism's limits, and insistence on Black self-reliance. Malcolm's influence grew after his death precisely because the events of 1965–68 seemed to confirm his diagnosis of liberal America's inadequacy.", "id": "fc17"}, {"front": "NAT Theme: Structural vs. Southern Aberration View of Racism", "back": "The shift from integration to Black Power reflected a broader insight: American racial inequality was not merely a Southern aberration curable by federal legislation, but a structural feature of American society rooted in residential segregation, discriminatory employment, and the cumulative economic effects of slavery and Jim Crow. This structural diagnosis was the intellectual foundation of Black Power's demand for economic and political power beyond formal legal equality.", "id": "fc18"}, {"front": "SOC Theme: The Multiple Meanings of Black Power", "back": "Black Power was not a unified ideology but a field of overlapping critiques sharing a diagnosis (legal equality without economic and political power is insufficient) with different remedies: community control (community development corporations), Black electoral politics (Jesse Jackson's later campaigns), cultural nationalism (Black Arts Movement), revolutionary socialism (Panthers), or separatism (some Black Muslim tendencies). The movement permanently expanded civil rights to include economic and political power.", "id": "fc19"}, {"front": "De Facto vs. De Jure Segregation", "back": "De jure segregation: segregation enforced by law — what the Civil Rights Act of 1964 and Voting Rights Act of 1965 primarily dismantled in the South. De facto segregation: segregation produced by residential patterns, economic inequality, and school district boundaries without explicit legal mandate — the condition of Northern and Western Black communities that the Watts uprising revealed to be untouched by the landmark legislation.", "id": "fc20"}, {"front": "Urban Rebellions ('Long Hot Summers,' 1966–67)", "back": "Following the Watts uprising (1965), urban rebellions erupted in Newark, Detroit, and more than 100 other cities during the 'long hot summers' of 1966 and 1967. Each reflected conditions of concentrated poverty, police brutality, substandard housing, de facto school segregation, and unemployment that federal civil rights legislation had not addressed. The rebellions demonstrated the geographic reach of structural racism beyond the South.", "id": "fc21"}, {"front": "Continuity/Change: From Civil Rights to Human Rights Frame", "back": "The shift from 'civil rights' to 'human rights' as a political frame — articulated by King in his final years — reflected the recognition that formal legal equality was insufficient. Human rights included economic justice: the right to a job, decent housing, education. This frame connected the Black freedom struggle to global anti-colonial movements and anticipated the Poor People's Campaign that King was organizing at the time of his assassination.", "id": "fc22"}, {"front": "Black Voter Registration Impact (1964–1967)", "back": "Following the Voting Rights Act of 1965, Black voter registration in the Deep South increased dramatically — from roughly 29% in 1964 to 52% by 1967. This measurable political outcome was the Voting Rights Act's most immediate achievement and translated into increased Black electoral representation in Southern states over the following decades.", "id": "fc23"}, {"front": "AP Comparison: King vs. Malcolm X on Goals and Tactics", "back": "King: integration into American society on equal terms; nonviolent direct action; interracial coalition; moral suasion of white America. Malcolm X: Black self-determination outside white supremacist society; armed self-defense 'by any means necessary'; Black-only organizing; rejection of integration as co-optation. Agreement: both insisted on Black dignity and condemned white racism; both recognized that 'separate but equal' was a lie. Difference: whether the goal was transformation of self within American society or transformation of American society itself.", "id": "fc24"}, {"front": "AP Causation: Why Did Nonviolent Integration Not Resolve Black Inequality?", "back": "Because the Civil Rights Act of 1964 and Voting Rights Act of 1965 addressed de jure segregation (law-based) but not de facto inequality (structure-based): concentrated urban poverty, residential segregation produced by redlining, employment discrimination, police brutality, and the cumulative economic effects of centuries of exclusion. Legislative dismantling of Jim Crow was necessary but insufficient for the economic liberation Black communities required.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

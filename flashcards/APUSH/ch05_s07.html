@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 7</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "How Reconstruction ended — four causes", "back": "(1) Organized paramilitary violence (KKK, Red Shirts, White League). (2) Political exhaustion: Panic of 1873 → Northern voter attention to economic recovery → Democrats win House 1874. (3) Compromise of 1877: Hayes withdraws federal troops, abandons Reconstruction governments. (4) Supreme Court progressively narrows Reconstruction Amendments (Civil Rights Cases 1883, Plessy 1896). APUSH key: It was overthrown, not a failure of Black political capacity.", "id": "fc01"}, {"front": "Ku Klux Klan — founding and function", "back": "Founded in Pulaski, Tennessee, 1865, by former Confederate General Nathan Bedford Forrest and other ex-Confederate officers. Night-riding campaigns of violence — whipping, mutilation, murder — against Black officeholders, white Republican allies, Black voters, and anyone challenging the racial order. Not merely criminal: a political instrument for 'Redemption' of the South from Republican governance. Temporarily suppressed by Klan Acts (1870–71) and Akerman's prosecutions.", "id": "fc02"}, {"front": "Ku Klux Klan Acts (1870–71)", "back": "Federal legislation giving the federal government authority to prosecute Klan violence as federal crimes and suspend habeas corpus in particularly affected areas. Attorney General Amos Akerman successfully prosecuted hundreds of Klansmen in South Carolina in 1871. The organized Klan was temporarily suppressed. But political will to sustain federal enforcement dissolved by 1872–73; the General Amnesty Act (1872) restored Confederate political rights.", "id": "fc03"}, {"front": "Panic of 1873 and Reconstruction's political collapse", "back": "Worst economic depression the United States had yet experienced, triggered by the collapse of Jay Cooke and Company and railroad over-expansion. Depression lasted five years. Northern voters, focused on economic recovery, lost interest in freedpeople's condition. 1874 midterm elections: Democrats won the House for the first time since before the Civil War. The political coalition that had sustained Reconstruction fractured.", "id": "fc04"}, {"front": "Compromise of 1877 ('Bargain of 1877')", "back": "Republican Rutherford B. Hayes and Democrat Samuel Tilden disputed electoral votes of Florida, Louisiana, and South Carolina. Electoral commission awarded all to Hayes on party-line vote. In exchange: Hayes agreed to withdraw remaining federal troops from the South and abandon Republican Reconstruction governments. Ended the last federal protection for Black political rights. Within months, 'Redeemer' Democratic governments seized control of every Southern state.", "id": "fc05"}, {"front": "Sharecropping — mechanism of labor coercion", "back": "Black family farms white-owned land; receives a crop share (typically 1/3 to 1/2) at year's end. In practice: landlords kept accounts; croppers rarely came out ahead; debt-peonage bound families to the same land year after year. Crop-lien system (merchants advance credit at usurious rates against future crop) deepened indebtedness. Vagrancy laws, labor contract enforcement statutes, and enticement laws (criminal to hire away another's contracted laborer) bound free laborers to land.", "id": "fc06"}, {"front": "Convict leasing system", "back": "Exploited the Thirteenth Amendment's exception clause allowing involuntary servitude 'as a punishment for crime.' Southern states arrested Black men on trivial charges (loitering, petty theft, speaking too loudly) and leased them to private employers (coal mines, turpentine camps, railroad construction) who worked them under conditions comparable to slavery. Mortality rates in some camps exceeded antebellum plantation rates. Generated revenue for states and profits for employers. Not abolished in all states until the 1940s.", "id": "fc07"}, {"front": "Disfranchisement mechanisms — evading the Fifteenth Amendment", "back": "(1) Poll taxes: fee to vote; Black voters disproportionately poor; poor whites sometimes exempted via grandfather clauses. (2) Literacy tests: administered selectively (Black applicants asked to interpret obscure provisions; whites asked nothing). (3) Grandfather clauses: exempted those whose grandfather could vote before 1867 — all white men; excluded all formerly enslaved. (4) White primaries: Democratic Party as 'private club,' excluding Black members from the only election that mattered.", "id": "fc08"}, {"front": "Mississippi's literacy test effect", "back": "After Mississippi imposed the literacy test in 1890, Black voter registration dropped from approximately 190,000 to fewer than 9,000. The test was administered selectively and capriciously — proof that the mechanism was designed for racial exclusion, not literacy promotion. This dramatic drop demonstrates how a facially race-neutral mechanism could produce near-total racial exclusion through discriminatory administration.", "id": "fc09"}, {"front": "De jure segregation and Jim Crow", "back": "Racial separation mandated by law in every domain of Southern public life: schools, railroads, waiting rooms, restaurants, hotels, cemeteries, public parks. Named after a pre-Civil War minstrel character. Not merely custom: a legal architecture enforced by state courts and the constant threat of violence. Contrast with de facto segregation (custom without legal mandate, more common in the North).", "id": "fc10"}, {"front": "Civil Rights Cases (1883)", "back": "Supreme Court struck down the Civil Rights Act of 1875, holding that the Fourteenth Amendment prohibited only state action, not private discrimination. Effect: opened the door to privately enforced segregation that states then chose not to prohibit. The state-action doctrine became the constitutional limitation on federal civil rights enforcement for decades. 'Plessy v. Ferguson' (1896) would directly validate state-mandated segregation.", "id": "fc11"}, {"front": "Plessy v. Ferguson (1896)", "back": "Supreme Court upheld a Louisiana law requiring racial segregation in railroad cars, establishing the 'separate but equal' doctrine. Validated state-mandated segregation across the South. Justice John Marshall Harlan's lone dissent argued the Constitution was 'color-blind.' The Plessy decision was not overturned until Brown v. Board of Education (1954) — 58 years later.", "id": "fc12"}, {"front": "Dunning School vs. revisionist history of Reconstruction", "back": "Dunning School (dominant through early 20th century): Reconstruction was corrupt 'Negro rule' imposed by vindictive Northerners on a helpless South — the intellectual foundation for Jim Crow legitimation. Revisionist (W.E.B. Du Bois, Black Reconstruction 1935; Eric Foner, Reconstruction: America's Unfinished Revolution 1988): Reconstruction governments were neither more corrupt nor incompetent than predecessors; freedpeople engaged in sophisticated political organization; Reconstruction failed because of organized violence and political abandonment, NOT Black incapacity.", "id": "fc13"}, {"front": "W.E.B. Du Bois and Black Reconstruction (1935)", "back": "Du Bois's Black Reconstruction in America challenged the Dunning School by demonstrating that formerly enslaved people were sophisticated political actors, not passive subjects or incompetent rulers. His concept of the 'General Strike' (mass enslaved flight to Union lines as a form of labor action) helped establish Black agency as central to the Civil War's outcome. Black Reconstruction was decades ahead of mainstream historiography and became foundational for Eric Foner's later synthesis.", "id": "fc14"}, {"front": "'Redeemer' Democrats", "back": "The name Southern Democrats gave themselves as they violently overthrew Reconstruction governments state by state. 'Redemption' framed the violent reversal of a democratic experiment as the restoration of rightful order. The Lost Cause mythology provided the ideological framework: Reconstruction had been an oppressive imposition; its overthrow was 'natural' restoration. Within months of the Compromise of 1877, Redeemers controlled every Southern state.", "id": "fc15"}, {"front": "Lost Cause mythology — ideological functions", "back": "Portrayed the Confederacy as fighting for noble constitutional principle, not slavery. Portrayed Reconstruction as corrupt 'Negro rule' imposed by vindictive Northerners. Portrayed the violent overthrow of Reconstruction as the restoration of 'natural order.' Served as intellectual legitimation for Jim Crow and racial hierarchy. Directly contradicted by primary sources like Alexander Stephens's Cornerstone Speech (1861) and Confederate secession declarations citing slavery explicitly.", "id": "fc16"}, {"front": "Nathan Bedford Forrest — career trajectory", "back": "Confederate cavalry commander responsible for the Fort Pillow Massacre (April 1864) — massacre of surrendered Black Union soldiers. Founded or became first Grand Wizard of the Ku Klux Klan (1865). His career traces a direct line from Confederate military violence against Black soldiers to post-war terror against Black political participation — illustrating the continuity between Confederate military violence and Reconstruction-era paramilitary terror.", "id": "fc17"}, {"front": "APUSH Key Concept: Reconstruction overthrown, not failed", "back": "For AP purposes: Reconstruction was not a failure of Black political capacity. It was overthrown. Evidence: (1) KKK and paramilitary terror against Black officeholders and voters. (2) Compromise of 1877's political abandonment. (3) Disfranchisement mechanisms designed to evade the Fifteenth Amendment. (4) Convict leasing exploiting the Thirteenth Amendment. (5) Supreme Court's narrowing of the Fourteenth Amendment. The distinction between overthrow and failure drives the analytical argument.", "id": "fc18"}, {"front": "POL + SOC + ARC theme: Overthrow of Reconstruction", "back": "POL: Compromise of 1877's political abandonment was made possible by a broader Northern consensus that 'sectional reconciliation' between white Americans was more important than racial justice. SOC: Structural economic coercion (sharecropping, convict leasing) replaced legal slavery. ARC (civic culture): Lost Cause mythology justified white supremacy's restoration as natural order, not as violent reversal of democratic experiment.", "id": "fc19"}, {"front": "Crop-lien system", "back": "System in which merchants advanced credit to sharecroppers against the future crop at usurious (extremely high) interest rates. Combined with landlords' control of accounts, the crop-lien system created permanent indebtedness — croppers ended each year owing more than they had started with. Legal mechanisms (vagrancy laws, enticement laws) then bound indebted croppers to the land, recreating slavery's labor-coercive function without the name.", "id": "fc20"}, {"front": "Continuity/Change: From slavery to Jim Crow", "back": "Change: legal slavery abolished (13th Amendment, 1865). Continuity in function: sharecropping (debt-peonage), convict leasing (criminal justice as forced labor), disfranchisement mechanisms (political exclusion), and de jure segregation (racial hierarchy enforced by law) recreated slavery's essential features — racial coercion, political exclusion, and economic exploitation — under different legal names. The form changed; the function continued.", "id": "fc21"}, {"front": "Comparison: Reconstruction's end vs. its beginning", "back": "Reconstruction began as the most transformative democratic experiment in American history: biracial governance, public schools, constitutional amendments, Black officeholding. It ended with: every Southern state under Redeemer Democratic control, Black voters effectively disfranchised, sharecropping and convict leasing recreating coerced labor, and the Supreme Court narrowing the Reconstruction Amendments to near-irrelevance. The gap between promise and reality is the measure of what organized violence and political abandonment accomplished.", "id": "fc22"}, {"front": "Enticement laws", "back": "Post-Reconstruction Southern laws making it illegal to hire away another man's contracted laborer. Combined with labor contract enforcement statutes and vagrancy laws, enticement laws bound free Black sharecroppers to their current employer — they could not leave while in debt (which was perpetual), and any employer who tried to hire them could be criminally prosecuted. These laws recreated slavery's geographic immobility without legally owning the laborer.", "id": "fc23"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

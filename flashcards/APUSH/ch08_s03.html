@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 8, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Brown v. Board of Education (1954)", "back": "Unanimous Supreme Court decision (9-0, Chief Justice Earl Warren) declaring racial segregation in public schools unconstitutional under the Equal Protection Clause of the Fourteenth Amendment. Overruled the 'separate but equal' doctrine of Plessy v. Ferguson (1896). Warren rejected 'original intent' methodology, focusing instead on the contemporary role of public schooling and the psychological harm of segregation. Provoked the 'Southern Manifesto' (1956) pledging massive resistance.", "id": "fc01"}, {"front": "Plessy v. Ferguson (1896)", "back": "Supreme Court decision establishing the 'separate but equal' doctrine that permitted racial segregation in public facilities as long as the facilities were theoretically equal. It provided the constitutional foundation for Jim Crow segregation from 1896 until Brown v. Board overruled it in the field of public education in 1954.", "id": "fc02"}, {"front": "Thurgood Marshall", "back": "NAACP attorney who represented the plaintiffs in Brown v. Board of Education, arguing that segregation was inherently harmful regardless of physical facility equality. His legal strategy challenged the principle of separation itself, not merely the 'equal' half of 'separate but equal.' Later became the first African American Supreme Court justice (1967).", "id": "fc03"}, {"front": "Southern Manifesto (1956)", "back": "A declaration signed by 101 Southern members of Congress pledging 'massive resistance' to the Supreme Court's desegregation orders following Brown v. Board. It demonstrated that federal court decisions alone were insufficient to desegregate the South — enforcement required federal executive action, as at Little Rock (1957) and the University of Mississippi (1962).", "id": "fc04"}, {"front": "Montgomery Bus Boycott (1955–56)", "back": "A 381-day campaign by African Americans in Montgomery, Alabama, to protest segregated bus seating. Initiated by Rosa Parks's arrest (a trained NAACP activist, not a spontaneous act), coordinated by the Montgomery Improvement Association under Martin Luther King Jr. African Americans constituted 70% of bus ridership; economic pressure combined with a Supreme Court ruling (November 1956) desegregated Montgomery's buses in December 1956.", "id": "fc05"}, {"front": "Rosa Parks", "back": "NAACP secretary and trained activist who refused to give up her bus seat in Montgomery, Alabama, in December 1955. Her arrest was the catalyst the Montgomery movement had been preparing for. The popular image of Parks as a tired, apolitical seamstress is historically misleading — she was a deliberate activist embedded in an organizational network that turned her arrest into a sustained movement.", "id": "fc06"}, {"front": "Martin Luther King Jr. (1929–1968)", "back": "Baptist minister who became the national leader of the civil rights movement through the Montgomery Bus Boycott. Co-founded the SCLC (1957). His rhetoric synthesized the Hebrew prophetic tradition, Gandhi's nonviolent philosophy, and the American democratic tradition. Led major campaigns from Montgomery (1955) through the Poor People's Campaign (1968). Assassinated in Memphis on April 4, 1968, while supporting a sanitation workers' strike.", "id": "fc07"}, {"front": "Nonviolent Direct Action", "back": "The civil rights movement's core strategic approach, drawing on Mahatma Gandhi's philosophy: the deliberate, disciplined acceptance of suffering to expose injustice and awaken the conscience of observers and oppressors. Not passive — an aggressive political strategy that worked by staging peaceful demonstrations where authorities were expected to respond with violence, generating images that mobilized Northern opinion and federal pressure.", "id": "fc08"}, {"front": "Southern Christian Leadership Conference (SCLC)", "back": "Organization co-founded by King and other Southern Black ministers in 1957, using the infrastructure of Black churches to coordinate direct-action campaigns across the South. The SCLC provided organizational continuity, adult leadership, and church-based networks. Its model of church-based organizing distinguished it from student-run SNCC and the older NAACP's legal strategy.", "id": "fc09"}, {"front": "Greensboro Sit-ins (February 1960)", "back": "On February 1, 1960, four Black students from North Carolina A&T sat at a Woolworth's lunch counter in Greensboro and requested service. Within two weeks the tactic had spread to 15 cities; within two months, to 54 cities in 9 states. The sit-ins produced the Student Nonviolent Coordinating Committee (SNCC) and demonstrated that disciplined nonviolent direct action by young people could rapidly escalate into a mass movement.", "id": "fc10"}, {"front": "Student Nonviolent Coordinating Committee (SNCC)", "back": "Student organization founded in April 1960 following the Greensboro sit-ins, under the mentorship of Ella Baker. Baker explicitly encouraged student autonomy from adult organizations like SCLC and NAACP. SNCC became the most radical and youth-driven wing of the civil rights movement, eventually moving toward Black Power under Stokely Carmichael (1966).", "id": "fc11"}, {"front": "Ella Baker", "back": "SCLC organizer who mentored the founding of SNCC and encouraged student autonomy from adult-led organizations. Baker's insistence that the movement needed democratic, community-based leadership — not top-down charismatic authority — represented an alternative organizational philosophy to King's SCLC model. Her influence shaped SNCC's decentralized, student-led character.", "id": "fc12"}, {"front": "Freedom Rides (May 1961)", "back": "Integrated groups of activists who boarded interstate buses to test the Supreme Court's Boynton v. Virginia (1960) ruling banning segregation in interstate travel facilities. Attacked by mobs in Anniston and Birmingham while police stood aside. Attorney General Robert Kennedy negotiated to end violence; the Interstate Commerce Commission ultimately ordered full desegregation of interstate facilities in November 1961.", "id": "fc13"}, {"front": "Birmingham Campaign (1963)", "back": "King led a campaign in Birmingham, Alabama, deliberately choosing the city because Public Safety Commissioner Bull Connor was expected to provide violent confrontational images. Connor's use of fire hoses and police dogs against peaceful demonstrators — including children — generated international outrage and massive pressure on the Kennedy administration to introduce comprehensive civil rights legislation.", "id": "fc14"}, {"front": "Bull Connor", "back": "Birmingham, Alabama Public Safety Commissioner whose violent response to peaceful civil rights demonstrators in 1963 — deploying fire hoses and police dogs — generated photographs that appeared on front pages worldwide. Connor was selected as a target precisely because his predictable overreaction would produce the confrontational images the movement strategically needed.", "id": "fc15"}, {"front": "Letter from Birmingham Jail (April 1963)", "back": "King's most important document, written on newspaper margins and scraps of paper while imprisoned for violating an injunction against demonstrations. Addressed formally to eight white Alabama clergymen who called the campaign 'unwise and untimely,' it refuted the 'wait' argument with a philosophically and theologically rigorous case for direct action. HAPP: its actual audience was the entire white moderate liberal establishment whose patience with injustice the movement most needed to challenge.", "id": "fc16"}, {"front": "March on Washington (August 28, 1963)", "back": "Approximately 250,000 people gathered at the National Mall for the March on Washington for Jobs and Freedom, organized by a coalition including SCLC, SNCC, NAACP, National Urban League, and labor unions. King delivered the 'I Have a Dream' address from the Lincoln Memorial steps. The march demonstrated the movement's mass base and intensified pressure for comprehensive civil rights legislation.", "id": "fc17"}, {"front": "HAPP: Brown v. Board of Education (1954)", "back": "Historical context: May 1954, nine years after WWII; the US was engaged in Cold War competition with the Soviet Union for the allegiance of newly decolonizing nations — legal apartheid was a propaganda liability. Audience: the legal and political establishment. Purpose: overturn Plessy v. Ferguson and establish equal protection in education. Point of view: Warren's unanimous court rejected 'original intent' in favor of contemporary social reality, notably Kenneth Clark's psychological research on segregation's harm to children.", "id": "fc18"}, {"front": "HAPP: Letter from Birmingham Jail", "back": "Historical context: April 1963, Kennedy administration reluctant to push civil rights legislation; white moderates urging patience. Audience: formally, 8 white Alabama clergymen; practically, the entire white moderate liberal establishment. Purpose: refute the 'wait' argument; distinguish just from unjust laws; articulate a theology of redemptive suffering. Point of view: King as Black Southern Baptist minister with a theology doctorate — meeting white clergymen on their own intellectual terrain while speaking from the experience they had never shared.", "id": "fc19"}, {"front": "SOC Theme: The Movement as Creator of New Institutions", "back": "The civil rights movement created new organizational forms (SCLC, SNCC), new tactics (sit-ins, freedom rides), and a new public language of rights. These institutional innovations outlasted the movement's peak years: the rights language was adopted by women, Chicanos, indigenous peoples, and gay Americans in the following decade, and the organizing models developed in the civil rights movement became templates for subsequent social movements.", "id": "fc20"}, {"front": "POL Theme: The Movement as Political Crisis", "back": "The civil rights movement forced both major parties to define their position on racial equality, cracking the New Deal coalition. Southern white Democrats who had supported FDR's economic programs but tolerated Jim Crow could not maintain both positions once the movement made racial justice a federal legislative question. The resulting party realignment — white Southerners moving toward the Republican Party — reshaped American politics from 1964 onward.", "id": "fc21"}, {"front": "Kenneth Clark's Doll Studies", "back": "Psychologist Kenneth Clark's research demonstrating that Black children attributed inferior characteristics to brown dolls (choosing white dolls as 'nice' and 'pretty') was introduced in the Brown litigation to show the psychological harm of segregation. The Court cited the psychological harm of generating a 'feeling of inferiority' in its ruling — making social science evidence, not just legal argument, part of constitutional reasoning.", "id": "fc22"}, {"front": "Comparison: SCLC vs. SNCC", "back": "SCLC: adult leadership, church infrastructure, hierarchical and charismatic (King-centered); coordinated major campaigns and provided organizational continuity. SNCC: student-led, decentralized, encouraged by Ella Baker to maintain autonomy from adult organizations; more willing to challenge the movement's direction; eventually moved toward Black Power. Both used nonviolent direct action but represented different organizational philosophies and generational perspectives.", "id": "fc23"}, {"front": "AP Continuity/Change: Legal Strategy Before and After Brown", "back": "Before Brown, the NAACP's legal strategy (Thurgood Marshall) attacked the 'equal' half of 'separate but equal,' arguing that Black facilities were materially inferior. In Brown, Marshall shifted to challenging the principle of separation itself. After Brown, the movement increasingly combined legal challenges with nonviolent direct action, recognizing that court victories required organizational pressure to enforce and legislative action to extend beyond education.", "id": "fc24"}, {"front": "Television as Movement Weapon", "back": "One of the three strategic lessons of the Montgomery Bus Boycott was that the television camera was a powerful political weapon, broadcasting Southern brutality into Northern living rooms. The civil rights movement strategically deployed this insight: Birmingham's photographs of fire hoses and dogs against children generated international outrage; the Selma bridge crossing on Bloody Sunday triggered the Voting Rights Act. Television transformed local confrontations into national moral crises.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

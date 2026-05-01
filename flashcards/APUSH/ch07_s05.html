@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Black Tuesday (October 29, 1929)", "back": "The worst single day of selling in New York Stock Exchange history. The trigger of the Great Depression, not its underlying cause. The crash made visible pre-existing structural weaknesses: fragile banking built on inadequate reserves; farm sector depressed since 1921; consumer economy dependent on installment credit; global economy destabilized by unresolved war debts and reparations.", "id": "fc01"}, {"front": "Structural causes of the Great Depression", "back": "1) Banking system built on fragile correspondent relationships and inadequate reserves. 2) Farm sector depressed since 1921. 3) Consumer economy sustained by installment credit that collapsed when confidence vanished. 4) Global economy destabilized by war debts and reparations never properly resolved at Paris. The crash was the trigger; these were the underlying causes.", "id": "fc02"}, {"front": "Dust Bowl", "back": "Environmental catastrophe in the Great Plains caused by drought compounded by decades of overcultivation that stripped topsoil. 'Black blizzards' of Oklahoma, Kansas, and Texas Panhandle topsoil displaced ~2.5 million people — the 'Okie migration' documented in Dorothea Lange's photographs and John Steinbeck's The Grapes of Wrath.", "id": "fc03"}, {"front": "Hoovervilles", "back": "Makeshift shantytowns that appeared in every American city during the Depression, named sardonically after President Hoover. By 1933, unemployment was 25%, GNP had fallen one-third, and thousands of banks had failed. The Bonus Army's camp was burned by MacArthur's troops — the defining image of Hoover's response.", "id": "fc04"}, {"front": "Hoover's ideological limits", "back": "Hoover opposed direct federal relief to individuals, believing it would destroy self-reliance, corrupt local charity, and create a permanent dependent class. He launched the RFC (1932) and Federal Home Loan Bank Act — but by 1932, private charity was overwhelmed and local governments were bankrupt. His balanced-budget commitment ruled out the deficit spending that might have stimulated demand.", "id": "fc05"}, {"front": "Reconstruction Finance Corporation (RFC, 1932)", "back": "Hoover-era agency providing emergency loans to banks and railroads — the largest peacetime federal relief program to that point. Demonstrated that Hoover was not a pure laissez-faire ideologue; his ideological limits applied to direct relief for individuals, not institutional support for banks and infrastructure.", "id": "fc06"}, {"front": "Bonus Army (1932)", "back": "Some 20,000 WWI veterans who marched on Washington to demand early payment of service bonuses. Hoover ordered General Douglas MacArthur to disperse them; MacArthur used tanks and tear gas and burned their encampment. The optics were catastrophic — a key factor in FDR's landslide 1932 victory.", "id": "fc07"}, {"front": "FDR's First Hundred Days (March 4 – June 16, 1933)", "back": "FDR proposed 15 major pieces of legislation; Congress passed all 15. Key acts: Emergency Banking Act (reopened sound banks), FDIC (insured deposits), AAA (paid farmers to reduce production), NRA (fair competition codes), CCC (300,000 young men in conservation work), TVA (dams and hydroelectric power), FERA (federal emergency relief).", "id": "fc08"}, {"front": "Federal Deposit Insurance Corporation (FDIC)", "back": "Created by the Banking Act (1933) to insure individual bank deposits up to $2,500 (initial limit). Eliminated the incentive for bank runs by guaranteeing that ordinary depositors would not lose savings even if their bank failed. 'The single most important banking reform of the New Deal.' Still exists today with much higher coverage limits.", "id": "fc09"}, {"front": "Agricultural Adjustment Act (AAA)", "back": "First New Deal program paying farmers to reduce production in the hope of raising prices. Struck down by the Supreme Court in United States v. Butler (1936). Problematic exclusion: the AAA's displacement of Black sharecroppers (landowners collected payments, then evicted tenants) was one of the New Deal's most damaging racial exclusions.", "id": "fc10"}, {"front": "Tennessee Valley Authority (TVA)", "back": "Built dams and hydroelectric plants across seven Southern states, bringing electricity to rural areas that private utilities had deemed unprofitable. The most ambitious direct federal economic development program in American history to that point — and the most controversial, as private utilities and conservatives attacked it as government competition with private enterprise.", "id": "fc11"}, {"front": "Civilian Conservation Corps (CCC)", "back": "Put 300,000 young unemployed men to work in national forests and parks. Combined relief (wages sent home), conservation, and military-style discipline. Racially segregated but included Black participants. One of the New Deal programs with direct anti-poverty effects; also built the infrastructure of the national park system.", "id": "fc12"}, {"front": "National Recovery Administration (NRA)", "back": "Established codes of fair competition for industries and guaranteed workers the right to organize. Struck down by the Supreme Court in Schechter Poultry Corp. v. United States (1935) as an unconstitutional delegation of legislative power. Its collapse accelerated FDR's move toward the Second New Deal's more structural reforms.", "id": "fc13"}, {"front": "Second New Deal (1935–38)", "back": "Shifted from relief and recovery toward structural reform and social insurance. Key acts: Social Security Act (1935), Wagner Act / NLRA (1935), WPA (1935), Fair Labor Standards Act (1938). Produced the most durable elements of the modern American welfare state — though with significant exclusions that disproportionately harmed Black and Latino workers.", "id": "fc14"}, {"front": "Social Security Act (1935)", "back": "Established federal old-age retirement insurance and federal-state unemployment insurance. Financed by payroll taxes. Excluded domestic servants and agricultural workers — categories disproportionately African American and Latino — because Southern Democrats required this exclusion to support the bill. The New Deal's most durable social insurance program, though its founding exclusions shaped inequality for decades.", "id": "fc15"}, {"front": "Wagner Act / National Labor Relations Act (1935)", "back": "Guaranteed workers the right to organize into unions and bargain collectively; created the National Labor Relations Board (NLRB) to enforce those rights. The most significant pro-labor legislation in American history to that point. Did not cover agricultural or domestic workers. Produced dramatic growth in union membership through the CIO (Congress of Industrial Organizations).", "id": "fc16"}, {"front": "Works Progress Administration (WPA)", "back": "Employed 8.5 million Americans in construction and — distinctively — in arts, theater, music, and writing through its Federal Arts Projects. The New Deal's broadest employment program; its cultural projects documented Depression-era America in ways that outlasted the program itself. Criticized by conservatives as wasteful boondoggles.", "id": "fc17"}, {"front": "Fair Labor Standards Act (1938)", "back": "Established the first federal minimum wage (25 cents per hour), maximum workweek (44 hours), and prohibition on child labor in interstate commerce. Excluded domestic servants and agricultural workers (again reflecting Southern Democratic political demands). Set the framework for federal labor standards that subsequent minimum wage increases built upon.", "id": "fc18"}, {"front": "Court-packing plan (February 1937)", "back": "FDR proposed adding up to six new Supreme Court justices for every justice over 70 who did not retire, to overcome the Court's hostility to New Deal programs. Constitutionally legal but politically catastrophic: widely perceived as an attack on judicial independence. Congress refused to pass it — FDR's most significant political defeat. But Justice Roberts's 'switch in time' upheld the New Deal anyway.", "id": "fc19"}, {"front": "'The switch in time that saved nine'", "back": "Justice Owen Roberts's shift in vote to uphold New Deal programs (particularly the Wagner Act and Social Security), correlated with FDR's court-packing proposal. The Court reversed its opposition to the New Deal without a single new appointment — suggesting the threat of court-packing accomplished what the act itself could not.", "id": "fc20"}, {"front": "New Deal exclusions — racial and class dimensions", "back": "Social Security's coverage gaps (domestic servants, agricultural workers — disproportionately Black and Latino). AAA's displacement of Black sharecroppers. NRA codes with lower wages for Black workers. FLSA's exclusions. These exclusions were not accidents — they were political bargains with Southern Democrats whose votes were required for passage. The New Deal 'served some citizens more fully than others.'", "id": "fc21"}, {"front": "Huey Long's 'Share Our Wealth'", "back": "Louisiana Senator Huey Long's populist movement demanding redistribution of wealth through caps on fortunes and guaranteed minimum incomes. Pushed FDR leftward toward the Second New Deal's structural reforms. Long's assassination in 1935 removed a potential primary challenge to FDR in 1936. Represents the political pressure from the left that shaped New Deal evolution.", "id": "fc22"}, {"front": "POL/ECO Theme: Federal power transformation", "back": "Before 1933: federal domestic role primarily regulatory (food safety, railroads) and promotional (land grants, tariffs). After 1938: insurer (FDIC, Social Security), employer (WPA, CCC), labor-relations arbiter (NLRB), wage-setter (FLSA), direct electricity provider (TVA). The citizen's relationship to the federal government transformed from market-mediated to direct social entitlement. Every subsequent political generation has contested this transformation.", "id": "fc23"}, {"front": "Dorothea Lange — Migrant Mother (1936)", "back": "Farm Security Administration photograph of Florence Owens Thompson with three children at a pea-pickers' camp in Nipomo, California. The defining visual document of Depression-era suffering. HAPP: purpose was documentary for a federal agency charged with documenting agricultural poverty to build support for relief programs; the image became the era's most powerful argument for federal action.", "id": "fc24"}, {"front": "FDR's Fireside Chats", "back": "Radio addresses in which FDR spoke directly to Americans in accessible, informal language — bypassing newspaper editors and building personal political loyalty. A new form of presidential communication that transformed the relationship between the president and the public. The precursor to modern presidents' direct communication strategies.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

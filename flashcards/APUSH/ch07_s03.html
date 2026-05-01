@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 7, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Wilson's path to war — neutrality to intervention", "back": "Wilson won re-election in 1916 on 'He kept us out of war.' Within a month of his second inauguration, he was asking Congress for a war declaration. Key triggers: (1) Germany's resumption of unrestricted submarine warfare (February 1917); (2) Zimmermann Telegram published March 1917. Illustrates the recurring American pattern of late intervention under provocation.", "id": "fc01"}, {"front": "RMS Lusitania (May 7, 1915)", "back": "German U-boat sank the British ocean liner, killing 1,198 passengers and crew including 128 Americans. Germany argued the ship carried munitions (later confirmed). Wilson demanded Germany renounce unrestricted submarine warfare; Germany temporarily complied with the Sussex Pledge (1916), then resumed in February 1917 — the immediate trigger for American entry.", "id": "fc02"}, {"front": "Zimmermann Telegram (January 1917)", "back": "German Foreign Secretary Zimmermann secretly proposed to Mexico: if the U.S. entered the war, Mexico should join Germany and receive assistance recovering 'the lost territory in Texas, New Mexico, and Arizona.' Intercepted and decoded by British intelligence, published in U.S. newspapers March 1917. Shifted American public opinion decisively toward intervention.", "id": "fc03"}, {"front": "Wilson's Fourteen Points (January 1918)", "back": "Wilson's vision for postwar international order: self-determination of peoples, freedom of the seas, open diplomacy, arms reduction, and a League of Nations to adjudicate future disputes. 'Idealistic by design' — offered as an alternative to European nationalist and imperialist war aims. Vision was unrealized: compromised at Paris, rejected by the Senate.", "id": "fc04"}, {"front": "Selective Service Act (1917)", "back": "Authorized the military draft; registered nearly 24 million men and inducted nearly 3 million. The act was the legal mechanism for mass mobilization. Charles Schenck was prosecuted under the Espionage Act for distributing leaflets to draft registrants arguing the draft violated the Thirteenth Amendment.", "id": "fc05"}, {"front": "Committee on Public Information (CPI / George Creel)", "back": "Federal agency headed by George Creel that produced an 'industrial-scale propaganda campaign' to generate popular support for the war. Recruited journalists, artists, and academics to promote American war aims. Demonstrated that modern warfare required mobilizing public opinion as fully as industrial production — a precedent with lasting implications for government information management.", "id": "fc06"}, {"front": "Espionage Act (1917)", "back": "Made it a federal crime to obstruct military recruitment, cause insubordination among the armed forces, or mail material violating those provisions. More than 2,000 Americans prosecuted, including Eugene V. Debs (ten-year sentence for a speech arguing workers should not fight a capitalist war). The principal legal instrument of wartime speech suppression.", "id": "fc07"}, {"front": "Sedition Act (1918)", "back": "Made it illegal to 'utter, print, write, or publish any disloyal, profane, scurrilous, or abusive language' about the U.S. government, Constitution, flag, or military uniforms. Broader than the Espionage Act: criminalized abstract political speech, not just concrete obstruction. Represented the furthest reach of wartime speech suppression.", "id": "fc08"}, {"front": "Eugene V. Debs", "back": "Socialist Party leader sentenced to ten years in federal prison under the Espionage Act for a speech arguing workers should not fight a capitalist war. His prosecution illustrated that the wartime suppression targeted political dissent (socialist class critique) as much as concrete security threats. Wilson refused to pardon him; Harding commuted his sentence in 1921.", "id": "fc09"}, {"front": "Schenck v. United States (1919)", "back": "Charles Schenck mailed leaflets to draft registrants arguing the draft was involuntary servitude; convicted under the Espionage Act. The Court unanimously upheld the conviction. Justice Holmes established the 'clear and present danger' standard: the First Amendment does not protect speech that poses a clear and present danger of producing illegal action Congress has the right to prevent. First Supreme Court test for limits of First Amendment speech.", "id": "fc10"}, {"front": "'Clear and present danger' standard", "back": "Holmes's test from Schenck (1919): 'The question in every case is whether the words used are used in such circumstances and are of such a nature as to create a clear and present danger that they will bring about the substantive evils that Congress has a right to prevent.' Used the 'shouting fire in a theatre' analogy. Later modified by Brandenburg v. Ohio (1969).", "id": "fc11"}, {"front": "Holmes's 'fire in a theatre' analogy", "back": "'The most stringent protection of free speech would not protect a man in falsely shouting fire in a theatre and causing a panic.' Holmes used this to illustrate that context determines constitutionality: Schenck's leaflets in the context of wartime recruitment created the same kind of immediate danger as a false fire alarm. The analogy became one of the most quoted in American constitutional law.", "id": "fc12"}, {"front": "Abrams v. United States (1919)", "back": "Holmes dissented from a decision upholding convictions for antiwar pamphlets, arguing that abstract doctrine without immediate danger of concrete harm should be protected. Holmes began revising his own Schenck standard, moving toward protecting speech unless it posed immediate, concrete danger — the trajectory that eventually led to Brandenburg.", "id": "fc13"}, {"front": "Brandenburg v. Ohio (1969)", "back": "Replaced Schenck's 'clear and present danger' test with a more speech-protective standard: government cannot punish speech unless it is 'directed to inciting imminent lawless action' AND 'likely to produce such action.' Two-part test provides broader protection for dissent than Schenck's contextual balancing.", "id": "fc14"}, {"front": "First Red Scare (1919–20)", "back": "Postwar fear of domestic communism triggered by the Russian Revolution (October 1917) combined with 3,000+ labor strikes in 1919. Business and political leaders portrayed strikes as Bolshevik infiltration. Mail bombs in April and June 1919 intensified hysteria. Led to the Palmer Raids — mass arrests targeting suspected communists, anarchists, and radical immigrants.", "id": "fc15"}, {"front": "Palmer Raids (1919–20)", "back": "Mass arrests by Attorney General A. Mitchell Palmer targeting suspected communists, anarchists, and radical immigrants. In January 1920 alone, ~6,000 arrests across 33 cities, many without warrants. ~500 foreign nationals deported including Emma Goldman. Discredited when Palmer's May 1920 uprising prediction failed to materialize and Louis Post's review found most detainees had no radical organizational connections.", "id": "fc16"}, {"front": "Emma Goldman", "back": "Anarchist activist deported during the Palmer Raids. Her deportation illustrated the use of immigration law to remove from the country people whose political views were deemed incompatible with American identity — a pattern the source connects to the broader function of 'national security' in enforcing social conformity.", "id": "fc17"}, {"front": "Louis Post and the Palmer Raids' discrediting", "back": "Assistant Secretary of Labor who reviewed deportation cases from the Palmer Raids and found that most detainees had no connection to any radical organization. His review was a rare instance of internal executive branch accountability checking civil liberties excess — and contributed to the eventual political discrediting of Palmer's anti-radical crusade.", "id": "fc18"}, {"front": "POL/NAT Theme: Who belongs to the nation?", "back": "The wartime suppression of civil liberties illustrates the POL + NAT intersection: whose speech deserves protection, which voices are treated as inherently threatening. The targets — socialists, immigrants, labor organizers — were disproportionately people 'already marginal to the mainstream political community,' revealing that 'national security' enforcement also enforces social and political conformity.", "id": "fc19"}, {"front": "Recurring emergency-suppression pattern", "back": "The source identifies a 'persistent tension in American democracy': in moments of perceived national emergency, civil liberties tend to be suppressed in ways that subsequent historical verdicts find disproportionate. WWI (Espionage/Sedition Acts, Palmer Raids) → WWII (Japanese internment) → Cold War (McCarthyism) → post-9/11 (PATRIOT Act, NSA surveillance). The pattern recurs; the subsequent verdict consistently finds the sacrifice of liberty exceeded the danger.", "id": "fc20"}, {"front": "Sussex Pledge (1916)", "back": "Germany's agreement, following Wilson's protests over the Lusitania sinking, to restrict submarine warfare and not attack passenger ships without warning. Temporarily preserved American neutrality. Germany rescinded the pledge in February 1917, resuming unrestricted submarine warfare — the direct trigger for Wilson's war message.", "id": "fc21"}, {"front": "War Industries Board / Food Administration / Creel Committee", "back": "Three key mobilization agencies: War Industries Board (coordinated industrial production); Food Administration (Herbert Hoover, managed agricultural output); Committee on Public Information (George Creel, war propaganda). Together demonstrated that modern war required total mobilization of industry, food supply, and public opinion — not just military forces.", "id": "fc22"}, {"front": "HAPP: Schenck opinion (1919)", "back": "Historical context: wartime mobilization, Espionage Act prosecutions, socialist antiwar movement. Audience: legal — addressed to lower courts applying the Espionage Act to future cases; broader audience of Americans concerned about wartime speech. Purpose: establish constitutional limits on First Amendment protection in emergency. Point of view: Holmes writing for a unanimous court at the height of wartime hysteria; he would partially revise this view in Abrams dissent later the same year.", "id": "fc23"}, {"front": "Comparison: WWI suppression and WWII internment", "back": "Both involved government using emergency power to suppress the rights of people deemed politically or racially alien to the mainstream national community. WWI targeted socialist/immigrant speech; WWII internment targeted Japanese Americans based on race. Both were upheld by the courts at the time (Schenck 1919, Korematsu 1944); both were subsequently judged disproportionate to the actual threat. The pattern reveals how emergency power systematically targets already-marginal groups.", "id": "fc24"}, {"front": "Wilson's 'The world must be made safe for democracy'", "back": "Wilson's April 2, 1917, war message to Congress framing American entry not as a conventional great-power conflict but as a crusade to restructure the international order. The idealistic framing — democracy vs. autocracy — made the domestic suppression of democratic dissent (Espionage Act, Palmer Raids) particularly contradictory and historically ironic.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 2, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Partus sequitur ventrem (1662)", "back": "Latin legal phrase meaning 'the offspring follows the condition of the mother.' Virginia's 1662 statute reversed English common law (under which status followed the father) to establish that enslaved women's children were automatically enslaved regardless of the father's status. This single statute made sexual violence against enslaved women economically profitable for slaveholders, since any child born of those assaults would be enslaved property.", "id": "fc01"}, {"front": "Virginia Slave Code of 1705", "back": "A comprehensive legislative framework that consolidated earlier Virginia slave statutes (1662–1691) into a single code. It defined enslaved Africans and their descendants as property, stripped them of the right to testify in court or bear arms, prohibited literacy and assembly, and authorized extreme physical punishments — including dismemberment — for resistance or flight. It became a model for slave codes across the colonies.", "id": "fc02"}, {"front": "Middle Passage", "back": "The second leg of the triangular trade route: the brutal transatlantic crossing that transported enslaved captives from West Africa to the Americas. The term refers to the middle segment of the triangle (Europe → Africa → Americas → Europe). Average mortality was roughly 15 percent of captives in the eighteenth century; those who survived arrived physically devastated and were subjected to a 'seasoning' process that killed an additional significant fraction in the first year.", "id": "fc03"}, {"front": "Chattel Slavery", "back": "A system in which human beings are legally defined as personal property (chattel) that can be bought, sold, inherited, and mortgaged. Distinguished from earlier forms of bondage by its hereditary nature — enslaved status was permanent and passed automatically from an enslaved mother to her children under Virginia law. This made escape through natural generation impossible and distinguished American chattel slavery from Roman slavery and many forms of African bondage.", "id": "fc04"}, {"front": "Slave Codes", "back": "Colonial and later state statutes defining the legal status, rights, and treatment of enslaved people. Virginia's sequence (1662–1705) established: hereditary transmission of enslaved status through the mother; enslaved people as property, not persons; prohibition of literacy and assembly; and authorization of extreme violence to enforce compliance. The codes actively constructed race as a legal category rather than simply describing existing practice.", "id": "fc05"}, {"front": "Triangular Trade", "back": "The Atlantic commercial circuit linking England, West Africa, and the Americas. In its classic form: manufactured goods (textiles, firearms, iron) from English ports to West Africa → enslaved captives from West Africa to the Americas (Middle Passage) → colonial commodities (tobacco, sugar, rice, rum) from the Americas back to England. In practice the trade ran multiple overlapping circuits, including a New England variant trading rum to Africa for enslaved people in the Caribbean, returning with molasses.", "id": "fc06"}, {"front": "Olaudah Equiano (c. 1745–1797)", "back": "Enslaved African, later free, whose 1789 memoir The Interesting Narrative of the Life of Olaudah Equiano is the most widely read autobiography by an enslaved African from the early modern period. Kidnapped from present-day Nigeria as a child, he vividly described the Middle Passage — making the human cost viscerally real to a British reading public that had abstracted the slave trade into statistics. Published strategically during Britain's parliamentary debate over abolition of the slave trade.", "id": "fc07"}, {"front": "Seasoning (slave trade)", "back": "A period of forced acclimation to new climate, diet, and labor that enslaved people who survived the Middle Passage were subjected to upon arrival in the Americas. 'Seasoning' killed an additional significant fraction in the first year beyond Middle Passage mortality. The term was a slaveholders' euphemism for a process that was, in practice, a continuation of the coercive brutality of the crossing itself.", "id": "fc08"}, {"front": "Anthony Johnson", "back": "An African man who arrived in Virginia as a servant in the 1620s, earned his freedom, acquired land, and himself held servants — one of the earliest examples of a free Black property-holder in colonial Virginia. His story is crucial evidence that racial slavery was not predetermined: his trajectory was possible in the 1630s–40s because the legal construction of race-based slavery had not yet been completed. By the 1670s, laws systematically closing the same pathways to freedom made his story impossible to replicate.", "id": "fc09"}, {"front": "Stono Rebellion (1739)", "back": "An uprising in South Carolina in which roughly twenty enslaved people seized weapons, killed approximately twenty whites, and marched toward Spanish Florida seeking freedom. The Stono Rebellion confirmed planter anxieties about controlling a slave society with a Black majority and triggered even more repressive legislation. Yet South Carolina's economic dependence on enslaved labor only deepened — by 1750, its rice and indigo exports made it one of the wealthiest societies in British North America.", "id": "fc10"}, {"front": "Carolina Low Country and Rice Economy", "back": "South Carolina's plantation economy, centered on rice cultivation (after 1663) and indigo (after the 1740s), in the coastal tidal lowlands. Planters specifically sought enslaved Africans from the 'Rice Coast' of West Africa (present-day Sierra Leone, Guinea-Bissau, Senegal) because those workers possessed technical knowledge of rice cultivation that English planters lacked. African expertise was not incidental to the Carolina economy — it was its foundation.", "id": "fc11"}, {"front": "\"Rice Coast\" (West Africa)", "back": "A coastal region of West Africa (present-day Sierra Leone, Guinea-Bissau, Senegal) where rice cultivation was well established before European contact. Carolina planters targeted this region when acquiring enslaved workers because of the agricultural expertise those workers possessed — demonstrating that the slave trade was not simply a market for undifferentiated labor but that slaveholders actively sought and exploited specific technical knowledge.", "id": "fc12"}, {"front": "Interracial Marriage Ban (Virginia, 1691)", "back": "Virginia statute prohibiting marriage between white colonists and Black or indigenous people, as part of the legislative construction of racial hierarchy following Bacon's Rebellion. Along with the 1670 prohibition on free Black Virginians owning white servants and the 1662 and 1667 slave statutes, the 1691 ban was one step in a deliberate legislative project to harden racial boundaries and eliminate the ambiguity of status that had characterized early colonial Virginia.", "id": "fc13"}, {"front": "SOC + WXT Theme: Slavery's Racial Bargain", "back": "AP CED themes Social (SOC) and Work, Exchange, and Technology (WXT): Race-based slavery created a legal and cultural hierarchy that elevated all white colonists above all African Americans regardless of economic status. This racial solidarity across class lines gave the planter elite a tool for managing poor whites — even the landless had a stake in a system guaranteeing racial supremacy. Economically, enslaved people produced the tobacco, rice, and indigo that filled British merchant coffers while capturing none of the value their labor created.", "id": "fc14"}, {"front": "Why did Bacon's Rebellion accelerate (not cause) the shift to chattel slavery?", "back": "The shift to African labor had begun before 1676, but Bacon's Rebellion provided a clarifying political shock: a coalition of poor whites, servants, and enslaved Africans had nearly overthrown the colonial government. The lesson for planters was not to address class grievances but to eliminate the category of free poor white men who could form such coalitions. Chattel slavery replaced temporary indenture with permanent bondage — creating a labor force that, unlike freed servants, could never accumulate the freedom to become politically volatile.", "id": "fc15"}, {"front": "Virginia's African Population Growth, 1650–1750", "back": "Fewer than 300 in 1650 → roughly 13,000 by 1700 → approximately 150,000 by 1750. This dramatic growth reflects the deliberate post-Bacon shift to chattel slavery: planters who had relied on indentured European labor turned to the Atlantic slave trade to supply a permanent, heritable workforce. The scale of forced migration transformed Virginia's — and the broader South's — demographic, economic, and cultural landscape.", "id": "fc16"}, {"front": "\"Seasoning\" vs. Middle Passage mortality", "back": "Middle Passage mortality averaged roughly 15 percent of captives. Those who survived faced a 'seasoning' period upon arrival — forced acclimation to new climate, diet, and labor — that killed an additional significant fraction in the first year. Together, these two stages of brutality meant that a substantial proportion of those enslaved in West Africa never survived to enter the plantation workforce — a fact that underscores the scale of demographic destruction wrought by the Atlantic slave trade.", "id": "fc17"}, {"front": "Compare: Chesapeake vs. Carolina Slave Systems", "back": "Chesapeake (Virginia/Maryland): tobacco-based; enslaved Africans imported primarily for physical labor; plantation slavery developed incrementally through slave codes post-1660s. Carolina Low Country: rice-based; planters specifically recruited enslaved Africans from rice-growing West African regions for their technical knowledge; quickly became the only mainland colony with a Black majority; slave codes among the harshest in North America reflecting white minority anxiety.", "id": "fc18"}, {"front": "Continuity/Change: Legal Status of Africans in Virginia, 1619–1705", "back": "Change: Radical transformation from legal ambiguity (some Africans gaining freedom and property, as with Anthony Johnson) to comprehensive race-based chattel slavery codified in the 1705 Virginia Slave Code. Continuity: African presence and labor exploitation began in 1619 and never ceased. The key insight is that the change was legislative and deliberate — a political construction, not an evolution of natural prejudice — making it equally a product of human choice and potentially reversible by human choice.", "id": "fc19"}, {"front": "How was race constructed as a legal category in colonial Virginia?", "back": "Through a deliberately escalating legislative sequence: 1662 (status follows mother, making slavery heritable); 1667 (baptism does not confer freedom); 1670 (free Black Virginians lose right to own white servants); 1691 (interracial marriage banned); 1705 (comprehensive slave code defining enslaved people as property). Each statute closed a pathway to freedom or equality that had existed in the earlier ambiguous period, constructing race as a legal — not natural — boundary.", "id": "fc20"}, {"front": "Equiano's Narrative as Historical Evidence", "back": "Equiano's memoir provides first-person testimony about the Middle Passage from the perspective of an enslaved captive — a category almost entirely absent from colonial records otherwise dominated by slaveholder, merchant, and government sources. Its political purpose (abolitionist advocacy in Britain, 1789) shapes its rhetorical choices, but its historical details of shipboard conditions, mortality, and psychological devastation are corroborated by other sources. AP students should practice both 'using' and 'sourcing' this document.", "id": "fc21"}, {"front": "Connection: Slave Codes → Constitutional Compromises", "back": "The legal architecture of chattel slavery built by Virginia and the Carolinas in the late seventeenth century created entrenched economic and political interests that shaped the Constitutional Convention (1787): the Three-Fifths Compromise, the Fugitive Slave Clause, and the twenty-year moratorium on restricting the slave trade all reflect the power of slaveholding interests whose foundation lay in the legal construction of race-based bondage in the colonial era.", "id": "fc22"}, {"front": "What did it mean for slavery to be 'heritable' through the mother?", "back": "Under partus sequitur ventrem (Virginia, 1662), enslaved status was inherited from mother to child automatically at birth. This meant: (1) enslaved women's children were enslaved regardless of their father's status; (2) freedom could not be inherited through paternity; (3) sexual violence against enslaved women produced additional enslaved property for the master; (4) escape through generations was impossible without legal manumission. It was the defining characteristic separating American chattel slavery from most other historical forms of bondage.", "id": "fc23"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

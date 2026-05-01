@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 6, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Knights of Labor", "back": "Founded Philadelphia 1869; public national organization under Terence V. Powderly from 1879. Radical inclusiveness: organized across craft, racial, and gender lines; 700,000 members at 1886 peak. Sought 8-hour day, abolition of child labor, equal pay, producer cooperatives, graduated income tax — aimed at transforming capitalism, not merely improving wages within it. Collapsed after Haymarket (1886) association; illustrates fragility of broad labor organization.", "id": "fc01"}, {"front": "Terence V. Powderly", "back": "Leader of the Knights of Labor from 1879. Pursued a reformist and cooperative vision — not just higher wages within capitalism but transformation to a cooperative economy. The Knights' decline after 1886 illustrated that broad, inclusive labor organization was extremely vulnerable to employer power, hostile courts, and public opinion manipulation.", "id": "fc02"}, {"front": "American Federation of Labor (AFL)", "back": "Founded 1886 by Samuel Gompers. Organized skilled craft workers only (cigar makers, carpenters, printers) in separate affiliated unions. Philosophy: 'pure and simple' trade unionism — higher wages, shorter hours, better conditions through collective bargaining; no political radicalism, no cooperatives. Strength: skilled workers were hard to replace; weakness: explicitly excluded unskilled, immigrant, and Black workers, leaving most of the industrial workforce unrepresented.", "id": "fc03"}, {"front": "Samuel Gompers", "back": "Founder and longtime president of the AFL. Pragmatic 'pure and simple' trade unionism: focus on achievable economic gains (higher wages, shorter hours) through collective bargaining, backed by credible strike threat. Political non-partisanship: reward labor's friends, punish its enemies regardless of party. The AFL's exclusivity — skilled workers only — was simultaneously its strength (leverage) and its historical limitation.", "id": "fc04"}, {"front": "Great Railroad Strike of 1877", "back": "First national labor uprising in American history. Began July 1877 when the B&O Railroad announced a second 10% wage cut. Spread spontaneously from West Virginia to Missouri, paralyzing the national rail network; strikers in Pittsburgh burned roundhouses and destroyed 1,200 freight cars. President Hayes deployed federal troops to break it — the FIRST use of federal military force against a labor action. Established the precedent of the federal government as capital's enforcer against labor.", "id": "fc05"}, {"front": "Haymarket Riot (May 4, 1886)", "back": "Chicago's Haymarket Square: peaceful labor rally protesting police killing of McCormick Harvesting strikers; unknown person threw a bomb killing 7 officers; police fired into the crowd. Eight anarchist labor leaders arrested; four executed; evidence of bombing connection insufficient. Created lasting association in the public mind between labor organizing and radical violence — used by employers and politicians to suppress the labor movement for decades. Effectively destroyed the Knights of Labor's momentum.", "id": "fc06"}, {"front": "Homestead Strike (1892)", "back": "Carnegie Steel's flagship Homestead, PA plant. Frick (Carnegie's deputy) announced lockout, hired 300 Pinkerton agents to protect strikebreakers arriving by barge. July 6 battle: 12-hour fight between Pinkertons and armed steelworkers left 10 dead. Pennsylvania governor sent 8,500 National Guard troops; strikebreakers escorted in; union destroyed by November. Carnegie Steel remained unorganized for 4 decades. Carnegie was in Scotland — the gap between his Gospel of Wealth philanthropy and his industrial conduct.", "id": "fc07"}, {"front": "Henry Clay Frick", "back": "Carnegie's deputy who managed Homestead while Carnegie was absent in Scotland. Negotiated in bad faith with the Amalgamated Association, then announced a lockout and hired Pinkerton agents. Survived an assassination attempt by anarchist Alexander Berkman during the strike. Symbol of the brutal enforcement arm of Gilded Age industrial capitalism.", "id": "fc08"}, {"front": "Pullman Strike (1894)", "back": "Pullman Palace Car Company cut wages 25–28% while refusing to reduce company-town rents. Workers struck in May; Debs's ARU launched sympathy boycott, refusing to handle Pullman cars, paralyzing Midwest rail traffic. Cleveland obtained federal injunction; sent troops over Illinois Governor Altgeld's objection. Debs jailed for contempt; Supreme Court upheld injunction in In re Debs (1895). Established 'government by injunction' as a labor-suppression tool for the next three decades.", "id": "fc09"}, {"front": "Eugene V. Debs", "back": "Founded the American Railway Union (ARU), which launched the Pullman Strike sympathy boycott (1894). Jailed for contempt of court after Cleveland obtained a federal injunction; In re Debs (1895) upheld his imprisonment. Radicalized in prison; became the Socialist Party's presidential candidate five times (1900–1920). The Pullman Strike's outcome was pivotal in his political transformation.", "id": "fc10"}, {"front": "In re Debs (1895)", "back": "Supreme Court case upholding the use of federal injunctions against labor actions that affected interstate commerce. Debs had been jailed for contempt after refusing to obey an injunction against the Pullman boycott. The ruling established 'government by injunction' as constitutional — federal courts could jail union leaders without a jury trial whenever a strike touched interstate commerce. Labor activists fought this doctrine for the next three decades.", "id": "fc11"}, {"front": "Pinkerton Agents", "back": "Private detective and mercenary agency hired by companies to protect strikebreakers and intimidate workers. At Homestead (1892), 300 Pinkertons arrived by barge and fought a 12-hour battle with steelworkers. Symbolized employers' ability to field a private army against labor. Politically toxic but legally tolerated; eventually restricted by the Anti-Pinkerton Act (1893), which prohibited hiring armed agents for labor disputes — though enforcement was weak.", "id": "fc12"}, {"front": "Government by Injunction", "back": "Legal doctrine produced by the Pullman Strike (1894) and In re Debs (1895): federal courts could issue injunctions ordering strikes or boycotts to cease and jail union leaders for contempt — bypassing jury trial — whenever labor actions affected interstate commerce. Employers used injunctions extensively as a strike-suppression tool for the next three decades. The Norris-LaGuardia Act (1932) finally restricted federal injunctions in labor disputes.", "id": "fc13"}, {"front": "Liberty of Contract Doctrine", "back": "Gilded Age judicial doctrine that treated workers and employers as formally equal parties freely negotiating wages, making labor protective legislation (minimum wage, maximum hours) constitutionally suspect as interference with voluntary contract. Ignored the actual power imbalance between individual workers and industrial corporations. Used alongside Sherman Antitrust Act conspiracy doctrine to limit labor's legal tools. Eventually repudiated by West Coast Hotel v. Parrish (1937).", "id": "fc14"}, {"front": "Amalgamated Association of Iron and Steel Workers", "back": "The skilled union representing steelworkers at Carnegie's Homestead plant that was destroyed in the 1892 strike. Its defeat illustrates the vulnerability of craft unions to employer lockouts backed by private mercenaries and state military force. Carnegie Steel remained non-union for four decades after Homestead.", "id": "fc15"}, {"front": "HAPP: Gospel of Wealth (Carnegie, 1889)", "back": "Historical context: 1889 — intense labor conflict building; written before Homestead (1892). Audience: middle- and upper-class North American Review readers (opinion-forming elite). Purpose: defend industrial concentration; recast wealthy as stewards to forestall redistribution and labor militancy. Point of View: Carnegie was the era's second-richest man; his stewardship framing served his class interest. Significance: reveals the ideological work performed by philanthropic rhetoric to legitimate concentrated wealth.", "id": "fc16"}, {"front": "WXT + SOC Theme: Deskilling and Labor Conflict", "back": "The same Bessemer process and mechanized rolling mills that made Carnegie's steel cheap also deskilled iron puddlers and heaters whose craft knowledge had given them bargaining power. When machinery replaced skill, workers' leverage disappeared and employers' increased. The SOC theme: racial and ethnic divisions (AFL's exclusions; employers' use of strikebreakers across ethnic lines) fragmented the working class. Industrial capitalism's class conflict was always simultaneously a racial and ethnic conflict.", "id": "fc17"}, {"front": "Role of the State in Gilded Age Labor Conflicts", "back": "Every major Gilded Age strike ended with the state intervening on the side of employers: city police (McCormick 1886), state militia at Homestead (1892), federal troops at Pullman (1894). Courts classified strikes as restraint of trade under the Sherman Act. Liberty of contract made labor protective legislation unconstitutional. The combined weight of employer power, state violence, and judicial hostility explains why the U.S. had the most active labor movement of the 1880s but the weakest union infrastructure by 1900.", "id": "fc18"}, {"front": "Black Workers in the Gilded Age Labor Movement", "back": "The Knights of Labor nominally admitted Black workers but Southern assemblies maintained de facto segregation. The AFL explicitly excluded most Black workers. Employers deliberately used Black strikebreakers at key moments to prevent cross-racial working-class solidarity. The racial fragmentation of the labor movement was not accidental — it was structurally maintained by both unions' internal politics and employers' deliberate divide-and-conquer strategy.", "id": "fc19"}, {"front": "Pullman, Illinois (Company Town)", "back": "George Pullman built a planned industrial town near Chicago where workers lived in company-owned housing and paid rent to Pullman Palace Car Company. When the company cut wages 25–28% without reducing rents, workers had no exit: loss of job meant simultaneous loss of home. The company-town structure concentrated employer power over every dimension of workers' lives, making the 1894 strike not just about wages but about basic economic autonomy.", "id": "fc20"}, {"front": "Comparison: Knights of Labor vs. AFL — why AFL survived", "back": "AFL survived because: (1) skilled workers were hard to replace, giving genuine leverage; (2) narrow 'pure and simple' focus on wages/hours was achievable within capitalism; (3) AFL avoided the anarchist association that destroyed Knights' public standing after Haymarket. Knights failed because: broad inclusiveness meant unskilled members whose labor was easily replaced; association with Haymarket; reformist cooperative vision was too radical for the political moment.", "id": "fc21"}, {"front": "Child Labor in the Gilded Age", "back": "Pervasive in coal mines and textile factories. Children worked 12–14 hour days; many mines used 'breaker boys' to pick slate from coal. One of the Knights of Labor's key demands was abolition of child labor. Federal child labor restrictions did not come until the Fair Labor Standards Act (1938). State-level restrictions were inconsistent and often weakly enforced before the Progressive Era.", "id": "fc22"}, {"front": "Continuity/Change: Federal Government and Labor, 1877–1935", "back": "CONTINUITY (1877–1935): Federal government consistently sided with capital in labor disputes through troops, injunctions, and Sherman Act applications. CHANGE: Norris-LaGuardia Act (1932) restricted federal injunctions in labor disputes; National Labor Relations Act/Wagner Act (1935) guaranteed workers' right to organize and collectively bargain — reversing six decades of judicial and executive hostility to labor.", "id": "fc23"}, {"front": "John Altgeld", "back": "Illinois governor who opposed President Cleveland's decision to send federal troops to break the Pullman Strike (1894), arguing the state's own resources were sufficient and the federal intervention was unconstitutional. His opposition cost him politically but illustrated that not all state officials automatically aligned with capital against labor. Altgeld had also previously pardoned three Haymarket defendants, recognizing the insufficient evidence of their guilt.", "id": "fc24"}, {"front": "Blacklist", "back": "A list of workers who had participated in strikes or union organizing, circulated among employers in the same industry. Blacklisted workers found it impossible to obtain employment in their trade. Along with physical intimidation by Pinkerton agents and company guards, blacklisting was a primary tool of employer power that made labor organizing extremely costly for individual workers.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

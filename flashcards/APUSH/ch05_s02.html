@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 5, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Compromise of 1850", "back": "Five separate bills engineered by Henry Clay and steered through the Senate by Stephen Douglas: (1) California admitted as free state; (2) popular sovereignty for New Mexico and Utah territories; (3) Texas boundary settled with $10M payment; (4) slave trade abolished in DC; (5) strengthened Fugitive Slave Act. Proved unsustainable primarily because of the Fugitive Slave Act's Northern reaction.", "id": "fc01"}, {"front": "Fugitive Slave Act of 1850", "back": "The compromise's fatal weakness. Required Northern citizens to assist in capturing alleged fugitives under penalty of fine and imprisonment. Denied accused persons the right to testify in their own defense. Paid federal commissioners $10 for ruling a person enslaved but only $5 for ruling them free. Made Northerners legally complicit in slavery — triggering violent resistance, crowd rescues, and Harriet Beecher Stowe's novel.", "id": "fc02"}, {"front": "Popular Sovereignty", "back": "Antebellum doctrine that territorial settlers, not Congress, should decide the slavery question. First associated with Senator Lewis Cass (1848); operationalized in the Compromise of 1850 and Kansas-Nebraska Act (1854). Fatally ambiguous: at what stage could residents vote — before or after drafting a state constitution? This ambiguity made it unworkable in Kansas.", "id": "fc03"}, {"front": "Free Soil Party (1848)", "back": "Third party holding that western territories must be reserved for free white labor. Did NOT advocate abolition of slavery where it already existed — only non-extension. Drew former Whigs, anti-slavery Democrats, and Liberty Party members. 1848 candidate Martin Van Buren won 10% of popular vote. Its organization and vocabulary were absorbed into the Republican Party after 1854.", "id": "fc04"}, {"front": "Henry Clay", "back": "'The Great Compromiser' — Kentucky senator who designed the Compromise of 1850 as a series of linked bills. Clay had also engineered the Missouri Compromise (1820) and the Compromise of 1833 (nullification crisis). By 1850 his health was failing; Stephen Douglas steered the bills through after Clay's capacity declined. Represents the last generation of politicians who believed compromise could hold the Union together.", "id": "fc05"}, {"front": "Stephen Douglas", "back": "Illinois senator who steered the Compromise of 1850 through the Senate and then introduced the Kansas-Nebraska Act (1854). His motivation for the 1854 Act was partly to organize territory for a transcontinental railroad through Chicago. His popular sovereignty doctrine required him to articulate the 'Freeport Doctrine' after Dred Scott (1857), which alienated Southern Democrats and destroyed his presidential prospects.", "id": "fc06"}, {"front": "Kansas-Nebraska Act (1854)", "back": "Legislation that organized the Kansas and Nebraska territories under popular sovereignty, explicitly repealing the Missouri Compromise line (36°30′). Passed with solid Southern support and Northern Democratic backing. Destroyed the Whig Party, shattered the Northern Democratic Party, and gave birth to the Republican Party. Unleashed the violence of Bleeding Kansas.", "id": "fc07"}, {"front": "Republican Party (founded 1854)", "back": "Formed from anti-Nebraska coalitions in Wisconsin, Michigan, and across the free states. Explicitly sectional — no Southern support. Central principle: slavery must not expand into the territories. NOT an abolitionist party at founding — accepted slavery where it existed. Its sectional character made a presidential victory without Southern electoral votes structurally possible.", "id": "fc08"}, {"front": "Bleeding Kansas", "back": "The violence in Kansas Territory (1854–58) resulting from competing pro-slavery and anti-slavery settlers each trying to create a majority on the ground. Pro-slavery 'Border Ruffians' from Missouri stuffed ballot boxes; Northern emigrants arrived with rifles funded by the New England Emigrant Aid Company. Produced two rival governments, two rival constitutions, hundreds dead. Demonstrated that popular sovereignty = armed competition.", "id": "fc09"}, {"front": "John Brown at Pottawatomie Creek (1856)", "back": "Radical abolitionist John Brown, believing slavery could be ended only by force, supervised the killing of five pro-slavery settlers along Pottawatomie Creek (May 1856) — two days after the pro-slavery sack of Lawrence. This 'eye for an eye' logic intensified the Kansas violence and established Brown as a central figure in the escalation toward civil war.", "id": "fc10"}, {"front": "Caning of Charles Sumner (May 22, 1856)", "back": "Representative Preston Brooks of South Carolina beat Senator Charles Sumner of Massachusetts unconscious at his Senate desk with a metal-tipped cane, in retaliation for Sumner's anti-slavery speech mocking Brooks's cousin. Brooks was lionized in the South (gifts of commemorative canes); Sumner's empty chair, vacant for three years, became a Republican rallying image — demonstrating that the two sections now inhabited 'separate moral universes.'", "id": "fc11"}, {"front": "Harriet Beecher Stowe's Uncle Tom's Cabin (1852)", "back": "The best-selling novel of the nineteenth century, drawing its emotional power directly from the Fugitive Slave Act's horrors. Published in 1852, it transformed Northern anti-slavery sentiment from an abstract moral position into a concrete, emotionally vivid experience. One of the most significant examples of literature shaping political opinion in American history. Lincoln reportedly greeted Stowe during the Civil War: 'So you're the little woman who wrote the book that made this great war.'", "id": "fc12"}, {"front": "Border Ruffians", "back": "Pro-slavery Missouri residents who crossed into Kansas Territory to vote illegally in territorial elections and intimidate anti-slavery settlers. Their ballot-box stuffing helped produce a fraudulently elected pro-slavery territorial legislature that passed extreme pro-slavery laws. Their actions demonstrated that popular sovereignty would not produce fair democratic results in a context of organized, funded intimidation.", "id": "fc13"}, {"front": "New England Emigrant Aid Company", "back": "Northern organization that funded anti-slavery settlers to move to Kansas, equipped with rifles (sometimes called 'Beecher's Bibles' after Henry Ward Beecher, who endorsed shipping rifles labeled as Bibles). Represented organized Northern effort to win Kansas by demographic competition. Part of the dynamic the source describes: popular sovereignty + organized migration = armed conflict.", "id": "fc14"}, {"front": "Three approaches to territorial slavery, 1846–1854", "back": "(1) Wilmot Proviso position: Congress has the power and obligation to ban slavery from territories — the Northern free-soil position. (2) Southern position: Congress has no power to ban slavery — slaveholders have a constitutional right to take property anywhere. (3) Popular sovereignty: neither Congress nor slaveholders decide — territorial residents decide. None resolved the underlying question; all substituted procedure for substance.", "id": "fc15"}, {"front": "Why did the Compromise of 1850 fail in the long run?", "back": "The Fugitive Slave Act alienated Northern public opinion by requiring Northern citizens to act as agents of the slave system. The popular sovereignty formula for New Mexico and Utah was replaced in 1854 by the Kansas-Nebraska Act, which applied popular sovereignty while explicitly repealing the Missouri Compromise — triggering the crisis that destroyed both the Whig Party and Northern Democratic unity.", "id": "fc16"}, {"front": "Collapse of the second party system", "back": "The Whig Party collapsed in the wake of the Kansas-Nebraska Act (1854) as Northern Whigs could not remain in a party with Southern members who supported the Act. The Democratic Party split along sectional lines. The Republican Party replaced the Whigs as the major Northern party, organized exclusively around free soil. The new two-party system was explicitly sectional — meaning a sectional presidential election was structurally inevitable.", "id": "fc17"}, {"front": "What motivated Douglas to propose the Kansas-Nebraska Act?", "back": "Douglas was chairman of the Senate Committee on Territories and wanted to organize the remaining Louisiana Purchase territory to secure a transcontinental railroad route through Chicago. To win Southern support for the organizing legislation, he proposed repealing the Missouri Compromise and applying popular sovereignty. The political explosion that followed was the unintended consequence of a railroad-politics calculation.", "id": "fc18"}, {"front": "APUSH Key Concept: Why compromise failed structurally", "back": "All three antebellum compromises on territorial slavery (Missouri 1820, Compromise 1850, Kansas-Nebraska 1854) shared a structural flaw: each substituted procedural formulas for a substantive answer to whether slavery would expand. They postponed the question rather than resolving it. Each postponement was bought at a higher political price than the last. The Kansas-Nebraska Act's collapse into Bleeding Kansas demonstrated that the formula of popular sovereignty was not just inadequate but actively destructive.", "id": "fc19"}, {"front": "POL + SOC theme: The collapse of compromise", "back": "POL: Party realignments (Whig collapse → Republican rise) restructured the power relationships between regions, not just organizational arrangements. SOC: Bleeding Kansas was social conflict between competing communities — free-soil and pro-slavery settlers, each with distinct economic systems and values — literally fighting for the right to determine the character of a new society. Political crisis and social violence were inseparable.", "id": "fc20"}, {"front": "California Gold Rush and the Compromise of 1850's trigger", "back": "Gold was discovered at Sutter's Mill on January 24, 1848 — eight days before the Treaty of Guadalupe Hidalgo. California's non-indigenous population grew from ~14,000 to over 100,000 within two years. California applied for statehood as a free state in 1849, directly threatening the 15-15 Senate balance. Southern senators threatened secession. This precipitated the crisis that required the Compromise of 1850.", "id": "fc21"}, {"front": "Comparison: Free Soil vs. abolitionism", "back": "Free Soil (and the early Republican Party): oppose slavery's extension into new territories; accept its existence where it already is. Abolitionism: oppose slavery everywhere, including where it already exists; demand immediate emancipation. The AP exam frequently tests whether students can distinguish these positions — conflating them is a common analytical error.", "id": "fc22"}, {"front": "How did the Compromise of 1850 treat the slave trade vs. slavery itself in Washington DC?", "back": "The Compromise abolished the slave trade (buying and selling of enslaved people) in the District of Columbia but did NOT abolish slavery itself there. This distinction — between the trade and the institution — was a concession to Northern sensibilities that left the fundamental institution untouched. It satisfied neither abolitionists (who wanted full emancipation) nor ardent Southerners (who opposed any restriction).", "id": "fc23"}, {"front": "Continuity/Change: What was fundamentally different about the Republican Party vs. the Whigs?", "back": "The Whig Party was a national party with Southern and Northern wings held together by economic program (protective tariff, national bank, internal improvements) despite disagreeing on slavery. The Republican Party was explicitly sectional — it drew NO support in the South and was organized entirely around the free-soil principle. This sectional character made it structurally capable of winning the presidency without any Southern votes, which it did in 1860.", "id": "fc24"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 3, Section 5</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Federalist Papers", "back": "Eighty-five essays written by Alexander Hamilton, James Madison, and John Jay under the pseudonym 'Publius,' published in New York newspapers October 1787–May 1788. Simultaneously propaganda (aimed at skeptical New York) and political philosophy (addressing foundational questions about republican government). The most systematic defense of the Constitution ever written.", "id": "fc01"}, {"front": "Federalist No. 10 (Madison) — Faction Theory", "back": "Madison attacked the conventional wisdom that republics could only survive in small, homogeneous territories. His argument: a large republic is SAFER because it contains more factions, making it harder for any single one to achieve majority control and tyrannize the rest. Competition among factions protects liberty better than the uniformity of a small republic where one faction easily dominates.", "id": "fc02"}, {"front": "Faction (Madison's definition)", "back": "A number of citizens united by a common impulse of passion or interest adverse to the rights of other citizens or the permanent interests of the community. Madison argued that factions are inevitable wherever liberty exists — the cure for faction (eliminating liberty) is worse than the disease. The solution: design a system where faction competes with faction.", "id": "fc03"}, {"front": "Federalist No. 51 (Madison) — Separation of Powers", "back": "'Ambition must be made to counteract ambition.' Rather than relying on the virtue of officeholders, the Constitution's design pits the interests of each branch against the others — self-interest prevents any branch from accumulating tyrannical power. The 'double security' of federalism (states vs. federal) and separated powers (executive, legislative, judicial) protects liberty even if any single mechanism fails.", "id": "fc04"}, {"front": "Federalist No. 70 (Hamilton) — Executive Energy", "back": "'Energy in the executive is a leading character in the definition of good government.' Hamilton argued for a single president rather than an executive council: a single executive would be more decisive, more accountable, and more capable of effective action in emergencies. Decisiveness and accountability require unity, not collegiality.", "id": "fc05"}, {"front": "Federalist No. 78 (Hamilton) — Judicial Review", "back": "Hamilton argued the judiciary was the 'least dangerous' branch (no sword, no purse — only judgment). The courts' role: when a legislative act conflicts with the Constitution, courts must enforce the Constitution — not because courts are superior to the legislature, but because the people's will (expressed in the Constitution) is superior to both. This established the theoretical basis for judicial review.", "id": "fc06"}, {"front": "Judicial Review", "back": "The power of courts to invalidate laws that conflict with the Constitution. Articulated theoretically in Federalist No. 78; assumed widely by 1800; formally established in Marbury v. Madison (1803). Hamilton's argument: enforcing the Constitution over conflicting statutes asserts the people's will over their temporary representatives — not judicial superiority over the legislature.", "id": "fc07"}, {"front": "Anti-Federalists — Overview", "back": "Opponents of the Constitution who articulated a principled alternative theory of republican self-governance, not merely irrational fear of strong government. They drew from the same historical evidence as the Federalists but reached different conclusions: large republics were historically prone to tyranny; explicit rights protections were essential; the necessary and proper clause was a blank check; the federal judiciary would absorb state courts.", "id": "fc08"}, {"front": "Brutus No. 1 (1787)", "back": "The most influential Anti-Federalist essay, published in New York and attributed to Robert Yates. Argued from classical political theory: free republics historically required small geographic areas where citizens shared common interests, manners, and values. In a territory as vast and diverse as the United States, the central government would inevitably become remote, unresponsive, and tyrannical. Directly contradicted Federalist No. 10's extended-republic theory.", "id": "fc09"}, {"front": "Robert Yates", "back": "New York judge who attended but left the Philadelphia Convention, attributed as the likely author of 'Brutus' — the pseudonymous Anti-Federalist essays published in the New York Journal. His departure from the Convention before the final document was approved reflected his principled opposition to replacing the Articles with a national government.", "id": "fc10"}, {"front": "Anti-Federalist: Absence of Bill of Rights", "back": "The Anti-Federalists' most publicly effective objection: the Constitution contained no explicit protections for freedom of speech, press, religion; no jury trial guarantee; no protection against unreasonable searches. Federalists argued a bill of rights was unnecessary (limited enumerated powers). Anti-Federalists countered: governments tend to expand power over time; explicit protections are essential precisely for that reason.", "id": "fc11"}, {"front": "Anti-Federalist: Necessary and Proper Clause Concern", "back": "Anti-Federalists argued that the 'necessary and proper' clause gave Congress unlimited power to legislate on virtually anything — a blank check that would swallow states' reserved powers. This proved prescient: Hamilton used the clause to justify the National Bank (1791), and the Supreme Court validated implied powers in McCulloch v. Maryland (1819).", "id": "fc12"}, {"front": "Anti-Federalist: Judiciary Concern (Brutus No. 11 and 15)", "back": "Brutus argued that the federal judiciary — with lifetime appointments and broad jurisdiction — would 'absorb and destroy the judiciaries of the several states' and become the instrument of federal consolidation. The Anti-Federalists proved partially correct: federal courts, especially under Chief Justice John Marshall, significantly expanded federal power at states' expense.", "id": "fc13"}, {"front": "Ratification — Massachusetts Model", "back": "Massachusetts ratified the Constitution narrowly (187–168) only after Federalists agreed to recommend amendments addressing Anti-Federalist concerns. This 'Massachusetts compromise' — ratify now, add a bill of rights later — became the model for other contested states. Without this concession, New Hampshire, Virginia, and New York might not have ratified.", "id": "fc14"}, {"front": "Ratification Outcome — Close Vote", "back": "Delaware, Pennsylvania, New Jersey, Georgia, Connecticut: ratified quickly by large margins. Massachusetts (187–168), Virginia, New Hampshire, New York: ratified narrowly. North Carolina and Rhode Island: initially rejected; ratified after the new government was operating. The close votes validate that Anti-Federalism represented a substantial, principled alternative, not a fringe position.", "id": "fc15"}, {"front": "Bill of Rights (1791)", "back": "The first ten amendments to the Constitution, ratified December 15, 1791. Madison, who had initially opposed a bill of rights as unnecessary, shepherded twelve amendments through the First Congress; ten were ratified. The Bill of Rights encodes precisely the protections Anti-Federalists had demanded — making the Anti-Federalists the losers of ratification but the winners of constitutional content.", "id": "fc16"}, {"front": "The Federalist–Anti-Federalist Debate as Foundational Argument", "back": "More than a ratification campaign: the debate established the intellectual vocabulary through which Americans argue about constitutional meaning. Federalists contributed: separation of powers, checks and balances, faction theory, judicial review. Anti-Federalists contributed: the Bill of Rights and the tradition of constitutional skepticism toward federal power — which resurfaces in debates over states' rights, implied powers, and civil liberties in every generation.", "id": "fc17"}, {"front": "Compare/Contrast: Federalists vs. Anti-Federalists on Size of Republic", "back": "Federalists (Federalist No. 10): large republic = safer, because more factions prevent any single faction from dominating. Anti-Federalists (Brutus No. 1): large republic = dangerous, because government becomes remote from the people, unresponsive, and tyrannical; free republics historically required small, homogeneous territories. Both sides cited the same ancient republics (Greece, Rome) and reached opposite conclusions.", "id": "fc18"}, {"front": "Compare/Contrast: Federalists vs. Anti-Federalists on Human Nature", "back": "Federalists (No. 51): assumed human nature was fallible and self-interested; designed the system so ambition would counteract ambition structurally. Anti-Federalists: also assumed human nature was fallible — but concluded that more structural complexity (a larger national government) gave ambitious people more opportunities to escape accountability, not fewer.", "id": "fc19"}, {"front": "CED Theme: POL — What was the lasting constitutional legacy of the ratification debate?", "back": "Federalists' lasting contribution: the analytical framework of the Federalist Papers — faction theory, separation of powers, checks and balances, judicial review — became the vocabulary for all subsequent constitutional argument. Anti-Federalists' lasting contribution: the Bill of Rights and the tradition of constitutional skepticism toward federal power that resurfaces in every generation's debates about states' rights, implied powers, and civil liberties.", "id": "fc20"}, {"front": "Pseudonyms in the Ratification Debate", "back": "Federalists wrote under 'Publius' (Hamilton, Madison, Jay) — invoking Publius Valerius Publicola, founder of the Roman Republic. Anti-Federalists used 'Brutus' (possibly Robert Yates) — invoking Marcus Brutus, who killed Julius Caesar to prevent tyranny. The classical pseudonyms reveal both sides saw themselves as defenders of republican tradition against the opposing threat.", "id": "fc21"}, {"front": "Continuity/Change: How did the Bill of Rights change the Anti-Federalist legacy?", "back": "Anti-Federalists lost ratification (June 1788, nine states ratified) but their insistence on a bill of rights proved decisive for the Constitution's long-term legitimacy. Madison's shepherding of the Bill of Rights through the First Congress was a pragmatic concession that transformed the Constitution from a document that many citizens distrusted into one with explicit protections — making constitutional government more durable.", "id": "fc22"}, {"front": "James Madison — Evolution on the Bill of Rights", "back": "Madison initially opposed a bill of rights as unnecessary (the federal government's limited enumerated powers were sufficient protection). He reversed course and shepherded twelve amendments through the First Congress, recognizing that the Bill of Rights was politically necessary to build public trust in the new Constitution — and that Anti-Federalist concerns about government expansion were not entirely wrong.", "id": "fc23"}, {"front": "Alexander Hamilton — Key Federalist Contributions", "back": "Hamilton wrote 51 of the 85 Federalist Papers, including No. 70 (energetic executive), No. 78 (judicial review as least dangerous branch), and No. 84 (bill of rights unnecessary). As Secretary of Treasury, he implemented his economic vision. His confrontational political style contributed to the formation of organized parties — despite the Federalists' anti-party rhetoric.", "id": "fc24"}, {"front": "Checks and Balances", "back": "The constitutional design principle described in Federalist No. 51: each branch of the federal government has mechanisms to check the others (presidential veto, congressional override, judicial review, Senate confirmation of executive appointments). Combined with federalism (state vs. federal power), this creates Madison's 'double security' against the concentration of power in any single institution.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

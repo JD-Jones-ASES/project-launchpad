@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 9, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "September 11, 2001 — Basic Facts", "back": "8:46 a.m.: AA Flight 11 hits North Tower. 9:03 a.m.: UA Flight 175 hits South Tower. 9:37 a.m.: AA Flight 77 hits the Pentagon. 10:03 a.m.: UA Flight 93 crashes near Shanksville, PA (passengers overpowered hijackers). 10:28 a.m.: Both towers collapsed. 2,977 people killed — the largest loss of life from an external attack in American history. Perpetrators: 19 operatives of al-Qaeda, led by Osama bin Laden, operating from Taliban-controlled Afghanistan.", "id": "fc01"}, {"front": "Al-Qaeda", "back": "A transnational jihadist organization led by Osama bin Laden, a Saudi national. Operated from Taliban-controlled Afghanistan at the time of the 9/11 attacks. The CIA had warned in an August 6, 2001, Presidential Daily Brief that bin Laden was 'determined to strike in U.S.' Al-Qaeda's ideology combined jihadist theology with opposition to American military presence in Muslim-majority countries; its organizational structure was transnational and decentralized.", "id": "fc02"}, {"front": "USA PATRIOT Act (October 26, 2001)", "back": "Signed into law 45 days after 9/11. Expanded federal surveillance: reduced evidentiary standards for intelligence surveillance, authorized 'roving wiretaps' across multiple devices, expanded Internet and financial monitoring, permitted 'sneak and peek' delayed-notice searches. Passed 98–1 in Senate, 357–66 in House. Renewed multiple times; some provisions scaled back after the 2013 Snowden revelations showed government had interpreted authorities more broadly than Congress understood.", "id": "fc03"}, {"front": "Operation Enduring Freedom (Afghanistan, 2001)", "back": "The U.S.-British invasion of Afghanistan, launched October 7, 2001. Targeted the Taliban regime harboring al-Qaeda. Initial campaign was swift: Kabul fell November 2001, Taliban government collapsed. But mission expanded — defeating Taliban, disrupting al-Qaeda, building a democratic state, training Afghan forces — and it became the longest war in American history. American forces remained until August 2021; Taliban retook control within days of withdrawal. Cost: $2.3 trillion, over 2,400 American military lives.", "id": "fc04"}, {"front": "Iraq War — The Case for Invasion", "back": "The Bush administration made three claims: (1) Saddam Hussein possessed WMD; (2) there were links between Saddam's regime and al-Qaeda; (3) the U.S. had a duty to prevent WMD transfer to terrorists. Colin Powell made the case before the UN Security Council on February 5, 2003. All three claims proved false or wildly overstated. No WMD found; intelligence was fabricated or misread; al-Qaeda-Saddam links were essentially nonexistent (Saddam was a secular Ba'athist who brutally suppressed Islamists).", "id": "fc05"}, {"front": "Iraq War — Timeline and Costs", "back": "Invasion: March 2003. Saddam's statue toppled in Firdos Square: April 9, 2003. Coalition Provisional Authority (CPA) disbanded Iraqi army and de-Ba'athified government — creating hundreds of thousands of armed, unemployed, aggrieved men. Insurgency erupted; sectarian violence compounded it; al-Qaeda in Iraq evolved into ISIS. American combat operations formally ended: 2011. Costs: over 4,400 American lives, $2 trillion, 170,000–200,000 estimated Iraqi civilian deaths.", "id": "fc06"}, {"front": "De-Ba'athification", "back": "Coalition Provisional Authority policy (May 2003) removing all Ba'ath Party members from the new Iraqi government and disbanding the Iraqi military. Led by L. Paul Bremer. The policy left hundreds of thousands of armed, trained military personnel unemployed and aggrieved. Combined with the power vacuum of regime change, de-Ba'athification is widely cited as the single most consequential mistake of the Iraq occupation — directly feeding the insurgency.", "id": "fc07"}, {"front": "Islamic State (ISIS)", "back": "The extremist group that emerged from al-Qaeda in Iraq (AQI) through a succession of mutations after the 2003 Iraq War. Seized large parts of Iraq and Syria in 2013–14, declaring a 'caliphate.' ISIS was, in significant part, a product of the Iraq War's destabilization — the power vacuum, the sectarian conflict, and the pool of armed, aggrieved men created by de-Ba'athification. This outcome could not have been predicted by those who planned the invasion, but was widely anticipated by critics of the 'de-Ba'athification' policy.", "id": "fc08"}, {"front": "Guantánamo Bay Detention Facility", "back": "Opened January 2002 on the U.S. naval base in Cuba, outside the regular federal court system. Held detainees as 'unlawful enemy combatants' — neither POWs (Geneva Convention) nor criminal defendants (due process). The Supreme Court pushed back: Hamdi v. Rumsfeld (2004), Hamdan v. Rumsfeld (2006), Boumediene v. Bush (2008). Facility remained open into the 2020s despite repeated presidential promises to close it.", "id": "fc09"}, {"front": "Hamdi v. Rumsfeld (2004)", "back": "Supreme Court held that U.S. citizens detained as 'enemy combatants' have a constitutional right to challenge their detention before a neutral decision-maker. Yaser Hamdi, an American citizen captured in Afghanistan, could not be held indefinitely without due process. One of three major post-9/11 Supreme Court rulings pushing back against executive detention authority, alongside Hamdan (2006) and Boumediene (2008).", "id": "fc10"}, {"front": "Hamdan v. Rumsfeld (2006)", "back": "Supreme Court held that the military commissions established by the Bush administration to try Guantánamo detainees violated the Uniform Code of Military Justice and the Geneva Conventions. Congress responded with the Military Commissions Act (2006), creating a new legal framework for the commissions. The case illustrates the judicial branch checking executive emergency-powers expansion.", "id": "fc11"}, {"front": "Boumediene v. Bush (2008)", "back": "Supreme Court held that foreign nationals held at Guantánamo have constitutional habeas corpus rights and may petition federal courts to challenge their detention. The 5–4 decision, written by Justice Kennedy, held that the Military Commissions Act's limitation of habeas review was unconstitutional. The most sweeping of the post-9/11 detainee rights decisions.", "id": "fc12"}, {"front": "NSA Bulk Collection Programs (revealed 2013)", "back": "Former NSA contractor Edward Snowden disclosed in June 2013 that the NSA collected metadata on virtually all Americans' phone calls and Internet communications under secret interpretations of the PATRIOT Act never disclosed publicly. Civil-liberties critique: violated the Fourth Amendment (unreasonable search and seizure without individualized suspicion), operated under secret legal interpretations, created surveillance infrastructure that could be misused. Congress partially curtailed the phone-records program in the USA FREEDOM Act (2015).", "id": "fc13"}, {"front": "Edward Snowden", "back": "Former NSA contractor who disclosed classified information about bulk surveillance programs to journalists at The Guardian and The Washington Post in June 2013. His disclosures triggered a major public debate about civil liberties, privacy, and government surveillance power. He fled to Russia to avoid prosecution. Supporters called him a whistle-blower exposing unconstitutional programs; critics called him a traitor who damaged national security.", "id": "fc14"}, {"front": "George W. Bush (1946–present)", "back": "43rd president (2001–09). Entered office as a 'compassionate conservative' focused on domestic policy. The 9/11 attacks transformed his presidency. Afghanistan invasion: broadly supported. Iraq invasion: one of the most consequential and contested foreign-policy choices in American history. Abu Ghraib scandal (2004), failure to find WMD, and deteriorating occupation drove approval from 90% (post-9/11) to below 30% (2008). Historians debate: intelligence failure, deliberate deception, or tragic miscalculation.", "id": "fc15"}, {"front": "Abu Ghraib Scandal (2004)", "back": "Photographs leaked in April 2004 showing U.S. military personnel torturing and humiliating Iraqi prisoners at Abu Ghraib prison. The scandal damaged American credibility globally, energized the Iraqi insurgency, and raised fundamental questions about command responsibility and the treatment of prisoners in the War on Terror. It was particularly damaging because it appeared to confirm critics' arguments about the moral costs of the Iraq occupation.", "id": "fc16"}, {"front": "Unlawful Enemy Combatant", "back": "The legal category created by the Bush administration to classify captured al-Qaeda and Taliban fighters as neither POWs (entitled to Geneva Convention protections) nor criminal defendants (entitled to due-process rights). The 'war on terror' framing — treating the conflict as a military rather than law enforcement operation — provided the basis for this category, which enabled indefinite detention at Guantánamo and trial by military commission.", "id": "fc17"}, {"front": "USA FREEDOM Act (2015)", "back": "Congressional legislation that partially curtailed the NSA's bulk phone-records collection program in response to the Snowden revelations. Required the NSA to obtain specific records from telephone companies rather than bulk-collecting all records. Represented a partial reform of post-9/11 surveillance authority — but the 'fundamental questions about the scope of surveillance authority in a democracy remained unresolved.'", "id": "fc18"}, {"front": "POL Theme: Emergency Powers and Permanent Architecture", "back": "The post-9/11 era extended a recurring American pattern: emergency consistently expands executive power. The PATRIOT Act, Guantánamo detentions, and NSA surveillance programs all pushed against constitutional limits. The legal architecture built in 2001–2006 proved far more durable than its architects' stated intentions — 'powers acquired in crises rarely expire with the crisis. Each administration that inherited these tools used rather than dismantled them.'", "id": "fc19"}, {"front": "WOR Theme: Iraq War and American Credibility", "back": "The Iraq War is the clearest case in American history of a war begun under false pretenses that profoundly damaged American credibility and capacity. Failure to find WMD, Abu Ghraib, and the emergence of ISIS demonstrated the limits of American military power in asymmetric conflicts — a lesson available from Vietnam but not institutionalized. The war also strengthened Iran's regional influence and created conditions for ISIS, reshaping regional power dynamics for decades.", "id": "fc20"}, {"front": "Comparison: Post-9/11 Civil Liberties vs. Earlier American Wars", "back": "Pattern across American wars: Civil War (Lincoln suspended habeas corpus); WWI (Espionage and Sedition Acts); WWII (Japanese American internment); Cold War (McCarthyism, COINTELPRO); post-9/11 (PATRIOT Act, Guantánamo, NSA bulk collection). Each emergency expanded executive power and contracted civil liberties. Powers acquired in crises rarely expire with the crisis — they become the permanent architecture inherited by subsequent administrations.", "id": "fc21"}, {"front": "Social Media and Post-9/11 Politics", "back": "September 11 occurred two years before Facebook, four years before YouTube, five years before Twitter. Social media democratized political communication — enabling the Arab Spring, Black Lives Matter, and other mobilizations — while creating information environments in which emotional intensity outcompetes factual accuracy, algorithmic amplification maximizes outrage, and the boundary between reporting and rumor blurs. The interplay between the post-9/11 security state and social media created new forms of surveillance capitalism and vulnerabilities in democratic discourse.", "id": "fc22"}, {"front": "Presidential Daily Brief — August 6, 2001", "back": "A CIA intelligence document titled 'Bin Laden Determined to Strike in US' delivered to President Bush on August 6, 2001 — five weeks before 9/11. The PDB warned of al-Qaeda intentions to attack inside the United States. Its existence and contents became politically controversial after the attacks, raising questions about whether sufficient action had been taken on the warning. The CIA had provided the warning; the question was what decision-makers did with it.", "id": "fc23"}, {"front": "What was the Boland Amendment's equivalent in the post-9/11 era?", "back": "The Authorization for Use of Military Force (AUMF, September 18, 2001) authorized the president to use 'all necessary and appropriate force' against those responsible for 9/11. Unlike the Boland Amendment (which limited executive action), the AUMF expanded it — broadly enough that subsequent administrations invoked it to authorize military operations against groups that did not exist in 2001. The AUMF's broad language became the statutory foundation for the ongoing War on Terror architecture.", "id": "fc24"}, {"front": "Mission Creep — Afghanistan as Case Study", "back": "The Afghanistan War illustrates 'mission creep': a military operation that begins with focused objectives (destroy al-Qaeda, remove the Taliban) and expands to far more ambitious ones (build a democratic state, train Afghan security forces). Mission creep occurred because each early success created a new opportunity that seemed achievable; each new objective added resources, time, and lives. The Taliban's rapid reconquest in August 2021 demonstrated that the nation-building objectives had not been achieved after 20 years.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

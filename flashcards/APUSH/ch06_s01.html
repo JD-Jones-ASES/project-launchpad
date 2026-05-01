@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP United States History &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP United States History &mdash; Chapter 6, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APUSH.html">&larr; Back to AP United States History</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Transcontinental Railroad (1869)", "back": "Completed at Promontory Summit, Utah Territory, on May 10, 1869. The Union Pacific (building west) and Central Pacific (building east) were financed by federal land grants and bond loans under the Pacific Railway Acts of 1862 and 1864. Built largely by Irish immigrant and Chinese ('Celestial') labor; reduced cross-continental travel from months to days and accelerated western settlement and indigenous dispossession.", "id": "fc01"}, {"front": "Pacific Railway Acts (1862 and 1864)", "back": "Federal legislation granting approximately 10 million acres of alternating square-mile land sections and $16,000–$48,000 per mile in bond loans to the Union Pacific and Central Pacific railroads. Illustrated the Gilded Age pattern of the federal government as capitalism's enabling partner — not a regulator standing apart from industrial growth.", "id": "fc02"}, {"front": "Crédit Mobilier Scandal (1872)", "back": "A construction subsidiary of the Union Pacific that charged wildly inflated costs and distributed discounted stock to compliant members of Congress. The scandal revealed the corrupt entanglement of federal government and railroad capitalism and is the paradigmatic example of Gilded Age political corruption.", "id": "fc03"}, {"front": "Homestead Act (1862)", "back": "Offered 160 acres of public domain land free to any head of household who settled and improved it for five years. Partially fulfilled the free-labor ideal in the humid Midwest; largely undermined on the semiarid plains west of the 100th meridian by drought, insufficient acreage, and speculator pre-emption. By 1900, much of the distributed land had passed to corporations rather than family farmers.", "id": "fc04"}, {"front": "100th Meridian", "back": "The rough geographical boundary between regions with sufficient rainfall for conventional agriculture (east) and semiarid lands where 160-acre homestead farming was often unviable (west). Represents the environmental limit that railroad advertising and federal boosterism could not overcome, and a key reason the Homestead Act produced mixed rather than uniformly positive results.", "id": "fc05"}, {"front": "Comstock Lode / Mining Rushes", "back": "The Comstock Lode (Nevada, 1859) was the first of successive western mineral rushes (Colorado gold 1859, Leadville silver 1877, Montana copper 1882, Black Hills gold 1874). Each followed a pattern: individual prospectors, then capital-intensive industrial operations displacing them, then bust. The 'frontier' was an investment frontier where Eastern and European capital rapidly supplanted the lone prospector.", "id": "fc06"}, {"front": "Open Range Cattle Industry", "back": "From the 1860s to c. 1890, Texas longhorn cattle were driven north to Kansas rail terminals by cowboys (roughly a quarter Black or Mexican vaquero — a demographic dime novels erased). The brutal winter of 1886–87 killed up to 90% of range cattle in some areas; subsequent homesteader barbed-wire fencing ended the open range era by 1890.", "id": "fc07"}, {"front": "Frederick Jackson Turner's Frontier Thesis (1893)", "back": "Turner argued that the experience of successive frontiers shaped American democratic individualism and that the 1890 Census closure of the frontier marked a national identity crisis. Historically influential but deeply problematic: treated the West as empty land awaiting 'civilization,' erasing indigenous nations with their own sovereignty — a colonialist framing that historians like Patricia Limerick have reframed as 'conquest.'", "id": "fc08"}, {"front": "Fort Laramie Treaty (1868)", "back": "Acknowledged Sioux ownership of the Black Hills of Dakota Territory and promised to exclude American settlement. The treaty lasted six years: when Custer's 1874 expedition confirmed gold in the Black Hills, the Grant administration declined to enforce it, prospectors poured in, and the treaty's violation led directly to Sioux and Cheyenne resistance culminating at Little Bighorn.", "id": "fc09"}, {"front": "Battle of Little Bighorn (June 25–26, 1876)", "back": "Lakota Sioux, Northern Cheyenne, and Arapaho warriors led by Sitting Bull and Crazy Horse annihilated five companies of the Seventh Cavalry under Lt. Col. George Armstrong Custer — the largest Native military victory of the Plains Wars. Despite the victory, the army responded with overwhelming force and most Lakota were on reservations within a year, illustrating how military success could not overcome the structural imbalance of power.", "id": "fc10"}, {"front": "Ghost Dance Movement", "back": "A messianic religious revival among Plains peoples in the late 1880s, promising the return of the bison and the ancestors. The U.S. Army interpreted it as a prelude to armed insurrection. The attempt to disarm a band participating in the Ghost Dance led directly to the Wounded Knee Massacre (December 29, 1890).", "id": "fc11"}, {"front": "Wounded Knee Massacre (December 29, 1890)", "back": "Soldiers of the Seventh Cavalry opened fire on a Lakota encampment during a disarmament operation, killing 150–300 men, women, and children. The army awarded twenty Medals of Honor to participants. Historians classify it as a massacre. It marked the violent end of armed resistance on the Great Plains.", "id": "fc12"}, {"front": "Reservation System", "back": "Confined surviving Plains nations to limited federal land tracts where government agents controlled food distribution, market access, and children's education. Land was frequently unsuitable for farming; annuity payments were underfunded and corrupt; disease mortality was devastating. The reservations were designed to force transition to sedentary farming but were systematically under-resourced.", "id": "fc13"}, {"front": "Dawes Severalty Act (1887)", "back": "Dismantled communal reservation landholding by dividing land into individual allotments (160 acres per household). 'Surplus' land beyond allotment needs was sold to white settlers and speculators. By 1934, Native Americans had lost ~90 million of 138 million acres held in 1887. Supported by well-meaning reformers but catastrophic in effect — allotment completed the dispossession that military conquest had begun.", "id": "fc14"}, {"front": "Commercial Buffalo Hunt", "back": "Eastern demand for leather and hides drove a commercial slaughter that reduced the estimated 30 million bison of 1865 to near-extinction by 1889. General Philip Sheridan reportedly noted that buffalo hunters were doing more to subdue the Plains than decades of soldiers — an acknowledgment that bison destruction was a deliberate instrument of federal Indian policy, not incidental economic activity.", "id": "fc15"}, {"front": "Sitting Bull", "back": "Hunkpapa Lakota leader and spiritual figure who helped organize the alliance of Lakota, Cheyenne, and Arapaho warriors that defeated Custer at Little Bighorn (1876). Fled to Canada after the battle; surrendered in 1881 and lived under military supervision; killed in 1890 during the Ghost Dance crisis.", "id": "fc16"}, {"front": "Crazy Horse", "back": "Oglala Lakota war leader who commanded warriors at Little Bighorn (1876) and the Battle of the Rosebud. Surrendered in May 1877 and was killed in custody at Fort Robinson, Nebraska, in September 1877 — one of many instances where Native leaders who surrendered were denied the security they were promised.", "id": "fc17"}, {"front": "Patricia Limerick's 'New Western History'", "back": "Historian who reframed Turner's 'frontier' as 'conquest' — a word that more accurately names what happened to indigenous peoples, Mexican inhabitants, and other non-Anglo communities in the West. Limerick's Legacy of Conquest (1987) challenged the triumphalist narrative and centered dispossession, racial hierarchy, and environmental limits.", "id": "fc18"}, {"front": "Indian Reorganization Act (1934)", "back": "Federal legislation that reversed the Dawes Act allotment policy, ended the sale of 'surplus' reservation land, and allowed tribes to reconstitute communal landholding. Came after 47 years of Dawes Act devastation during which ~90 million acres were lost. Represents a belated acknowledgment that allotment had been a policy catastrophe.", "id": "fc19"}, {"front": "HAPP Prompt: Photograph of the Golden-Spike Ceremony", "back": "Historical Context (1869): peak of post-Civil War railroad expansion; Chinese and Irish workers built the line. Audience: newspaper readership, posterity, corporate promoters. Purpose: to celebrate American engineering and corporate achievement, erase the labor of non-white workers. Point of View: executive/managerial — workers' bodies and labor invisible in the frame. Significance: the photograph's omissions reveal the racial and class hierarchies structuring the 'conquest' narrative.", "id": "fc20"}, {"front": "CED Theme: MIG + GEO — Western Settlement", "back": "The conquest of the West was a massive internal migration (MIG) shaped by geographical reality (GEO). The 100th meridian's semiarid conditions proved an environmental limit that railroad advertising could not overcome; millions settled the Great Plains and hundreds of thousands were broken by drought and crop-price volatility. The promise of independent agrarian life was subverted by the railroad and financial system that made settlement possible.", "id": "fc21"}, {"front": "Checkerboard Land-Grant Pattern", "back": "The Pacific Railway Acts granted railroads alternating square-mile sections on either side of the right-of-way — a checkerboard that made the intervening (non-granted) sections more valuable and saleable. The pattern enriched railroad companies and facilitated corporate land accumulation, contributing to the concentration of western land in corporate hands rather than family farmers.", "id": "fc22"}, {"front": "How did railroad construction labor demographics challenge the 'rugged individual' frontier myth?", "back": "The transcontinental railroad was built primarily by Chinese workers (Central Pacific, Sierra Nevada segment) and Irish immigrants (Union Pacific). These workers — totaling roughly 20,000 — were erased from the ceremony photograph and from popular memory. Their labor was collective, immigrant, non-white, and poorly compensated, directly contradicting the individualist mythology Turner and dime novels constructed.", "id": "fc23"}, {"front": "Continuity/Change: Federal Indian Policy, 1860s–1930s", "back": "CHANGE: policy shifted from treaty-making (Fort Laramie 1868) to military conquest (1876–1890) to allotment (Dawes Act 1887) — each phase more effective at dispossession. CONTINUITY: throughout all phases, the underlying goal was transforming communally held indigenous land into privatized American property; the vocabulary of 'civilization' and 'improvement' masked a consistent policy of elimination of Native land tenure.", "id": "fc24"}, {"front": "Henry Dawes vs. Patricia Limerick on Western Policy", "back": "Dawes (reformer, 1880s): believed allotment would integrate Native Americans into American society through private land ownership — the 'civilizing' potential of property. Limerick (historian, 1987): the entire framework of 'civilization' was a conquest ideology that converted indigenous sovereignty into a problem to be solved. The gap between reform intent and dispossession outcome is a central lesson of the Dawes Act.", "id": "fc25"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>
