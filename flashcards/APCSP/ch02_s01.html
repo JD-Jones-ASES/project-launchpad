@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP Computer Science Principles &mdash; Chapter 2, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Interpreter", "back": "A program that reads source code line by line and executes it directly, without a separate compilation step. Python's interpreter is invoked by python or py -3 on Windows. Because execution happens immediately, errors are reported at the exact line where they occur, which makes the interpreter a powerful debugging tool.", "id": "fc01"}, {"front": "REPL", "back": "Read-Eval-Print Loop: an interactive shell that Reads one expression, Evaluates it, Prints the result, and Loops back. Launched by running python (or py -3) with no filename. The prompt is >>>. Ideal for testing tiny ideas like 2 + 3 before committing them to a saved program.", "id": "fc02"}, {"front": "IDE", "back": "Integrated Development Environment: a single application combining a source-code editor, a way to run programs, and debugging tools. Common Python IDEs are IDLE (bundled with Python), Thonny (beginner debugger), VS Code (professional, free), and Replit (browser-based, no install). The IDE choice does not change how Python code works, only the writing and testing experience.", "id": "fc03"}, {"front": "IDLE vs Thonny vs VS Code vs Replit", "back": "IDLE ships with python.org and is minimal — F5 runs the script. Thonny adds a step-by-step debugger that highlights the current line and shows variable values. VS Code is professional-grade with auto-complete, linting, integrated terminal, and a full debugger. Replit is browser-based, requires no install, and supports collaborative pair programming through shared links — ideal for Chromebooks.", "id": "fc04"}, {"front": "Iterative Development Cycle", "back": "Four stages repeated until the program is correct enough: Design (define inputs, outputs, algorithm), Implement (translate design into code), Test (run with typical, boundary, and invalid inputs), Refine/Debug (fix errors and return to test). Each pass produces a slightly better version. The Create PT rubric awards a point for documenting this cycle.", "id": "fc05"}, {"front": "Design Stage", "back": "The first stage of the iterative cycle: define the program's inputs, outputs, and the algorithm that transforms them. Sketching on paper or writing pseudocode before touching the keyboard often saves hours of rework later. Skipping design is a common cause of code that has to be rewritten from scratch.", "id": "fc06"}, {"front": "Test Stage", "back": "Run the program with three categories of inputs: typical inputs (the happy path), boundary inputs (largest or smallest legal values), and invalid inputs (letters where a number is expected). Note every discrepancy between expected and actual output. Skipping any of these categories leaves classes of bugs undiscovered.", "id": "fc07"}, {"front": "Pair Programming", "back": "A collaborative technique where two developers share one workstation. The driver types the code; the navigator reads it aloud, watches for errors, and suggests next steps. Partners switch roles every few minutes. Research shows pair programming reduces defects because a second set of eyes catches mistakes the driver's brain has learned to overlook. On the Create PT, design may be collaborative, but the final code submission must be individually authored.", "id": "fc08"}, {"front": "Program Function", "back": "What a program computes — the specific transformation it applies to inputs to produce outputs. Described in technical, operational terms with computation verbs (accepts, reads, generates, computes, prints). Function answers \"what does the code do?\" Example: \"The program accepts a name and birth year, computes age, and prints a greeting that includes the name and computed age.\"", "id": "fc09"}, {"front": "Program Purpose", "back": "Why the program exists — who it serves, what problem it solves. Described in human, goal-oriented terms with benefit verbs (helps, lets, supports). Purpose answers \"why does this program matter to someone?\" Example: \"My program helps elderly community center members confirm senior-discount eligibility without doing mental arithmetic.\" The Create PT rubric awards a point for distinguishing purpose from function.", "id": "fc10"}, {"front": "Function vs Purpose Trap", "back": "The Chief Reader report identifies confusing function with purpose as the #1 source of point loss on the Create PT. Students describe what the program does (function) when the prompt asks why it exists (purpose). Test: function uses verbs of computation (\"reads,\" \"computes\"); purpose uses verbs of benefit (\"helps\"). Structure your purpose sentence as: \"My program helps [audience] [goal] by [mechanism].\"", "id": "fc11"}, {"front": "Big Idea 1 (Creative Development)", "back": "The College Board curriculum framework's first big idea. It covers iterative development, collaboration (including pair programming), and the function/purpose distinction. Almost every Create PT rubric point is anchored in BI 1, which is why this section is high-leverage exam material.", "id": "fc12"}, {"front": "Ada Lovelace", "back": "Augusta Ada King, Countess of Lovelace (1815-1852). Author of the first algorithm intended to be executed by a machine — a method for computing Bernoulli numbers on Babbage's Analytical Engine, published in her 1843 annotations of Menabrea's article. Her conceptual leap that the Engine could manipulate any symbolic quantity (not just numbers) anticipated the stored-program concept by over a century. The Ada programming language was named in her honor in 1980.", "id": "fc13"}, {"front": "REPL vs Script File", "back": "REPL: type one statement, see the result instantly; ideal for testing operator behavior or verifying a single function. Script file (.py): saves a complete program on disk that can be re-run, shared, and extended over time. The REPL is for experimentation; the script is for anything you want to keep, distribute, or grow.", "id": "fc14"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

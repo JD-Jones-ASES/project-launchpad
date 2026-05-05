@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles - Fault Tolerance and Network Design &mdash; Study Guide &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .guide-content {
+            max-width: 800px; margin: 0 auto; padding: 2rem;
+            background: var(--card-background); border: 2px solid var(--border-color);
+            border-radius: 12px; line-height: 1.8;
+        }
+        .guide-content h1 {
+            font-family: 'Cinzel', serif; color: var(--primary-color);
+            font-size: 1.8rem; margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem; border-bottom: 2px solid var(--border-color);
+        }
+        .guide-content h2 {
+            font-family: 'Cinzel', serif; color: var(--primary-color);
+            font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem;
+        }
+        .guide-content h3 {
+            font-family: 'Cinzel', serif; color: var(--accent-color);
+            font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;
+        }
+        .guide-content p { margin-bottom: 1rem; color: var(--text-primary); }
+        .guide-content ul, .guide-content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+        .guide-content li { margin-bottom: 0.4rem; }
+        .guide-content table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;
+        }
+        .guide-content th {
+            background: var(--primary-color); color: white;
+            padding: 0.6rem 0.75rem; text-align: left;
+            font-family: 'Cinzel', serif; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.03rem;
+        }
+        .guide-content td {
+            padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-color);
+        }
+        .guide-content tr:hover td { background: rgba(218, 165, 32, 0.05); }
+        .guide-content strong { color: var(--primary-color); }
+        .guide-content em { font-style: italic; }
+        .guide-content hr {
+            border: none; border-top: 2px solid var(--border-color); margin: 2rem 0;
+        }
+        .guide-content blockquote {
+            border-left: 4px solid var(--secondary-color);
+            margin: 1rem 0; padding: 0.75rem 1.25rem;
+            background: #fdf6e3; border-radius: 0 8px 8px 0;
+            font-style: italic; color: var(--text-secondary);
+        }
+        .guide-content code {
+            background: #f5f0e8; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-size: 0.9em;
+        }
+        .guide-breadcrumb { text-align: center; margin-bottom: 2rem; }
+        .guide-breadcrumb a {
+            color: var(--secondary-color); text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem; border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .guide-breadcrumb a:hover { background: var(--secondary-color); color: white; }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">STUDY GUIDE</h1>
+                <p class="subtitle">AP Computer Science Principles &mdash; Fault Tolerance and Network Design</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="guide-breadcrumb">
+                <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+            </div>
+            <div class="guide-content">
+<h1>AP CSP — Topic 7.4: Fault Tolerance and Network Design</h1>
+<h2>Core Question</h2>
+<p>How can a system grow a billionfold (from four ARPANET nodes in 1969 to roughly 15 billion devices today) without breaking, and continue to function when submarine cables are cut, data centers flood, or backbone routers crash? The Internet's resilience is no accident — it is the deliberate consequence of three architectural choices: scalability, redundancy and fault tolerance, and the end-to-end principle. This section explains each and shows how real-world incidents (2008 Mediterranean cable cuts, BGP route leaks) illustrate both the strengths and the limits of the Internet's design.</p>
+<h2>Key Concepts</h2>
+<ul>
+<li><strong>Scalability</strong>: handling increased work by adding resources, without redesign. The Internet scales because new participants only need to implement existing protocols; no central permission is required.</li>
+<li><strong>Redundancy</strong>: extra components or paths so failure of one does not stop service. Submarine cables, IXPs, multi-region data centers, BGP multi-homing all embody it.</li>
+<li><strong>Fault tolerance</strong>: continuing to operate during failures, not just preventing them. Achieved through redundancy + dynamic routing.</li>
+<li><strong>Reliability vs. fault tolerance</strong>: a reliable system rarely fails; a fault-tolerant system continues to work when it does fail. The Internet was designed for fault tolerance because reliability of physical infrastructure could not be guaranteed.</li>
+<li><strong>Failure detection</strong>: routing protocol heartbeats let routers detect dead neighbors and update their routing tables.</li>
+<li><strong>Graceful degradation</strong>: service continues at reduced capacity, not zero. A network with ten paths still works if seven fail.</li>
+<li><strong>Distributed topology</strong>: many nodes, many connections — destroying a subset leaves the rest connected through alternative paths. From Baran's 1964 RAND analysis.</li>
+<li><strong>End-to-end principle</strong>: application logic at the endpoints; the core forwards packets only. Saltzer/Reed/Clark, 1984.</li>
+<li><strong>Innovation at the edges</strong>: anyone can invent a new application without modifying routers.</li>
+<li><strong>Simplicity in the core</strong>: routers implement only packet forwarding; reliability/encryption/state live at the endpoints.</li>
+</ul>
+<h2>Worked Examples / Mechanisms</h2>
+<ul>
+<li><strong>Distributed vs. centralized: Baran's 1964 analysis</strong>. Picture two graphs. In the centralized graph, every link goes to one central hub. In the distributed graph, each node has links to several neighbors. Bomb the hub and the centralized network is gone; bomb several distributed nodes and the rest are still connected via alternative paths. ARPANET adopted the distributed design, and that lineage runs straight to today's Internet.</li>
+<li><strong>The 2008 Mediterranean cable cuts</strong>. In late January and early February 2008, ship anchors and other physical incidents severed multiple submarine cables in the Mediterranean and Middle East. Traffic in Egypt, India, Pakistan, and the Gulf states dropped 60-80% at the moment of each cut. Within hours to days, traffic was rerouted through surviving cables (including via Asia and the Pacific). The episode illustrates both fault tolerance (rerouting worked) and limits (concentrated infrastructure creates real bottlenecks until repairs or alternate routes catch up). Graceful degradation is the rule; perfect transparent failover is not.</li>
+<li><strong>BGP fat-finger incidents</strong>. In 2010 China Telecom briefly attracted traffic for thousands of US government and commercial IP addresses after misconfiguration; in 2019 a small Pittsburgh ISP caused a significant rerouting event. The same BGP propagation that lets the Internet adapt to physical failures also lets human errors propagate globally before the routes are withdrawn. Fault tolerance at the infrastructure level (cable cut) is more reliable than at the logical level (misconfigured routing).</li>
+<li><strong>The end-to-end principle in action</strong>. Consider TLS encryption: it is implemented in the browser and the server, not in the routers between them. A new encryption scheme can be deployed without touching any router in the world. Likewise BitTorrent's distribution protocol: invented in 2001 and deployed without permission, because the network's interior had no need to know about it.</li>
+</ul>
+<h2>Common Pitfalls</h2>
+<ul>
+<li><strong>Treating redundancy and fault tolerance as the same word twice</strong>. They differ. Redundancy is the structural design (extra paths); fault tolerance is the resulting behavior (service during failure). Each AP question often hinges on the distinction.</li>
+<li><strong>Saying the Internet &quot;doesn't fail&quot;</strong>. It does fail in pieces — submarine cables get cut, routers crash, data centers flood. What it does not do is fail catastrophically all at once, because graceful degradation produces partial reductions in capacity, not total collapse.</li>
+<li><strong>Conflating reliability with fault tolerance</strong>. A reliable system rarely fails. A fault-tolerant system keeps working when it does. They are complementary goals; ARPANET's designers chose fault tolerance specifically because reliability could not be guaranteed.</li>
+<li><strong>Thinking the end-to-end principle means &quot;no rules in the middle&quot;</strong>. It does not — the network has rules (IP, BGP). The principle is about not putting application-specific logic in the middle. Routers must do their job; they just should not also act as web servers, mail filters, or encryption endpoints.</li>
+<li><strong>Believing all fault tolerance is automatic</strong>. Logical errors (BGP misconfigurations, DNS hijacking) can propagate globally despite physical-layer redundancy. Defense at the logical level requires additional mechanisms like RPKI, not just multiple cables.</li>
+</ul>
+<h2>Connect to the Exam</h2>
+<p>Section 7.4 is heavy on definitions and conceptual distinctions. Expect questions that ask you to (a) distinguish redundancy from fault tolerance, (b) explain the end-to-end principle and give an example of a function correctly placed at the endpoints, and (c) identify the architectural property (scalability) that explains the Internet's billion-fold growth. The 2008 cable-cut and BGP-leak case studies are excellent stimulus material — be prepared to read a brief incident description and identify which architectural property (or its limit) it illustrates. The AP rubric rewards naming the mechanism: &quot;rerouted via surviving cables,&quot; &quot;alternate path discovered by BGP within seconds,&quot; &quot;endpoint-based encryption&quot; — not vague &quot;the Internet kept working.&quot;</p>
+<h2>Self-Check</h2>
+<ul>
+<li>Distinguish between redundancy and fault tolerance. How does each contribute to the Internet's resilience? Give one concrete example of redundancy in physical infrastructure.</li>
+<li>Explain the end-to-end principle in your own words. Give one example of a function that is correctly placed at the endpoints rather than in the network core, and explain why the placement matters.</li>
+<li>The Internet grew from 4 nodes (1969) to billions of devices today without a fundamental architectural redesign. What property of the Internet makes this possible, and what aspects of its design enable that property?</li>
+<li>Compare the centralized and distributed architectures Paul Baran described in 1964. Which did ARPANET adopt, and what survivability advantage did that choice produce?</li>
+<li>A submarine cable in the North Atlantic is severed at 3:00 AM. Describe the sequence of events that allows traffic between New York and London to continue flowing — including the role of dynamic routing protocols and the difference between graceful degradation and catastrophic failure.</li>
+</ul>
+
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;"><a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

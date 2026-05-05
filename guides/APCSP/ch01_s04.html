@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles - Hardware Limitations: Overflow and Roundoff &mdash; Study Guide &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .guide-content {
+            max-width: 800px; margin: 0 auto; padding: 2rem;
+            background: var(--card-background); border: 2px solid var(--border-color);
+            border-radius: 12px; line-height: 1.8;
+        }
+        .guide-content h1 {
+            font-family: 'Cinzel', serif; color: var(--primary-color);
+            font-size: 1.8rem; margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem; border-bottom: 2px solid var(--border-color);
+        }
+        .guide-content h2 {
+            font-family: 'Cinzel', serif; color: var(--primary-color);
+            font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem;
+        }
+        .guide-content h3 {
+            font-family: 'Cinzel', serif; color: var(--accent-color);
+            font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;
+        }
+        .guide-content p { margin-bottom: 1rem; color: var(--text-primary); }
+        .guide-content ul, .guide-content ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+        .guide-content li { margin-bottom: 0.4rem; }
+        .guide-content table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;
+        }
+        .guide-content th {
+            background: var(--primary-color); color: white;
+            padding: 0.6rem 0.75rem; text-align: left;
+            font-family: 'Cinzel', serif; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.03rem;
+        }
+        .guide-content td {
+            padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-color);
+        }
+        .guide-content tr:hover td { background: rgba(218, 165, 32, 0.05); }
+        .guide-content strong { color: var(--primary-color); }
+        .guide-content em { font-style: italic; }
+        .guide-content hr {
+            border: none; border-top: 2px solid var(--border-color); margin: 2rem 0;
+        }
+        .guide-content blockquote {
+            border-left: 4px solid var(--secondary-color);
+            margin: 1rem 0; padding: 0.75rem 1.25rem;
+            background: #fdf6e3; border-radius: 0 8px 8px 0;
+            font-style: italic; color: var(--text-secondary);
+        }
+        .guide-content code {
+            background: #f5f0e8; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-size: 0.9em;
+        }
+        .guide-breadcrumb { text-align: center; margin-bottom: 2rem; }
+        .guide-breadcrumb a {
+            color: var(--secondary-color); text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem; border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .guide-breadcrumb a:hover { background: var(--secondary-color); color: white; }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">STUDY GUIDE</h1>
+                <p class="subtitle">AP Computer Science Principles &mdash; Hardware Limitations: Overflow and Roundoff</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="guide-breadcrumb">
+                <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+            </div>
+            <div class="guide-content">
+<h1>AP CSP — Topic 1.4: Hardware Limitations: Overflow and Roundoff</h1>
+<h2>Core Question</h2>
+<p>Every CPU is a finite machine. The registers where arithmetic actually happens have a fixed bit width — typically 8, 16, 32, or 64 bits — and that fixed width creates two unavoidable limitations: an upper (and, for signed integers, lower) bound on integer magnitude, and an inability to exactly represent most real numbers. When computations cross these limits, two characteristic errors result: <strong>overflow</strong> (range exceeded) and <strong>roundoff</strong> (precision lost). They look similar in their consequences but arise from completely different causes and demand different fixes. Understanding both is essential for the AP exam, for financial software, for cryptography, and for any code that handles real-world values.</p>
+<h2>Key Concepts</h2>
+<ul>
+<li><strong>Overflow</strong>: An arithmetic result that exceeds the range of the destination type's bits. For unsigned integers, the result wraps around (255 + 1 = 0 in 8-bit unsigned). For signed integers, sign can flip (a large positive sum becomes negative).</li>
+<li><strong>Unsigned integer range</strong>: An n-bit unsigned integer represents 0 to 2^n - 1. 8-bit max = 255; the maximum is <strong>exactly 2^n - 1</strong>, not 2^n.</li>
+<li><strong>Signed integer range (two's complement)</strong>: An n-bit signed integer represents -2^(n-1) to +2^(n-1) - 1. 8-bit: -128 to +127 (asymmetric).</li>
+<li><strong>Wraparound</strong>: The default hardware behavior on overflow: the result is the true value modulo 2^n. The carry bit is discarded.</li>
+<li><strong>IEEE 754</strong>: The 1985 standard for floating-point arithmetic. Defines single (32-bit), double (64-bit), and quadruple (128-bit) precision formats. Standardizes rounding modes, special values (infinity, NaN), and exception handling.</li>
+<li><strong>IEEE 754 format</strong>: A floating-point value is <code>sign * significand * 2^exponent</code>. Double-precision uses 1 sign + 11 exponent + 52 significand bits.</li>
+<li><strong>Roundoff error</strong>: The inherent error from approximating real numbers in finite binary fractions. A binary fraction can exactly represent only numbers whose denominator is a power of 2 (1/2, 1/4, 3/8). Most decimal fractions (0.1, 0.2) are infinitely repeating in binary.</li>
+<li><strong>0.1 + 0.2 != 0.3</strong>: The canonical floating-point surprise. The IEEE 754 approximations of 0.1 and 0.2 sum to a slightly different value than the approximation of 0.3.</li>
+<li><strong>decimal.Decimal</strong>: Python's library for exact decimal arithmetic. Used in financial software. <strong>Always pass a STRING argument</strong> — passing a float literal already loses precision.</li>
+<li><strong>Tolerance-based comparison</strong>: The safe way to compare floats: <code>abs(x - y) &lt; tolerance</code> (e.g., <code>1e-9</code>), never <code>x == y</code>.</li>
+<li><strong>Python int vs. fixed-width int</strong>: Python's built-in <code>int</code> is arbitrary-precision and never overflows. Fixed-width types (NumPy <code>int32</code>, struct packing) do overflow.</li>
+</ul>
+<h2>Worked Examples / Code Walkthroughs</h2>
+<p><strong>Example 1 — 8-bit unsigned overflow:</strong></p>
+<pre><code>Initial value:   200          (binary 11001000)
+Add:             100          (binary 01100100)
+Naive sum:       300          (binary 1 00101100, 9 bits)
+Discard carry:   00101100     (the high bit &quot;1&quot; overflows out)
+Stored value:    44
+
+Equivalent: 300 mod 256 = 44.
+</code></pre>
+<p>The register cannot hold a 9-bit value, so it discards the high bit. This is the wraparound behavior.</p>
+<p><strong>Example 2 — Floating-point surprise:</strong></p>
+<pre><code class="language-python">print(0.1 + 0.2)            # 0.30000000000000004
+print(0.1 + 0.2 == 0.3)     # False
+
+import decimal
+print(decimal.Decimal(0.1)) # 0.1000000000000000055511151231257827021181583404541015625
+                            # The &quot;true&quot; stored value of the float 0.1 -- not 0.1 exactly
+
+# Fix for currency:
+from decimal import Decimal
+a = Decimal('0.1')          # STRING -- exactly 0.1
+b = Decimal('0.2')
+print(a + b)                # 0.3
+print(a + b == Decimal('0.3'))  # True
+</code></pre>
+<p><strong>Example 3 — Safe equality with tolerance:</strong></p>
+<pre><code class="language-python">def almost_equal(x, y, tol=1e-9):
+    return abs(x - y) &lt; tol
+
+x = 0.1 + 0.2
+y = 0.3
+print(x == y)            # False (bit-pattern check)
+print(almost_equal(x, y))# True (within tolerance)
+</code></pre>
+<p><strong>Example 4 — Currency calculation, the wrong way and the right way:</strong></p>
+<pre><code class="language-python"># WRONG: floating-point currency
+price = 19.99
+tax_rate = 0.0825
+tax = price * tax_rate
+print(tax)               # 1.6491750000000001  (NOT 1.65)
+
+# RIGHT: decimal.Decimal
+from decimal import Decimal
+price = Decimal('19.99')
+tax_rate = Decimal('0.0825')
+tax = price * tax_rate
+print(tax)               # 1.649175  (exact)
+print(tax.quantize(Decimal('0.01')))  # 1.65  (rounded to cents)
+</code></pre>
+<h2>Common Pitfalls</h2>
+<ul>
+<li><strong>Believing Python integers can overflow.</strong> Python's built-in <code>int</code> is arbitrary-precision; it never overflows. Overflow can still happen via NumPy or <code>struct</code> calls into fixed-width types — but pure Python arithmetic does not have an overflow risk.</li>
+<li><strong>Comparing floats with <code>==</code>.</strong> This will fail unpredictably. Always use a tolerance: <code>abs(x - y) &lt; 1e-9</code>.</li>
+<li><strong>Passing a float to <code>Decimal</code>.</strong> <code>Decimal(0.1)</code> reads the imperfect IEEE 754 approximation; you get a Decimal that is <em>almost</em> 0.1 but not exactly. Always pass a string: <code>Decimal('0.1')</code>.</li>
+<li><strong>Confusing overflow with roundoff.</strong> Overflow is a range issue (result too big or too small for the type). Roundoff is a precision issue (real numbers can't be exactly stored). Different causes, different fixes.</li>
+<li><strong>Trusting that 8-bit unsigned holds 256.</strong> The max value is 255, not 256. With 8 bits you have 256 <em>distinct values</em> (0 through 255 inclusive); the max value is exactly 2^n - 1.</li>
+</ul>
+<h2>Connect to the Exam</h2>
+<p>Topic 1.4 anchors <strong>Big Idea 2 (Data)</strong> and produces some of the most rule-rich exam questions in the entire course. Expect: (1) a small arithmetic problem with a fixed-width unsigned or signed integer, asking what value remains after overflow, (2) a code segment using floating-point arithmetic where you must predict the inexact result, (3) a question about why two floats compute to slightly different values mathematically equal, and (4) a real-world risk question (Ariane 5, currency) tying overflow to consequences. The exam tests your ability to apply the formulas: 8-bit unsigned max = 255, 8-bit signed range = -128 to +127, and 0.1 + 0.2 != 0.3 in IEEE 754.</p>
+<h2>Self-Check</h2>
+<ul>
+<li>An 8-bit unsigned integer holds 250. The program adds 10. What value remains, and what is the modular arithmetic that explains it?</li>
+<li>Why is <code>0.5 + 0.5 == 1.0</code> always True in Python, but <code>0.1 + 0.2 == 0.3</code> always False? (Hint: think about which fractions have exact binary representations.)</li>
+<li>Write a Python function <code>safe_eq(x, y, tol=1e-9)</code> that compares floats safely, and demonstrate that <code>safe_eq(0.1 + 0.2, 0.3)</code> returns True.</li>
+<li>A C program uses a 32-bit signed int to hold the number of seconds since January 1, 1970. When will this counter overflow? (Hint: 2^31 seconds.)</li>
+<li>Suppose a banking system has been computing interest using <code>float</code> instead of <code>Decimal</code> for ten years on millions of transactions. Why is this a problem, and how should the bank diagnose how much money has been silently rounded?</li>
+</ul>
+
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;"><a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Random Numbers and Simulation</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "What value range can random.randint(1, 6) return?", "options": [{"text": "Any integer from 1 to 5 — the upper bound is excluded.", "isCorrect": false, "rationale": "That description matches range(1, 6), not random.randint. Unlike range, randint includes both endpoints."}, {"text": "Any integer from 1 to 6 — both endpoints are included.", "isCorrect": true, "rationale": "random.randint(a, b) is inclusive on both ends. The function can return 1, 2, 3, 4, 5, or 6 — exactly the values needed to simulate a fair six-sided die."}, {"text": "Any floating-point number between 1.0 and 6.0.", "isCorrect": false, "rationale": "random.randint always returns an integer. random.uniform(a, b) returns a float."}, {"text": "Any integer from 0 to 6 — the lower bound is always 0.", "isCorrect": false, "rationale": "randint takes both bounds as arguments. random.randint(1, 6) starts at 1, not 0."}]}, {"question": "What does AP Pseudocode's RANDOM(a, b) return, and how does it compare to Python's random.randint(a, b)?", "options": [{"text": "RANDOM(a, b) excludes the upper bound; randint(a, b) includes it. The two are NOT directly equivalent.", "isCorrect": false, "rationale": "Both RANDOM(a, b) and random.randint(a, b) are inclusive on both ends — they DO match. This is the rare case where Python and AP Pseudocode agree."}, {"text": "Both return an integer chosen uniformly at random from a to b inclusive on both ends — they match exactly.", "isCorrect": true, "rationale": "random.randint(a, b) and RANDOM(a, b) both include both endpoints. RANDOM(1, 6) and random.randint(1, 6) both return one of 1, 2, 3, 4, 5, 6 with equal probability. This is one of the few places Python and Pseudocode line up."}, {"text": "Both return a floating-point number in [a, b).", "isCorrect": false, "rationale": "Both return integers. random.random() returns a float in [0.0, 1.0), but RANDOM(a, b) and randint(a, b) are integer-valued."}, {"text": "RANDOM(a, b) returns a string; randint(a, b) returns an integer.", "isCorrect": false, "rationale": "Both return integers. They differ in syntax (Python vs AP Pseudocode) but agree on type and range."}]}, {"question": "Which Python expression simulates a fair coin flip, returning 0 (tails) or 1 (heads) with equal probability?", "options": [{"text": "random.randint(0, 1)", "isCorrect": true, "rationale": "random.randint is inclusive on both ends. random.randint(0, 1) returns 0 or 1, each with probability 1/2 — exactly a fair coin flip."}, {"text": "random.randint(0, 2)", "isCorrect": false, "rationale": "This includes 2 in the range, returning 0, 1, or 2 with equal probability. Each outcome is 1/3 — not a fair coin."}, {"text": "random.random()", "isCorrect": false, "rationale": "random.random() returns a float in [0.0, 1.0), not an integer 0 or 1. To simulate a coin flip with random.random(), you would need to compare to 0.5 and convert to int."}, {"text": "random.range(0, 1)", "isCorrect": false, "rationale": "random.range is not a function in Python's random module. Use random.randint, random.random, or random.choice."}]}, {"question": "What is the law of large numbers, as it applies to a Python coin-flip simulation?", "options": [{"text": "As the number of trials grows, the empirical proportion of heads converges to the theoretical probability (1/2 for a fair coin).", "isCorrect": true, "rationale": "For a fair coin, the proportion of heads in N flips approaches 0.5 as N grows large. With N = 10 you may see 0.6 or 0.4; with N = 10,000 you will reliably see something very close to 0.5. Random fluctuations average out at scale."}, {"text": "Each individual flip has a 50% chance of being heads regardless of past flips.", "isCorrect": false, "rationale": "That is the definition of independent trials, not the law of large numbers. The law of large numbers describes long-run averaging."}, {"text": "After 10 flips, the proportion is guaranteed to equal exactly 0.5.", "isCorrect": false, "rationale": "Small-N samples have substantial variance. With 10 flips, common outcomes include 4/10, 5/10, 6/10, 7/10. The proportion is only guaranteed to converge AS N grows large."}, {"text": "Each flip influences the next, eventually balancing the count.", "isCorrect": false, "rationale": "This is the gambler's fallacy. Independent random trials have no memory; previous results do not influence future ones. The law of large numbers is about long-run averaging, not compensating fluctuations."}]}, {"question": "Trace this dice-roll simulation and predict approximately what the printed proportion of sevens will be after 10,000 trials.\n\nimport random\nN = 10000\nsevens = 0\nfor _ in range(N):\n    roll = random.randint(1, 6) + random.randint(1, 6)\n    if roll == 7:\n        sevens += 1\nprint(sevens / N)", "options": [{"text": "About 0.500 — half the rolls sum to 7.", "isCorrect": false, "rationale": "Two dice produce sums from 2 to 12, with each sum's probability proportional to the number of (die1, die2) pairs that produce it. Seven has 6 pairs, but other sums also occur."}, {"text": "About 0.167 — six of the 36 possible (die1, die2) pairs sum to 7, so the theoretical probability is 6/36 = 1/6.", "isCorrect": true, "rationale": "Seven is the most likely sum: pairs are (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) = 6 pairs. Total pairs = 6 * 6 = 36. Probability = 6/36 = 1/6 ≈ 0.167. By the law of large numbers, the empirical proportion converges to this theoretical value."}, {"text": "About 0.333 — 7 is one of three common sums.", "isCorrect": false, "rationale": "0.333 = 1/3, which would require 12 of 36 pairs to sum to 7. Only 6 pairs do. The correct value is 6/36 = 1/6 ≈ 0.167."}, {"text": "Exactly 1/6 every time.", "isCorrect": false, "rationale": "Random simulations have variance even at large N. The proportion CONVERGES to 1/6 but rarely equals exactly 1/6 in any single run."}]}, {"question": "Translate the Python statement\n\nguess = random.randint(1, 100)\n\nto AP Pseudocode.", "options": [{"text": "guess <- RANDOM(1, 100)", "isCorrect": true, "rationale": "AP Pseudocode uses <- for assignment and RANDOM(a, b) for inclusive integer randomness. Both random.randint(1, 100) and RANDOM(1, 100) include both endpoints, so the translation is direct."}, {"text": "guess = RANDOM(1, 100)", "isCorrect": false, "rationale": "Single = is the equality operator in AP Pseudocode, not assignment. The assignment operator is <- (left arrow)."}, {"text": "guess <- RANDOM(0, 99)", "isCorrect": false, "rationale": "RANDOM is inclusive on both ends, just like random.randint. There is no need to shift the range to (0, 99). RANDOM(0, 99) returns 0–99, missing 100."}, {"text": "guess <- RANDOM(1, 101)", "isCorrect": false, "rationale": "This is the wrong analogy with range(1, 101). RANDOM is inclusive on both ends, so RANDOM(1, 101) would include 101 — not what was intended. Use RANDOM(1, 100) to match random.randint(1, 100)."}]}, {"question": "What is a Monte Carlo method, in computer science?", "options": [{"text": "A method for sorting lists using randomness as a tiebreaker.", "isCorrect": false, "rationale": "Random tiebreaking is a feature of certain sorting algorithms but not the definition of Monte Carlo methods. Monte Carlo refers more broadly to estimation through random sampling."}, {"text": "A computational technique that uses random sampling to estimate quantities that are difficult or impossible to compute directly.", "isCorrect": true, "rationale": "Monte Carlo methods sample random points (or scenarios) and use the empirical proportion or average to approximate quantities like π, financial-derivative prices, or particle-physics outcomes. Used today in nuclear simulation, optimization, and 3D rendering."}, {"text": "A purely deterministic technique with no use of randomness.", "isCorrect": false, "rationale": "Monte Carlo methods are defined by their use of random sampling. The name itself comes from the Monte Carlo casino — a hat-tip to the role of randomness."}, {"text": "A method exclusive to gambling and casino design.", "isCorrect": false, "rationale": "While the name is from a casino, Monte Carlo methods have applications across science, engineering, and finance. They are a general computational technique."}]}, {"question": "In the following Monte Carlo estimate of π, what role does the comparison if x**2 + y**2 < 1.0 play?\n\nN = 100000\ninside = 0\nfor _ in range(N):\n    x = random.random()\n    y = random.random()\n    if x**2 + y**2 < 1.0:\n        inside += 1\npi_estimate = 4 * inside / N", "options": [{"text": "It checks whether the random point (x, y) lies inside the quarter-unit-circle in the unit square.", "isCorrect": true, "rationale": "x**2 + y**2 < 1 is the equation of the interior of the unit circle. Since x and y are both in [0, 1), points satisfying this lie in the quarter-circle. The proportion of points inside, multiplied by 4, estimates π. (The full unit-square has area 1; the quarter circle has area π/4.)"}, {"text": "It checks whether the loop has completed.", "isCorrect": false, "rationale": "Loop completion is governed by range(N), not the if condition. The if condition tests a geometric property of the sampled point."}, {"text": "It rounds the result to the nearest integer.", "isCorrect": false, "rationale": "Rounding plays no role here. The comparison is geometric — testing whether (x, y) lies inside a quarter-unit-circle."}, {"text": "It checks whether x and y are both positive.", "isCorrect": false, "rationale": "x and y are already guaranteed non-negative by random.random(), which returns floats in [0.0, 1.0). The comparison tests a stricter geometric condition."}]}, {"question": "When is randomness NOT appropriate, and what should you use instead?", "options": [{"text": "When the result must be reproducible — use deterministic algorithms or seed the generator.", "isCorrect": false, "rationale": "Reproducibility can be achieved by seeding the PRNG with a fixed value, but this addresses one limitation of randomness, not all of them. The MORE important case is security."}, {"text": "When you need security — Python's random module is a pseudo-random number generator (PRNG) and is predictable; use secrets.randbelow() for cryptographic purposes.", "isCorrect": true, "rationale": "Python's random module is a PRNG seeded by the system clock — adequate for simulation but predictable enough that an attacker who can guess the seed can predict every output. For cryptographic randomness (passwords, tokens, keys), use the secrets module, which uses OS entropy."}, {"text": "When the program must run on multiple computers — randomness is platform-dependent.", "isCorrect": false, "rationale": "Python's random module produces consistent results across platforms when given the same seed. Platform consistency is not the issue."}, {"text": "When the program runs faster than 1 second — randomness adds overhead.", "isCorrect": false, "rationale": "Performance overhead is negligible. The limitation of random is predictability, not speed."}]}, {"question": "A program uses a sentinel-controlled loop to read user input until the user enters -1. The program also rolls a six-sided die for each valid input. Which structure correctly implements this?", "options": [{"text": "import random\nwhile True:\n    n = int(input())\n    if n == -1:\n        break\n    roll = random.randint(1, 6)\n    print(f'You rolled {roll}')", "isCorrect": true, "rationale": "Sentinel test BEFORE the die roll. The if/break exits cleanly when -1 is entered, and only valid (non-sentinel) inputs trigger a roll. random.randint(1, 6) gives an inclusive die roll. Combines indefinite loops (Topic 4.2), sentinel pattern, and randomness (Topic 4.5)."}, {"text": "import random\nfor _ in range(-1):\n    roll = random.randint(1, 6)\n    print(roll)", "isCorrect": false, "rationale": "range(-1) yields no values, so the loop never executes. for ... range cannot represent unknown-count iteration controlled by user input."}, {"text": "import random\nwhile True:\n    roll = random.randint(0, 6)\n    if roll == -1:\n        break\n    print(roll)", "isCorrect": false, "rationale": "random.randint(0, 6) cannot return -1, so the loop never exits — infinite loop. The sentinel must be controlled by the user, not by random output."}, {"text": "import random\nn = int(input())\nif n == -1:\n    break\nroll = random.randint(1, 6)", "isCorrect": false, "rationale": "There is no loop — only one input is read and one die rolled. break outside a loop is a syntax error."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

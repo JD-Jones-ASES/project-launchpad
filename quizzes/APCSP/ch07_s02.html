@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Packet Switching and Routing</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "Which statement BEST captures the defining characteristic of packet switching that distinguishes it from circuit switching?", "options": [{"text": "Packet switching reserves a dedicated end-to-end physical path for the duration of a session.", "isCorrect": false, "rationale": "That is circuit switching, not packet switching. Reserving a dedicated path during silences is exactly what the traditional phone network does — and exactly what the Internet avoids."}, {"text": "Each packet is routed independently through the network — different packets in the same stream may take different physical paths and be reassembled by sequence number at the destination.", "isCorrect": true, "rationale": "Independent routing of each packet is the textbook-defining property of packet switching. The text emphasizes that routers make per-packet forwarding decisions and the receiver uses sequence numbers to put packets back in order."}, {"text": "Every packet must follow the route taken by the first packet in the stream.", "isCorrect": false, "rationale": "The text explicitly contradicts this: if conditions change between packet 1 and packet 2, they may take entirely different physical routes."}, {"text": "Packet switching guarantees that no packets ever arrive out of order.", "isCorrect": false, "rationale": "Out-of-order arrival is a normal consequence of independent routing. Sequence numbers in the header let the receiver reassemble the original order; the network itself does not guarantee in-order arrival."}]}, {"question": "A packet's header contains, among other things, the destination IP address, a sequence number, a checksum, and a Time-to-Live (TTL) counter. Why is the TTL field necessary?", "options": [{"text": "It tells the receiver how long to display the data on screen.", "isCorrect": false, "rationale": "TTL has nothing to do with display time. It is decremented at each router; if it hits zero, the packet is discarded."}, {"text": "It prevents packets from circulating forever through the network if a routing loop or misconfiguration exists. The TTL is decremented at each router, and a packet that reaches zero is discarded.", "isCorrect": true, "rationale": "The text describes this exact mechanism: TTL is a counter decremented at each router; reaching zero means discard. Without TTL, a routing loop could keep a packet alive indefinitely, wasting capacity."}, {"text": "It encrypts the packet's payload so eavesdroppers cannot read it.", "isCorrect": false, "rationale": "TTL is unrelated to encryption. Encryption is provided by higher-layer protocols like TLS."}, {"text": "It records the packet's source coordinates in case it must be returned.", "isCorrect": false, "rationale": "The source IP is the field that records the origin. TTL is a hop counter for loop prevention."}]}, {"question": "A video file is 800 MB and you transfer it over a 100 Mbps connection at full utilization. Approximately how long, in seconds, will the transfer take?", "options": [{"text": "Approximately 8 seconds.", "isCorrect": false, "rationale": "This treats megabytes as if they equaled megabits. There are 8 bits in a byte, so 800 MB equals 6,400 Mb, not 100 Mb."}, {"text": "Approximately 64 seconds, because 800 megabytes is 6,400 megabits and 6,400 / 100 = 64.", "isCorrect": true, "rationale": "The unit conversion is the heart of the question. 800 MB equals 800 x 8 = 6,400 Mb. At 100 Mbps the transfer takes 6,400 / 100 = 64 seconds."}, {"text": "Approximately 800 seconds.", "isCorrect": false, "rationale": "This implies 1 Mb per second, off by two orders of magnitude. 100 Mbps means 100 megabits per second, not 1."}, {"text": "Approximately 1 second, because the connection is fast.", "isCorrect": false, "rationale": "This ignores the actual arithmetic. 800 MB is far too much data to move in 1 second over a 100 Mbps link."}]}, {"question": "A residential customer has a satellite Internet connection rated at 25 Mbps with 600 ms round-trip latency. A local Ethernet LAN gives 1 Gbps with 1 ms latency. Why might the satellite link be 'painful for interactive gaming' even though its bandwidth is 'adequate for downloading files'?", "options": [{"text": "Bandwidth and latency are independent dimensions of network performance. Downloading a large file uses bandwidth; interactive gaming requires low latency, because every player input must round-trip to the server before the game state updates.", "isCorrect": true, "rationale": "The text emphasizes exactly this: bandwidth (data per second) is one dimension; latency (round-trip time) is another. Downloads are throughput-limited; gaming is latency-limited. 600 ms round-trip is unusable for fast-paced interaction."}, {"text": "Satellite signals cannot carry game data, only file data.", "isCorrect": false, "rationale": "Satellite carries any kind of IP traffic. The issue is latency, not data type."}, {"text": "25 Mbps is too low to download files; the link is misadvertised.", "isCorrect": false, "rationale": "25 Mbps is plenty of bandwidth for typical downloads. The bottleneck is latency, not bandwidth."}, {"text": "Latency only matters for transferring large files; small games are unaffected by it.", "isCorrect": false, "rationale": "The opposite is true. Interactive gaming is exquisitely sensitive to round-trip time; large file transfer is mostly insensitive to it."}]}, {"question": "When a backbone fiber cable is suddenly cut, end users in the affected region typically experience a brief slowdown but the network does not 'go down.' Which mechanism is responsible?", "options": [{"text": "Routing protocols (such as BGP and OSPF) update routing tables continuously, so when a link disappears, routers rediscover the topology and reroute traffic through surviving paths within seconds.", "isCorrect": true, "rationale": "The text describes exactly this dynamic behavior: routing tables are continuously updated by routing protocols; when a backbone cable is cut, routers automatically discover the failure and reroute through surviving paths."}, {"text": "Each packet is broadcast to every router in the world to ensure delivery.", "isCorrect": false, "rationale": "Broadcasting every packet globally would melt the Internet. Routing decisions are local lookups in routing tables, not global broadcasts."}, {"text": "TCP retransmits the cable.", "isCorrect": false, "rationale": "TCP retransmits dropped packets, not physical cables. Cable repair is a physical-layer process unrelated to TCP."}, {"text": "The Internet's backbone is fault-free and never experiences cuts.", "isCorrect": false, "rationale": "Submarine cables are cut by ship anchors several times a year. Resilience comes from rerouting, not from preventing cuts."}]}, {"question": "A router receives a packet whose TTL field is currently 1. According to the forwarding pseudocode in the section, what does the router do?", "options": [{"text": "It increments the TTL to 2 and forwards the packet to the next hop.", "isCorrect": false, "rationale": "Routers decrement TTL, never increment it. Incrementing would defeat the loop-prevention purpose of the field."}, {"text": "It decrements the TTL to 0, sees that TTL is now zero or below, and discards the packet rather than forwarding it.", "isCorrect": true, "rationale": "The pseudocode decrements TTL first, then checks: if the resulting TTL is at most zero, the packet is discarded. A packet with TTL 1 entering a router becomes TTL 0 and is dropped."}, {"text": "It immediately forwards the packet without altering TTL.", "isCorrect": false, "rationale": "The pseudocode explicitly decrements TTL on every forwarding step. Skipping decrement would create infinite-loop risk."}, {"text": "It returns the packet to the source via ICMP_UNREACHABLE.", "isCorrect": false, "rationale": "ICMP_UNREACHABLE is sent when the destination is not in the routing table, not when TTL expires. (TTL expiration sends ICMP Time Exceeded, but the section's pseudocode shows discard.)"}]}, {"question": "Why does packet switching let the Internet handle far more simultaneous users than circuit switching could?", "options": [{"text": "Packet switching reserves a private circuit for every user, so capacity scales with users.", "isCorrect": false, "rationale": "Reservation per user is the circuit-switching model — and it scales poorly. Packet switching avoids reservation entirely."}, {"text": "Packet switching shares capacity dynamically: each router forwards each packet to the best available next hop, so a single physical link can carry packets from millions of conversations whose data is interleaved on a microsecond timescale.", "isCorrect": true, "rationale": "The text states exactly this: shared capacity is used far more efficiently than any circuit-switched design could achieve, because no resources are reserved during idle moments. Packets from many flows interleave on the same wire."}, {"text": "Packet switching uses faster fiber than circuit switching.", "isCorrect": false, "rationale": "The fiber is the same medium. The advantage is the model — sharing instead of reserving — not the speed of the cable."}, {"text": "Circuit switching was outlawed by the Internet Engineering Task Force.", "isCorrect": false, "rationale": "Circuit switching is still used by the traditional telephone network. There was no ban; packet switching simply scales better for the Internet's workload."}]}, {"question": "Two packets with the same source and destination IPs are sent one after another. Packet 1 takes the route Source → R1 → R2 → R4 → Destination. Packet 2 takes Source → R1 → R3 → R5 → Destination. What does this scenario illustrate?", "options": [{"text": "A bug in the routing protocol — both packets should always take the same path.", "isCorrect": false, "rationale": "It is not a bug. Independent per-packet routing is the design. The receiver uses sequence numbers to reassemble correctly even when packets travel different paths."}, {"text": "Independent routing — each router makes its own forwarding decision based on current network conditions, so consecutive packets in the same stream may travel different physical routes.", "isCorrect": true, "rationale": "This is the central feature of packet switching that the section's diagram illustrates. The path may change between packets because conditions (congestion, link state) change between forwarding decisions."}, {"text": "Round-trip latency must always equal hop count multiplied by 5 ms.", "isCorrect": false, "rationale": "There is no fixed per-hop latency. Latency depends on physical distance, propagation speed, and queuing delay at each router."}, {"text": "The packets violated the Internet Protocol because they took different routes.", "isCorrect": false, "rationale": "IP imposes no requirement that packets follow the same route. Different routes per packet is normal and expected."}]}, {"question": "What is the difference between bandwidth and latency, and why are they conceptually independent?", "options": [{"text": "Bandwidth is the maximum data rate (bits per second); latency is the time for a packet to travel from source to destination, usually measured as round-trip time. They are independent because a wide pipe (high bandwidth) does not shorten the drive time between cities (low latency).", "isCorrect": true, "rationale": "The text gives exactly this analogy. Bandwidth tells you throughput, latency tells you delay. A satellite link can have high bandwidth but high latency, and a local Ethernet link can have moderate bandwidth and very low latency."}, {"text": "Bandwidth and latency are two names for the same quantity.", "isCorrect": false, "rationale": "They are explicitly distinct: bandwidth is bps, latency is ms. The section opens by warning students to separate them."}, {"text": "Bandwidth measures latency in milliseconds, and latency measures bandwidth in bits per second.", "isCorrect": false, "rationale": "This swaps the units backwards. Bandwidth is bps; latency is ms."}, {"text": "Higher bandwidth always reduces latency.", "isCorrect": false, "rationale": "Bandwidth and latency are independent. Doubling a link's bandwidth does not reduce its propagation time. The pipe gets wider, not shorter."}]}, {"question": "Congestion at a router is handled by queuing — packets wait in a buffer at each router. What happens if the buffer fills up, and how does TCP eventually respond?", "options": [{"text": "The router drops new packets that arrive while the buffer is full. TCP detects the missing packets through its acknowledgement mechanism and reduces the sender's transmission rate, implementing distributed flow control.", "isCorrect": true, "rationale": "The text describes exactly this: full buffers cause packet drops, and TCP's response (slowing down) prevents any single sender from overwhelming a shared link. This is distributed congestion control, no central coordinator required."}, {"text": "The router refuses all incoming packets indefinitely until manually reset.", "isCorrect": false, "rationale": "Routers do not freeze on congestion. They drop packets until queues clear naturally; TCP's reaction lets the system settle without intervention."}, {"text": "TCP increases its sending rate to push more data through the bottleneck.", "isCorrect": false, "rationale": "Increasing the rate would worsen congestion. TCP's actual response is to back off when it detects loss, easing the bottleneck."}, {"text": "Packets from full buffers are emailed back to the sender for resending.", "isCorrect": false, "rationale": "Networks do not 'email' packets. Lost packets are detected by missing ACKs at the sender and retransmitted by TCP."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Conditional Execution</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "In a Python if/elif/else chain, exactly how many branches execute on a given run?", "options": [{"text": "All branches whose condition is True.", "isCorrect": false, "rationale": "Python evaluates conditions top-to-bottom and stops at the first True. Subsequent True conditions are skipped."}, {"text": "Exactly one branch — the first whose condition is True, or the else branch if none are True.", "isCorrect": true, "rationale": "Python's if/elif/else semantics: top-to-bottom evaluation, stop at first True, fall to else only if all conditions are False. Exactly one branch fires per run."}, {"text": "Zero branches if all conditions are False.", "isCorrect": false, "rationale": "When else is present, it always catches the case where every condition is False. Even without else, the if alone may execute zero or one branch — but with else, exactly one always fires."}, {"text": "All elif branches run together if the if branch is False.", "isCorrect": false, "rationale": "elif branches are mutually exclusive. Python tests each in order; only the first True elif executes, and the rest are skipped."}]}, {"question": "Trace this Python code with `score = 70`:\n\n```\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelif score >= 60:\n    grade = \"D\"\nelse:\n    grade = \"F\"\n```\n\nWhich branch fires, and what is the value of `grade`?", "options": [{"text": "if score >= 90 fires; grade = \"A\".", "isCorrect": false, "rationale": "score = 70 is not >= 90, so this branch is skipped (False)."}, {"text": "elif score >= 70 fires; grade = \"C\".", "isCorrect": true, "rationale": "Step 1: 70 >= 90 is False (skip). Step 2: 70 >= 80 is False (skip). Step 3: 70 >= 70 is True — branch fires, grade = \"C\". All later branches are skipped."}, {"text": "elif score >= 60 fires; grade = \"D\".", "isCorrect": false, "rationale": "Python stops at the FIRST True condition. Once score >= 70 fires, score >= 60 is never tested even though it would also be True."}, {"text": "else fires; grade = \"F\".", "isCorrect": false, "rationale": "else fires only when EVERY preceding condition is False. Since score >= 70 is True for 70, the chain fires there and never reaches else."}]}, {"question": "If the grade-classifier branches were reversed (lowest threshold first), what grade would `score = 83` produce?", "options": [{"text": "B, because 83 falls in the 80-89 range.", "isCorrect": false, "rationale": "B is the correct grade for 83 with thresholds in DESCENDING order. With ascending order, 83 satisfies the very first condition (score >= 60) and gets D."}, {"text": "D, because Python stops at the first True condition; with ascending order that is `score >= 60`.", "isCorrect": true, "rationale": "Python evaluates top-to-bottom and stops at the first True. If the order were if score >= 60: grade = 'D' first, then 83 (which is >= 60) immediately matches and grade = 'D'. The remaining elif branches never execute."}, {"text": "C, because elif gets the first valid range.", "isCorrect": false, "rationale": "There is no special semantics for 'first valid range.' The semantics are simply 'first True condition.'"}, {"text": "F, because else always fires when scores are unusual.", "isCorrect": false, "rationale": "else fires only when EVERY preceding condition is False. With ascending thresholds, 83 satisfies the very first condition, so else is never reached."}]}, {"question": "What is the correct AP Pseudocode equivalent of this Python code?\n\n```\nif x > 0:\n    print(\"positive\")\nelse:\n    print(\"non-positive\")\n```", "options": [{"text": "IF (x > 0) { DISPLAY(\"positive\") } ELSE { DISPLAY(\"non-positive\") }", "isCorrect": true, "rationale": "AP Pseudocode uses IF / ELSE keywords with curly braces around blocks. There is no colon after the condition; indentation is not significant. The DISPLAY procedure shows output."}, {"text": "if (x > 0): print(\"positive\") else: print(\"non-positive\")", "isCorrect": false, "rationale": "Lowercase 'if' and the colon are Python conventions. Pseudocode uses uppercase IF/ELSE and braces, with no colon."}, {"text": "IF x > 0 ELSE \"non-positive\"", "isCorrect": false, "rationale": "Pseudocode requires explicit blocks with braces and uses ELSE on a separate construct, not as an inline keyword."}, {"text": "IF x > 0 THEN \"positive\" END", "isCorrect": false, "rationale": "AP Pseudocode does not use THEN/END syntax. It uses IF (condition) { block } ELSE { block }."}]}, {"question": "What is the difference between an IndentationError and a logic error in a Python conditional?", "options": [{"text": "Both crash the program; they are different names for the same thing.", "isCorrect": false, "rationale": "An IndentationError stops the program from running. A logic error allows the program to run but produces wrong output."}, {"text": "An IndentationError stops the program from running; a logic error lets the program run but produces wrong output.", "isCorrect": true, "rationale": "IndentationError is a SYNTAX problem — Python cannot even parse the code. A logic error has valid syntax but flawed reasoning, so the program runs but yields incorrect results. The text notes that misleading-but-valid indentation is the harder bug to find."}, {"text": "An IndentationError affects only Pseudocode; logic errors affect only Python.", "isCorrect": false, "rationale": "Pseudocode does not use indentation for blocks (it uses braces), so IndentationError is a Python concept. Logic errors occur in any language."}, {"text": "Logic errors produce IndentationError messages.", "isCorrect": false, "rationale": "These are distinct error categories. Logic errors produce no error message at all — that is what makes them hard to find."}]}, {"question": "Consider the Movie Ticket Pricer scenario. A programmer writes the student tier as `age > 12 and age < 18`. For which age value does this differ from the spec `age >= 12 and age <= 17`, and what happens?", "options": [{"text": "Age 11: the new condition treats 11 as a student; the spec treats it as a child.", "isCorrect": false, "rationale": "Age 11 is below 12 in both conditions: 11 > 12 is False, and 11 >= 12 is also False. Both treat 11 as not a student."}, {"text": "Age 12: `age > 12` is False, so 12 misses the student tier; the spec correctly catches 12 as a student.", "isCorrect": true, "rationale": "12 > 12 is False (strict inequality excludes 12), but 12 >= 12 is True. Under the buggy condition, age 12 falls through to the next branch (likely Adult or unmatched), producing an incorrect price. This is a textbook off-by-one error."}, {"text": "Age 13: both conditions agree.", "isCorrect": false, "rationale": "Both conditions agree on 13: 13 > 12 is True and 13 >= 12 is True. The disagreement is at the boundary (12), not in the interior."}, {"text": "Age 18: both conditions exclude 18 from the student tier.", "isCorrect": false, "rationale": "Both correctly exclude 18: 18 < 18 is False and 18 <= 17 is False. The bug is at age 12, not 18."}]}, {"question": "What does the colon (:) at the end of a Python `if` line indicate?", "options": [{"text": "It marks the start of a comment.", "isCorrect": false, "rationale": "Python comments start with # (hash). The colon serves a different role."}, {"text": "It separates the condition from the indented block of statements that form the body of the if.", "isCorrect": true, "rationale": "The colon is mandatory and signals that an indented block follows. Forgetting the colon raises SyntaxError. The indented block forms the body of the conditional."}, {"text": "It is optional and only used for readability.", "isCorrect": false, "rationale": "The colon is mandatory in Python. Omitting it raises SyntaxError because Python's grammar requires it."}, {"text": "It assigns the result of the condition to a variable.", "isCorrect": false, "rationale": "No assignment happens; the colon is purely syntactic, marking the start of the body block."}]}, {"question": "Which keyword in Python is the equivalent of AP Pseudocode's `ELSE IF`?", "options": [{"text": "else if (two words)", "isCorrect": false, "rationale": "Python does not use 'else if' as two words; that would be a parsing error if combined inside the same line. The single-word 'elif' is Python's contracted form."}, {"text": "elif (one word)", "isCorrect": true, "rationale": "Python contracts 'else if' into 'elif'. AP Pseudocode keeps the two-word form ELSE IF. Both serve identical roles: an additional branch tested only when previous conditions are False."}, {"text": "elseif (one word, no space)", "isCorrect": false, "rationale": "Python uses 'elif', not 'elseif'. (Some other languages like Bash use 'elif'; some like PowerShell use 'elseif'. Python is 'elif'.)"}, {"text": "esleif (a typo intentionally chosen).", "isCorrect": false, "rationale": "That is a misspelling; the correct keyword is 'elif'."}]}, {"question": "How does the AP Pseudocode block syntax differ from Python's?", "options": [{"text": "Pseudocode uses curly braces { } around the block body; Python uses indentation. Pseudocode also omits the colon and uses uppercase IF / ELSE / ELSE IF.", "isCorrect": true, "rationale": "Two structural differences. (1) Block delimiter: Pseudocode uses { }; Python uses indentation. (2) Keyword case: Pseudocode is uppercase; Python is lowercase. Pseudocode also has no colon; Python's if line ends with one."}, {"text": "They are identical in syntax.", "isCorrect": false, "rationale": "They differ in keyword case (uppercase vs lowercase), block delimiters (braces vs indentation), and the colon (Pseudocode has none, Python is mandatory)."}, {"text": "Pseudocode uses parentheses around the body; Python uses brackets.", "isCorrect": false, "rationale": "Neither is correct. Pseudocode uses curly braces around bodies; parentheses go around conditions only."}, {"text": "Python requires uppercase IF / ELSE; Pseudocode requires lowercase.", "isCorrect": false, "rationale": "The conventions are reversed: Python is lowercase (if, elif, else); Pseudocode is uppercase (IF, ELSE IF, ELSE)."}]}, {"question": "A weather app should print \"Bring an umbrella!\" only when the variable `rain_forecast` is True. Which Python code correctly implements this with no else clause?", "options": [{"text": "if rain_forecast: print(\"Bring an umbrella!\")", "isCorrect": true, "rationale": "An if statement without else is allowed. When rain_forecast is True, the body executes; when False, the entire body is skipped and execution continues after the if. No fallback action is required."}, {"text": "if rain_forecast == True: print(\"Bring an umbrella!\") else: pass", "isCorrect": false, "rationale": "While syntactically valid, this is verbose. (1) Comparing a Boolean to True with == is redundant; Python treats Boolean variables as conditions directly. (2) The else: pass branch is unnecessary noise. The simpler form is preferred."}, {"text": "if (rain_forecast = True): print(\"Bring an umbrella!\")", "isCorrect": false, "rationale": "Single = is assignment, not comparison; Python raises SyntaxError. Equality requires == — but even better, just write `if rain_forecast:`."}, {"text": "if rain_forecast then print(\"Bring an umbrella!\")", "isCorrect": false, "rationale": "Python does not use the keyword 'then'. Python's syntax is: if condition: <newline> indented body. The colon and indentation replace 'then'."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

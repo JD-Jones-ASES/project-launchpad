@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Logical Operators and Truth Tables</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "Python's three logical operators take Boolean inputs and return a single Boolean output. Which set lists Python's logical operators correctly?", "options": [{"text": "AND, OR, NOT (uppercase)", "isCorrect": false, "rationale": "Uppercase AND/OR/NOT is AP Pseudocode notation; in Python they would raise NameError. Python uses the lowercase keywords."}, {"text": "and, or, not (lowercase)", "isCorrect": true, "rationale": "Python uses the lowercase keywords and, or, not. AP Pseudocode uses the uppercase AND, OR, NOT. Capitalization matters: AND in Python raises NameError."}, {"text": "&&, ||, !", "isCorrect": false, "rationale": "Those are C/C++/Java logical operators. Python rejects them; the language uses the English-word keywords and/or/not."}, {"text": "True, False, None", "isCorrect": false, "rationale": "Those are Boolean and null values, not operators. Operators combine values; values are what get combined."}]}, {"question": "Trace this Python expression: `(False or True) and (not False)`. What does it evaluate to?", "options": [{"text": "False, because there is a False operand somewhere in the expression.", "isCorrect": false, "rationale": "Boolean evaluation is compositional, not 'False wins anywhere.' You evaluate sub-expressions first."}, {"text": "True, because (False or True) is True, (not False) is True, and True and True is True.", "isCorrect": true, "rationale": "Step 1: (False or True) = True (or returns True if at least one operand is True). Step 2: (not False) = True. Step 3: True and True = True."}, {"text": "None, because mixing operators is undefined.", "isCorrect": false, "rationale": "Python clearly defines operator precedence: not, then and, then or. Mixing operators is fully defined and produces a Boolean."}, {"text": "SyntaxError, because not cannot be used after and.", "isCorrect": false, "rationale": "not before False is grammatically valid. The expression parses cleanly and evaluates to True."}]}, {"question": "Complete the truth table row: A = True, B = False. What is `A or (not B)`?", "options": [{"text": "False, because A and B differ.", "isCorrect": false, "rationale": "or returns True if either operand is True. A is True, so the whole expression is True before even computing not B."}, {"text": "True, because A is True (or short-circuits to True).", "isCorrect": true, "rationale": "Step 1: A is True. or short-circuits and returns True without even evaluating (not B). Even computing in full: not False = True; True or True = True."}, {"text": "True, only because not B is True.", "isCorrect": false, "rationale": "True is correct, but the reason understates: A alone makes the or True. not B happens also to be True, but the or would short-circuit on A first."}, {"text": "False, because not B is False.", "isCorrect": false, "rationale": "not B = not False = True (not flips False to True). And A is True, so the or returns True regardless."}]}, {"question": "A truth table for a Boolean expression with 4 inputs has how many rows?", "options": [{"text": "4 rows (one per input).", "isCorrect": false, "rationale": "Each input independently takes 2 values, so total combinations multiply: 2 x 2 x 2 x 2 = 16, not 4."}, {"text": "8 rows.", "isCorrect": false, "rationale": "8 = 2^3 (three inputs). Four inputs require 2^4 = 16 rows to enumerate every combination."}, {"text": "16 rows, since 2^4 = 16.", "isCorrect": true, "rationale": "With n Boolean inputs, the truth table has exactly 2^n rows because each input independently takes 2 values. 2^4 = 16."}, {"text": "24 rows.", "isCorrect": false, "rationale": "24 = 4! (factorial), which counts permutations, not combinations of input values. Truth-table size is 2^n, not n!."}]}, {"question": "What error occurs when a Python program contains the line `if (score > 90) AND (attempts < 3):`?", "options": [{"text": "SyntaxError: AND is misspelled.", "isCorrect": false, "rationale": "AND is not a syntactic keyword in Python at all; the issue is name resolution at runtime, not parsing. Python parses the line fine but cannot find any name AND."}, {"text": "NameError: name 'AND' is not defined.", "isCorrect": true, "rationale": "Python uses the lowercase keyword and. Uppercase AND is treated as an undefined identifier, raising NameError. The correct expression is: if (score > 90) and (attempts < 3):."}, {"text": "TypeError: cannot apply AND to integers.", "isCorrect": false, "rationale": "TypeError arises from incompatible operand types, not undefined names. The error here is about the name AND not existing."}, {"text": "No error; AND and and are aliases in Python.", "isCorrect": false, "rationale": "Python is case-sensitive. AND is NOT an alias for and; using uppercase raises NameError because AND is treated as an undefined variable."}]}, {"question": "De Morgan's First Law states: not (A and B) is equivalent to which expression?", "options": [{"text": "(not A) and (not B)", "isCorrect": false, "rationale": "That is De Morgan's Second Law for or: not (A or B) = (not A) and (not B). For not (A and B), the operator FLIPS to or."}, {"text": "(not A) or (not B)", "isCorrect": true, "rationale": "De Morgan's First Law: pushing not inside (A and B) flips and to or AND negates each operand: not (A and B) = (not A) or (not B)."}, {"text": "A or B", "isCorrect": false, "rationale": "Negation is required on each operand; you cannot drop the not entirely. not (A and B) is False only when both A and B are True."}, {"text": "not A and not B", "isCorrect": false, "rationale": "Without parentheses Python evaluates not first, but the operator must FLIP from and to or. The correct equivalent is (not A) or (not B)."}]}, {"question": "The `and` operator returns True only when which of the following is true?", "options": [{"text": "At least one operand is True.", "isCorrect": false, "rationale": "That description is the OR operator. AND requires BOTH operands to be True."}, {"text": "Both operands are True simultaneously.", "isCorrect": true, "rationale": "The defining rule of and: True only when BOTH (left AND right) are True. If either is False, the result is False."}, {"text": "Both operands are False.", "isCorrect": false, "rationale": "and (False, False) = False, not True. and returns True only when both inputs are True."}, {"text": "Either or both operands are True.", "isCorrect": false, "rationale": "That is the OR operator. AND requires BOTH (not 'either or both')."}]}, {"question": "Apply De Morgan's First Law to rewrite `not (x < 5 and y > 10)` without the outer not.", "options": [{"text": "x < 5 or y > 10", "isCorrect": false, "rationale": "This drops the negation on each operand. De Morgan requires negating each: not (x < 5) becomes x >= 5, and not (y > 10) becomes y <= 10."}, {"text": "x >= 5 or y <= 10", "isCorrect": true, "rationale": "De Morgan flips and to or AND negates each operand. not (x < 5) is x >= 5; not (y > 10) is y <= 10. Combined with or: x >= 5 or y <= 10."}, {"text": "x < 5 and y > 10", "isCorrect": false, "rationale": "This drops the outer not without applying De Morgan, leaving the original inner expression unchanged. The two are not equivalent — they have opposite truth values."}, {"text": "x >= 5 and y <= 10", "isCorrect": false, "rationale": "De Morgan flips and to or, not the other way. The correct rewrite uses or, not and."}]}, {"question": "Why does the Python expression `(x != 0) and (10 / x > 2)` evaluate to False without raising ZeroDivisionError when x = 0?", "options": [{"text": "Python ignores division-by-zero errors inside Boolean expressions.", "isCorrect": false, "rationale": "Python does NOT ignore ZeroDivisionError; it raises one whenever 10/0 is actually evaluated. The reason no error appears is because the division never executes."}, {"text": "Short-circuit evaluation: x != 0 is False, so Python skips evaluating the right operand entirely.", "isCorrect": true, "rationale": "Python evaluates and from left to right and stops as soon as the result is determined. Since x != 0 is False (when x = 0), the and is already False; the right operand 10/x > 2 is never evaluated, and no division occurs."}, {"text": "Python automatically catches the exception and returns False.", "isCorrect": false, "rationale": "There is no automatic exception catching for division-by-zero. The ZeroDivisionError simply never occurs because the division never runs."}, {"text": "10 / 0 evaluates to infinity, which is greater than 2, but and returns False.", "isCorrect": false, "rationale": "Python integer division by zero raises ZeroDivisionError, not infinity. The correct mechanism is short-circuit evaluation preventing the division from executing."}]}, {"question": "Trace this Python expression with `user = None`: `user is not None and user.is_logged_in()`. What does this evaluate to, and why does it not raise AttributeError?", "options": [{"text": "True; user.is_logged_in() returns True for None objects.", "isCorrect": false, "rationale": "None has no is_logged_in method; calling it would raise AttributeError. The expression must short-circuit before that call."}, {"text": "False; user is not None is False, so short-circuit evaluation skips the method call entirely.", "isCorrect": true, "rationale": "Step 1: user is not None evaluates to False (because user IS None). Step 2: and short-circuits because False and anything is False. The right operand user.is_logged_in() is never evaluated, so no AttributeError occurs. This is the textbook 'guard pattern' for short-circuiting."}, {"text": "AttributeError: NoneType has no attribute 'is_logged_in'.", "isCorrect": false, "rationale": "That is what would happen WITHOUT short-circuit evaluation. The whole point of using and as a guard is that the method call never executes."}, {"text": "True; the and operator unconditionally returns True when user is None.", "isCorrect": false, "rationale": "and returns True only when BOTH operands are True. When the left operand is False, and short-circuits and returns False."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

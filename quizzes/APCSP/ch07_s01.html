@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; The Anatomy of the Internet</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "Which statement BEST captures the architectural distinction between the Internet and the World Wide Web?", "options": [{"text": "The Internet and the World Wide Web are two names for the same global communication system.", "isCorrect": false, "rationale": "The text is explicit that they are not the same. The Internet is the underlying infrastructure; the Web is one application that runs on it."}, {"text": "The Internet is the underlying network infrastructure (cables, routers, IP addressing); the Web is one application — built from HTML, HTTP, and URLs — that runs on top of that infrastructure.", "isCorrect": true, "rationale": "This matches the section's explicit framing. Berners-Lee's three-part invention (HTML, HTTP, URLs) added the Web as an application layer; the Internet existed long before the Web."}, {"text": "The World Wide Web carries email and file transfers; the Internet only carries web pages.", "isCorrect": false, "rationale": "This inverts the relationship. Email, file transfer, and web pages are all applications; the Internet carries packets for all of them."}, {"text": "The Internet was invented by Tim Berners-Lee in 1989 at CERN.", "isCorrect": false, "rationale": "Berners-Lee invented the Web in 1989. The Internet's TCP/IP foundation was published in 1974 by Cerf and Kahn, and ARPANET predates that."}]}, {"question": "A laptop in a small Kansas town loads a web page hosted at a major cloud provider in Oregon. Trace the most likely ISP path the request takes from laptop to server.", "options": [{"text": "Laptop → Tier 3 local ISP → Tier 2 regional ISP → Tier 1 backbone → Tier 2 → Tier 3 cloud-region provider → cloud server.", "isCorrect": true, "rationale": "The Tier hierarchy works exactly this way: a Tier 3 ISP connects the laptop locally, sells transit through Tier 2 to reach the Tier 1 backbone, which carries the long-distance leg, then hands off through Tier 2/3 again to reach the destination network."}, {"text": "Laptop → Tier 1 backbone → cloud server. Cross-country routes always travel directly on the backbone.", "isCorrect": false, "rationale": "End-user devices are not connected directly to Tier 1 carriers. Tier 3 ISPs (cable companies, municipal broadband) provide last-mile access; the request must climb the hierarchy."}, {"text": "Laptop → DNS server → Tier 2 ISP → cloud server. DNS replaces the routing hierarchy.", "isCorrect": false, "rationale": "DNS resolves a hostname to an IP address but does not transport packets. The packets still traverse the Tier 1/2/3 ISP hierarchy."}, {"text": "Laptop → Berners-Lee's CERN web server → cloud server. All web traffic still passes through CERN.", "isCorrect": false, "rationale": "CERN hosted the first web server in 1991 but is not in the routing path of modern traffic. The Internet has no central hub."}]}, {"question": "The text describes the Internet as a 'network of networks' with 'no single owner, no single authority.' What practical engineering consequence does this decentralized design produce?", "options": [{"text": "It causes the Internet to fail whenever one major operator goes offline.", "isCorrect": false, "rationale": "The opposite is true. Decentralization means no single failure can take the whole system down."}, {"text": "Failure of any single component or network affects only those directly connected to it; the rest of the system continues to function.", "isCorrect": true, "rationale": "This is the key consequence stated in the text. Because no central authority controls routing or content, the network is inherently resilient — operational heterogeneity at the edges, with shared protocols at the boundaries."}, {"text": "Decentralization requires every router to consult a global registry before forwarding any packet.", "isCorrect": false, "rationale": "There is no global registry. Routers exchange reachability information via protocols like BGP, but no single database governs forwarding."}, {"text": "It means every packet travels through every Tier 1 ISP before reaching its destination.", "isCorrect": false, "rationale": "Packets take the path their routers select, often involving only a few networks. Decentralization is about absence of central control, not exhaustive routing."}]}, {"question": "What roles does a typical home router play on a Local Area Network?", "options": [{"text": "It encrypts all packets with the user's public key before forwarding them.", "isCorrect": false, "rationale": "Home routers forward packets based on IP addresses; encryption (TLS/HTTPS) is provided by endpoints, not by the router."}, {"text": "It forwards packets between the LAN and the wider Internet, assigns local IP addresses through DHCP, and performs Network Address Translation so many devices share one public IP.", "isCorrect": true, "rationale": "The text explicitly lists these jobs: forwarding between networks, DHCP for local IP assignment, and NAT for IP sharing. The router also acts as the gateway between LAN and ISP."}, {"text": "It hosts the websites the user visits and serves their content directly.", "isCorrect": false, "rationale": "Home routers do not host websites. Web servers are remote machines; the router's job is forwarding."}, {"text": "It maintains the global DNS root zone for all .com domains.", "isCorrect": false, "rationale": "The DNS root zone is maintained by a small set of root server operators, not by individual home routers."}]}, {"question": "On October 29, 1969, the first message sent over ARPANET was supposed to be 'login.' The system crashed after two letters, so the first word ever transmitted was 'lo.' What broader claim about the Internet's history does this anecdote support?", "options": [{"text": "The Internet was fully reliable from its first day of operation.", "isCorrect": false, "rationale": "The crash on the first message demonstrates the opposite. ARPANET's reliability was a goal, not an initial feature."}, {"text": "ARPANET was a working research prototype that grew incrementally — not a mature, polished system that arrived all at once.", "isCorrect": true, "rationale": "The story illustrates that ARPANET was an experimental network that grew over decades through trial, error, and incremental engineering. The Internet did not 'spring into existence fully formed.'"}, {"text": "TCP/IP was the protocol used in 1969.", "isCorrect": false, "rationale": "TCP/IP was published in 1974 and adopted on Flag Day in 1983. ARPANET ran the older NCP protocol in 1969."}, {"text": "The first message was sent from Stanford to UCLA.", "isCorrect": false, "rationale": "The text states the first message was sent from UCLA to Stanford Research Institute, not the other way around."}]}, {"question": "Which definition correctly distinguishes a client from a server in the Internet's request-response model?", "options": [{"text": "A client always has a faster CPU than a server.", "isCorrect": false, "rationale": "Speed is not the distinguishing feature. Servers are typically more powerful, not less, but the role distinction is about behavior — who initiates and who responds."}, {"text": "A client initiates requests for resources or services; a server listens for incoming requests and returns the requested resources.", "isCorrect": true, "rationale": "This matches the text's definitions exactly. The roles are about initiating versus responding to requests, not about hardware power. A single machine can play both roles simultaneously."}, {"text": "A client has a public IP address; a server only has a private IP.", "isCorrect": false, "rationale": "It is the reverse: servers are typically addressable by stable public IPs, while clients often sit behind NAT with private IPs."}, {"text": "Clients send only HTTP traffic; servers handle all other protocols.", "isCorrect": false, "rationale": "Clients and servers operate over many protocols (HTTP, SMTP, FTP, DNS). The role distinction is independent of protocol choice."}]}, {"question": "An RFC 791 excerpt describes IP as a protocol for 'transmitting blocks of data called datagrams from sources to destinations, where sources and destinations are hosts identified by fixed length addresses.' What does this passage tell you about IP's design responsibilities?", "options": [{"text": "IP is responsible for retransmitting any datagrams that are lost in transit.", "isCorrect": false, "rationale": "IP provides best-effort delivery only. Retransmission is the job of TCP at the transport layer, not IP."}, {"text": "IP defines fixed-length addresses for hosts and provides the rules for moving datagrams from one host to another, including fragmentation when packets must cross networks with smaller maximum sizes.", "isCorrect": true, "rationale": "This is exactly what the RFC excerpt describes: IP is the addressing-and-forwarding layer that interconnects heterogeneous packet networks. Reliability, ordering, and retransmission are layered on top by TCP."}, {"text": "IP guarantees in-order delivery of all datagrams to the receiving host.", "isCorrect": false, "rationale": "IP does not guarantee order — that is TCP's job. Datagrams can arrive out of order or not at all under IP alone."}, {"text": "IP encrypts the contents of every datagram.", "isCorrect": false, "rationale": "IP does not encrypt by default. Encryption is provided at higher layers by TLS or IPsec."}]}, {"question": "Why has the Internet's international bandwidth grown at roughly the pace of Moore's Law — that is, why does the underlying physical infrastructure scale gracefully?", "options": [{"text": "Because adding capacity largely means adding more fiber strands or upgrading the laser and detector equipment at the cable endpoints, rather than rebuilding the entire network.", "isCorrect": true, "rationale": "The text makes exactly this point. Optical fiber's physics allow incremental upgrades: more strands, faster lasers, better detectors — all without overhauling the global topology."}, {"text": "Because every Tier 1 ISP rebuilds its backbone from scratch every two years.", "isCorrect": false, "rationale": "Rebuilding a continent-spanning fiber backbone every two years would be economically and physically impossible. Capacity growth comes from incremental upgrades."}, {"text": "Because copper telephone wires double in capacity every two years.", "isCorrect": false, "rationale": "Copper telephone wires are not the international backbone — fiber-optic submarine cables are. Copper has nowhere near fiber's capacity scaling."}, {"text": "Because Moore's Law guarantees that all computer hardware doubles in speed every 18 months automatically.", "isCorrect": false, "rationale": "Moore's Law is an empirical observation about transistor density, not a guarantee. The text uses 'roughly the pace of Moore's Law' as analogy, not causation."}]}, {"question": "ARPANET hosts switched from NCP to TCP/IP simultaneously on January 1, 1983 — a date engineers call 'Flag Day.' What does this transition mark in the history of the Internet?", "options": [{"text": "The decommissioning of ARPANET in favor of NSFNet.", "isCorrect": false, "rationale": "ARPANET was decommissioned in 1990, not 1983. Flag Day was a protocol switch, not a network shutdown."}, {"text": "The first commercial use of the Internet by a private company.", "isCorrect": false, "rationale": "Commercial traffic was not allowed on the backbone until 1993, ten years after Flag Day."}, {"text": "The day ARPANET hosts adopted TCP/IP, creating the modern Internet in the protocol sense we would recognize today.", "isCorrect": true, "rationale": "The text states this directly: the simultaneous switch from NCP to TCP/IP 'created the modern Internet in the sense we would recognize today.' Every Internet device since uses TCP/IP descendants of that 1983 specification."}, {"text": "The invention of the World Wide Web by Tim Berners-Lee.", "isCorrect": false, "rationale": "The Web was proposed in 1989 and went live in 1991, six years after Flag Day."}]}, {"question": "Which statement BEST describes why the term 'operational heterogeneity' applies to the Internet?", "options": [{"text": "All networks on the Internet must use Wi-Fi to communicate.", "isCorrect": false, "rationale": "Networks use whatever physical medium suits them — Ethernet, Wi-Fi, cellular, satellite. The point of heterogeneity is that diverse media can coexist."}, {"text": "Different connected networks can use different internal technologies (Ethernet, Wi-Fi, cellular 5G, satellite) as long as they implement the shared protocols (TCP/IP) at the boundaries.", "isCorrect": true, "rationale": "This is the text's exact framing of operational heterogeneity: protocols, not shared hardware or central databases, are what make the Internet work. Networks are free to differ internally."}, {"text": "Every network on the Internet must share a single global database.", "isCorrect": false, "rationale": "There is no single global database. Routing information propagates through BGP without a central authority."}, {"text": "Heterogeneity means every device runs the same operating system.", "isCorrect": false, "rationale": "Devices on the Internet run vastly different operating systems (Windows, Linux, iOS, Android, embedded firmware). The protocols, not the OS, are what unify them."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

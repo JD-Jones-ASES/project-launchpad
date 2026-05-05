@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Logic Gates and Circuit Analysis</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "Which of the following BEST describes a logic gate?", "options": [{"text": "A piece of software that simulates Boolean logic.", "isCorrect": false, "rationale": "While software can simulate gates, the term 'logic gate' refers specifically to a physical electronic circuit that implements a Boolean function in hardware."}, {"text": "An electronic circuit that takes one or more binary input signals and produces a single binary output according to a Boolean rule.", "isCorrect": true, "rationale": "The text defines logic gates precisely this way: physical circuits where 0 V = logic 0 and 3.3 V or 5 V = logic 1, computing one Boolean function on their inputs. Modern CPUs contain billions of gates organized from transistors."}, {"text": "A loop construct in Python that controls program flow.", "isCorrect": false, "rationale": "Logic gates are hardware, not software. Loops are software control structures unrelated to gate-level circuits."}, {"text": "A mathematical theorem proved by George Boole.", "isCorrect": false, "rationale": "Boole's algebra is the mathematical foundation, but a 'logic gate' is a physical component, not a theorem. The bridge between Boole's algebra and circuits was made by Claude Shannon."}]}, {"question": "Which of the following describes the XOR (exclusive or) gate?", "options": [{"text": "Output is 1 when both inputs are 1.", "isCorrect": false, "rationale": "That is the AND gate. XOR outputs 0 when both inputs are 1."}, {"text": "Output is 1 when at least one input is 1.", "isCorrect": false, "rationale": "That is inclusive OR. XOR differs from OR specifically in the 1-1 case: OR outputs 1; XOR outputs 0."}, {"text": "Output is 1 when the inputs differ; 0 when they are the same.", "isCorrect": true, "rationale": "XOR (exclusive or) outputs 1 only when its inputs are unequal: 0-1 = 1, 1-0 = 1; same inputs (0-0 or 1-1) produce 0. Sometimes phrased: 'one or the other, but not both.'"}, {"text": "Output is the inverse of a single input.", "isCorrect": false, "rationale": "That describes the NOT gate (inverter), which has only one input. XOR has two inputs."}]}, {"question": "Forward-trace this circuit: `Y = (A AND B) OR (NOT A)`. With inputs A = 1, B = 0, what is Y?", "options": [{"text": "Y = 1, because (A AND B) = 1.", "isCorrect": false, "rationale": "(1 AND 0) = 0, not 1. AND requires both inputs to be 1."}, {"text": "Y = 0, because (A AND B) = 0 and (NOT A) = 0, so 0 OR 0 = 0.", "isCorrect": true, "rationale": "Step 1: (A AND B) = (1 AND 0) = 0. Step 2: (NOT A) = NOT 1 = 0. Step 3: 0 OR 0 = 0. Therefore Y = 0."}, {"text": "Y = 1, because (NOT A) = 1.", "isCorrect": false, "rationale": "NOT 1 = 0, not 1. The NOT operator inverts the input bit."}, {"text": "Y is undefined; the circuit has no output for A = 1, B = 0.", "isCorrect": false, "rationale": "Every Boolean circuit has a defined output for every combination of inputs. Forward-tracing produces Y = 0 here."}]}, {"question": "Forward-trace the same circuit `Y = (A AND B) OR (NOT A)` with inputs A = 0, B = 1. What is Y?", "options": [{"text": "Y = 0, because A = 0.", "isCorrect": false, "rationale": "A = 0 makes (A AND B) = 0, but (NOT A) = NOT 0 = 1, so the OR gate then produces 1."}, {"text": "Y = 1, because (NOT A) = 1, and 0 OR 1 = 1.", "isCorrect": true, "rationale": "Step 1: (A AND B) = (0 AND 1) = 0. Step 2: (NOT A) = NOT 0 = 1. Step 3: 0 OR 1 = 1. Therefore Y = 1."}, {"text": "Y = 0, because B is irrelevant when A = 0.", "isCorrect": false, "rationale": "Y = 1 here. B does not appear in (NOT A), but (NOT A) = 1 fires the OR. The value of B is irrelevant in THIS case, but the answer is still Y = 1, not 0."}, {"text": "Y has two values, 0 and 1, depending on which input we trust.", "isCorrect": false, "rationale": "Boolean logic produces a single deterministic output for any specific input combination. Y = 1 here."}]}, {"question": "A truth table for a Boolean expression with 3 inputs (A, B, C) has how many rows?", "options": [{"text": "3 rows.", "isCorrect": false, "rationale": "Three rows would mean only one row per input, but each input independently takes 2 values. Total combinations: 2 x 2 x 2 = 8."}, {"text": "6 rows.", "isCorrect": false, "rationale": "6 = 3 x 2, but the formula is 2 raised to n (the number of inputs), not n times 2. With 3 inputs: 2^3 = 8."}, {"text": "8 rows.", "isCorrect": true, "rationale": "With n Boolean inputs, the truth table has exactly 2^n rows. 2^3 = 8. Each input independently takes 2 values."}, {"text": "9 rows.", "isCorrect": false, "rationale": "9 = 3^2, the wrong formula. The correct formula is 2^n, not n^2. For 3 inputs: 2^3 = 8."}]}, {"question": "In a half-adder with inputs A and B, the Sum and Carry outputs are computed by which gates respectively?", "options": [{"text": "Sum = A AND B; Carry = A OR B.", "isCorrect": false, "rationale": "Reversed and incorrect. Sum is XOR (1 when inputs differ); Carry is AND (1 only when both are 1)."}, {"text": "Sum = A XOR B; Carry = A AND B.", "isCorrect": true, "rationale": "Two-bit binary addition: 0+0=00, 0+1=01, 1+0=01, 1+1=10. The Sum column is the XOR truth table; the Carry column is the AND truth table. So a half-adder uses one XOR gate (Sum) and one AND gate (Carry)."}, {"text": "Sum = NOT (A AND B); Carry = A OR B.", "isCorrect": false, "rationale": "These produce the wrong truth tables. NOT (A AND B) is NAND, not the Sum bit. A OR B is wrong for Carry; the Carry is 1 only when both are 1, which is AND."}, {"text": "Sum = A AND B; Carry = A XOR B.", "isCorrect": false, "rationale": "Reversed. Sum is XOR (different inputs -> 1); Carry is AND (both inputs 1 -> 1)."}]}, {"question": "Trace a half-adder with A = 1, B = 1. What are the Sum and Carry outputs, and what binary number do they form?", "options": [{"text": "Sum = 1, Carry = 0; this represents binary 01 = decimal 1.", "isCorrect": false, "rationale": "1 + 1 = 2 in binary, not 1. Sum = (1 XOR 1) = 0 (same inputs); Carry = (1 AND 1) = 1."}, {"text": "Sum = 0, Carry = 1; this represents binary 10 = decimal 2.", "isCorrect": true, "rationale": "Sum = (1 XOR 1) = 0 (XOR is 0 when inputs match). Carry = (1 AND 1) = 1. The two-bit result 'Carry, Sum' = '10' in binary, which is decimal 2 — correctly representing 1 + 1 = 2."}, {"text": "Sum = 1, Carry = 1; this represents binary 11 = decimal 3.", "isCorrect": false, "rationale": "Sum = (1 XOR 1) = 0 because XOR is 0 when inputs are equal. The half-adder cannot produce Sum = 1 with both inputs equal."}, {"text": "Sum = 0, Carry = 0; this represents binary 00 = decimal 0.", "isCorrect": false, "rationale": "1 + 1 cannot equal 0. Carry = (1 AND 1) = 1, not 0."}]}, {"question": "Why is a full-adder needed in addition to a half-adder for multi-bit binary addition?", "options": [{"text": "Half-adders are slower than full-adders.", "isCorrect": false, "rationale": "Speed is not the issue. The issue is that half-adders cannot accept a carry-in from a previous stage."}, {"text": "A half-adder can add only two bits and cannot accept a carry-in from a previous addition stage; full-adders accept three inputs (A, B, and carry-in) and chain into ripple-carry adders.", "isCorrect": true, "rationale": "Half-adders take exactly two inputs (A, B) and produce Sum and Carry. They cannot accept a carry from a previous bit position. Full-adders take three inputs (A, B, C_in) and produce Sum and C_out, allowing them to chain into multi-bit ripple-carry adders. A 64-bit add uses ~64 full-adders."}, {"text": "Half-adders use AND gates; full-adders use OR gates.", "isCorrect": false, "rationale": "Both adder types use multiple gate types (XOR, AND, OR). The structural difference is the number of inputs and the carry-in capability, not the gate types alone."}, {"text": "Full-adders work for decimal numbers; half-adders only work for binary.", "isCorrect": false, "rationale": "Both adders work on binary digits. The difference is in handling carry-in for multi-bit addition, not decimal vs binary."}]}, {"question": "A full-adder has 3 inputs (A, B, C_in). How many rows does its truth table have, and what does the C_out column represent?", "options": [{"text": "8 rows. C_out is 1 when at least two of the three inputs are 1.", "isCorrect": true, "rationale": "Three inputs -> 2^3 = 8 rows. C_out (carry-out) tracks when the sum overflows a single bit: it is 1 when 2 or more of (A, B, C_in) are 1, ensuring the carry propagates to the next bit position. The Sum column gives the parity (1 when an odd number of inputs are 1)."}, {"text": "6 rows. C_out is 1 when all three inputs are 1.", "isCorrect": false, "rationale": "6 is wrong; 2^3 = 8 rows. C_out is 1 when at least 2 of 3 inputs are 1 (not exclusively when all 3 are)."}, {"text": "4 rows. C_out is the parity bit.", "isCorrect": false, "rationale": "4 rows would correspond to 2 inputs (a half-adder). With 3 inputs, the truth table has 8 rows. The parity is the SUM column; C_out tracks when the sum carries."}, {"text": "16 rows. C_out is the negation of A.", "isCorrect": false, "rationale": "16 rows = 2^4 (four inputs). A full-adder has only 3 inputs, so 8 rows."}]}, {"question": "A circuit needs to output Y = 1 only when input A is 0. Which of the following Boolean expressions accomplishes this with the simplest gate?", "options": [{"text": "Y = A AND 1", "isCorrect": false, "rationale": "This produces Y = A. When A = 0, Y = 0 — the opposite of what is required."}, {"text": "Y = NOT A", "isCorrect": true, "rationale": "Backward-tracing: Y = 1 only when A = 0 means Y is the inversion of A. The NOT gate (inverter) takes A as input and outputs the opposite. NOT 0 = 1; NOT 1 = 0. This is the simplest possible solution: a single gate."}, {"text": "Y = A XOR A", "isCorrect": false, "rationale": "A XOR A is always 0 (XOR returns 0 when inputs match). Y = 0 always — the opposite of inverting A."}, {"text": "Y = A AND (NOT A)", "isCorrect": false, "rationale": "A AND (NOT A) is always 0 (a value cannot be both 0 and 1 simultaneously). Y = 0 always — wrong direction."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Bias in Computing Systems — Mechanisms and Mitigations</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "A spam filter is trained on email data where 95% of messages are in English. When deployed for a Spanish-speaking user base, the filter incorrectly flags many legitimate Spanish messages as spam. Which bias mechanism is responsible, and what is the corresponding technical mitigation?", "options": [{"text": "Sampling bias; mitigation is dataset rebalancing — collecting additional Spanish-language training examples (oversampling) or removing some English examples (undersampling) to align the training distribution with the deployed input distribution.", "isCorrect": true, "rationale": "The 95/5 imbalance is sampling bias by definition: the dataset does not represent the distribution of inputs the deployed model will encounter. The textbook's mitigation is dataset rebalancing — oversampling the under-represented class, undersampling the over-represented, or generating synthetic examples through data augmentation."}, {"text": "Feature selection bias; mitigation is removing the language feature from the input.", "isCorrect": false, "rationale": "The bias here is in the data composition, not in any proxy variable among the features. Removing language as a feature would not address the under-representation of Spanish examples in training."}, {"text": "Evaluation gap; mitigation is hiding the test set.", "isCorrect": false, "rationale": "Evaluation gap is a procedural issue with how performance is measured across subgroups. The Spanish-language failure here is rooted in training-data composition, which is sampling bias."}, {"text": "Quantum tunneling; mitigation is changing CPU vendor.", "isCorrect": false, "rationale": "Quantum tunneling is a chip-fabrication phenomenon unrelated to machine-learning bias. The mitigation listed is nonsense in this context."}]}, {"question": "A loan-approval algorithm uses ZIP code as an input feature even though race is not explicitly included. In many U.S. metropolitan areas with historically segregated housing patterns, the algorithm produces systematically different outputs by ZIP code that mirror demographic patterns. Which mechanism does this illustrate?", "options": [{"text": "Feature selection bias via a proxy variable: ZIP code is statistically correlated with race in many U.S. metropolitan areas, so the model can implicitly depend on the underlying attribute even though the attribute itself was not provided.", "isCorrect": true, "rationale": "A proxy variable is a feature correlated with a protected attribute. The model trained to minimize prediction error may learn to use the proxy as an indirect stand-in. ZIP code is a textbook example."}, {"text": "Sampling bias, because urban ZIP codes have more loan applications than rural ZIP codes.", "isCorrect": false, "rationale": "The mechanism here is feature selection (the model uses ZIP code as a feature), not the composition of the training set across demographic groups. The bias enters via the proxy correlation, not the sample distribution."}, {"text": "An evaluation gap, because the test set lacked labeled ZIP codes.", "isCorrect": false, "rationale": "Evaluation gap describes failure to disaggregate metrics across subgroups during evaluation, not the use of a proxy feature during training."}, {"text": "Moore's Law, because computational power increased over time.", "isCorrect": false, "rationale": "Moore's Law concerns transistor density. It is unrelated to feature selection or proxy variables in machine-learning models."}]}, {"question": "Why does removing ZIP code from a model that was previously biased not always eliminate the bias?", "options": [{"text": "Because other correlated proxy features may remain (commute distance, first name, high school graduation year combined with birth date), and the model can shift its dependence onto the remaining proxies.", "isCorrect": true, "rationale": "The textbook explicitly notes that removing one proxy does not always resolve the issue if other correlated proxies remain. Mitigation requires removing all correlated features, applying fairness constraints during training, or evaluating outputs at the subgroup level."}, {"text": "Because the model is now unbiased by construction.", "isCorrect": false, "rationale": "Simply removing one proxy does not guarantee an unbiased model. Other proxies often remain, and the model's optimization can re-introduce bias via those.”"}, {"text": "Because the FCC requires ZIP code as a feature.", "isCorrect": false, "rationale": "There is no such FCC requirement, and the FCC regulates broadband and communications, not loan-approval features."}, {"text": "Because Moore's Law forces all features to be retained over time.", "isCorrect": false, "rationale": "Moore's Law is unrelated to feature selection in machine learning. This option is nonsense in context."}]}, {"question": "A model achieves 95% aggregate accuracy on a held-out test set, but disaggregated metrics show 99% accuracy on the majority subgroup and 70% accuracy on a minority subgroup. What concept does this disparity illustrate, and what is the standard mitigation?", "options": [{"text": "The evaluation gap; the mitigation is computing subgroup performance metrics (accuracy, precision, recall, error rate) separately for each relevant subgroup, often packaged in a model card.", "isCorrect": true, "rationale": "The evaluation gap is precisely the situation where aggregate metrics hide significant subgroup disparities. Disaggregated evaluation closes the gap by reporting performance per subgroup."}, {"text": "Sampling bias; the mitigation is changing the optimizer.", "isCorrect": false, "rationale": "The aggregate-vs-subgroup gap is an evaluation-procedure issue, not a training-set composition issue. Changing the optimizer would not surface the hidden disparity."}, {"text": "A proxy variable; the mitigation is renaming the test set.", "isCorrect": false, "rationale": "Proxy variables are a feature-selection concept, not an evaluation-procedure concept. Renaming the test set has no relevance."}, {"text": "Quantum tunneling; the mitigation is moving to a different chip.", "isCorrect": false, "rationale": "Quantum tunneling is unrelated to machine-learning evaluation. This option is nonsense in context."}]}, {"question": "Multiple published studies measured commercial facial-recognition error rates across demographic groups, finding error rates below 2% for lighter-skinned male faces and 5-35% for darker-skinned female faces. The textbook frames this gap as evidence of:", "options": [{"text": "Sampling bias in the training datasets, with under-represented demographic groups contributing fewer examples, so the model optimized less thoroughly for their characteristics.", "isCorrect": true, "rationale": "The textbook describes this as a worked example of sampling bias. The technical hypothesis is that training-set composition under-represented the subgroups with higher error rates, so the optimization signal favored the over-represented subgroups."}, {"text": "A copyright-law failure, because the training images were unlicensed.", "isCorrect": false, "rationale": "Training-data licensing is a separate question. The error-rate gap is rooted in dataset composition, not in licensing status."}, {"text": "A failure of Moore's Law, because chips were too slow to process all faces equally.", "isCorrect": false, "rationale": "Computing capacity is not the constraint. The same model running on faster hardware would still inherit the dataset composition imbalance and produce the same error-rate gap."}, {"text": "A last-mile broadband problem, because rural users have less access.", "isCorrect": false, "rationale": "Broadband access is unrelated to facial-recognition training-set composition. The mechanism here is the labeled examples used during training, not network connectivity."}]}, {"question": "A model card is best described as:", "options": [{"text": "A standardized documentation artifact for a machine-learning model recording intended use cases, training-data provenance and known limitations, evaluation methodology and metrics, and per-subgroup performance results.", "isCorrect": true, "rationale": "Model cards were introduced by Google researchers in 2019. They standardize the disclosure of training-data origin, evaluation methodology, and disaggregated performance, enabling downstream users to make informed deployment decisions."}, {"text": "A printed photograph of a model used for visual classification.", "isCorrect": false, "rationale": "Model cards are documentation artifacts, not images. The textbook defines them in terms of the information they record."}, {"text": "A copyright registration document for a training dataset.", "isCorrect": false, "rationale": "Copyright registration is a separate legal mechanism. Model cards document model behavior; they are not legal filings."}, {"text": "A flashcard used to train AP CSP students.", "isCorrect": false, "rationale": "Model cards in machine learning are documentation about ML models, not study materials for students."}]}, {"question": "Which list correctly pairs each computing-bias mechanism with its primary technical mitigation?", "options": [{"text": "Sampling bias -> dataset rebalancing; feature selection bias -> feature auditing; evaluation gap -> subgroup performance metrics and model cards.", "isCorrect": true, "rationale": "These are the three mechanism-mitigation pairs the textbook explicitly defines. Each mechanism has a corresponding technical response: rebalance the data, audit and possibly remove proxy features, and disaggregate evaluation by subgroup."}, {"text": "Sampling bias -> open-source licensing; feature selection bias -> LEO satellite deployment; evaluation gap -> Moore's Law extension.", "isCorrect": false, "rationale": "These pairings have no relationship between mechanism and mitigation. Open-source licensing, satellite deployment, and Moore's Law are unrelated to ML bias mitigation."}, {"text": "All three mechanisms share the same mitigation: replacing the model with a different one.", "isCorrect": false, "rationale": "The textbook's whole point is that each mechanism has a distinct, targeted mitigation. Replacing the model wholesale does not specifically address any of the three mechanisms."}, {"text": "Sampling bias -> fair use; feature selection bias -> copyleft; evaluation gap -> Creative Commons.", "isCorrect": false, "rationale": "These are intellectual-property concepts unrelated to machine-learning bias mitigation."}]}, {"question": "A training loss function minimizes the average error across all training examples. If 90% of training examples are from category A and 10% from category B, why does this often produce systematically different per-category error rates at deployment?", "options": [{"text": "Because the optimizer prioritizes minimizing A errors (which contribute more to the average loss); B errors contribute less to the optimization signal, so the model generalizes more thoroughly within A than within B.", "isCorrect": true, "rationale": "This is the mathematical intuition the textbook gives for sampling bias. With 90% A examples, A errors dominate the average loss; the optimizer focuses on reducing them. B errors contribute less and are reduced less aggressively, leaving higher per-category error at inference."}, {"text": "Because the model intentionally prefers category A.", "isCorrect": false, "rationale": "The bias is statistical, not intentional. The optimizer is doing exactly what it was instructed to do: minimize average loss. The result is biased because the average is weighted by training-set composition."}, {"text": "Because category B is harder to learn in principle.", "isCorrect": false, "rationale": "There is no inherent difficulty asymmetry between categories. Equal exposure during training would yield similar per-category error rates."}, {"text": "Because Moore's Law slowed before category B was added.", "isCorrect": false, "rationale": "Moore's Law is unrelated to training-set composition or per-category error rates."}]}, {"question": "Computing bias also arises in non-machine-learning systems. Which scenario in the textbook illustrates this point?", "options": [{"text": "A search engine that ranks results by historical click-through rates ranks highly the content that historically attracted clicks, which may reflect the demographics of the original user population rather than the needs of a broader user base.", "isCorrect": true, "rationale": "The textbook explicitly cites this scenario. Any algorithm whose outputs depend on data collected through a biased process can amplify that historical bias, even when no machine-learning model is involved."}, {"text": "A compiled C program returning the wrong result due to a syntax error.", "isCorrect": false, "rationale": "A syntax error is a software bug, not computing bias. Bias is a systematic tendency tied to data composition, feature selection, or evaluation procedure."}, {"text": "A LEO satellite dropping packets during heavy weather.", "isCorrect": false, "rationale": "Packet loss is a physical-layer connectivity issue, not computing bias."}, {"text": "A processor running at a lower clock speed than rated.", "isCorrect": false, "rationale": "Clock-speed throttling is a hardware concern unrelated to computing bias."}]}, {"question": "The CED definition of computing bias is broad. According to the textbook, the AP exam tests whether students can do which set of tasks?", "options": [{"text": "(a) Identify that bias can arise from data, from algorithm design, or from the interaction between the two; (b) describe at least one mechanism by which each type arises; and (c) name at least one corresponding mitigation.", "isCorrect": true, "rationale": "The textbook explicitly lists these three competencies as what the AP exam tests for computing bias. The framing keeps the focus on mechanism and mitigation, not on policy debate."}, {"text": "Memorize the names of every U.S. anti-discrimination statute and recite them.", "isCorrect": false, "rationale": "The AP CSP exam tests technical mechanisms and mitigations, not legal statutes. The textbook explicitly avoids policy and legal-doctrine framing for this section."}, {"text": "Score machine-learning models against a fixed benchmark.", "isCorrect": false, "rationale": "The exam does not test specific benchmark scores. It tests conceptual understanding of bias mechanisms and mitigations."}, {"text": "Select hardware vendors based on chip-architecture preferences.", "isCorrect": false, "rationale": "Vendor selection is unrelated to the AP exam's treatment of computing bias."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

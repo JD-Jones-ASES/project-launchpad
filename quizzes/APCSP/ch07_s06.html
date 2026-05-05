@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Cybersecurity Foundations</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "What is the 'key distribution problem' of symmetric encryption, and how does the Diffie-Hellman key exchange solve it?", "options": [{"text": "Symmetric encryption is too slow; Diffie-Hellman makes it faster.", "isCorrect": false, "rationale": "Symmetric encryption is in fact fast — AES-256 runs at multi-Gbps speeds. The problem is not speed but how the two parties first agree on the shared key."}, {"text": "The key distribution problem is that symmetric encryption requires both parties to share a secret key in advance, but exchanging the key over the Internet exposes it to eavesdroppers. Diffie-Hellman solves it by letting Alice and Bob jointly compute a shared secret over an insecure channel — Eve can see every message they send and still cannot determine the secret, because doing so would require solving the discrete logarithm problem.", "isCorrect": true, "rationale": "This is the section's central insight. Diffie-Hellman exploits a one-way function (modular exponentiation): Alice and Bob each pick a private exponent, exchange public values g^a mod p and g^b mod p, and each can compute g^(ab) mod p — but Eve cannot recover a or b from the public values. The shared secret is established without ever transmitting it."}, {"text": "Diffie-Hellman replaces symmetric encryption entirely; symmetric encryption is no longer used.", "isCorrect": false, "rationale": "Symmetric encryption is still used for the bulk encryption of data; Diffie-Hellman (or RSA) is used to exchange the symmetric session key, because symmetric ciphers are far faster than public-key methods."}, {"text": "The key distribution problem is solved by writing the key on a piece of paper and mailing it.", "isCorrect": false, "rationale": "The text explicitly notes: if Alice and Bob meet in person to exchange a key, what was the point of the Internet? Physical key exchange does not scale and defeats the purpose of online cryptography."}]}, {"question": "Alice uses a Caesar cipher with shift 7 to encrypt the letter 'T'. What is the resulting ciphertext character? Show the modular arithmetic.", "options": [{"text": "'T' has alphabet index 19 (with A=0). (19 + 7) mod 26 = 26 mod 26 = 0, which is 'A'.", "isCorrect": true, "rationale": "Caesar cipher arithmetic: with A=0, B=1, ... Z=25, T's index is 19. (19 + 7) = 26. 26 mod 26 = 0. Index 0 is 'A'. So the ciphertext is 'A'. The modulo is essential because shifts wrap from Z back to A."}, {"text": "(19 + 7) mod 26 = 26, so the ciphertext is 'Z'.", "isCorrect": false, "rationale": "The arithmetic is wrong. 26 mod 26 equals 0, not 26. Index 0 corresponds to 'A', not 'Z'."}, {"text": "'T' shifted by 7 is 'T+7' = 'AA' because the shift exceeds the alphabet.", "isCorrect": false, "rationale": "Caesar cipher shifts wrap within the alphabet using modulo 26; the result is one letter, not two. The wrap from Z back to A is exactly what modulo handles."}, {"text": "Caesar cipher cannot encrypt the letter 'T' because of a special exception.", "isCorrect": false, "rationale": "There is no exception. Every letter shifts by the same amount. T shifted by 7 with wrap is A."}]}, {"question": "You receive an email that appears to be from your bank, urging you to click a link and enter your password to 'verify your account.' Identify the attack and name two defenses.", "options": [{"text": "It is a software-update vulnerability; the only defense is to install the OS update.", "isCorrect": false, "rationale": "Software updates address known vulnerabilities, but the email is not exploiting a software bug. It is a social engineering attempt — phishing — that targets the human, not the software."}, {"text": "It is a phishing attack: a fraudulent communication impersonating a trusted entity to trick you into revealing credentials. Defenses include (1) navigating to your bank's site directly rather than clicking the email link, and (2) enabling multi-factor authentication so even a stolen password is insufficient to log in.", "isCorrect": true, "rationale": "The section defines phishing exactly this way and lists MFA as a key defense. Avoiding the link by typing the bank's URL directly into the browser, combined with MFA on the account, defeats both the credential capture and the consequences if it succeeds."}, {"text": "It is a man-in-the-middle attack; the only defense is to disable HTTPS.", "isCorrect": false, "rationale": "Disabling HTTPS would make MitM attacks easier, not harder. A man-in-the-middle attack requires the attacker to be in the network path; phishing operates by tricking the human, not by intercepting traffic in transit."}, {"text": "It is a denial-of-service attack; the only defense is to ignore email entirely.", "isCorrect": false, "rationale": "Denial of service floods a server with traffic to deny legitimate use; it is unrelated to phishing emails that target a single user. And ignoring all email is not a viable defense."}]}, {"question": "Which BEST describes the contrast between symmetric and asymmetric (public-key) encryption?", "options": [{"text": "Symmetric encryption uses a single shared key for both encryption and decryption (fast, but requires secure key distribution); asymmetric encryption uses a mathematically related key pair — public and private — so anyone can encrypt with the public key, but only the holder of the private key can decrypt. Public-key encryption is 100 to 1000 times slower than symmetric, so it is typically used to securely exchange a symmetric session key.", "isCorrect": true, "rationale": "This matches the section's contrast exactly. The two are complementary, not alternatives: HTTPS uses public-key cryptography to exchange a symmetric session key, then uses the symmetric key for the bulk encryption of the actual traffic — combining the security of public-key with the speed of symmetric."}, {"text": "Symmetric and asymmetric encryption are two names for the same mechanism.", "isCorrect": false, "rationale": "They are fundamentally different. Symmetric uses one key; asymmetric uses a related key pair. The mathematical foundation (modular arithmetic, one-way functions) and the use cases differ substantially."}, {"text": "Symmetric encryption is more secure than asymmetric encryption.", "isCorrect": false, "rationale": "Both can be secure when used correctly. The trade-off is speed (symmetric wins) versus key distribution (asymmetric wins, because no shared secret is required in advance)."}, {"text": "Asymmetric encryption uses one key; symmetric uses a related key pair.", "isCorrect": false, "rationale": "This is exactly backwards. Symmetric uses one key; asymmetric uses a key pair."}]}, {"question": "How does HTTPS prevent a man-in-the-middle attack on a connection between your browser and your bank's website?", "options": [{"text": "By using TLS, which combines asymmetric and symmetric cryptography. TLS authenticates the server's identity using a certificate signed by a trusted authority (proving you are talking to the real bank, not an impostor) and then encrypts the channel using a symmetric session key established via key exchange. An attacker on the network path can see encrypted bytes but cannot read or modify them, and cannot impersonate the bank without a valid certificate.", "isCorrect": true, "rationale": "The section makes both points: TLS's two jobs are authentication (the certificate proves the server's identity) and encryption (preventing eavesdropping and tampering). Without authentication, an attacker could simply impersonate the bank; without encryption, they could read traffic. Both are necessary."}, {"text": "By blocking the attacker's IP address at the router.", "isCorrect": false, "rationale": "There is no IP-blocklist mechanism in HTTPS. The defense is cryptographic — authentication via certificate plus encryption via session key — not network filtering."}, {"text": "By avoiding the use of TCP entirely.", "isCorrect": false, "rationale": "HTTPS runs over TCP and benefits from TCP's reliable delivery. The MitM defense is provided by TLS, not by avoiding the transport layer."}, {"text": "By making the bank server invisible to attackers.", "isCorrect": false, "rationale": "The server is publicly addressable on the Internet. The MitM defense is cryptographic — the attacker can see the connection exists but cannot read or impersonate it."}]}, {"question": "Why is multi-factor authentication (MFA) considered a strong defense against credential theft, even when a user's password is stolen?", "options": [{"text": "Because MFA encrypts the password before sending it.", "isCorrect": false, "rationale": "Encryption of the password in transit (HTTPS) is a separate defense. MFA's value is requiring an additional factor that the attacker likely does not have, even after stealing the password."}, {"text": "Because MFA requires two or more independent factors to authenticate — something you know (password), something you have (phone or hardware token), something you are (fingerprint). Even if an attacker learns the password, they cannot log in without the second factor.", "isCorrect": true, "rationale": "The section gives this exact framing. The strength of MFA is the multiplication of independent factors: stealing one is much easier than stealing all of them. A password leak is a credential breach but not an account breach when MFA is enabled."}, {"text": "Because MFA changes the password every minute.", "isCorrect": false, "rationale": "Some MFA tokens generate time-based codes, but this is not 'changing the password.' The password remains; the second factor adds an independent verification step."}, {"text": "Because MFA is invisible to the user.", "isCorrect": false, "rationale": "MFA is explicitly visible to the user — it requires a second factor at login. Visibility is part of the design; users see the prompt for the additional code."}]}, {"question": "The Diffie-Hellman key exchange relies on the discrete logarithm problem. What property of this problem makes the protocol secure?", "options": [{"text": "It is easy to compute g^a mod p (modular exponentiation) for given g, a, and p, but given only g, p, and the result g^a mod p, recovering the exponent a is computationally infeasible for sufficiently large primes. This is a one-way function: easy in one direction, infeasible in the reverse.", "isCorrect": true, "rationale": "The section explains exactly this asymmetry. Alice and Bob compute their public values cheaply; Eve, who sees only the public values g, p, A = g^a mod p, B = g^b mod p, would need to solve the discrete logarithm to recover a or b — and that is computationally infeasible for the prime sizes used in practice."}, {"text": "Discrete logarithms are illegal under U.S. law.", "isCorrect": false, "rationale": "The security comes from computational hardness, not legal restriction. Discrete logarithms are studied openly worldwide."}, {"text": "Diffie-Hellman is secure because it transmits the shared secret in plaintext.", "isCorrect": false, "rationale": "It does the opposite. The shared secret is never transmitted; it is computed independently by each party from the public values, which is precisely what makes the protocol secure."}, {"text": "The discrete logarithm is easy to compute, which is why Diffie-Hellman is fast.", "isCorrect": false, "rationale": "The discrete logarithm is hard to compute — that hardness is the source of the security. The forward direction (modular exponentiation) is easy, which is what makes the public values cheap to compute."}]}, {"question": "Match each cybersecurity concept to its correct definition: malware, phishing, man-in-the-middle attack, denial of service.", "options": [{"text": "Malware is the act of guessing passwords; phishing is intercepting traffic; MitM is making a server unreachable; DoS is malicious software.", "isCorrect": false, "rationale": "Every match is wrong. The terms have specific definitions in the section: malware is malicious software; phishing is fraudulent communications tricking users; MitM is intercepting traffic between two parties; DoS is flooding a server to deny legitimate access."}, {"text": "Malware is malicious software (viruses, worms, ransomware, spyware) installed without consent. Phishing is fraudulent communications impersonating a trusted entity to trick users into revealing credentials or clicking malicious links. Man-in-the-Middle attacks intercept communication between two parties to read or modify it. Denial of Service floods a server with traffic to prevent legitimate users from accessing it.", "isCorrect": true, "rationale": "This is the section's exact set of definitions. Each represents a distinct threat category that requires distinct defenses: anti-malware tools, user awareness for phishing, HTTPS/TLS for MitM, and load balancers and rate limits for DoS."}, {"text": "All four terms are synonyms for the same general concept of cybercrime.", "isCorrect": false, "rationale": "They are distinct attack categories. Conflating them obscures the very different defenses each requires."}, {"text": "Malware is fraudulent email; phishing is malicious software; MitM is denial of service; DoS is intercepting traffic.", "isCorrect": false, "rationale": "All four labels are swapped. Each term has its own specific definition that does not overlap with the others."}]}, {"question": "What does the principle of 'defense in depth' mean for cybersecurity, and why does the section emphasize it?", "options": [{"text": "Defense in depth means installing only the most expensive security software available.", "isCorrect": false, "rationale": "Defense in depth is about layering, not about cost. A free MFA app combined with HTTPS and routine software updates can be far stronger than any single expensive product."}, {"text": "Defense in depth means using multiple overlapping layers of protection — encryption, MFA, software updates, user awareness — because no single defense is sufficient. If one layer fails, others continue to protect.", "isCorrect": true, "rationale": "The section's closing key concept makes exactly this point. Cybersecurity is not a single feature but a family of complementary techniques. A breach of one layer (e.g., a stolen password) is contained by the next layer (e.g., MFA)."}, {"text": "Defense in depth means relying solely on encryption to protect against all threats.", "isCorrect": false, "rationale": "Encryption alone does not stop phishing, malware, social engineering, or insider threats. Defense in depth explicitly avoids single-layer dependence."}, {"text": "Defense in depth means letting attackers in to study them.", "isCorrect": false, "rationale": "Studying attackers (deception, honeypots) is a niche tactic, not the meaning of defense in depth. The principle is about layered defenses, not luring intruders."}]}, {"question": "The NIST Cybersecurity Framework organizes cybersecurity activities into five core functions: Identify, Protect, Detect, Respond, and Recover. Which of the following BEST describes how these functions relate to each other?", "options": [{"text": "They are intended to be performed concurrently and continuously, not as a serial path or static end state. Together, they form a strategic, lifecycle view of an organization's cybersecurity risk management.", "isCorrect": true, "rationale": "The section's primary-source excerpt from the NIST framework states this explicitly: the five functions can be performed concurrently and continuously to form an operational culture, not as a step-by-step linear sequence."}, {"text": "They must be performed strictly in order — Identify first, then Protect, then Detect, etc. — and an organization cannot move to the next until the previous is complete.", "isCorrect": false, "rationale": "The NIST framework explicitly rejects this strict serial interpretation. The functions overlap and run continuously."}, {"text": "Only Identify and Protect are required; Detect, Respond, and Recover are optional.", "isCorrect": false, "rationale": "All five are part of the framework's core. None is described as optional. They cover the full lifecycle from understanding the environment to recovering from incidents."}, {"text": "The five functions are private to NIST and are not used outside the U.S. government.", "isCorrect": false, "rationale": "The framework has become the de facto standard for cybersecurity governance across many industries worldwide. NIST released it as a voluntary, widely adopted reference."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

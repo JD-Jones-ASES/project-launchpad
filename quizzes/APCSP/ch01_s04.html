@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Hardware Limitations: Overflow and Roundoff</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "An 8-bit unsigned integer currently holds the value 200. A program adds 100 to it. What value does the 8-bit register contain after the addition, and what name describes this error?", "options": [{"text": "300, with no error; the register expands to fit larger values.", "isCorrect": false, "rationale": "An 8-bit register cannot hold 300 because 8 bits max out at 255. Hardware does not auto-expand register width."}, {"text": "44, due to overflow. The maximum 8-bit unsigned value is 255; 200 + 100 = 300 exceeds the range, so the carry bit is discarded and the register wraps around: 300 - 256 = 44.", "isCorrect": true, "rationale": "200 + 100 = 300 overflows 8-bit unsigned (max 255). The result wraps modulo 256: 300 mod 256 = 44. This is a classic overflow case."}, {"text": "0, because overflow always resets the value to zero.", "isCorrect": false, "rationale": "Overflow does not always produce 0; it produces the result modulo 2^n. 0 happens specifically when the wraparound lands on 0 (e.g., 255 + 1 = 0)."}, {"text": "300, the correct value, because Python integers are arbitrary precision.", "isCorrect": false, "rationale": "Python's built-in int type IS arbitrary-precision and would correctly produce 300. But the question asks about an 8-bit register, which has fixed width and overflows."}]}, {"question": "Why does the expression 0.1 + 0.2 == 0.3 evaluate to False in Python?", "options": [{"text": "Because Python's == operator does not work for floats.", "isCorrect": false, "rationale": "The == operator works for floats, but it tests exact bit-pattern equality. The reason for the unexpected result is the underlying floating-point approximations, not a broken operator."}, {"text": "Because the IEEE 754 double-precision binary fractions for 0.1, 0.2, and 0.3 are all approximations; 0.1 + 0.2 produces a slightly larger value (0.30000000000000004), which differs from the stored approximation of 0.3.", "isCorrect": true, "rationale": "Neither 0.1 nor 0.2 has an exact binary representation (10 is not a power of 2). The stored approximations accumulate roundoff error, producing 0.30000000000000004, which is not bitwise equal to the stored approximation of 0.3."}, {"text": "Because Python rounds floats to integer values before comparison.", "isCorrect": false, "rationale": "Python does not round floats before ==. The whole point is that == performs bit-pattern comparison on the stored binary approximations."}, {"text": "Because 0.1 + 0.2 evaluates to 0.0 due to underflow.", "isCorrect": false, "rationale": "0.1 + 0.2 evaluates to 0.30000000000000004, very close to 0.3 - certainly not 0. Underflow occurs when a number is too small to represent, not in this everyday computation."}]}, {"question": "A student writes the following code to check if a price computation is correct:\n\nif total == expected_total:\n    print(\"Match\")\n\nWhen total and expected_total are floating-point numbers, what is the flaw in this approach, and what is a better strategy?", "options": [{"text": "There is no flaw; floating-point equality always works.", "isCorrect": false, "rationale": "Floating-point equality is unreliable because identical mathematical values can differ in their bit-level representations after even simple arithmetic. The whole section is about why this is unsafe."}, {"text": "The flaw is that floating-point arithmetic accumulates small roundoff errors, so two values that should be mathematically equal may differ by a tiny amount; the better strategy is abs(total - expected_total) < tolerance with a small tolerance like 1e-9.", "isCorrect": true, "rationale": "The text explicitly warns: 'Never use floating-point arithmetic to compare for exact equality. Always compare within a tolerance: abs(x - y) < 1e-9.'"}, {"text": "The flaw is that integers should be used; convert both values to int before comparing.", "isCorrect": false, "rationale": "Converting to int truncates fractional parts, which is unacceptable for currency. The better fix is decimal.Decimal or tolerance-based comparison."}, {"text": "The flaw is that == is the wrong syntax in Python; use 'is' instead.", "isCorrect": false, "rationale": "'is' tests object identity, not value equality, and is even more unreliable for comparing floats. == is the correct operator; the issue is precision, not syntax."}]}, {"question": "An n-bit two's complement integer represents which range of values?", "options": [{"text": "From 0 to 2^n - 1.", "isCorrect": false, "rationale": "This is the unsigned range. Two's complement uses one bit for the sign, halving the magnitude available."}, {"text": "From -2^(n-1) to +2^(n-1) - 1; for example, 8-bit signed is -128 to +127.", "isCorrect": true, "rationale": "Two's complement uses the MSB with weight -2^(n-1), giving range -2^(n-1) to +2^(n-1) - 1. The asymmetry (one more negative than positive) is because zero counts toward the non-negative side."}, {"text": "From -2^n to +2^n.", "isCorrect": false, "rationale": "8-bit two's complement does NOT range from -256 to +256. The MSB has weight -2^(n-1), not -2^n, so the range is half that."}, {"text": "From -2^(n-1) - 1 to +2^(n-1) (symmetric).", "isCorrect": false, "rationale": "Two's complement is asymmetric (-128 to +127, not -127 to +128). The negative side has one more representable value because zero falls on the non-negative side."}]}, {"question": "Consider a Python program that computes 19.99 * 0.0825 (a sales tax calculation). The output is 1.6491750000000001. Why does this happen, and what is the recommended fix for currency calculations?", "options": [{"text": "Floating-point multiplication amplifies roundoff error; for currency, use decimal.Decimal('19.99') * decimal.Decimal('0.0825') with string arguments to preserve exact decimal representation.", "isCorrect": true, "rationale": "Floats can't represent 19.99 or 0.0825 exactly, so their product carries an accumulated error. The text recommends decimal.Decimal with STRING arguments (passing a float literal would already lose precision)."}, {"text": "The output is incorrect because Python is buggy.", "isCorrect": false, "rationale": "Python is not buggy; it correctly computes the product of the IEEE 754 approximations of 19.99 and 0.0825. The error is inherent to floating-point representation."}, {"text": "The fix is to use the round() function on every intermediate calculation.", "isCorrect": false, "rationale": "Rounding intermediate values can hide errors but accumulates them in subtle ways across many operations. For currency, decimal.Decimal is more robust."}, {"text": "The fix is to multiply using the // floor-division operator.", "isCorrect": false, "rationale": "// performs integer floor division, which truncates fractional parts entirely. This loses cents, not appropriate for tax calculations."}]}, {"question": "What is the key conceptual difference between integer overflow and floating-point roundoff?", "options": [{"text": "Both are the same error; the names are interchangeable.", "isCorrect": false, "rationale": "They are entirely different: overflow is exceeding range; roundoff is inability to represent fractional values exactly. They have different causes and require different mitigations."}, {"text": "Overflow occurs when an arithmetic result exceeds the representable range of a fixed-width integer; roundoff is the inherent error from approximating real numbers in finite binary fractions, present even for in-range values.", "isCorrect": true, "rationale": "Overflow is a range issue (result too big or small for the bit width); roundoff is a precision issue (real numbers can't be exactly stored in finite bits). Both are predictable consequences of finite hardware but they are independent phenomena."}, {"text": "Overflow only happens in C; roundoff only happens in Python.", "isCorrect": false, "rationale": "Both can happen in any language using fixed-width types. Python's built-in int avoids integer overflow but its float type still has roundoff."}, {"text": "Overflow only affects negative numbers; roundoff only affects positive numbers.", "isCorrect": false, "rationale": "Both errors can affect numbers of any sign. Overflow occurs at the upper or lower limit of the type; roundoff occurs whenever a real number cannot be represented exactly."}]}, {"question": "Which of the following is true about Python's built-in int type, in contrast to fixed-width integers in C or Java?", "options": [{"text": "Python int is arbitrary-precision and never overflows; the overflow risk in Python arises mainly when calling C extension libraries (NumPy, struct) that use fixed-width types.", "isCorrect": true, "rationale": "The text explicitly states Python's built-in int 'uses as many bits as needed and never overflows. The overflow risk in Python arises primarily when calling C extension libraries... that use fixed-width integer types.'"}, {"text": "Python int is the same as C's int; both are 32-bit fixed-width.", "isCorrect": false, "rationale": "Python's built-in int is arbitrary-precision; only library types like NumPy's int32 use fixed widths."}, {"text": "Python int silently caps at 2^63 - 1.", "isCorrect": false, "rationale": "Python int has no cap; you can compute 10**1000 without error. Operations may slow down for very large values, but they do not overflow."}, {"text": "Python int rounds to the nearest representable float.", "isCorrect": false, "rationale": "Python int is exact and integer-only; it does not round. Conversion to float (via float(n)) can lose precision for very large integers, but int itself is exact."}]}, {"question": "Why does the Ariane 5 rocket explosion of 1996 illustrate integer overflow as a serious real-world risk?", "options": [{"text": "A 64-bit floating-point value was converted to a 16-bit signed integer, but the value exceeded the 16-bit range. The unhandled overflow exception crashed the guidance computer 37 seconds after launch.", "isCorrect": true, "rationale": "The section recounts: 'In 1996, the European Space Agency's Ariane 5 rocket exploded 37 seconds after launch because a 64-bit floating-point number was converted to a 16-bit signed integer and overflowed - the resulting exception, unhandled, crashed the guidance computer.'"}, {"text": "A floating-point roundoff error caused the rocket to drift slightly off course.", "isCorrect": false, "rationale": "The cause was integer overflow during type conversion, not floating-point roundoff. The two errors are distinct."}, {"text": "The rocket's onboard CPU was destroyed by overheating from over-precision arithmetic.", "isCorrect": false, "rationale": "Arithmetic precision does not produce thermal damage. The cause was a software exception from an overflow during type narrowing."}, {"text": "The Ariane 5 incident has nothing to do with overflow; it was a sensor failure.", "isCorrect": false, "rationale": "The well-documented cause of the explosion was integer overflow in the inertial reference unit's software. It is a textbook case of overflow risk in safety-critical software."}]}, {"question": "Trace through this Python code and predict the output:\n\nimport decimal\na = decimal.Decimal(0.1)\nb = decimal.Decimal('0.1')\nprint(a == b)", "options": [{"text": "True, because both are Decimal types representing 0.1.", "isCorrect": false, "rationale": "Decimal(0.1) is constructed from the float 0.1, which is already an approximation. So a holds the exact Decimal value 0.1000000000000000055511151231257827021181583404541015625, while b holds exactly 0.1."}, {"text": "False, because Decimal(0.1) sees the imperfect IEEE 754 approximation of 0.1 (~0.100000000000000005...), while Decimal('0.1') with a string argument is exactly 0.1.", "isCorrect": true, "rationale": "Decimal(0.1) reads the float 0.1, which is already an approximation. Passing a STRING argument like Decimal('0.1') preserves the exact decimal value. The text emphasizes: 'pass a STRING, not a float literal.'"}, {"text": "Raises an error.", "isCorrect": false, "rationale": "Both Decimal(0.1) and Decimal('0.1') are valid; comparing them with == returns False but does not raise an error."}, {"text": "True, because Decimal automatically corrects for floating-point error.", "isCorrect": false, "rationale": "Decimal does NOT correct floating-point error. It precisely captures whatever you give it. Decimal(0.1) gets the imperfect float value; only Decimal('0.1') gets exactly 0.1."}]}, {"question": "Which standard governs how computers represent real numbers, and what are its implications for AP CSP students?", "options": [{"text": "IEEE 754 is the standard. It defines single (32-bit), double (64-bit), and quadruple (128-bit) precision formats and standardized rounding rules; the practical implication is that floating-point arithmetic is approximate by design, and exact equality comparisons of floats are almost always wrong.", "isCorrect": true, "rationale": "IEEE 754 (1985, revised 2008 and 2019) standardizes precision formats and rounding. The text emphasizes the practical implication: arithmetic is approximate, and == comparisons of floats are unreliable."}, {"text": "ASCII governs floating-point representation.", "isCorrect": false, "rationale": "ASCII is a character encoding, not a numeric standard. IEEE 754 is the floating-point standard."}, {"text": "There is no standard; each manufacturer implements floating-point arbitrarily.", "isCorrect": false, "rationale": "Pre-1985 this was true and caused major portability issues. IEEE 754 ended that fragmentation and is now the universal standard for floating-point hardware."}, {"text": "Two's complement is the standard for floating-point.", "isCorrect": false, "rationale": "Two's complement is for signed integers, not floating-point. IEEE 754 uses a sign bit + exponent + significand structure, not two's complement."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

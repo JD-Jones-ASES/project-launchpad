@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; Digital Representation of Media</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "ASCII assigns the integer 65 to the character 'A' and 97 to the character 'a'. The difference of 32 between uppercase and lowercase letters is meaningful because:", "options": [{"text": "Toggling bit 5 (the sixth bit from the right, zero-indexed) flips a letter between uppercase and lowercase, since 32 = 2^5.", "isCorrect": true, "rationale": "The 32-difference is exactly 2^5, so flipping bit 5 (zero-indexed) toggles the case. Early programmers exploited this for fast case conversion."}, {"text": "ASCII reserves codes 65-96 for case-related metadata.", "isCorrect": false, "rationale": "ASCII codes 65-96 are simply uppercase letters and a few punctuation marks. The 32-gap is a consequence of how ASCII was laid out, not metadata reservation."}, {"text": "All digits and letters in ASCII are exactly 32 apart.", "isCorrect": false, "rationale": "Only the upper-to-lowercase letter pairs are 32 apart. Digits are 0-9 (codes 48-57); the gap to letters is much larger."}, {"text": "Because ASCII uses a different table for uppercase and lowercase, and they happen to differ by 32 by coincidence.", "isCorrect": false, "rationale": "ASCII uses a single table. The 32-difference is a deliberate design choice exploiting the bit-toggle property, not a coincidence."}]}, {"question": "What does the following Python code segment output?\n\nletter = 'b'\nupper = chr(ord(letter) - 32)\nprint(upper)", "options": [{"text": "b, because chr() and ord() always return the original character.", "isCorrect": false, "rationale": "ord('b') = 98; subtracting 32 gives 66; chr(66) = 'B'. The conversion chain produces 'B', not 'b'."}, {"text": "B, because ord('b') is 98, subtracting 32 gives 66, and chr(66) is 'B'.", "isCorrect": true, "rationale": "ord('b') returns 98 (the ASCII code for lowercase b). 98 - 32 = 66. chr(66) returns 'B'. This demonstrates case conversion via the 32-bit-difference property."}, {"text": "98, because ord() returns the integer code.", "isCorrect": false, "rationale": "The script prints `upper`, which is the result of chr(66) = 'B'. The integer 98 is intermediate; it is never printed."}, {"text": "Raises an error because chr() requires a string argument.", "isCorrect": false, "rationale": "chr() expects an integer (a code point), and ord(letter) - 32 = 66 is an integer. No error occurs."}]}, {"question": "Why is UTF-8 backward-compatible with ASCII?", "options": [{"text": "Because UTF-8 only encodes ASCII characters and refuses to encode anything outside that range.", "isCorrect": false, "rationale": "UTF-8 encodes the full Unicode range (over 149,000 characters), not just ASCII. The compatibility is more nuanced."}, {"text": "Because any ASCII document is also a valid UTF-8 document — the first 128 code points are encoded as a single byte identical to the original ASCII encoding.", "isCorrect": true, "rationale": "Code points 0-127 (the ASCII range) are encoded as a single byte in UTF-8, with the same byte value as the ASCII code. So an ASCII file is automatically a valid UTF-8 file."}, {"text": "Because UTF-8 always uses 1 byte per character, like ASCII.", "isCorrect": false, "rationale": "UTF-8 is variable-length: 1-4 bytes per character. Only ASCII-range characters use exactly 1 byte. Non-ASCII characters (accented letters, emoji) use 2-4 bytes."}, {"text": "Because UTF-8 has the same total number of code points as ASCII (128).", "isCorrect": false, "rationale": "Unicode covers over 149,000 characters; UTF-8 encodes all of them. The number of code points is far greater than ASCII's 128."}]}, {"question": "Consider the following Python code segment. What does it output, and what does the discrepancy demonstrate?\n\ncafe = 'café'\nprint(len(cafe))\nprint(len(cafe.encode('utf-8')))", "options": [{"text": "Both print 4; café has 4 characters and 4 bytes.", "isCorrect": false, "rationale": "While café has 4 code points, the e-with-acute (U+00E9) takes 2 bytes in UTF-8, so the byte count is 5, not 4."}, {"text": "Prints 4 then 5; len() on a string counts code points, while len() on UTF-8 bytes counts the variable-length byte encoding.", "isCorrect": true, "rationale": "Python 3 strings are sequences of code points, so len('café') = 4. The UTF-8 encoding of é (U+00E9) is 2 bytes (195, 169), so len(cafe.encode('utf-8')) = 5."}, {"text": "Prints 5 then 4; the encode method removes the accent.", "isCorrect": false, "rationale": "encode does not remove characters. The string still has 4 characters; the byte count is 5 because é is a 2-byte UTF-8 character."}, {"text": "Prints 4 then 8; UTF-8 always uses 2 bytes per code point.", "isCorrect": false, "rationale": "UTF-8 is variable-length, not fixed at 2 bytes. ASCII characters use 1 byte; é uses 2; some emoji use 4."}]}, {"question": "Which of the following is the BEST description of a Unicode code point?", "options": [{"text": "A unique non-negative integer assigned to every character in every writing system, written as U+XXXX in hexadecimal.", "isCorrect": true, "rationale": "This matches the section's definition: Unicode assigns a unique integer (code point) to each character, conventionally written U+XXXX in hex (e.g., U+00E9 for é)."}, {"text": "A 7-bit integer used to identify English-language characters.", "isCorrect": false, "rationale": "This describes ASCII, not Unicode. Unicode is much broader and uses up to 21 bits to address 149,000+ characters."}, {"text": "A binary representation of a character that is always 16 bits long.", "isCorrect": false, "rationale": "Unicode uses up to 21 bits for code points (allowing about 1.1 million code points total). UTF-8 encodes them in 1-4 bytes; UTF-16 in 2 or 4 bytes."}, {"text": "A pixel value used to render a character on screen.", "isCorrect": false, "rationale": "A code point is an abstract identifier for a character; rendering involves separate font and glyph systems. The two are independent layers."}]}, {"question": "A 24-bit color encoding gives each of the red, green, and blue channels 8 bits. How many distinct colors can this scheme represent?", "options": [{"text": "256 distinct colors, because each channel has 256 levels.", "isCorrect": false, "rationale": "Each channel has 256 levels, but the colors are combinations of all three. Total = 256 * 256 * 256, not 256."}, {"text": "16,777,216 distinct colors, computed as 256^3 (each of R, G, B has 256 levels).", "isCorrect": true, "rationale": "8 bits per channel = 2^8 = 256 levels per channel. Three independent channels yield 256 * 256 * 256 = 256^3 = 16,777,216 = 2^24 total colors."}, {"text": "24 distinct colors, equal to the number of bits.", "isCorrect": false, "rationale": "Bits and color count grow exponentially, not linearly. 24 bits encode 2^24 distinct values, which is approximately 16.7 million."}, {"text": "1,000 distinct colors; 24-bit color is a marketing term.", "isCorrect": false, "rationale": "24-bit color is a real, well-defined encoding. The exact count is 2^24 = 16,777,216. 1,000 has no relevant meaning here."}]}, {"question": "A web designer specifies the color #3CB371 (medium sea green) in CSS. What are the decimal red, green, and blue values?", "options": [{"text": "Red = 60, Green = 179, Blue = 113. Compute: 0x3C = 3*16 + 12 = 60; 0xB3 = 11*16 + 3 = 179; 0x71 = 7*16 + 1 = 113.", "isCorrect": true, "rationale": "Each pair of hex digits decodes to a byte: 0x3C = 60, 0xB3 = 179, 0x71 = 113. Apply place-value formula d1*16 + d0."}, {"text": "Red = 36, Green = 255, Blue = 113.", "isCorrect": false, "rationale": "0x3C is not 36 (0x24 would be 36). The hex-to-decimal conversion is 3*16 + 12 = 60."}, {"text": "Red = 3, Green = 11, Blue = 7; only the first hex digit of each pair counts.", "isCorrect": false, "rationale": "Both digits of each pair count, with the first digit weighted by 16. Reading only the first digit drops the place-value structure."}, {"text": "Red = 60, Green = 113, Blue = 179.", "isCorrect": false, "rationale": "The order of channels in #RRGGBB is R-G-B (red-green-blue, left-to-right). Swapping the green and blue values reverses the green-blue convention."}]}, {"question": "Why is RGB called an additive color model?", "options": [{"text": "Because all three channels at zero produce white, and adding light reduces brightness.", "isCorrect": false, "rationale": "All zero produces black (no light), not white. Adding light increases brightness; RGB is additive in the sense of mixing light, not pigment."}, {"text": "Because adding the three primary lights (R, G, B) produces other colors. R + G + B at full intensity = white; all zero = black. This is opposite to subtractive (pigment) mixing.", "isCorrect": true, "rationale": "RGB combines emitted light, so adding all three at full intensity = white (full light), and zero of all three = black (no light). Subtractive mixing (paints) is the opposite."}, {"text": "Because the channel values are added arithmetically to produce a single integer.", "isCorrect": false, "rationale": "Channel values are stored as a 3-tuple (one byte per channel), not summed into a single integer. 'Additive' refers to the physics of light mixing, not arithmetic addition."}, {"text": "Because RGB allows infinite color levels, more than subtractive systems.", "isCorrect": false, "rationale": "RGB has finite levels (256 per channel in 24-bit color). The 'additive' label describes how colors combine (mixing emitted light), not the level count."}]}, {"question": "A 1920 x 1080 (Full HD) display contains how many pixels, and how many bits of raw RGB data does it hold (24 bits per pixel)?", "options": [{"text": "About 2 million pixels and 6 MB; 1920 x 1080 = 2,073,600 pixels, x 24 bits = 49.8 Mb ~= 6 MB.", "isCorrect": true, "rationale": "1920 x 1080 = 2,073,600 pixels. 2,073,600 x 24 bits = 49,766,400 bits / 8 = 6,220,800 bytes ~= 6 MB. This is the storage cost of one frame in raw 24-bit RGB."}, {"text": "About 2 million pixels and 2 MB; multiply pixels by bytes/pixel.", "isCorrect": false, "rationale": "Bytes per pixel for 24-bit RGB is 3 (24/8), so 2,073,600 pixels x 3 bytes = 6.2 MB, not 2 MB."}, {"text": "1920 + 1080 = 3,000 pixels and roughly 9 KB.", "isCorrect": false, "rationale": "Pixel count is rows TIMES columns, not rows PLUS columns. 1920 x 1080 = 2,073,600 pixels."}, {"text": "About 18 million pixels and 9 MB.", "isCorrect": false, "rationale": "1920 x 1080 = 2,073,600, not 18 million. The 18-million figure is closer to a 4K display (3840 x 2160 = 8,294,400)."}]}, {"question": "Mojibake — garbled text that appears when a file in one encoding is decoded with another — illustrates which broader principle about ASCII, Unicode/UTF-8, and RGB?", "options": [{"text": "All three are agreed-upon standards rather than natural facts; software interoperability depends on parties agreeing on the encoding.", "isCorrect": true, "rationale": "The section explicitly states ASCII, Unicode/UTF-8, and RGB are 'agreed-upon standards that allow software written by different teams and hardware manufactured by different companies to interoperate' - mojibake is the chaos that results when systems disagree."}, {"text": "All three are mathematically equivalent and can be substituted freely.", "isCorrect": false, "rationale": "ASCII, Unicode, and RGB encode different things (text vs. color), so they are not substitutable. They share only the principle of being agreed-upon standards."}, {"text": "All three encode color information.", "isCorrect": false, "rationale": "ASCII and Unicode/UTF-8 encode text characters, not color. Only RGB encodes color."}, {"text": "Mojibake proves that Unicode is fundamentally broken.", "isCorrect": false, "rationale": "Mojibake illustrates the consequences of encoding mismatch, not a flaw in Unicode. Unicode/UTF-8 itself works correctly; the issue is when text is interpreted with the wrong encoding."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP Computer Science Principles &mdash; Chapter 7, Section 3</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Protocol", "back": "An agreed-upon set of rules that allows two parties to communicate. The Internet's power comes from the fact that its protocols are open standards — anyone can implement them, and any device that does so correctly can join the global conversation. TCP/IP is the foundational protocol suite.", "id": "fc01"}, {"front": "IP Address", "back": "A numerical label assigned to each device on a network using the Internet Protocol. IPv4 is 32 bits, written as four decimal numbers separated by dots (192.168.1.1). IPv6 is 128 bits, written as eight groups of four hexadecimal digits separated by colons. The IP address is both the device's identity and its network location.", "id": "fc02"}, {"front": "IPv4 vs. IPv6", "back": "IPv4 (32-bit, 4.3 billion addresses) was specified in 1981. The Internet exhausted unassigned IPv4 blocks in February 2011. IPv6 (128-bit, ~3.4 x 10^38 addresses) was designed to replace it and is being adopted gradually. Most modern devices and operating systems support both during the transition.", "id": "fc03"}, {"front": "TCP (Transmission Control Protocol)", "back": "A transport-layer protocol that provides reliable, ordered, connection-oriented delivery of a stream of bytes. TCP establishes a connection through the three-way handshake, numbers every byte with a sequence number, requires the receiver to acknowledge received data, retransmits lost segments, and performs flow control. Used by file transfer, web pages, email, database queries.", "id": "fc04"}, {"front": "TCP Three-Way Handshake", "back": "Three messages negotiate a TCP connection before any data flows. (1) SYN: client sends a synchronize segment with random initial sequence x. (2) SYN-ACK: server acknowledges x+1 and proposes its own initial sequence y. (3) ACK: client acknowledges y+1. After the third message, application data can flow in both directions.", "id": "fc05"}, {"front": "UDP (User Datagram Protocol)", "back": "A transport-layer protocol that provides connectionless, unreliable delivery of individual datagrams. UDP has no handshake, no acknowledgements, no retransmission, no flow control. The header is just 8 bytes. Applications using UDP must handle their own error recovery when needed. Examples: DNS lookups, real-time voice and video, online gaming.", "id": "fc06"}, {"front": "TCP vs. UDP — When to Use Each", "back": "TCP and UDP are complementary, not competing. Use TCP when every byte matters and timing is flexible: file downloads, web pages, email. Use UDP when speed matters and a small amount of loss is acceptable: voice and video calls, live streaming, DNS lookups, online gaming. UDP is not 'broken' — it omits guarantees by design.", "id": "fc07"}, {"front": "DNS (Domain Name System)", "back": "A hierarchical, distributed database that maps human-readable domain names (www.example.com) to numeric IP addresses (93.184.216.34). DNS uses a client-server protocol: a resolver contacts root servers, top-level domain servers, and authoritative name servers in succession until it obtains the answer. Results are cached locally for speed.", "id": "fc08"}, {"front": "DNS Hierarchy", "back": "Three levels of name servers. (1) Root servers (13 logical addresses, distributed across hundreds of physical servers worldwide) know which servers handle each top-level domain. (2) TLD servers (one set per .com, .org, .edu) know which servers handle each second-level domain. (3) Authoritative name servers, run by domain owners, hold the actual hostname-to-IP mapping.", "id": "fc09"}, {"front": "HTTP (HyperText Transfer Protocol)", "back": "An application-layer protocol that defines how web clients and servers exchange messages. A request specifies a method (GET, POST, PUT, DELETE), a path (/index.html), and optional headers. The server replies with a status code (200 OK, 404 Not Found, 500 Internal Server Error), headers, and a body. HTTP runs on top of TCP, typically port 80 (or 443 for HTTPS).", "id": "fc10"}, {"front": "HTTP Stateless Design", "back": "Each HTTP request-response pair is independent — the server does not, by default, remember earlier requests from the same client. Persistent state (login, shopping cart) must be layered on top using cookies, session tokens, or other application-level mechanisms. Statelessness simplifies the protocol and lets servers scale horizontally.", "id": "fc11"}, {"front": "HTTPS", "back": "HTTP carried over TLS (Transport Layer Security). The browser opens a TCP connection on port 443, performs the TLS handshake to establish an encrypted channel, and then sends ordinary HTTP requests inside that channel. HTTPS authenticates the server identity (via a certificate) and encrypts all traffic so eavesdroppers along the path cannot read it.", "id": "fc12"}, {"front": "Protocol Stack in Action", "back": "When you load a URL: (1) DNS resolves the hostname to an IP address. (2) TCP three-way handshake opens a connection on port 443. (3) TLS handshake establishes an encrypted channel. (4) HTTP GET request travels through the encrypted channel. (5) Every packet is wrapped in an IP header for routing. (6) Server returns the page; browser fetches images and scripts the same way.", "id": "fc13"}, {"front": "Layered Architecture", "back": "The Internet is built as layers: application protocols (HTTP, DNS, SMTP) on top of transport protocols (TCP, UDP) on top of IP on top of physical networks (Ethernet, Wi-Fi, cellular). Each layer relies on the services below and provides services to the layer above. New layers can be invented (HTTP/3 on QUIC) or new physical networks added (5G) without changing the others.", "id": "fc14"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

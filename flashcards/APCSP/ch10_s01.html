@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">AP Computer Science Principles &mdash; Chapter 10, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "The Seven Primary Error Vectors", "back": "The seven most common AP exam translation mistakes between Python and AP Pseudocode: (1) off-by-one from 0/1 indexing, (2) REPEAT UNTIL inverted condition, (3) equality (==) vs. assignment (=) vs. AP <-, (4) loop boundary inclusivity, (5) nested-loop trace order, (6) range start/stop/step semantics, (7) >= symbol direction. Naming each by name is the first step toward eliminating it.", "id": "fc01"}, {"front": "Off-by-One: 0 vs. 1 Indexing", "back": "Python lists start at index 0; AP Pseudocode lists start at index 1. A loop accessing data[i] in Python (where i runs 0..len-1) must access data[i] in AP Pseudocode where i runs 1..LENGTH(data). Translating range(len(scores)) to AP Pseudocode means starting the counter at 1, not 0, and using REPEAT UNTIL (i > LENGTH(data)).", "id": "fc02"}, {"front": "REPEAT UNTIL Inverted Condition", "back": "Python's while runs while the condition is TRUE; AP Pseudocode's REPEAT UNTIL runs UNTIL the condition becomes true (i.e., while it is FALSE). Translating while x < 10 to AP Pseudocode requires REPEAT UNTIL (x >= 10) — the negated condition. Direct copy is the most common translation bug on the AP exam.", "id": "fc03"}, {"front": "Assignment vs. Equality", "back": "Python: = assigns, == tests equality. AP Pseudocode: <- assigns, = tests equality. Writing x = 5 in pseudocode is a comparison; writing x == 5 in Python is a comparison; writing x = 5 in Python is assignment; writing x <- 5 in pseudocode is assignment. The arrow notation is exclusive to AP Pseudocode.", "id": "fc04"}, {"front": "Python: range(a, b)", "back": "Yields integers a, a+1, ..., b-1 — exclusive at the upper bound b. The number of iterations is exactly b - a. Translating to AP Pseudocode: REPEAT (b - a) TIMES with an explicit counter initialized to a and incremented inside the loop. range(1, 6) is five iterations (1, 2, 3, 4, 5), not six.", "id": "fc05"}, {"front": "Python: range(start, stop, step)", "back": "Yields start, start+step, ... up to but not including stop. Default start = 0, default step = 1. range(2, 11, 2) yields 2, 4, 6, 8, 10. range(2, 10, 2) yields 2, 4, 6, 8 — the value 10 meets the exclusive stop, so it is omitted. Always subtract 1 from stop and check whether the last expected value reaches stop.", "id": "fc06"}, {"front": "REPEAT n TIMES", "back": "Repeats the body exactly n times. AP Pseudocode does not provide an automatic counter — if your algorithm needs the iteration index (e.g., to access data[i]), you must declare a counter variable, initialize it before REPEAT, and increment it inside the loop body. To translate Python's for i in range(5), use i <- 0; REPEAT 5 TIMES; ...; i <- i + 1.", "id": "fc07"}, {"front": "AP Pseudocode List Operations", "back": "LENGTH(list) returns the number of elements (1-indexed). list[i] accesses the element at position i (1..LENGTH). APPEND(list, value) adds value to the end of list. INSERT(list, i, value) inserts at position i. REMOVE(list, i) removes the element at position i. There is no <-> sugar like Python's list.append() — AP Pseudocode uses procedure-style calls.", "id": "fc08"}, {"front": "Python ↔ Pseudo: While Loop", "back": "Python:\nwhile val != -1:\n    process(val)\n    val = read()\n\nAP Pseudocode:\nREPEAT UNTIL (val = -1)\n  process(val)\n  val <- READ()\n\nNote three changes: while → REPEAT UNTIL (negated condition), != becomes = (since the condition is now \"stop when equal\"), and = becomes <- for the assignment.", "id": "fc09"}, {"front": "Python ↔ Pseudo: Procedure", "back": "Python:\ndef double(n):\n    return n * 2\n\nAP Pseudocode:\nPROCEDURE double(n)\n  RETURN(n * 2)\n\nProcedure definition uses PROCEDURE name(params) instead of def name(params):. RETURN takes parentheses around its expression. Calling looks the same: double(5) in both notations.", "id": "fc10"}, {"front": "Nested-Loop Trace Order", "back": "In a nested loop, the inner loop runs to completion for every single iteration of the outer loop. For an outer loop of size m and inner loop of size n, the body executes m × n times. When tracing output, exhaust the inner counter completely before incrementing the outer counter — never jump the outer counter prematurely.", "id": "fc11"}, {"front": "Python ↔ Pseudo: Linear Search", "back": "Python:\nfor i in range(len(data)):\n    if data[i] == target:\n        return i\nreturn -1\n\nAP Pseudocode:\ni <- 1\nREPEAT UNTIL (i > LENGTH(data))\n  IF (data[i] = target)\n    RETURN(i)\n  i <- i + 1\nRETURN(-1)\n\nKey shifts: 0-index → 1-index, range → REPEAT UNTIL, == → =, return → RETURN().", "id": "fc12"}, {"front": "Boolean Operators: Python ↔ AP Pseudo", "back": "Python uses lowercase and, or, not. AP Pseudocode uses uppercase AND, OR, NOT. Both languages use parentheses to group sub-expressions. Translation example: Python (x > 5) and (y < 10) becomes AP Pseudocode ((x > 5) AND (y < 10)). The semantics are identical; only the keywords change.", "id": "fc13"}, {"front": "Pre-Translation 10-Second Scan", "back": "Before translating any algorithm, scan for all seven error vectors. Ask: (1) Does this code access a list? (Check 0/1 indexing.) (2) Does it use a loop? (Check boundary inclusivity and condition direction.) (3) Does it assign or compare? (Check <- vs. =.) (4) Are there nested loops? (Reserve mental space for inner-before-outer ordering.) Catching errors before writing a single symbol saves the most time on the exam.", "id": "fc14"}, {"front": "DISPLAY vs. print", "back": "AP Pseudocode uses DISPLAY(value) where Python uses print(value). DISPLAY accepts a single expression and outputs its value. To display multiple values, separate them with commas: DISPLAY(a, b, c). Common translation slip: forgetting to wrap the expression in parentheses (DISPLAY x is invalid; DISPLAY(x) is correct).", "id": "fc15"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

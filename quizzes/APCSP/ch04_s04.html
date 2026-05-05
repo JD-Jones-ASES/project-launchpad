@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Computer Science Principles &mdash; Quiz &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-breadcrumb">
+        <a href="../../courses/APCSP.html">&larr; Back to AP Computer Science Principles</a>
+    </div>
+    <div class="quiz-hero">
+        <h1>QUIZ</h1>
+        <div class="subtitle">AP Computer Science Principles &mdash; The Robot on the Grid</div>
+    </div>
+
+    <div id="score-box" class="score-box">
+        <h2>Results</h2>
+        <div class="score-pct" id="score-pct"></div>
+        <div class="score-detail" id="score-detail"></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="quiz-actions">
+        <button class="quiz-btn" id="submit-btn" onclick="gradeQuiz()">Submit Answers</button>
+        <button class="quiz-btn secondary" id="reset-btn" style="display:none" onclick="resetQuiz()">Try Again</button>
+    </div>
+
+    <div class="quiz-footer">
+        Scholastica Codex &mdash; Self-Grading Quiz
+    </div>
+</div>
+
+<script>
+var QUESTIONS = [{"question": "What is the AP exam's grid robot, in the most precise terms?", "options": [{"text": "A real robot with sensors and motors that students program in Python.", "isCorrect": false, "rationale": "The grid robot is purely abstract — a pedagogical tool, not real hardware. AP exam questions test the algorithm, not any physical platform."}, {"text": "An abstract computational agent that occupies one cell of a grid, faces one of four cardinal directions, and responds to a fixed command set.", "isCorrect": true, "rationale": "The grid robot is a finite-state machine: its full state is (column, row, facing direction). Each command transitions it to a new state. This abstraction connects directly to Turing's foundational model of computation."}, {"text": "A free-roaming agent that can occupy any pixel on a continuous 2D plane.", "isCorrect": false, "rationale": "The robot moves only between grid cells, not between continuous coordinates. The grid is rectangular and discrete — that is what makes the analysis tractable."}, {"text": "A simulation of an Internet of Things device.", "isCorrect": false, "rationale": "IoT is a separate topic. The grid robot is a teaching abstraction designed for tracing algorithms, not for modeling networked devices."}]}, {"question": "Which set of four commands does the AP exam's grid robot understand?", "options": [{"text": "MOVE_FORWARD(), TURN(angle), JUMP(), CAN_MOVE(direction)", "isCorrect": false, "rationale": "The robot does not have a TURN(angle) or JUMP() command. Rotation is restricted to 90° steps via ROTATE_LEFT() and ROTATE_RIGHT()."}, {"text": "MOVE_FORWARD(), ROTATE_LEFT(), ROTATE_RIGHT(), CAN_MOVE(direction)", "isCorrect": true, "rationale": "These are the four commands defined by the AP CSP exam reference. The robot moves one cell forward, rotates 90° left or right in place, and queries whether forward (or another specified direction) is unobstructed."}, {"text": "GO_NORTH(), GO_SOUTH(), GO_EAST(), GO_WEST()", "isCorrect": false, "rationale": "The robot does not have absolute-direction movement commands. All movement is relative to the current facing direction; you must rotate first to face a different way."}, {"text": "WALK(), RUN(), STOP(), CHECK()", "isCorrect": false, "rationale": "These are not the AP exam's command names. Use the exact reference set: MOVE_FORWARD, ROTATE_LEFT, ROTATE_RIGHT, CAN_MOVE."}]}, {"question": "A robot starts at cell (1,1) facing East. It executes:\n\nMOVE_FORWARD()\nMOVE_FORWARD()\nROTATE_LEFT()\nMOVE_FORWARD()\n\nWhere does the robot end up, and which direction does it face? Assume no obstacles.", "options": [{"text": "Position (3,2), facing North", "isCorrect": true, "rationale": "Step 1: (1,1) → (2,1) East. Step 2: (2,1) → (3,1) East. Step 3: rotate left from East, now facing North. Step 4: (3,1) → (3,2) North. Final position: (3,2), facing North."}, {"text": "Position (3,1), facing North", "isCorrect": false, "rationale": "After rotating left, the robot moves forward one more cell. (3,1) is the position after the two MOVE_FORWARD calls but BEFORE the final move."}, {"text": "Position (2,2), facing North", "isCorrect": false, "rationale": "Two MOVE_FORWARD calls advance East from (1,1) to (3,1), not (2,1). (2,2) would require only one initial move East."}, {"text": "Position (3,2), facing West", "isCorrect": false, "rationale": "ROTATE_LEFT from East gives North, not West. From North, another ROTATE_LEFT would give West, but the algorithm rotates only once."}]}, {"question": "A robot starts at (1,1) facing East. After executing\n\nROTATE_LEFT()\nMOVE_FORWARD()\nROTATE_RIGHT()\nMOVE_FORWARD()\n\nwhat is its final position and facing direction? (Assume no obstacles.)", "options": [{"text": "Position (1,2), facing East", "isCorrect": false, "rationale": "After rotating left from East to North, MOVE_FORWARD goes to (1,2). Then rotating right back to East and moving forward goes to (2,2). Position (1,2) is one move short."}, {"text": "Position (2,2), facing East", "isCorrect": true, "rationale": "Step 1: rotate left from East → facing North. Step 2: move forward (1,1) → (1,2), facing North. Step 3: rotate right from North → facing East. Step 4: move forward (1,2) → (2,2), facing East. Final: (2,2), facing East."}, {"text": "Position (2,1), facing East", "isCorrect": false, "rationale": "(2,1) is the result of just MOVE_FORWARD from (1,1) East, ignoring the rotations. The first ROTATE_LEFT changes direction before the first move."}, {"text": "Position (1,2), facing North", "isCorrect": false, "rationale": "The final ROTATE_RIGHT changes facing back to East, and the final MOVE_FORWARD advances one more cell. (1,2) facing North is the state after step 2, not step 4."}]}, {"question": "What does CAN_MOVE(forward) return when the robot is at the edge of the grid facing outward (e.g., at column 5 in a 5-column grid, facing East)?", "options": [{"text": "True, because the robot can always attempt to move.", "isCorrect": false, "rationale": "CAN_MOVE checks whether the destination cell is valid. If forward movement would take the robot off the grid, the destination is not valid."}, {"text": "False, because moving forward would take the robot off the grid.", "isCorrect": true, "rationale": "CAN_MOVE returns False if the cell directly in front is off-grid or contains an obstacle. This guards MOVE_FORWARD calls so the algorithm can take an alternative action when blocked."}, {"text": "An error, because CAN_MOVE is undefined at edges.", "isCorrect": false, "rationale": "CAN_MOVE is defined for all positions and directions. At edges facing outward, it simply returns False."}, {"text": "Undefined, because the AP exam does not specify edge behavior.", "isCorrect": false, "rationale": "Edge behavior is well-defined: CAN_MOVE returns False when forward movement would leave the grid. This is precisely how the function is used to navigate around boundaries and obstacles."}]}, {"question": "A robot starts at (1,1) facing East with no obstacles. Trace the algorithm:\n\nREPEAT 3 TIMES {\n    MOVE_FORWARD()\n}\nROTATE_LEFT()\nREPEAT 2 TIMES {\n    MOVE_FORWARD()\n}\n\nWhere is the robot, and which direction does it face?", "options": [{"text": "Position (4,3), facing North", "isCorrect": true, "rationale": "Three MOVE_FORWARD East: (1,1) → (2,1) → (3,1) → (4,1). Rotate left from East → facing North. Two MOVE_FORWARD North: (4,1) → (4,2) → (4,3). Final: (4,3), facing North."}, {"text": "Position (3,3), facing North", "isCorrect": false, "rationale": "Three moves East from (1,1) reach (4,1), not (3,1). Counting moves: start at column 1, after 1 move column 2, after 2 moves column 3, after 3 moves column 4."}, {"text": "Position (4,2), facing North", "isCorrect": false, "rationale": "Two MOVE_FORWARD calls from (4,1) reach (4,3), not (4,2). (4,2) would be the result of only one final move."}, {"text": "Position (4,3), facing West", "isCorrect": false, "rationale": "ROTATE_LEFT from East gives North, not West. Two left rotations would be needed to reach West."}]}, {"question": "While tracing a robot algorithm, what is the most common student error?", "options": [{"text": "Forgetting that the robot occupies a cell rather than a continuous coordinate.", "isCorrect": false, "rationale": "Students rarely confuse this — the grid is clearly drawn. The most common error is more subtle and concerns the robot's facing direction."}, {"text": "Forgetting to update the facing direction after a rotation, so subsequent MOVE_FORWARD steps go the wrong way.", "isCorrect": true, "rationale": "Students often track position carefully but neglect facing direction. After a missed rotation, all subsequent moves are wrong. Always track BOTH (column, row) AND facing in the trace."}, {"text": "Confusing MOVE_FORWARD with a Python for loop.", "isCorrect": false, "rationale": "These are different constructs. The Pseudocode trace itself does not invite this confusion."}, {"text": "Believing that REPEAT n TIMES exposes a loop variable.", "isCorrect": false, "rationale": "That confusion belongs to definite-loop topics (4.1), not robot tracing. The robot-grid error is missing rotations."}]}, {"question": "Which abstract computational model is the AP CSP grid robot a direct pedagogical descendant of?", "options": [{"text": "John von Neumann's stored-program architecture.", "isCorrect": false, "rationale": "Von Neumann's architecture describes how memory and CPU are structured. The grid robot is a finite-state agent moving through a structured environment — closer to Turing's abstract machine than to von Neumann's organization."}, {"text": "Alan Turing's abstract machine — an agent with finite state, a limited command set, and a structured environment.", "isCorrect": true, "rationale": "The grid robot has a finite state (column, row, facing), a limited command set (its 'transition rules'), and a structured environment (the grid). Tracing the robot is exactly the activity Turing called 'computing by machine.'"}, {"text": "Donald Knuth's Big-O notation for algorithm analysis.", "isCorrect": false, "rationale": "Big-O is a tool for measuring algorithm efficiency, not a model of computation. Knuth analyzed loop-counting precision; he did not create the grid-robot abstraction."}, {"text": "Grace Hopper's compiler design.", "isCorrect": false, "rationale": "Hopper invented the first compiler and the COBOL language. The grid robot's lineage is from Turing's 1936 abstract machine, not from compiler design."}]}, {"question": "A robot starts at (1,1) facing East. The goal is at (3,3), with an obstacle at (2,1). What is the shortest valid sequence of commands that reaches the goal?", "options": [{"text": "MOVE_FORWARD(); MOVE_FORWARD(); MOVE_FORWARD()", "isCorrect": false, "rationale": "This crashes into the obstacle at (2,1) on the first move. The robot cannot move forward when the destination cell is blocked."}, {"text": "ROTATE_LEFT(); MOVE_FORWARD(); MOVE_FORWARD(); ROTATE_RIGHT(); MOVE_FORWARD(); MOVE_FORWARD()", "isCorrect": true, "rationale": "Rotate left (East → North), move forward twice from (1,1) to (1,3), rotate right (North → East), move forward twice from (1,3) to (3,3). Avoids the obstacle at (2,1) cleanly. Total: 6 commands."}, {"text": "MOVE_FORWARD(); ROTATE_RIGHT(); MOVE_FORWARD(); MOVE_FORWARD(); ROTATE_LEFT(); MOVE_FORWARD(); MOVE_FORWARD()", "isCorrect": false, "rationale": "This still attempts MOVE_FORWARD from (1,1) East, hitting the obstacle at (2,1). The first move must rotate AWAY from the obstacle."}, {"text": "ROTATE_RIGHT(); MOVE_FORWARD(); ROTATE_LEFT(); MOVE_FORWARD(); MOVE_FORWARD(); MOVE_FORWARD()", "isCorrect": false, "rationale": "ROTATE_RIGHT from East gives South. MOVE_FORWARD South from (1,1) is off the grid (row 0). This sequence is invalid."}]}, {"question": "Why does the AP exam test robot algorithms by combining iteration, selection, and movement in a single problem?", "options": [{"text": "Because robot problems are easier to grade than purely numeric problems.", "isCorrect": false, "rationale": "Robot problems are not easier to grade — if anything, they have more state to track. The reason is pedagogical: combining constructs tests integrative reasoning."}, {"text": "Because tracing position and direction step by step exercises the same abstract reasoning skills as tracing variables in a numeric loop, but in a spatial context that is hard to handwave.", "isCorrect": true, "rationale": "Robot tracing forces students to apply iteration (REPEAT), selection (IF CAN_MOVE), and state transitions (rotation, movement) together. The visual context catches errors that pure-numeric tracing might miss, and tests integrative reasoning."}, {"text": "Because the AP exam phased out numeric problems in favor of robotics in 2018.", "isCorrect": false, "rationale": "This is factually wrong. The AP exam continues to test numeric algorithms; robot problems are an additional category, not a replacement."}, {"text": "Because the College Board owns intellectual property in robotics curricula.", "isCorrect": false, "rationale": "There is no IP issue. The grid robot is a free pedagogical abstraction with deep roots in Turing's foundational work on computation."}]}];
+var graded = false;
+
+function buildQuiz() {
+    var container = document.getElementById('questions');
+    container.innerHTML = '';
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.createElement('div');
+        block.className = 'question-block';
+        block.id = q.id || ('q' + qi);
+
+        var numEl = document.createElement('div');
+        numEl.className = 'question-num';
+        numEl.textContent = 'Question ' + (qi + 1) + ' of ' + QUESTIONS.length;
+        block.appendChild(numEl);
+
+        var textEl = document.createElement('div');
+        textEl.className = 'question-text';
+        textEl.innerHTML = q.question;
+        block.appendChild(textEl);
+
+        q.options.forEach(function(opt, oi) {
+            var label = document.createElement('label');
+            label.className = 'option-label';
+            label.id = 'q' + qi + '_o' + oi;
+
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q' + qi;
+            radio.value = oi;
+            label.appendChild(radio);
+
+            var span = document.createElement('span');
+            span.innerHTML = opt.text;
+            label.appendChild(span);
+            block.appendChild(label);
+
+            var rat = document.createElement('div');
+            rat.className = 'rationale';
+            rat.id = 'rat_q' + qi + '_o' + oi;
+            rat.innerHTML = opt.rationale;
+            block.appendChild(rat);
+        });
+
+        container.appendChild(block);
+    });
+    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+}
+
+function gradeQuiz() {
+    if (graded) return;
+    graded = true;
+    var correct = 0;
+
+    QUESTIONS.forEach(function(q, qi) {
+        var block = document.getElementById('q' + qi);
+        var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+        var selectedIdx = selected ? parseInt(selected.value) : -1;
+
+        var correctIdx = -1;
+        q.options.forEach(function(opt, oi) {
+            if (opt.isCorrect) correctIdx = oi;
+        });
+
+        if (selectedIdx === correctIdx) {
+            correct++;
+            block.classList.add('correct');
+            document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-correct');
+        } else {
+            block.classList.add('incorrect');
+            if (selectedIdx >= 0) {
+                document.getElementById('q' + qi + '_o' + selectedIdx).classList.add('selected-incorrect');
+            }
+            document.getElementById('q' + qi + '_o' + correctIdx).classList.add('was-correct');
+        }
+
+        if (selectedIdx >= 0) {
+            document.getElementById('rat_q' + qi + '_o' + selectedIdx).classList.add('show');
+        }
+        if (correctIdx !== selectedIdx) {
+            document.getElementById('rat_q' + qi + '_o' + correctIdx).classList.add('show');
+        }
+
+        var radios = block.querySelectorAll('input[type="radio"]');
+        radios.forEach(function(r) { r.disabled = true; });
+    });
+
+    var pct = Math.round(correct / QUESTIONS.length * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('score-detail').textContent = correct + ' of ' + QUESTIONS.length + ' correct';
+    document.getElementById('score-box').style.display = 'block';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+    document.getElementById('score-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    graded = false;
+    document.getElementById('score-box').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('reset-btn').style.display = 'none';
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
