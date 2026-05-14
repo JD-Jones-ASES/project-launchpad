@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutarch: Lives in Parallel &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Plutarch: Lives in Parallel &mdash; Chapter 8, Section 4</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Plutarch.html">&larr; Back to Plutarch: Lives in Parallel</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "What is the historical status of the Alexander-Caesar synkrisis?", "back": "Plutarch wrote a comparison. The pair appears together in the manuscripts; the closing comparison did not survive transmission. The loss is irreparable and, by common consent, the most painful single loss in the manuscript tradition of the Parallel Lives.", "id": "fc01"}, {"front": "Why is this loss called the most painful in the tradition?", "back": "These are two of the most famous men in Western history; we do not know what Plutarch's verdict on them was. Section 8.1 already named the loss; this section frames it and turns the work over to the student.", "id": "fc02"}, {"front": "How does the section say a student can reconstruct, in outline, what Plutarch likely would have weighed?", "back": "From the surviving synkriseis, whose habits of comparison are highly consistent. The Life of Alexander was written with great affection; the Life of Caesar with more measured admiration; both are biographies of world-historical conquerors who broke their inherited political form.", "id": "fc03"}, {"front": "On the axis of origin and inherited situation, where would the verdict tilt?", "back": "Toward Caesar. Alexander inherited a kingdom and an expedition already planned (his father had begun the Persian campaign); Caesar started as a politically and financially modest patrician and made his own way through Roman political competition. Plutarch on most such comparisons gives credit to the man who started lower.", "id": "fc04"}, {"front": "On the axis of military genius, where would the verdict tilt?", "back": "Probably a draw. Both are in the very small set of unquestioned military geniuses of antiquity. Alexander's campaigns were of greater geographic scope (Greece to the Indus); Caesar's, of more strategic difficulty (more diverse terrain and more competent enemies).", "id": "fc05"}, {"front": "On the axis of treatment of defeated enemies, where would the verdict tilt?", "back": "Plutarch would probably have given the political edge to Caesar (his pardons brought enemies into the new political order) and the moral weight to neither. Both used clemency politically — Alexander's chivalry to Darius's family and founding of Greek cities; Caesar's clementia Caesaris. Both also committed mass slaughter — Tyre and Thebes for Alexander, perhaps a million Gauls for Caesar.", "id": "fc06"}, {"front": "On the axis of restraint in personal life, where would the verdict tilt?", "back": "Toward Caesar. Alexander grew increasingly imperious, adopted Persian dress, demanded proskynesis, killed Clitus in a drunken rage, and gave way to extravagant grief at Hephaestion's death. Caesar drank moderately, was a disciplined writer (his Commentaries are masterpieces of clean Latin prose), and kept political composure under personal pressure.", "id": "fc07"}, {"front": "On the axis of educational formation, where would the verdict tilt?", "back": "Toward Alexander. He had Aristotle. Caesar had the Greek tutors of his youth and a lifelong reading habit but no comparable single teacher. The Aristotelian formation made Alexander a soldier of unique learning.", "id": "fc08"}, {"front": "On the axis of the political form he broke, where would the verdict tilt?", "back": "Slight edge to Alexander. Alexander destroyed Greek polis freedom (his father had done much of the work; Alexander completed it) and replaced it with Hellenistic monarchy. Caesar destroyed the Roman Republic and replaced it (at least in form) with a dictatorship. The Hellenistic Greek world was, in many ways, more cosmopolitan than the small-polis world it replaced — so Alexander's destruction yielded some positive returns; the Roman political collapse was less clearly improving.", "id": "fc09"}, {"front": "On the axis of 'the end,' where would the verdict tilt?", "back": "Probably even. Alexander died of fever at thirty-two, incompletely; Caesar was assassinated at fifty-six, mid-program, with reforms half-implemented. The deaths are different but both unfinished.", "id": "fc10"}, {"front": "What is the first thing the section says Plutarch could not have weighed?", "back": "The long political afterlife. Caesar's nephew Augustus established a system that lasted four centuries. Alexander's empire fell apart within twenty years. The afterlife of the conquests is part of how we judge them — but Plutarch, writing in the high empire, could see the asymmetry only as a current fact, not yet as a centuries-long verdict.", "id": "fc11"}, {"front": "What is the second thing the section says Plutarch could not have weighed?", "back": "The Christian reception. Plutarch could not have known how Dante would place Brutus and Cassius in the lowest circle of Hell, or how the Christian moral imagination would use Caesar as the type case of overweening political ambition. The Christian reception is part of how Caesar is now read.", "id": "fc12"}, {"front": "Why does the section call the chapter's writesynkrisis the book's most demanding essay?", "back": "Three reasons. (1) Plutarch's verdict is lost, so the student has no model. (2) These are perhaps the two most famous men in Western history, so the student must resist the temptation to defer. (3) The pair has the richest reception history of all in the book; the student must choose what to engage and what to set aside.", "id": "fc13"}, {"front": "What four axes does the section offer for the writesynkrisis (or invite the student to propose another)?", "back": "(1) The conqueror's restraint — chivalry to Darius's family, the killing of Clitus, the clemency to Brutus, the dictator perpetuo. (2) The political form broken — which destruction has been more vindicated by what followed. (3) The end — Alexander incomplete at thirty-two, Caesar mid-program at fifty-six; Plutarch's habit weights the manner of the ending heavily. (4) The educational formation — Aristotle vs. eclectic Greek tutors and reading.", "id": "fc14"}, {"front": "What are the four explicit requirements of the writesynkrisis essay?", "back": "(a) State the axis in the first sentence. (b) Cite two specific incidents from each Life — name them. (c) Render judgment; the lost synkrisis freed Plutarch of the obligation to verdict, but it does not free the student. (d) Stay under 1,000 words.", "id": "fc15"}, {"front": "How does the section treat Shakespeare's Julius Caesar?", "back": "If the student has read Shakespeare's Julius Caesar (or reads it as part of the chapter's work), the student has already engaged one of the great post-Plutarchan treatments of Caesar's career. Shakespeare drew the Senate scene almost line-for-line from Plutarch. The student may quote Shakespeare in the essay if it serves the argument, but the weight of evidence should still come from Plutarch.", "id": "fc16"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

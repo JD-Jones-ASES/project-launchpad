@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutarch: Lives in Parallel &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Plutarch: Lives in Parallel &mdash; Chapter 8, Section 1</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Plutarch.html">&larr; Back to Plutarch: Lives in Parallel</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who are the two men of Chapter 8, and what makes the pairing the most famous and most demanding in the book?", "back": "Alexander of Macedon and Julius Caesar of Rome — the two most famous men in Western history. Each conquered the political form he inherited; each turned a republic or its equivalent into a personal empire; each died short of fifty. The pair's closing synkrisis is also lost, which adds to the demand.", "id": "fc01"}, {"front": "What are Alexander's dates and the broad outline of his career?", "back": "356-323 BC. He inherited the throne of Macedon at twenty, used the next twelve years to lead an army from Greece across Asia Minor, Egypt, and Mesopotamia to the Indus River, conquered the Persian Empire, founded a chain of Greek-speaking cities, and died at thirty-two in Babylon. His empire fell to pieces among his generals within a few years.", "id": "fc02"}, {"front": "What are Caesar's dates and the broad outline of his career?", "back": "100-44 BC. A Roman patrician of modest standing who, by political ambition, financial recklessness, and military genius, became master of the Roman Republic. He conquered Gaul (58-50 BC), crossed the Rubicon in 49 BC, won the civil war in three years, was made dictator perpetuo in 44 BC, and was assassinated on the Ides of March of that same year.", "id": "fc03"}, {"front": "What is the chapter's stated theme?", "back": "Conquest and the slide toward monarchy. Each man broke the political institutions of his society to make himself supreme — Alexander destroyed Persian rule and Greek polis freedom in the same campaign; Caesar destroyed the Roman Republic. Each was, in his own way, the end of a particular political form.", "id": "fc04"}, {"front": "What is the moral and political question Plutarch presses on the reader?", "back": "What kind of man makes such an end? Are the conquerors morally distinguishable from the systems they break? What balance of personal virtue, talent, ruthlessness, and accident produces a world-historical figure?", "id": "fc05"}, {"front": "Which pair is the second whose synkrisis is lost in this book, and which was the first?", "back": "Alexander and Caesar is the second; Themistocles and Camillus (Chapter 5) was the first. Plutarch wrote a comparative essay for each pair; neither survived the manuscript tradition.", "id": "fc06"}, {"front": "Why does the section call the Alexander-Caesar loss the most painful of the lost synkriseis?", "back": "Because these are two of the most famous men in Western history, both were soldiers and conquerors, both broke the political institutions of their cities, and both died young. Plutarch wrote a comparison answering questions we still ask, and the text did not survive.", "id": "fc07"}, {"front": "What does the loss mean for the chapter's exercise?", "back": "The chapter's synkrisis is fully the student's own. The reader writes what Plutarch did not leave behind. The section frames this as the book's most weight-bearing exercise.", "id": "fc08"}, {"front": "What is the opening signal of the Life of Alexander the section flags?", "back": "Plutarch's most famous methodological statement — that he is writing biography, not history, and that a small expression or jest can reveal character better than a great battle. The statement opens the Life of Alexander and applies to both halves of the chapter.", "id": "fc09"}, {"front": "What early displays of character does the section flag for each man?", "back": "Alexander taming Bucephalas at twelve and questioning Persian ambassadors at fourteen; Caesar's encounter with the pirates who captured him and his joke at his own coronation. Plutarch keeps drawing the eye to such moments because they show what the public deeds confirm.", "id": "fc10"}, {"front": "What decisive geographic moments does the section flag?", "back": "For Alexander, the crossings: the Hellespont, the Granicus, Issus, the Egyptian deserts, the deep East. For Caesar, the Rubicon. Each crossing is a moral as well as a strategic moment.", "id": "fc11"}, {"front": "What examples of clemency as a political tool does the section name?", "back": "Alexander married Roxane (a Sogdian princess) to weld together his new empire; Caesar pardoned many of his civil-war enemies and readmitted them to the Senate. Each is a different style of using clemency politically and is to be compared.", "id": "fc12"}, {"front": "How does the section describe the two death scenes the reader should watch?", "back": "Alexander died of fever in Babylon at thirty-two, asking his generals to whom they would leave the empire (\"to the strongest\"). Caesar fell at the foot of Pompey's statue, struck twenty-three times by men who included his political proteges. The endings define the careers as much as the conquests.", "id": "fc13"}, {"front": "What ancient sources besides Plutarch are named for each man, and why are no Second Witnesses included in this chapter?", "back": "For Alexander: Arrian's Anabasis, Diodorus Siculus Book XVII, Quintus Curtius Rufus. For Caesar: Caesar's own Commentaries on the Gallic and Civil Wars, Suetonius's Life of Caesar, Appian's Civil Wars. No Second Witness is included because the comparative material is voluminous and short excerpts would not do justice to it.", "id": "fc14"}, {"front": "How does the Christian tradition treat Alexander and Caesar respectively?", "back": "Alexander became a hero of romance (the Alexander Romance) and a model of princely virtue in medieval and Renaissance schools. Caesar's reception was more ambivalent: Augustine treated the Rubicon as the type case of overweening ambition, and Dante placed Brutus and Cassius — the conspirators — in the lowest circle of hell.", "id": "fc15"}, {"front": "How were the American Founders divided on Caesar?", "back": "Adams admired Cicero and thought Caesar contemptible; Hamilton found in Caesar a model of executive greatness. The Christian reading was not univocal even by the Founders' time, and the chapter returns to the Christian reception in Chapter 12.", "id": "fc16"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>

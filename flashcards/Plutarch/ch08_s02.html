@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutarch: Lives in Parallel &mdash; Flashcards &mdash; Scholastica Codex</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','code'] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        .fc-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fc-breadcrumb {
+            margin-bottom: 2rem;
+        }
+        .fc-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Crimson Text', serif;
+            border: 1px solid var(--secondary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .fc-breadcrumb a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Card */
+        .fc-card-wrapper {
+            perspective: 1000px;
+            margin: 2rem auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fc-card {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .fc-face {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .fc-front {
+            background: var(--card-background);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        .fc-back {
+            background: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            border-color: var(--primary-color);
+        }
+        .fc-label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            opacity: 0.5;
+        }
+        .fc-front .fc-label { color: var(--text-secondary); }
+        .fc-back .fc-label { color: rgba(255,255,255,0.6); }
+        .fc-tap-hint {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fc-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--secondary-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .fc-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .fc-btn:disabled:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+        .fc-counter {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        /* Progress bar */
+        .fc-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 1rem 0 0.5rem;
+            overflow: hidden;
+        }
+        .fc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toolbar */
+        .fc-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .fc-tool {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Crimson Text', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fc-tool:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        .fc-tool.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Keyboard hint */
+        .fc-keys {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .fc-keys kbd {
+            background: #f5f0e8;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .fc-face {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+                min-height: 220px;
+            }
+            .fc-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="main-title" style="font-size: 2.5rem;">FLASHCARDS</h1>
+                <p class="subtitle">Plutarch: Lives in Parallel &mdash; Chapter 8, Section 2</p>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="fc-container">
+                <div class="fc-breadcrumb">
+                    <a href="../../courses/Plutarch.html">&larr; Back to Plutarch: Lives in Parallel</a>
+                </div>
+
+                <div class="fc-progress">
+                    <div class="fc-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="fc-card-wrapper" id="cardWrapper" onclick="flipCard()">
+                    <div class="fc-card" id="card">
+                        <div class="fc-face fc-front">
+                            <span class="fc-label">Question</span>
+                            <div id="frontText"></div>
+                            <span class="fc-tap-hint">click to flip</span>
+                        </div>
+                        <div class="fc-face fc-back">
+                            <span class="fc-label">Answer</span>
+                            <div id="backText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fc-controls">
+                    <button class="fc-btn" id="prevBtn" onclick="prevCard()">&larr; Prev</button>
+                    <span class="fc-counter" id="counter">1 / 1</span>
+                    <button class="fc-btn" id="nextBtn" onclick="nextCard()">Next &rarr;</button>
+                </div>
+
+                <div class="fc-toolbar">
+                    <button class="fc-tool" onclick="shuffleDeck()">Shuffle</button>
+                    <button class="fc-tool" onclick="resetDeck()">Reset</button>
+                </div>
+
+                <div class="fc-keys">
+                    <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp;&bull;&nbsp;
+                    <kbd>Space</kbd> flip &nbsp;&bull;&nbsp;
+                    <kbd>S</kbd> shuffle
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-credits">
+                    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-link" target="_blank">CC BY-SA 4.0</a> &mdash; Copyright &copy; 2025&ndash;2026 JD Jones</p>
+                    <p style="margin-top:0.5rem; font-size:0.85rem;">Uses <a href="https://developers.google.com/youtube/v3" target="_blank" style="color: var(--secondary-color);">YouTube Data API v3</a>. <a href="../../privacy.html" style="color: var(--secondary-color);">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    var CARDS = [{"front": "Who were Alexander's parents, and what political situation did he inherit in 336 BC?", "back": "His father was King Philip II of Macedon, his mother Olympias of Epirus. Philip had defeated Athens and Thebes at Chaeronea in 338 BC and forced the Greek city-states into a federated league under Macedonian leadership; he was planning the league's expedition against Persia when he was assassinated in 336 BC, and the expedition fell to his son.", "id": "fc01"}, {"front": "What is the methodological manifesto Plutarch places at the opening of the Life of Alexander?", "back": "His design is not to write histories but lives. The most glorious exploits do not always furnish the clearest discoveries of virtue or vice; sometimes a matter of less moment — an expression or a jest — informs us better of character. Plutarch likens himself to portrait-painters who attend to the lines of the face where character is seen, and applies the discipline to both Alexander and Caesar.", "id": "fc02"}, {"front": "Why does Plutarch warn the reader at the outset of the Life of Alexander?", "back": "Because the multitude of Alexander's and Caesar's great actions affords so large a field that, without an apology, the reader might expect a full history. Plutarch has chosen rather to epitomize the most celebrated parts of their story than to insist at large on every particular circumstance.", "id": "fc03"}, {"front": "What is the Bucephalas episode, and what did Alexander see that no one else saw?", "back": "A horse-dealer brought Bucephalas to Philip's court at thirteen talents; the horse reared and could not be mounted. Alexander, perhaps twelve, said the horse was being mishandled and offered to pay the price if he could not manage him. He saw the horse was bolting at his own shadow, turned the horse toward the sun so the shadow fell behind, and mounted easily. Philip wept and told his son to look out a kingdom worthy of himself, for Macedonia was too little for him.", "id": "fc04"}, {"front": "Who tutored Alexander, when, and what did he teach?", "back": "Aristotle, perhaps 343-340 BC, gave Alexander the full philosophical and literary curriculum of fourth-century Greece — ethics, politics, biology, literature, medicine. The section calls the Aristotelian formation decisive: Alexander conquered Persia not as a barbarian but as the most thoroughly educated soldier of his age.", "id": "fc05"}, {"front": "What does the section say about Alexander's reading habits on campaign?", "back": "He slept with Aristotle's so-called 'casket edition' of Homer's Iliad under his pillow throughout the Asian campaign. He requested books to be sent to him in upper Asia. He prescribed medical treatments for his friends.", "id": "fc06"}, {"front": "What did Alexander do in the first two years of his reign before crossing into Asia?", "back": "He suppressed rebellions among Greek cities and northern tribes — destroying Thebes in 335 BC as an example — and prepared his expedition. In 334 BC he crossed the Hellespont with perhaps thirty-five thousand men.", "id": "fc07"}, {"front": "What are the four major battles of the Persian campaign, in order and with dates?", "back": "The Granicus (334 BC), Issus (333 BC), Tyre (332 BC), and Gaugamela (331 BC). At the Granicus, Alexander led the cavalry charge himself and was nearly killed. At Issus he defeated Darius personally. Tyre was the seven-month siege ending in massacre or enslavement. Gaugamela was the decisive battle for the Persian throne.", "id": "fc08"}, {"front": "What did Alexander do for Darius's mother and wife after the battle of Issus?", "back": "He treated them with conspicuous chivalry, refusing to enter Darius's wife's tent. When Darius's mother bowed before Hephaestion thinking he was Alexander, Alexander said, \"It is no matter, Mother, for he too is Alexander.\"", "id": "fc09"}, {"front": "What happened to Alexander's army at the Hyphasis river?", "back": "After seven years pushing further east into trans-Oxiana, Bactria, and the Indus valley, his army refused to go further at the Hyphasis (327 BC). He turned around. The long retreat through the Gedrosian desert killed perhaps half his men. He reached Babylon in 323 BC, exhausted.", "id": "fc10"}, {"front": "What did Alexander do with the helmet of water in the Egyptian desert?", "back": "He gave the helmet of water away to a dying soldier and went thirsty himself.", "id": "fc11"}, {"front": "What did Diogenes say to Alexander in Corinth, and what did Alexander reply?", "back": "Diogenes was sunbathing in Corinth when Alexander asked if he could do anything for him. Diogenes replied, \"Yes; stand out of my sun.\" Alexander said to his courtiers, \"If I were not Alexander, I would be Diogenes.\"", "id": "fc12"}, {"front": "What is the killing of Clitus, and where does it stand in the Life's moral arc?", "back": "In a drunken rage in Samarkand, Alexander killed his old friend Clitus — who had saved his life at the Granicus — in an argument about whether Alexander was now too Persian. He spent three days in mourning afterward. The section identifies this as the moral nadir of the Life.", "id": "fc13"}, {"front": "What is proskynesis, and why did it provoke resistance among the Macedonians?", "back": "Proskynesis is the prostration before the king that Greeks had always considered the mark of slavery. In his last years Alexander adopted Persian dress, took Persian wives (Roxane was the most famous), and demanded that Greeks and Persians alike perform proskynesis. His Macedonian veterans resented every step, and there were plots; Alexander executed several old companions in response.", "id": "fc14"}, {"front": "Who was Hephaestion, and what was Alexander's response to his death?", "back": "Hephaestion was Alexander's closest friend. He died in 324 BC, and Alexander gave way to extravagant grief. The death is named in the section as evidence of the Life's deformation by the campaign — alongside the killing of Clitus, the Persianization, and the increasing imperiousness.", "id": "fc15"}, {"front": "How and where did Alexander die, and what did he say about his successor?", "back": "He developed fever after a long drinking party in Babylon in June 323 BC and died eleven days later, age thirty-two. When his generals asked to whom he would leave his empire, he was said to have replied, \"To the strongest.\" He had not, in his twelve-year campaign, found time to designate an heir.", "id": "fc16"}, {"front": "What happened to Alexander's empire after his death?", "back": "Within twenty years it had been divided among his generals into the rival Hellenistic kingdoms that governed the eastern Mediterranean for the next three centuries.", "id": "fc17"}];
+    var originalOrder = CARDS.slice();
+    var idx = 0;
+
+    function render() {
+        var card = CARDS[idx];
+        document.getElementById('frontText').innerHTML = card.front;
+        document.getElementById('backText').innerHTML = card.back;
+        document.getElementById('counter').textContent = (idx + 1) + ' / ' + CARDS.length;
+        document.getElementById('card').classList.remove('flipped');
+        document.getElementById('prevBtn').disabled = (idx === 0);
+        document.getElementById('nextBtn').disabled = (idx === CARDS.length - 1);
+        document.getElementById('progressBar').style.width = ((idx + 1) / CARDS.length * 100) + '%';
+        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
+    function flipCard() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (idx < CARDS.length - 1) { idx++; render(); }
+    }
+
+    function prevCard() {
+        if (idx > 0) { idx--; render(); }
+    }
+
+    function shuffleDeck() {
+        for (var i = CARDS.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = CARDS[i]; CARDS[i] = CARDS[j]; CARDS[j] = tmp;
+        }
+        idx = 0;
+        render();
+    }
+
+    function resetDeck() {
+        CARDS = originalOrder.slice();
+        idx = 0;
+        render();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Right') nextCard();
+        else if (e.key === 'ArrowLeft' || e.key === 'Left') prevCard();
+        else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        else if (e.key === 's' || e.key === 'S') shuffleDeck();
+    });
+
+    /* Navigate to specific card by hash (e.g., #fc03) */
+    var hash = location.hash;
+    if (hash && hash.length > 1) {
+        var targetId = hash.substring(1);
+        for (var hi = 0; hi < CARDS.length; hi++) {
+            if (CARDS[hi].id === targetId) { idx = hi; break; }
+        }
+    }
+    render();
+    </script>
+</body>
+</html>
